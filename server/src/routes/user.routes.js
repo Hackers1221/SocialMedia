@@ -5,6 +5,6 @@ const {checkUser} = require('../middlewares/middlewares')
 const userroutes = express.Router();
 
 userroutes.post('/signup',checkUser,authcontroller.signup);
-userroutes.get('/signin',authcontroller.signin);
+userroutes.post('/signin',authcontroller.signin);
 
 module.exports = userroutes
