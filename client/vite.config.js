@@ -10,8 +10,5 @@ export default defineConfig({
       light: "#D4F6FF", 
       dark: "#FBFBFB", 
       darkest: "#FFDDAE"}),
-    FONTS: JSON.stringify ({
-      creative: 
-    })
     },
 })

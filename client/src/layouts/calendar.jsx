@@ -1,16 +1,16 @@
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { forwardRef } from "react";
 
-const Calendar = () => {
-  const [birthdate, setBirthdate] = useState(null);
-
+// eslint-disable-next-line react/display-name
+const Calendar = forwardRef(({value, onChange}, ref) => {
   return (
     <div className="flex flex-col gap-2">
       <label className="text-gray-700 font-medium">Select Birthdate</label>
       <DatePicker
-        selected={birthdate}
-        onChange={(date) => setBirthdate(date)}
+        selected={value}
+        onChange={onChange}
         dateFormat="dd/MM/yyyy"
         showYearDropdown
         scrollableYearDropdown
@@ -20,9 +20,10 @@ const Calendar = () => {
         onKeyDown={(e) => e.preventDefault()}
         style={{backgroundColor: _COLOR.darkest}}
         placeholderText="DD/MM/YYYY"
+        ref={ref}
       />
    </div>
    );
-};
+});
 
 export default Calendar;
