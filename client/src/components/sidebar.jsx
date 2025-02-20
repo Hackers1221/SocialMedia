@@ -7,10 +7,50 @@ import { IoPerson } from "react-icons/io5";
 import { IoIosSettings } from "react-icons/io";
 import { LuCircleFadingPlus } from "react-icons/lu";
 import { ImVideoCamera } from "react-icons/im";
+import { useEffect, useState } from "react";
+import { GiHamburgerMenu } from "react-icons/gi";
 
 function Sidebar () {
+
+    const [isOpen, setIsOpen] = useState(false);
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+    // Handle screen resizing
+    useEffect(() => {
+        const handleResize = () => setScreenWidth(window.innerWidth);
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    // Close sidebar when clicking outside
+    useEffect(() => {
+        const handleOutsideClick = (e) => {
+            if (isOpen && screenWidth < 768) {
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener("click", handleOutsideClick);
+        return () => document.removeEventListener("click", handleOutsideClick);
+    }, [isOpen, screenWidth]);
+
+
     return (
-        <div className={`fixed flex flex-col top-0 left-0 w-64 bg-[${_COLOR.less_light}] h-full border-r`}>
+        <>
+            {/* Hamburger Icon for Smaller Devices */}
+            <div className="md:hidden p-4 z-50 relative">
+                <GiHamburgerMenu
+                    className="text-3xl cursor-pointer"
+                    onClick={(e) => {
+                        e.stopPropagation(); // Prevent immediate closing when clicking button
+                        setIsOpen(!isOpen);
+                    }}
+                />
+            </div>
+
+            {/* Sidebar */}
+            <div className={`fixed flex flex-col top-0 left-0 w-64 bg-[${_COLOR.less_light}] h-screen border-rtransform ${
+                    isOpen ? "translate-x-0" : "-translate-x-full"
+                } transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:shadow-none`} onClick={(e) => e.stopPropagation()} >
                 <div className={`py-4 flex items-center justify-center border-b border-[${_COLOR.more_light}]`}>
                     <div className="text-xl cursive-text">DropChat</div>
                 </div>
@@ -53,14 +93,16 @@ function Sidebar () {
                         <span className="ml-2 text-sm tracking-wide truncate">Messages</span>
                     </a>
                     </li>
-                    <li>
-                    <a href="#" className={`relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}] pr-6`}>
-                        <span className="inline-flex justify-center items-center ml-4">
-                        </span>
-                        <FaSearch />
-                        <span className="ml-2 text-sm tracking-wide truncate">Search</span>
-                    </a>
+                    {screenWidth < 768 && (
+                        <li>
+                        <a href="#" className={`relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}] pr-6`}>
+                            <span className="inline-flex justify-center items-center ml-4">
+                            </span>
+                            <FaSearch />
+                            <span className="ml-2 text-sm tracking-wide truncate">Search</span>
+                        </a>
                     </li>
+                    )}
                     <li>
                     <a href="#" className={`relative mb-4 flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}] pr-6 `}>
                         <span className="inline-flex justify-center items-center ml-4">
@@ -76,14 +118,16 @@ function Sidebar () {
                             <div className={`text-sm font-bold tracking-wide text-[${_COLOR.dark}]`}>Settings</div>
                         </div>
                     </li>
-                    <li>
-                    <a href="#" className={`relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}] pr-6`}>
-                        <span className="inline-flex justify-center items-center ml-4">
-                        </span>
-                        <IoPerson />
-                        <span className="ml-2 text-sm tracking-wide truncate">Profile</span>
-                    </a>
-                    </li>
+                    {screenWidth < 768 && (
+                        <li>
+                            <a href="#" className={`relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}] pr-6`}>
+                                <span className="inline-flex justify-center items-center ml-4">
+                                </span>
+                                <IoPerson />
+                                <span className="ml-2 text-sm tracking-wide truncate">Profile</span>
+                            </a>
+                        </li>
+                    )}
                     <li>
                     <a href="#" className={`relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}] pr-6`}>
                         <span className="inline-flex justify-center items-center ml-4">
@@ -103,6 +147,7 @@ function Sidebar () {
                 </ul>
                 </div>
             </div>
+        </>
     )
 }
 
