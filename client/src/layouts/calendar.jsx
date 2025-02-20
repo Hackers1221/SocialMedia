@@ -15,11 +15,7 @@ const Calendar = forwardRef(({value, onChange}, ref) => {
         scrollableYearDropdown
         yearDropdownItemNumber={100}
         maxDate={new Date()}
-        className={`border border-[2px] rounded-lg px-3 py-2 w-full focus:outline-none`}
-        style={{
-          // borderColor: _COLOR.light,
-          backgroundColor: _COLOR.lightest,
-        }}
+        className={`text-black border border-[2px] rounded-lg px-3 py-2 w-full focus:outline-none bg-[${_COLOR.lightest}]`}
         onKeyDown={(e) => e.preventDefault()}
         placeholderText="dd/mm/yyyy"
         ref={ref}
