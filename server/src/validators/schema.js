@@ -41,7 +41,7 @@ module.exports.userSchema = Joi.object({
             "string.pattern.base": "Password must have at least one uppercase letter, one lowercase letter, one number, and one special character."
         }),
 
-    birth: Joi.date()
+    birth: Joi.string()
         .messages({
             "date.base": "Birthdate must be a valid date."
         })

@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const userroutes = require('./src/routes/user.routes');
 const {Mongo_DB_URL} = require('./src/config/db.config');
 const mongoose = require('mongoose');
+const postRoutes = require("./src/routes/posts.routes");
 
 app.use(function (req, res, next) {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -19,6 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.text());
 
 app.use('/social/auth',userroutes);
+app.use('/social/post',postRoutes);
 
 app.use((err,req,res,next) => {
     const {statusCode = 500 , message = "Something went wrong"} = err;
@@ -32,7 +34,6 @@ app.use(cors())
 async function ConnectToDb(){
 
     try {
-    console.log(Mongo_DB_URL);
       await mongoose.connect(Mongo_DB_URL);
       console.log("Connected to DB");
     } catch (error) {
