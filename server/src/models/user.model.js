@@ -18,13 +18,14 @@ const userSchema = new Schema({
     },
     email: {
         type: String,
-        required: [true, 'Email cannot be empty']
+        required: [true, 'Email cannot be empty'],
+        unique : true
     },
     password: {
         type: String,
         minLength: 5,
         required: true,
-        // match: /^(?=.[A-Za-z])(?=.\d)(?=.[@$!%#?&])[A-Za-z\d@$!%*#?&]{5,}$/,
+        match: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
     },
     following: {
         type: [String],
