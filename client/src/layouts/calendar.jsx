@@ -1,4 +1,3 @@
-import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { forwardRef } from "react";
@@ -16,10 +15,13 @@ const Calendar = forwardRef(({value, onChange}, ref) => {
         scrollableYearDropdown
         yearDropdownItemNumber={100}
         maxDate={new Date()}
-        className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none"
+        className={`border border-[2px] rounded-lg px-3 py-2 w-full focus:outline-none`}
+        style={{
+          // borderColor: _COLOR.light,
+          backgroundColor: _COLOR.lightest,
+        }}
         onKeyDown={(e) => e.preventDefault()}
-        style={{backgroundColor: _COLOR.darkest}}
-        placeholderText="DD/MM/YYYY"
+        placeholderText="dd/mm/yyyy"
         ref={ref}
       />
    </div>
