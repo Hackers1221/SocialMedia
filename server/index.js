@@ -12,6 +12,13 @@ app.use(bodyParser.text());
 
 app.use('/social/auth',userroutes);
 
+app.use((err,req,res,next) => {
+    const {statusCode = 500 , message = "Something went wrong"} = err;
+    res.status(statusCode).send({
+        msg : message
+    })
+})
+
 
 async function ConnectToDb(){
 

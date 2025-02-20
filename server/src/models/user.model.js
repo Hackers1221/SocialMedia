@@ -14,7 +14,8 @@ const userSchema = new Schema({
     },
     username: {
         type: String,
-        required: [true, 'Name cannot be empty']
+        required: [true, 'Name cannot be empty'],
+        match : /^[a-z0-9]+$/
     },
     email: {
         type: String,

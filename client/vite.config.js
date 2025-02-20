@@ -9,9 +9,10 @@ export default defineConfig({
       lightest: "#C6E7FF", 
       light: "#D4F6FF", 
       dark: "#FBFBFB", 
-      darkest: "#FFDDAE"}),
-    FONTS: JSON.stringify ({
-      creative: 
+      darkest: "#FFDDAE"
+    }),
+    FONTS: JSON.stringify({
+      creative: "Arial, sans-serif"
     })
-    },
+  },
 })
