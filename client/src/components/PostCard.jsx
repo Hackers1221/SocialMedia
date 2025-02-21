@@ -84,10 +84,10 @@ function PostCard(post) {
       </div>
       <div>
         {image?.length > 0 && (
-          <div className={`my-5 h-[28rem] carousel rounded-md w-full shadow-box shadow-md shadow-[${_COLOR.medium}]`}>
+          <div className={`my-5 h-[28rem] carousel rounded-sm w-full bg-transparent`}>
             {image.map((photo, key) => (
-              <div key={key} className={`carousel-item w-full`}>
-                <img src={photo} className="w-full h-max" alt="Image not found"/>
+              <div key={key} className={`carousel-item flex justify-center bg-transparent w-full`}>
+                <img src={photo} className="w-max" alt="Image not found"/>
               </div>
             ))}
           </div>
