@@ -9,7 +9,7 @@ const initialState = {
 
 export const getAllPosts = createAsyncThunk('posts/getAllPosts', async () => {
     try {
-        const response = axiosInstance.get('posts', {
+        const response = axiosInstance.get('post/posts', {
             headers: {
                 'x-access-token': localStorage.getItem('token')
             }
@@ -30,8 +30,8 @@ const PostSlice = createSlice({
         .addCase(getAllPosts.fulfilled, (state, action) => {
             if(!action?.payload?.data) return;
             console.log (action.payload);
-            state.downloadedPosts = action?.payload?.data?.posts.reverse();
-            state.postsList = state.downloadedPosts;
+            state.downloadedPosts = action?.payload?.data?.postsdata?.posts.reverse();
+            state.postList = state.downloadedPosts;
         })
     }
 });

@@ -4,76 +4,80 @@ import { MdAddAPhoto } from "react-icons/md";
 import { MdVideoCameraBack } from "react-icons/md";
 import { MdGif } from "react-icons/md";
 import { BsPersonCircle } from "react-icons/bs";
-import PostCard from "../../components/PostCard";
+// import PostCard from "../../components/PostCard";
+import { useSelector } from 'react-redux'
 
 function PostPage() {
-    allposts = [
-        {
-            "image": [
-                "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0",
-                "https://images.unsplash.com/photo-1519682337058-a94d519337bc"
-            ],
-            "video": [
-                "https://www.shutterstock.com/video/clip-1094136931-audio-podcast-online-show-video-moving-male"
-            ],
-            "likes": [],
-            "comments": "Beautiful shot!",
-            "interests": ["travel", "landscape"],
-            "userId": ""
-        },
-        {
-            "image": [
-                "https://images.unsplash.com/photo-1496346651079-6ca5cb67f42f",
-                "https://images.unsplash.com/photo-1489278353717-f64c6ee8a4d2"
-            ],
-            "video": [
-                "https://www.shutterstock.com/video/clip-1094136931-audio-podcast-online-show-video-moving-male"
-            ],
-            "likes": [],
-            "comments": "Such an inspiring post!",
-            "interests": ["motivation", "fitness"],
-            "userId": ""
-        },
-        {
-            "image": [
-                "https://images.unsplash.com/photo-1461896836934-ffe607ba8211",
-                "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0"
-            ],
-            "video": [
-                "https://www.shutterstock.com/video/clip-1094136931-audio-podcast-online-show-video-moving-male"
-            ],
-            "likes": [],
-            "comments": "Nature is truly amazing!",
-            "interests": ["nature", "wildlife"],
-            "userId": ""
-        },
-        {
-            "image": [
-                "https://images.unsplash.com/photo-1519682337058-a94d519337bc",
-                "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8"
-            ],
-            "video": [
-                "https://www.shutterstock.com/video/clip-1094136931-audio-podcast-online-show-video-moving-male"
-            ],
-            "likes": [],
-            "comments": "Delicious-looking meal!",
-            "interests": ["food", "cooking"],
-            "userId": ""
-        },
-        {
-            "image": [
-                "https://images.unsplash.com/photo-1503341733017-1901578f9f2b",
-                "https://images.unsplash.com/photo-1483137140003-ae073b395549"
-            ],
-            "video": [
-                "https://www.shutterstock.com/video/clip-1094136931-audio-podcast-online-show-video-moving-male"
-            ],
-            "likes": [],
-            "comments": "Such a powerful moment!",
-            "interests": ["technology", "coding"],
-            "userId": ""
-        }
-    ]
+
+    const postState = useSelector ((state) => state.post);
+
+    // allposts = [
+    //     {
+    //         "image": [
+    //             "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0",
+    //             "https://images.unsplash.com/photo-1519682337058-a94d519337bc"
+    //         ],
+    //         "video": [
+    //             "https://www.shutterstock.com/video/clip-1094136931-audio-podcast-online-show-video-moving-male"
+    //         ],
+    //         "likes": [],
+    //         "comments": "Beautiful shot!",
+    //         "interests": ["travel", "landscape"],
+    //         "userId": ""
+    //     },
+    //     {
+    //         "image": [
+    //             "https://images.unsplash.com/photo-1496346651079-6ca5cb67f42f",
+    //             "https://images.unsplash.com/photo-1489278353717-f64c6ee8a4d2"
+    //         ],
+    //         "video": [
+    //             "https://www.shutterstock.com/video/clip-1094136931-audio-podcast-online-show-video-moving-male"
+    //         ],
+    //         "likes": [],
+    //         "comments": "Such an inspiring post!",
+    //         "interests": ["motivation", "fitness"],
+    //         "userId": ""
+    //     },
+    //     {
+    //         "image": [
+    //             "https://images.unsplash.com/photo-1461896836934-ffe607ba8211",
+    //             "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0"
+    //         ],
+    //         "video": [
+    //             "https://www.shutterstock.com/video/clip-1094136931-audio-podcast-online-show-video-moving-male"
+    //         ],
+    //         "likes": [],
+    //         "comments": "Nature is truly amazing!",
+    //         "interests": ["nature", "wildlife"],
+    //         "userId": ""
+    //     },
+    //     {
+    //         "image": [
+    //             "https://images.unsplash.com/photo-1519682337058-a94d519337bc",
+    //             "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8"
+    //         ],
+    //         "video": [
+    //             "https://www.shutterstock.com/video/clip-1094136931-audio-podcast-online-show-video-moving-male"
+    //         ],
+    //         "likes": [],
+    //         "comments": "Delicious-looking meal!",
+    //         "interests": ["food", "cooking"],
+    //         "userId": ""
+    //     },
+    //     {
+    //         "image": [
+    //             "https://images.unsplash.com/photo-1503341733017-1901578f9f2b",
+    //             "https://images.unsplash.com/photo-1483137140003-ae073b395549"
+    //         ],
+    //         "video": [
+    //             "https://www.shutterstock.com/video/clip-1094136931-audio-podcast-online-show-video-moving-male"
+    //         ],
+    //         "likes": [],
+    //         "comments": "Such a powerful moment!",
+    //         "interests": ["technology", "coding"],
+    //         "userId": ""
+    //     }
+    // ]
 
 
     return (
@@ -94,11 +98,7 @@ function PostPage() {
                     <FiSend className="h-[100%] hover:cursor-pointer"/>
                 </div>
             </div>
-            <div className="flex flex-column">
-                {allposts.map((post) => {return (<div key = {post._id}>
-                   <PostCard post = {post}/>
-                </ div>)})}
-            </div>
+
         </div>
 
         
