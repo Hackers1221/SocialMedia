@@ -6,6 +6,8 @@ import Avatar from "./Avatar";
 import { useEffect, useState } from "react";
 
 function PostCard(post) {
+    const [liked, setLiked] = useState(false);
+    const [saved, setSaved] = useState(false);
     const {image, video, likes, comments, interests, createdAt, userId, caption} = post.post;
     const currUser = useSelector((state) => state.auth);
     const dispatch = useDispatch();
@@ -23,7 +25,13 @@ function PostCard(post) {
     function getDate() {
       let date = createdAt?.toString()?.split('T')[0].split('-').reverse().join("/");
       setDate(date);
-  }
+    }
+    function toggleLike() {
+      setLiked(!liked);
+    }
+    function toggleBookmark() {
+      setSaved(!saved);
+    }
 
     async function getUser(userId) {
         const response = await dispatch(getUserById (userId));
@@ -41,35 +49,45 @@ function PostCard(post) {
 
   return (
     <div className={`rounded-md mb-4 bg-[${_COLOR.less_light}] p-4 border border-16 border-[${_COLOR.darkest}]`} >
+    <div className="flex justify-between">
       <div className="flex gap-3">
-        <div>
-          <Link href={'/profile'}>
-            <span className="cursor-pointer">
-              <Avatar url={creator?.image} />
-            </span>
-          </Link>
-        </div>
-        <div className="grow">
-          <p>
-            <Link href={'/profile/'+creator?._id}>
-              <span className="mr-1 font-semibold cursor-pointer hover:underline">
-                {creator?.name}
-              </span>
-            </Link>
-          </p>
-          <p className="text-gray-500 text-sm">
-          {date}
-          </p>
-        </div>
-        <div className="relative">
-        </div>
+              <div>
+                <Link href={'/profile'}>
+                  <span className="cursor-pointer">
+                    <Avatar url={creator?.image} />
+                  </span>
+                </Link>
+              </div>
+              <div className="grow">
+                <p>
+                  <Link href={'/profile/'+creator?._id}>
+                    <span className="mr-1 font-semibold cursor-pointer hover:underline">
+                      {creator?.name}
+                    </span>
+                  </Link>
+                </p>
+                <p className="text-gray-500 text-sm">
+                {date}
+                </p>
+              </div>
+            </div>
+            <div className="dropdown dropdown-end">
+              <div tabIndex={0} role="button" className="m-1">
+                <i class="fa-solid fa-ellipsis"></i>
+              </div>
+              <ul tabIndex={0} className={`dropdown-content menu bg-[${_COLOR.medium}] text-[${_COLOR.lightest}] rounded-box z-[1] w-52 p-2 shadow-2xl shadow-[${_COLOR.medium}]`}>
+                <li><a>Follow</a></li>
+                <li><a>Unfollow</a></li>
+                <li><a>Not Intrested</a></li>
+              </ul>
+            </div>
       </div>
       <div>
         {image?.length > 0 && (
           <div className={`my-5 h-[28rem] carousel rounded-md w-full shadow-box shadow-md shadow-[${_COLOR.medium}]`}>
             {image.map((photo, key) => (
               <div key={key} className={`carousel-item w-full`}>
-                <img src={photo} className="w-full" alt="Image not found"/>
+                <img src={photo} className="w-full h-max" alt="Image not found"/>
               </div>
             ))}
           </div>
@@ -78,9 +96,8 @@ function PostCard(post) {
       </div>
       <div className="mt-5 flex w-full justify-between px-2">
         <div className="flex gap-4">
-          <button className="flex gap-2 items-center" >
-          {/* <i className="fa-solid fa-heart"></i> */}
-          <i className="fa-regular fa-heart"></i>
+          <button className="flex gap-2 items-center" onClick={toggleLike}>
+            {liked ? (<i className="fa-solid fa-heart"></i>) : <i className="fa-regular fa-heart"></i>}
             {likes?.length}
           </button>
           <button className="flex gap-2 items-center">
@@ -90,9 +107,8 @@ function PostCard(post) {
           </button>
         </div>
         <div className="flex">
-        <button className="flex gap-2 items-center">
-            <i class="fa-regular fa-bookmark"></i>
-            {/* <i class="fa-solid fa-bookmark"></i> */}
+        <button className="flex gap-2 items-center" onClick={toggleBookmark}>
+            {saved? <i class="fa-solid fa-bookmark"></i> : <i class="fa-regular fa-bookmark"></i>}
             {comments?.length}
           </button>
         </div>
