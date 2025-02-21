@@ -86,16 +86,25 @@ function PostCard(post) {
             </div>
       </div>
       <div>
-        {image?.length > 0 && (
-          <div className={`my-5 h-[28rem] carousel rounded-sm w-full bg-transparent`}>
-            {image.map((photo, key) => {
-              return (<div key={key} className={`carousel-item flex justify-center bg-transparent w-full relative`}>
-                <img src={photo} className="w-max" alt="Image not found"/>
-              </div>)
-            }
-            )}
-          </div>
-        )}
+      {(video?.length > 0 || image?.length > 0) && (
+    <div className="my-5 h-[28rem] carousel rounded-sm w-full bg-transparent">
+      {/* Render videos first */}
+      {video?.map((ele, key) => (
+        <div key={`video-${key}`} className="carousel-item flex justify-center bg-transparent w-full relative">
+          <video className="w-max" controls>
+            <source src={ele} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      ))}
+      {/* Render images next */}
+      {image?.map((photo, key) => (
+        <div key={`image-${key}`} className="carousel-item flex justify-center bg-transparent w-full relative">
+          <img src={photo} className="w-max" alt="Image not found" />
+        </div>
+      ))}
+    </div>
+  )}
         <p className="text-sm">{caption}</p>
       </div>
       <div className="mt-5 flex w-full justify-between px-2">
