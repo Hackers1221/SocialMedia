@@ -16,6 +16,10 @@ const postSchema = new Schema({
         type: [String],
         default: []
     },
+    cpation: {
+        type: String,
+        default: ""
+    },
     comments: {
         type: [String],
         default : []
@@ -27,6 +31,10 @@ const postSchema = new Schema({
     userId : {
         type : String,
         required : true
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now()
     }
 });
 

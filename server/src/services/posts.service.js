@@ -7,7 +7,8 @@ const CreatePost = async (data) => {
             image: data.image,
             video: data.video,
             interests: data.interests,
-            userId: data.userId
+            userId: data.userId,
+            caption: data.caption,
         };
         const postresponse = await postsmodel.create(postObject);
         
