@@ -11,10 +11,12 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { IoMdClose } from "react-icons/io";
 import { FaBookmark } from "react-icons/fa6";
 import PostDialog from "./PostDialog";
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom"
+import PostForm from "./PostForm";
 
 function Sidebar() {
     const [isOpen, setIsOpen] = useState(false);
+    const [isPostForm, setIsPostForm] = useState(false);
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
@@ -48,6 +50,7 @@ function Sidebar() {
         
             {/* add post dialog box */}
             <PostDialog open={isDialogOpen} setOpen={setDialogOpen}/>
+            <PostForm open={isPostForm} setOpen={setIsPostForm}/>
             
 
             <div className="fixed top-0 left-0 z-50">
@@ -152,7 +155,7 @@ function Sidebar() {
                                 </div>
                             </li>
                             <li>
-                                <Link href="/saved" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}] pr-6`}>
+                                <Link to="/saved" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}] pr-6`}>
                                     <FaBookmark className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Saved Posts</span>
                                 </Link>
