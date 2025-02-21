@@ -5,7 +5,7 @@ import postSliceReducer from './Slices/post.slice'
 const Store = configureStore({
     reducer: {
         auth: authSliceReducer,
-        posts: postSliceReducer
+        post: postSliceReducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false}),
     devTools: true

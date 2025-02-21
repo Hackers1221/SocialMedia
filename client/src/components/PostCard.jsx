@@ -1,42 +1,58 @@
 import { useDispatch, useSelector } from "react-redux";
-import Card from "./Card";
 import { Link } from "react-router-dom";
-import ReactTimeAgo from "react-time-ago";
 import toast from "react-hot-toast";
+import { getUserById } from "../redux/Slices/auth.slice";
+import Avatar from "./Avatar";
+import { useEffect, useState } from "react";
 
-export default function PostCard({image, video, likes, comments, interests, createdAt, userId, caption}) {
+function PostCard(post) {
+    const {image, video, likes, comments, interests, createdAt, userId, caption} = post.post;
     const currUser = useSelector((state) => state.auth);
     const dispatch = useDispatch();
 
+    const [creator, setCreator] = useState ({
+      image: "A",
+      name: "",
+      username: "",
+      password: "",
+      email: "",
+      birth: ""
+    });
+
     async function getUser(userId) {
-        const response = await dispatch(getUserById(userId));
+        const response = await dispatch(getUserById (userId));
         if(!response){
             toast.error("Something went Wrong!");
         }
-        else return response;
+        
+        setCreator(response.payload?.data?.userdetails);
     }   
-    const creator = getUser(userId);
+
+    useEffect (() => {
+        getUser (userId);
+    }, [])
+
   return (
-    <Card>
+    <div className={`shadow-md shadow-gray-300 rounded-md mb-5 bg-[${_COLOR.lightest}] p-4`} >
       <div className="flex gap-3">
         <div>
           <Link href={'/profile'}>
             <span className="cursor-pointer">
-              <Avatar url={creator.image} />
+              <Avatar url={creator?.image} />
             </span>
           </Link>
         </div>
         <div className="grow">
           <p>
-            <Link href={'/profile/'+creator._id}>
+            <Link href={'/profile/'+creator?._id}>
               <span className="mr-1 font-semibold cursor-pointer hover:underline">
-                {creator.name}
+                {creator?.name}
               </span>
             </Link>
             shared a post
           </p>
           <p className="text-gray-500 text-sm">
-            <ReactTimeAgo date={ (new Date(createdAt)).getTime() } />
+          {(new Date(createdAt)).getTime() }
           </p>
         </div>
         <div className="relative">
@@ -117,7 +133,7 @@ export default function PostCard({image, video, likes, comments, interests, crea
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 011.037-.443 48.282 48.282 0 005.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
           </svg>
-          {comments.length}
+          {comments?.length}
         </button>
         <button className="flex gap-2 items-center">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -126,7 +142,7 @@ export default function PostCard({image, video, likes, comments, interests, crea
           4
         </button>
       </div>
-      <div className="flex mt-4 gap-3">
+      {/* <div className="flex mt-4 gap-3">
         <div>
           <Avatar url={currUser?.image} />
         </div>
@@ -142,7 +158,7 @@ export default function PostCard({image, video, likes, comments, interests, crea
           </button>
         </div>
       </div>
-      <div>
+      <div> */}
         {/* {comments.length > 0 && comments.map(comment => (
           <div key={comment.id} className="mt-2 flex gap-2 items-center">
             <Avatar url={comment.profiles.avatar} />
@@ -161,7 +177,9 @@ export default function PostCard({image, video, likes, comments, interests, crea
             </div>
           </div>
         ))} */}
-      </div>
-    </Card>
+      {/* </div> */}
+    </div>
   );
 }
+
+export default PostCard;
