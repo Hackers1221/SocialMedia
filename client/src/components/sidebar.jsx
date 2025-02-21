@@ -47,9 +47,11 @@ function Sidebar() {
 
     return (
         <>
-        
             {/* add post dialog box */}
-            <PostDialog open={isDialogOpen} setOpen={setDialogOpen}/>
+            <PostDialog open={isDialogOpen} setOpen={setDialogOpen} onAddPost={() => {
+                setDialogOpen(false); 
+                setIsPostForm(true); 
+            }} />
             <PostForm open={isPostForm} setOpen={setIsPostForm}/>
             
 

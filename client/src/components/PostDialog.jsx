@@ -1,6 +1,6 @@
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from "@headlessui/react";
 
-export default function PostDialog({ open, setOpen }) {
+export default function PostDialog({ open, setOpen, onAddPost }) {
   return (
     <Dialog open={open} onClose={setOpen} className="relative z-[9999]">
       <DialogBackdrop
@@ -27,7 +27,7 @@ export default function PostDialog({ open, setOpen }) {
             <div className="bg-gray-50 px-4 py-6 flex flex-col md:flex-row gap-4 justify-center sm:px-6">
               <button
                 type="button"
-                onClick={() => setOpen(false)}
+                onClick={onAddPost}
                 className="flex items-center w-full md:w-1/2 justify-center rounded-md bg-white px-4 py-3 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 shadow-xs hover:bg-gray-100"
               >
                 <i className="fa-solid fa-pen-to-square text-red-600 text-lg mr-2"></i> Add a post
