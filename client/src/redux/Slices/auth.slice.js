@@ -27,6 +27,15 @@ export const signup = createAsyncThunk('/auth/signup', async (data) => {
         console.log(error);
     }
 });
+export const getUserById = createAsyncThunk('/auth/user', async (id) => {     
+    try {
+        const response = axiosInstance.get(`auth/user/${id}`);
+        if(!response) toast.error('Something went wrong, try again');
+        return await response;
+    } catch (error) {
+        console.log(error);
+    }
+});
 
 
 const authSlice = createSlice({
