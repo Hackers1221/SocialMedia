@@ -9,6 +9,7 @@ import { LuCircleFadingPlus } from "react-icons/lu";
 import { ImVideoCamera } from "react-icons/im";
 import { useEffect, useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { IoMdClose } from "react-icons/io";
 
 function Sidebar () {
 
@@ -38,13 +39,23 @@ function Sidebar () {
         <>
             {/* Hamburger Icon for Smaller Devices */}
             <div className="md:hidden p-4 z-50 relative">
-                <GiHamburgerMenu
-                    className="text-3xl cursor-pointer"
-                    onClick={(e) => {
-                        e.stopPropagation(); // Prevent immediate closing when clicking button
-                        setIsOpen(!isOpen);
-                    }}
-                />
+                {isOpen ? (
+                    <IoMdClose
+                        className="text-3xl cursor-pointer"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setIsOpen(false);
+                        }}
+                    />
+                ) : (
+                    <GiHamburgerMenu
+                        className="text-3xl cursor-pointer"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setIsOpen(true);
+                        }}
+                    />
+                )}
             </div>
 
             {/* Sidebar */}
