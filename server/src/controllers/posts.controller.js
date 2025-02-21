@@ -15,6 +15,21 @@ const createPost = async(req,res) => {
     })
 }
 
+const getallPosts = async(req,res) => {
+    const response = await postsService.getAllPosts();
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg : "Something Went wrong",
+            error : response.error
+        })
+    }
+    return res.status(StatusCodes.OK).send({
+        msg : "All posts fetched",
+        postsdata: response
+    })
+}
+
 module.exports = {
-    createPost
+    createPost,
+    getallPosts
 }
