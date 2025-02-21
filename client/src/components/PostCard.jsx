@@ -73,7 +73,7 @@ function PostCard(post) {
             </div>
             <div className="dropdown dropdown-end">
               <div tabIndex={0} role="button" className="m-1">
-                <i class="fa-solid fa-ellipsis"></i>
+                <i className="fa-solid fa-ellipsis"></i>
               </div>
               <ul tabIndex={0} className={`dropdown-content menu bg-[${_COLOR.medium}] text-[${_COLOR.lightest}] rounded-box z-[1] w-52 p-2 shadow-2xl shadow-[${_COLOR.medium}]`}>
                 <li><a>Follow</a></li>
@@ -101,14 +101,14 @@ function PostCard(post) {
             {likes?.length}
           </button>
           <button className="flex gap-2 items-center">
-          {/* <i class="fa-solid fa-comment"></i> */}
-            <i class="fa-regular fa-comment"></i>
+          {/* <i className="fa-solid fa-comment"></i> */}
+            <i className="fa-regular fa-comment"></i>
             {comments?.length}
           </button>
         </div>
         <div className="flex">
         <button className="flex gap-2 items-center" onClick={toggleBookmark}>
-            {saved? <i class="fa-solid fa-bookmark"></i> : <i class="fa-regular fa-bookmark"></i>}
+            {saved? <i className="fa-solid fa-bookmark"></i> : <i className="fa-regular fa-bookmark"></i>}
             {comments?.length}
           </button>
         </div>
