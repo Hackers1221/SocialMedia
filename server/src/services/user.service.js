@@ -62,9 +62,36 @@ const getuserByid = async(id) => {
     }
 }
 
+const updateUser = async (userId, updatedData) => {
+    const response = {};
+    try {
+        if (updatedData.password) {
+            updatedData.password = await bcrypt.hash(updatedData.password, 11);
+        }
+
+        const updatedUser = await usermodel.findByIdAndUpdate(
+            userId, 
+            updatedData, 
+            { new: true, runValidators: true } 
+        );
+
+        if (!updatedUser) {
+            response.error = "User not found";
+            return response;
+        }
+        
+        response.user = updatedUser;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response;
+    }
+};
+
 module.exports = {
     CreateUser,
     ValidateUser,
-    getuserByid
+    getuserByid,
+    updateUser
 }
 

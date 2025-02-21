@@ -35,6 +35,10 @@ const userSchema = new Schema({
     birth:{
         type: String,
         required: true,
+    },
+    saved : {
+        type : [String],
+        default : []
     }
 });
 

@@ -8,5 +8,6 @@ const userroutes = express.Router();
 userroutes.post('/signup',checkUser,authcontroller.signup);
 userroutes.post('/signin',authcontroller.signin);
 userroutes.get('/user/:id',validators.isUserAuthenticated,authcontroller.getuserByid);
+userroutes.patch('/user/:id',validators.isUserAuthenticated,authcontroller.updateUser);
 
 module.exports = userroutes

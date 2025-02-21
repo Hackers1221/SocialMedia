@@ -48,8 +48,23 @@ const getuserByid = async(req,res) => {
     })
 }
 
+const updateUser = async(req,res) => {
+    const response = await userService.updateUser(req.params.id,req.body);
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg : "Unable to update the user",
+            error : response.error
+        })
+    }
+    return res.status(StatusCodes.OK).send({
+        msg : "Successfully updated the user",
+        userDetails : response.user
+    })
+}
+
 module.exports = {
     signup,
     signin,
-    getuserByid
+    getuserByid,
+    updateUser
 }
