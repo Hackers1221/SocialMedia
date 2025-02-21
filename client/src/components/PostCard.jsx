@@ -9,7 +9,7 @@ export default function PostCard({image, video, likes, comments, interests, crea
     const dispatch = useDispatch();
 
     async function getUser(userId) {
-        const response = await dispatch(getUserById(useId));
+        const response = await dispatch(getUserById(userId));
         if(!response){
             toast.error("Something went Wrong!");
         }

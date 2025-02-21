@@ -29,7 +29,11 @@ export const signup = createAsyncThunk('/auth/signup', async (data) => {
 });
 export const getUserById = createAsyncThunk('/auth/user', async (id) => {     
     try {
-        const response = axiosInstance.get(`auth/user/${id}`);
+        const response = axiosInstance.get(`auth/user/${id}`, {
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        });
         if(!response) toast.error('Something went wrong, try again');
         return await response;
     } catch (error) {

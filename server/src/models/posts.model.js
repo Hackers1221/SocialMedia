@@ -16,7 +16,7 @@ const postSchema = new Schema({
         type: [String],
         default: []
     },
-    cpation: {
+    caption: {
         type: String,
         default: ""
     },

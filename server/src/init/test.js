@@ -31,7 +31,7 @@ const initDB = async () => {
   // Get any random id from list
   const getRandomId = () => objectIds[Math.floor(Math.random() * objectIds.length)];
 
-  const posts = samplePosts.map((ele) => ({ ...ele, userId: getRandomId() }));
+  const posts = samplePosts.map((ele) => ({ ...ele, userId: getRandomId(), caption: "festive vibes"}));
   await Post.deleteMany({});
   await Post.insertMany(posts);
   console.log("posts was initialized");
