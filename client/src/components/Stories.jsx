@@ -7,7 +7,7 @@ function Stories () {
 
 
     return (
-        <section className="fixed top-[2rem] md:top-[3.5rem] md:right-0 w-full md:w-auto bg-transparent h-max md:min-h-screen flex flex-row md:flex-col items-center pt-5 px-4">
+        <section className="fixed top-[2rem] md:top-[4.5rem] md:right-0 w-full md:w-auto bg-transparent h-max md:min-h-screen flex flex-row md:flex-col items-center pt-5 px-4">
 
             <ul className="flex flex-row md:flex-col items-center justify-center gap-4">
                 <li className="flex flex-col items-center space-y-2">

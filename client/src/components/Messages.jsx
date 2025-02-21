@@ -1,6 +1,6 @@
 function Messages () {
     return (
-        <section className={`fixed top-[2rem] md:top-[4rem] right-[6rem] hidden md:flex md:flex-col overflow-auto w-[20rem] lg:max-w-sm bg-[${_COLOR.less_light}]`}>
+        <section className={`fixed top-[2rem] md:top-[4.5rem] right-[6rem] hidden md:flex md:flex-col overflow-auto w-[20rem] lg:max-w-sm bg-transparent rounded-md border-[1px] border-[${_COLOR.less_light}]`}>
             <div className="search-box p-4 flex-none">
                 <form onsubmit="">
                     <div className="relative">
@@ -302,7 +302,7 @@ function Messages () {
                     </div>
                 </div>
             </div>  */}
-            <div className="flex justify-between items-center p-3 hover:bg-gray-800 rounded-lg relative">
+            <div className={`flex justify-between items-center p-3 rounded-lg relative text-[${_COLOR.lightest}]`}>
                     <div className="w-16 h-16 relative flex flex-shrink-0">
                         <img className="shadow-md rounded-full w-full h-full object-cover"
                             src="https://t4.ftcdn.net/jpg/03/83/25/83/360_F_383258331_D8imaEMl8Q3lf7EKU2Pi78Cn0R7KkW9o.jpg"
@@ -312,7 +312,7 @@ function Messages () {
                             <div className="bg-green-500 rounded-full w-3 h-3"></div>
                         </div>
                     </div>
-                    <div className="flex-auto min-w-0 ml-4 mr-6 hidden md:block group-hover:block">
+                    <div className="flex-auto min-w-0 ml-4 mr-6 hidden md:block">
                         <p className="font-bold">Tony Stark</p>
                         <div className="flex items-center text-sm font-bold">
                             <div className="min-w-0">
@@ -321,7 +321,91 @@ function Messages () {
                             <p className="ml-2 whitespace-no-wrap">10min</p>
                         </div>
                     </div>
-                    <div className="bg-blue-700 w-3 h-3 rounded-full flex flex-shrink-0 hidden md:block group-hover:block"></div>
+                    <div className="bg-blue-700 w-3 h-3 rounded-full flex hidden md:block "></div>
+                </div>
+            <div className={`flex justify-between items-center p-3 rounded-lg relative text-[${_COLOR.lightest}]`}>
+                    <div className="w-16 h-16 relative flex flex-shrink-0">
+                        <img className="shadow-md rounded-full w-full h-full object-cover"
+                            src="https://t4.ftcdn.net/jpg/03/83/25/83/360_F_383258331_D8imaEMl8Q3lf7EKU2Pi78Cn0R7KkW9o.jpg"
+                            alt=""
+                        />
+                        <div className="absolute bg-gray-900 p-1 rounded-full bottom-0 right-0">
+                            <div className="bg-green-500 rounded-full w-3 h-3"></div>
+                        </div>
+                    </div>
+                    <div className="flex-auto min-w-0 ml-4 mr-6 hidden md:block">
+                        <p className="font-bold">Tony Stark</p>
+                        <div className="flex items-center text-sm font-bold">
+                            <div className="min-w-0">
+                                <p className="truncate">Hey, Are you there?</p>
+                            </div>
+                            <p className="ml-2 whitespace-no-wrap">10min</p>
+                        </div>
+                    </div>
+                    <div className="bg-blue-700 w-3 h-3 rounded-full flex hidden md:block "></div>
+                </div>
+            <div className={`flex justify-between items-center p-3 rounded-lg relative text-[${_COLOR.lightest}]`}>
+                    <div className="w-16 h-16 relative flex flex-shrink-0">
+                        <img className="shadow-md rounded-full w-full h-full object-cover"
+                            src="https://t4.ftcdn.net/jpg/03/83/25/83/360_F_383258331_D8imaEMl8Q3lf7EKU2Pi78Cn0R7KkW9o.jpg"
+                            alt=""
+                        />
+                        <div className="absolute bg-gray-900 p-1 rounded-full bottom-0 right-0">
+                            <div className="bg-green-500 rounded-full w-3 h-3"></div>
+                        </div>
+                    </div>
+                    <div className="flex-auto min-w-0 ml-4 mr-6 hidden md:block">
+                        <p className="font-bold">Tony Stark</p>
+                        <div className="flex items-center text-sm font-bold">
+                            <div className="min-w-0">
+                                <p className="truncate">Hey, Are you there?</p>
+                            </div>
+                            <p className="ml-2 whitespace-no-wrap">10min</p>
+                        </div>
+                    </div>
+                    <div className="bg-blue-700 w-3 h-3 rounded-full flex hidden md:block "></div>
+                </div>
+            <div className={`flex justify-between items-center p-3 rounded-lg relative text-[${_COLOR.lightest}]`}>
+                    <div className="w-16 h-16 relative flex flex-shrink-0">
+                        <img className="shadow-md rounded-full w-full h-full object-cover"
+                            src="https://t4.ftcdn.net/jpg/03/83/25/83/360_F_383258331_D8imaEMl8Q3lf7EKU2Pi78Cn0R7KkW9o.jpg"
+                            alt=""
+                        />
+                        <div className="absolute bg-gray-900 p-1 rounded-full bottom-0 right-0">
+                            <div className="bg-green-500 rounded-full w-3 h-3"></div>
+                        </div>
+                    </div>
+                    <div className="flex-auto min-w-0 ml-4 mr-6 hidden md:block">
+                        <p className="font-bold">Tony Stark</p>
+                        <div className="flex items-center text-sm font-bold">
+                            <div className="min-w-0">
+                                <p className="truncate">Hey, Are you there?</p>
+                            </div>
+                            <p className="ml-2 whitespace-no-wrap">10min</p>
+                        </div>
+                    </div>
+                    <div className="bg-blue-700 w-3 h-3 rounded-full flex hidden md:block "></div>
+                </div>
+            <div className={`flex justify-between items-center p-3 rounded-lg relative text-[${_COLOR.lightest}]`}>
+                    <div className="w-16 h-16 relative flex flex-shrink-0">
+                        <img className="shadow-md rounded-full w-full h-full object-cover"
+                            src="https://t4.ftcdn.net/jpg/03/83/25/83/360_F_383258331_D8imaEMl8Q3lf7EKU2Pi78Cn0R7KkW9o.jpg"
+                            alt=""
+                        />
+                        <div className="absolute bg-gray-900 p-1 rounded-full bottom-0 right-0">
+                            <div className="bg-green-500 rounded-full w-3 h-3"></div>
+                        </div>
+                    </div>
+                    <div className="flex-auto min-w-0 ml-4 mr-6 hidden md:block">
+                        <p className="font-bold">Tony Stark</p>
+                        <div className="flex items-center text-sm font-bold">
+                            <div className="min-w-0">
+                                <p className="truncate">Hey, Are you there?</p>
+                            </div>
+                            <p className="ml-2 whitespace-no-wrap">10min</p>
+                        </div>
+                    </div>
+                    <div className="bg-blue-700 w-3 h-3 rounded-full flex hidden md:block "></div>
                 </div>
         </section>
     )
