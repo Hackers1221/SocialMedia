@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt')
 
 const CreateUser = async(data) => { 
     const response  = {};
-    console.log(data);
+
     try {
         const userObject = {
             name :  data.name,

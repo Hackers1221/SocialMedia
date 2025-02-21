@@ -13,6 +13,8 @@ function PostCard(post) {
     const dispatch = useDispatch();
 
     const [date, setDate] = useState (0);
+    const [count, setCount] = useState (0);
+    const [imageLength, setImageLength] = useState (0);
     const [creator, setCreator] = useState ({
       image: "A",
       name: "",
@@ -45,6 +47,7 @@ function PostCard(post) {
     useEffect (() => {
         getUser (userId);
         getDate ();
+        setImageLength (image.length);
     }, [])
 
   return (
@@ -73,7 +76,7 @@ function PostCard(post) {
             </div>
             <div className="dropdown dropdown-end">
               <div tabIndex={0} role="button" className="m-1">
-                <i class="fa-solid fa-ellipsis"></i>
+                <i className="fa-solid fa-ellipsis"></i>
               </div>
               <ul tabIndex={0} className={`dropdown-content menu bg-[${_COLOR.medium}] text-[${_COLOR.lightest}] rounded-box z-[1] w-52 p-2 shadow-2xl shadow-[${_COLOR.medium}]`}>
                 <li><a>Follow</a></li>
@@ -85,11 +88,12 @@ function PostCard(post) {
       <div>
         {image?.length > 0 && (
           <div className={`my-5 h-[28rem] carousel rounded-sm w-full bg-transparent`}>
-            {image.map((photo, key) => (
-              <div key={key} className={`carousel-item flex justify-center bg-transparent w-full`}>
+            {image.map((photo, key) => {
+              return (<div key={key} className={`carousel-item flex justify-center bg-transparent w-full relative`}>
                 <img src={photo} className="w-max" alt="Image not found"/>
-              </div>
-            ))}
+              </div>)
+            }
+            )}
           </div>
         )}
         <p className="text-sm">{caption}</p>
@@ -101,14 +105,14 @@ function PostCard(post) {
             {likes?.length}
           </button>
           <button className="flex gap-2 items-center">
-          {/* <i class="fa-solid fa-comment"></i> */}
-            <i class="fa-regular fa-comment"></i>
+          {/* <i className="fa-solid fa-comment"></i> */}
+            <i className="fa-regular fa-comment"></i>
             {comments?.length}
           </button>
         </div>
         <div className="flex">
         <button className="flex gap-2 items-center" onClick={toggleBookmark}>
-            {saved? <i class="fa-solid fa-bookmark"></i> : <i class="fa-regular fa-bookmark"></i>}
+            {saved? <i className="fa-solid fa-bookmark"></i> : <i className="fa-regular fa-bookmark"></i>}
             {comments?.length}
           </button>
         </div>

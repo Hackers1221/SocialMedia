@@ -11,7 +11,6 @@ const isUserAuthenticated = async (req, res, next) => {
     }
     try {
         const verifyToken = await authservice.verfiyJwtToken(token);
-        // console.log (verifyToken);
         if (!verifyToken) {
             return res.status(401).json({
                 msg: "Token not verified"

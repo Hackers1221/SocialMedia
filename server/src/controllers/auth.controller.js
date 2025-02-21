@@ -3,9 +3,8 @@ const {StatusCodes} = require('http-status-codes');
 const jwt = require('jsonwebtoken')
 
 const signup = async(req,res) =>  {
-    console.log (req.body);
         const response  = await userService.CreateUser(req.body);
-        console.log(response)
+
         if(response.error){
             return res.status(StatusCodes.BAD_REQUEST).send({
                 msg : "Signup failed",

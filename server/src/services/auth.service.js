@@ -4,7 +4,6 @@ require('dotenv').config();
 const verfiyJwtToken = (token) =>{
     try {
         var decodedToken = jwt.verify(token, process.env.secret_key);
-        console.log (process.env.secret_key);
         return decodedToken;
       } catch(err) {
         throw err.message;
