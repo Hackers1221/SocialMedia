@@ -1,7 +1,12 @@
 import { IoPerson } from "react-icons/io5";
 import { FaSearch } from "react-icons/fa";
+import Avatar from "./Avatar";
+import { useSelector } from "react-redux";
 
 function Navbar () {
+
+    const authState = useSelector ((state) => state.auth);
+
     return (
         <div className={`w-full bg-[${_COLOR.less_light}] max-w-screen shadow-md flex items-center justify-between px-8 py-2`}>
             <div className={`w-8 flex items-center justify-center`}>
@@ -16,7 +21,7 @@ function Navbar () {
             </div>
 
             <div className="flex justify-end">
-                <IoPerson className="w-8 h-8"/>
+                <Avatar url={authState?.data?.image} />
             </div>
         </div>
     )
