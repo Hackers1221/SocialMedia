@@ -6,6 +6,7 @@ import { MdGif } from "react-icons/md";
 import { BsPersonCircle } from "react-icons/bs";
 
 function PostPage() {
+
     return (
         <div className="fixed top-[5rem] md:top-[4rem] md:left-[20rem] left-[1rem] w-[85%] md:w-[50%] h-[10rem]">
             <h2 className={`text-[${_COLOR.lightest}] heading text-[2rem]`}>Activity Feed</h2>
@@ -21,7 +22,7 @@ function PostPage() {
                         <MdVideoCameraBack className="h-[100%] w-[100%] hover:cursor-pointer"/>
                         <MdGif className="h-[100%] w-[100%] hover:cursor-pointer"/>
                     </div>
-                    <FiSend className="h-[100%]"/>
+                    <FiSend className="h-[100%] hover:cursor-pointer"/>
                 </div>
             </div>
         </div>
