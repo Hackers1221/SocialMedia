@@ -1,12 +1,15 @@
 body {
-    font-family: 'Ubuntu', sans-serif;
-  }
-  
-  .code-text {
-    font-family: 'Source Code Pro', monospace;
-  }
-  
-  .cursive-text {
-    font-family: 'Courgette', cursive;
-  }
-  
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.heading {
+  font-family: 'Oleo Script', cursive;
+}
+
+.code {
+  font-family: 'Source Code Pro', monospace;
+}
+
+.cursive-text {
+  font-family: 'Courgette', cursive;
+}

@@ -36,7 +36,7 @@ function Sidebar () {
 
 
     return (
-        <>
+        <div className="fixed top-0 left-0">
             {/* Hamburger Icon for Smaller Devices */}
             <div className="md:hidden p-4 z-50 relative">
                 {isOpen ? (
@@ -59,7 +59,7 @@ function Sidebar () {
             </div>
 
             {/* Sidebar */}
-            <div className={`absolute flex flex-col top-0 left-0 w-64 bg-[${_COLOR.less_light}] h-screen border-rtransform ${
+            <div className={`lex flex-col w-[18em] bg-[${_COLOR.less_light}] h-screen border-rtransform ${
                     isOpen ? "translate-x-0" : "-translate-x-full"
                 } transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:shadow-none`} onClick={(e) => e.stopPropagation()} >
                 <div className={`py-4 flex items-center justify-center border-b border-[${_COLOR.more_light}]`}>
@@ -158,7 +158,7 @@ function Sidebar () {
                 </ul>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 

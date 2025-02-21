@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/navbar";
 import Sidebar from "../components/sidebar";
+import PostPage from "./posts/postPage";
 
 function Home () {
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -15,7 +16,8 @@ function Home () {
     return (
         <div className={`min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-[${_COLOR.dark}] text-gray-800`}>
             {screenWidth >= 768 && (<Navbar />)}
-            <Sidebar/>
+            <Sidebar />
+            <PostPage />
         </div>
     )
 }
