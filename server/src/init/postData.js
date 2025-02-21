@@ -3,7 +3,11 @@ const posts = [
     {
         "image": [
             "https://images.unsplash.com/photo-1519682337058-a94d519337bc",
-            "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8"
+            "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8",
+            "https://images.unsplash.com/photo-1483137140003-ae073b395549",
+            "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8",
+            "https://images.unsplash.com/photo-1472214103451-9374bd1c798e",
+            "https://images.unsplash.com/photo-1518609571773-39b7d30390fa"
         ],
         "video": [
             "https://www.shutterstock.com/video/clip-1094136931-audio-podcast-online-show-video-moving-male"
