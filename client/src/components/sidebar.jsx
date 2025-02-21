@@ -67,7 +67,7 @@ function Sidebar() {
             {/* Sidebar */}
             <div
                 id="sidebar"
-                className={`fixed top-0 left-0 flex flex-col w-[18em] bg-[${_COLOR.less_light}] h-screen border-r shadow-md transform ${
+                className={`fixed top-0 left-0 flex flex-col w-[18em] bg-[${_COLOR.less_light}] h-screen shadow-md transform ${
                     isOpen ? "translate-x-0" : "-translate-x-full"
                 } transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:shadow-none`}
                 onClick={(e) => e.stopPropagation()} // Prevents click inside from closing
@@ -115,7 +115,7 @@ function Sidebar() {
                             </li>
                         )}
                         <li>
-                            <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}]pr-6`}>
+                            <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-gray-600 pr-4 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}]pr-6`}>
                                 <FaBell className="ml-4" />
                                 <span className="ml-2 text-sm tracking-wide truncate">Notifications</span>
                                 <span className="px-2 py-0.5 ml-auto text-xs font-medium text-red-500 bg-red-50 rounded-full">1.2k</span>
