@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Navbar from "../../components/navbar";
 import Sidebar from "../../components/sidebar";
 import { Outlet, useLocation } from "react-router-dom";
-import PostPage from "../posts/postPage";
+import Stories from "../../components/Stories";
 import Messages from "../../components/Messages";
 
 function Layout () {
@@ -26,7 +26,7 @@ function Layout () {
             {!hideLayout && screenWidth >= 768 && <Navbar />}
             {!hideLayout && <Sidebar />}
             <Messages />
-            <PostPage />
+            <Stories />
             <Outlet />
         </div>
     )
