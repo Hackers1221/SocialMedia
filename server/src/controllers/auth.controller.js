@@ -34,7 +34,22 @@ const signin = async(req,res) => {
     })
 }
 
+const getuserByid = async(req,res) => {
+    const response = await userService.getuserByid(req.params.id);
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg:"User not found",
+            error : response.error
+        })
+    }
+    return res.status(StatusCodes.ACCEPTED).json({
+        msg : "User details fetched",
+        userdetails : response.user
+    })
+}
+
 module.exports = {
     signup,
-    signin
+    signin,
+    getuserByid
 }

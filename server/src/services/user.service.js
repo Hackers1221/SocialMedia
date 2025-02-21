@@ -42,11 +42,29 @@ const ValidateUser = async(data) => {
         response.error = error.message;
         return response ; 
     }
+}
 
+const getuserByid = async(id) => {
+    const response = {};
+    try {
+        const userdetails = await usermodel.findById(id);
+        if(!userdetails){
+            response.error = "User not found";
+        }else{
+            response.user = userdetails;
+        }
+        return response;
+
+    } catch (error) {
+        console.log("Error" , error);
+        response.error = error.message;
+        return response ; 
+    }
 }
 
 module.exports = {
     CreateUser,
-    ValidateUser
+    ValidateUser,
+    getuserByid
 }
 
