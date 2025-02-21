@@ -5,8 +5,8 @@ function Home () {
 
     return  (
         <>
-            <PostPage />
             <Stories />
+            <PostPage />
         </>
     )
 }

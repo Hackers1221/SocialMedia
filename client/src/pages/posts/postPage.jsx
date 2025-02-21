@@ -24,7 +24,7 @@ function PostPage() {
 
     return (
         <>
-            <div className="fixed top-[5rem] md:top-[4rem] md:left-[20rem] left-[1rem] w-[85%] md:w-[50%] h-[90vh] flex flex-col flex-grow overflow-y-auto">
+            <div className="fixed top-[10rem] md:top-[5rem] md:top-[4rem] md:left-[20rem] left-[1rem] w-[85%] md:w-[50%] h-[90vh] flex flex-col flex-grow overflow-y-auto">
                 {/* Header */}
                 <h2 className={`text-[${_COLOR.lightest}] heading text-[2rem]`}>Activity Feed</h2>
                 

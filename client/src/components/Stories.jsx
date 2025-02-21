@@ -1,6 +1,7 @@
 function Stories () {
     return (
-        <section class="fixed top-[3.5rem] right-0 bg-transparent min-h-screen flex flex-row md:flex-col items-center pt-5 pr-4">
+        <section className="fixed top-[2rem] md:top-[3.5rem] md:right-0 w-full md:w-auto bg-transparent h-max md:min-h-screen flex flex-row md:flex-col items-center pt-5 px-4">
+
             <ul class="flex flex-row md:flex-col items-center justify-center md:space-x-8 gap-2">
                 <li class="flex flex-col items-center space-y-2">
                     <div class="bg-gradient-to-tr from-yellow-500 to-pink-600 rounded-full p-1 relative">
@@ -17,7 +18,7 @@ function Stories () {
                             <img class="h-10 w-10 rounded-full" src="https://i.ibb.co/yhh0Ljy/profile.jpg" alt="image"/>
                         </a>
                     </div>
-                    <p className={`text-sm text-[${_COLOR.lightest}]`}>dealer_101</p>
+                    <p className={`text-sm text-[${_COLOR.lightest}]`}>dealerAnu_101</p>
                 </li>
                 <li class="flex flex-col items-center space-y-2">
                     <div class="bg-gradient-to-tr from-yellow-500 to-pink-600 rounded-full p-1">
