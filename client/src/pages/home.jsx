@@ -14,11 +14,9 @@ function Home () {
 
     return (
         <div className={`min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-[${_COLOR.dark}] text-gray-800`}>
+            {screenWidth >= 768 && (<Navbar />)}
             <div className="flex">
                 <Sidebar />
-                <div className="w-full">
-                    {screenWidth >= 768 && (<Navbar />)}
-                </div>
             </div>
         </div>
     )
