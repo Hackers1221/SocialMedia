@@ -25,8 +25,8 @@ function Layout () {
         <div className={`min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-[${_COLOR.dark}] text-gray-800`}>
             {!hideLayout && screenWidth >= 768 && <Navbar />}
             {!hideLayout && <Sidebar />}
-            <Messages />
-            <Stories />
+            {!hideLayout && <Messages />}
+            {!hideLayout && <Stories />}
             <Outlet />
         </div>
     )
