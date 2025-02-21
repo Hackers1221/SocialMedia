@@ -11,6 +11,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { IoMdClose } from "react-icons/io";
 import { FaBookmark } from "react-icons/fa6";
 import PostDialog from "./PostDialog";
+import {Link} from "react-router-dom"
 
 function Sidebar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -151,10 +152,10 @@ function Sidebar() {
                                 </div>
                             </li>
                             <li>
-                                <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}] pr-6`}>
+                                <Link href="/saved" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}] pr-6`}>
                                     <FaBookmark className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Saved Posts</span>
-                                </a>
+                                </Link>
                             </li>
                             <li>
                                 <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}] pr-6`}>
