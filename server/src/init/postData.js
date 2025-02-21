@@ -1,43 +1,5 @@
 const posts = [
-    {
-        "image": [
-            "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0",
-            "https://images.unsplash.com/photo-1519682337058-a94d519337bc"
-        ],
-        "video": [
-            "https://www.shutterstock.com/video/clip-1094136931-audio-podcast-online-show-video-moving-male"
-        ],
-        "likes": [],
-        "comments": "Beautiful shot!",
-        "interests": ["travel", "landscape"],
-        "userId": ""
-    },
-    {
-        "image": [
-            "https://images.unsplash.com/photo-1496346651079-6ca5cb67f42f",
-            "https://images.unsplash.com/photo-1489278353717-f64c6ee8a4d2"
-        ],
-        "video": [
-            "https://www.shutterstock.com/video/clip-1094136931-audio-podcast-online-show-video-moving-male"
-        ],
-        "likes": [],
-        "comments": "Such an inspiring post!",
-        "interests": ["motivation", "fitness"],
-        "userId": ""
-    },
-    {
-        "image": [
-            "https://images.unsplash.com/photo-1461896836934-ffe607ba8211",
-            "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0"
-        ],
-        "video": [
-            "https://www.shutterstock.com/video/clip-1094136931-audio-podcast-online-show-video-moving-male"
-        ],
-        "likes": [],
-        "comments": "Nature is truly amazing!",
-        "interests": ["nature", "wildlife"],
-        "userId": ""
-    },
+    
     {
         "image": [
             "https://images.unsplash.com/photo-1519682337058-a94d519337bc",
