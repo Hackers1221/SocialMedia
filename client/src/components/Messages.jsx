@@ -2,7 +2,7 @@ function Messages () {
     return (
         <section className={`fixed top-[2rem] md:top-[4.5rem] right-[6rem] hidden md:flex md:flex-col overflow-auto w-[20rem] lg:max-w-sm bg-transparent rounded-md border-[1px] border-[${_COLOR.less_light}]`}>
             <div className="search-box p-4 flex-none">
-                <form onsubmit="">
+                <form>
                     <div className="relative">
                         <label>
                             <input className="rounded-full py-2 pr-6 pl-10 w-full border border-gray-800 focus:border-gray-700 bg-gray-800 focus:bg-gray-900 focus:outline-none text-gray-200 focus:shadow-md transition duration-300 ease-in"
