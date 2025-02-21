@@ -9,6 +9,7 @@ import { ImVideoCamera } from "react-icons/im";
 import { useEffect, useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoMdClose } from "react-icons/io";
+import { FaBookmark } from "react-icons/fa6";
 
 function Sidebar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -73,7 +74,7 @@ function Sidebar() {
                 onClick={(e) => e.stopPropagation()} // Prevents click inside from closing
             >
                 <div className={`py-4 flex items-center justify-center border-b border-[${_COLOR.more_light}]`}>
-                    <div className="text-xl font-bold">DropChat</div>
+                    <div className="text-xl font-bold cursive-text">DropChat</div>
                 </div>
                 <div className="overflow-y-auto overflow-x-hidden flex-grow">
                     <ul className="flex flex-col py-4 space-y-1">
@@ -124,7 +125,7 @@ function Sidebar() {
                         <div className="mx-4 h-[1px] bg-gray-300"></div>
                         <li className="px-5">
                             <div className="flex flex-row items-center h-8">
-                                <div className="text-sm font-bold text-gray-800">Settings</div>
+                                <div className={`text-sm font-bold text-[${_COLOR.dark}]`}>Settings</div>
                             </div>
                         </li>
                         {screenWidth < 768 && (
@@ -139,6 +140,12 @@ function Sidebar() {
                             <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}] pr-6`}>
                                 <LuCircleFadingPlus className="ml-4" />
                                 <span className="ml-2 text-sm tracking-wide truncate">Create Post</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}] pr-6`}>
+                                <FaBookmark className="ml-4" />
+                                <span className="ml-2 text-sm tracking-wide truncate">Saved Posts</span>
                             </a>
                         </li>
                         <li>

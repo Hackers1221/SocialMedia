@@ -11,6 +11,7 @@ const isUserAuthenticated = async (req, res, next) => {
     }
     try {
         const verifyToken = await authservice.verfiyJwtToken(token);
+        // console.log (verifyToken);
         if (!verifyToken) {
             return res.status(401).json({
                 msg: "Token not verified"
@@ -18,6 +19,7 @@ const isUserAuthenticated = async (req, res, next) => {
         }
         next();
     } catch (error) {
+        console.log (error);
         return res.status(500).json({
             msg: "Internal server error"
         });

@@ -16,6 +16,7 @@ const createPost = async(req,res) => {
 }
 
 const getallPosts = async(req,res) => {
+    console.log ("Hello");
     const response = await postsService.getAllPosts();
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
