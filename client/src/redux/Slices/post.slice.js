@@ -30,7 +30,7 @@ const PostSlice = createSlice({
         .addCase(getAllPosts.fulfilled, (state, action) => {
             if(!action?.payload?.data) return;
             console.log (action.payload);
-            state.downloadedPosts = action?.payload?.data?.postsdata?.posts.reverse();
+            state.downloadedPosts = action?.payload?.data?.postsdata?.posts;
             state.postList = state.downloadedPosts;
         })
     }

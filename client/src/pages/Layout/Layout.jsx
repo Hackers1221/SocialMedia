@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import Navbar from "../../components/navbar";
 import Sidebar from "../../components/sidebar";
 import { Outlet, useLocation } from "react-router-dom";
+import PostPage from "../posts/postPage";
+import Messages from "../../components/Messages";
 
 function Layout () {
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -23,6 +25,8 @@ function Layout () {
         <div className={`min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-[${_COLOR.dark}] text-gray-800`}>
             {!hideLayout && screenWidth >= 768 && <Navbar />}
             {!hideLayout && <Sidebar />}
+            <Messages />
+            <PostPage />
             <Outlet />
         </div>
     )
