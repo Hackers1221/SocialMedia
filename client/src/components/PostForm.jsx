@@ -110,14 +110,28 @@ export default function PostForm({ open, setOpen }) {
               onChange={(e) => setCaption(e.target.value)}
             ></textarea>
 
-            {/* Post Button */}
-            <button
-              type="button"
-              onClick={() => setOpen(false)}
-              className="mt-4 w-[20%] bg-gray-500 text-white font-semibold py-3 rounded-3xl hover:bg-gray-700"
-            >
-              Post
-            </button>
+            {/* Post Button + interest */}
+            <div className="flex justify-between items-center mt-4">
+              {/* Hashtag Input */}
+              <label className="flex items-center gap-2 px-3 h-12 border-2 border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition w-[75%]">
+                <i className="fa-solid fa-hashtag text-gray-800 text-lg"></i>
+                <input 
+                  type="text"
+                  className="bg-transparent outline-none text-gray-700 w-full"
+                  placeholder="Add hashtags Ex: games, sports"
+                />
+              </label>
+
+              {/* Post Button */}
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                className="h-12 w-[20%] bg-gray-500 text-white font-semibold rounded-3xl hover:bg-gray-700 transition"
+              >
+                Post
+              </button>
+            </div>
+
           </DialogPanel>
         </div>
       </div>
