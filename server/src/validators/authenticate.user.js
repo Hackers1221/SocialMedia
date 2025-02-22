@@ -4,6 +4,7 @@ const authservice = require('../services/auth.service')
 
 const isUserAuthenticated = async (req, res, next) => {
     const token = req.headers['x-access-token'];
+    console.log(token);
     if (!token) {
         return res.status(401).send({
             msg: "Token not provided"
@@ -11,6 +12,8 @@ const isUserAuthenticated = async (req, res, next) => {
     }
     try {
         const verifyToken = await authservice.verfiyJwtToken(token);
+        console.log("hello");
+        console.log(verifyToken);
         if (!verifyToken) {
             return res.status(401).json({
                 msg: "Token not verified"

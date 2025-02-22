@@ -4,27 +4,44 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
+import {useDispatch, useSelector} from 'react-redux'
+import { createPost } from "../redux/Slices/post.slice";
 
 export default function PostForm({ open, setOpen }) {
-  const [images, setImages] = useState([]);
-  const [videos, setVideos] = useState([]);
+  const [image, setImage] = useState([]);
+  const [video, setVideo] = useState([]);
   const [caption, setCaption] = useState("");
+  const [interests, setInterests] = useState("");
+  const authState = useSelector((state) => state.auth.data);
+  const dispatch = useDispatch();
 
+  const postData = {
+      image, video,caption,interests,
+      userId :  authState._id
+  }
+
+  const Createpost = async() => {
+
+    const response = await dispatch(createPost(postData));
+  }
+
+
+
+  // Handle files
   const handleFileChange = (event, type) => {
     const uploadedFiles = Array.from(event.target.files);
-    console.log(uploadedFiles);
     if (type === "image") {
-      setImages((prevImages) => [...uploadedFiles, ...prevImages]);
+      setImage((prevImages) => [...uploadedFiles, ...prevImages]);
     } else {
-      setVideos((prevVideos) => [...uploadedFiles, ...prevVideos]);
+      setVideo((prevVideos) => [...uploadedFiles, ...prevVideos]);
     }
   };
 
   const handleDeleteFile = (index, type) => {
     if (type === "image") {
-      setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+      setImage((prevImages) => prevImages.filter((_, i) => i !== index));
     } else {
-      setVideos((prevVideos) => prevVideos.filter((_, i) => i !== index));
+      setVideo((prevVideos) => prevVideos.filter((_, i) => i !== index));
     }
   };
 
@@ -40,7 +57,7 @@ export default function PostForm({ open, setOpen }) {
             </DialogTitle>
 
             {/* File Upload Section */}
-            {images.length > 0 || videos.length > 0 ? (
+            {image.length > 0 || video.length > 0 ? (
               <div className="relative w-full">
                 <Swiper
                   spaceBetween={10}
@@ -49,7 +66,7 @@ export default function PostForm({ open, setOpen }) {
                   modules={[Navigation]}
                   className="mt-4 w-full h-64 md:h-80"
                 >
-                  {[...images, ...videos].map((file, index) => (
+                  {[...image, ...video].map((file, index) => (
                     <SwiperSlide key={index} className="relative flex items-center justify-center rounded-lg overflow-hidden">
                       {file.type.startsWith("image") ? (
                         <img src={URL.createObjectURL(file)} alt="Preview" className="w-full object-cover" />
@@ -75,28 +92,28 @@ export default function PostForm({ open, setOpen }) {
                 <label className="flex flex-col items-center justify-center w-1/2 h-48 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
                   <i className="fa-solid fa-image text-gray-500 text-3xl"></i>
                   <span className="mt-2 text-sm text-gray-600">Add an Image</span>
-                  <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileChange(e, "image")} multiple />
+                  <input type="file" className="hidden" accept="image/*" encType= "multipart/form-data" onChange={(e) => handleFileChange(e, "image")} multiple />
                 </label>
                 <label className="flex flex-col items-center justify-center w-1/2 h-48 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
                   <i className="fa-solid fa-video text-gray-500 text-3xl"></i>
                   <span className="mt-2 text-sm text-gray-600">Add a Video</span>
-                  <input type="file" className="hidden" accept="video/*" onChange={(e) => handleFileChange(e, "video")} multiple />
+                  <input type="file" className="hidden" accept="video/*" encType= "multipart/form-data" onChange={(e) => handleFileChange(e, "video")} multiple />
                 </label>
               </div>
             )}
 
             {/* Separate Add Buttons */}
-            {(images.length > 0 || videos.length > 0) && (
+            {(image.length > 0 || video.length > 0) && (
               <div className="absolute top-4 right-7 flex gap-2">
                 <label className="bg-gray-400 text-white px-3 py-2 rounded-full shadow-lg cursor-pointer hover:bg-gray-700 transition flex items-center gap-2">
                   <i className="fa-solid fa-image text-lg"></i>
                   <span className="text-sm font-medium">Add Image</span>
-                  <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileChange(e, "image")} multiple />
+                  <input type="file" className="hidden" accept="image/*" encType= "multipart/form-data" onChange={(e) => handleFileChange(e, "image")} multiple />
                 </label>
                 <label className="bg-gray-400 text-white px-3 py-2 rounded-full shadow-lg cursor-pointer hover:bg-gray-700 transition flex items-center gap-2">
                   <i className="fa-solid fa-video text-lg"></i>
                   <span className="text-sm font-medium">Add Video</span>
-                  <input type="file" className="hidden" accept="video/*" onChange={(e) => handleFileChange(e, "video")} multiple />
+                  <input type="file" className="hidden" accept="video/*" encType= "multipart/form-data" onChange={(e) => handleFileChange(e, "video")} multiple />
                 </label>
               </div>
             )}
@@ -117,15 +134,20 @@ export default function PostForm({ open, setOpen }) {
                 <i className="fa-solid fa-hashtag text-gray-800 text-lg"></i>
                 <input 
                   type="text"
+                  value={interests}
                   className="bg-transparent outline-none text-gray-700 w-full"
                   placeholder="Add hashtags Ex: games, sports"
+                  onChange={(e) => setInterests(e.target.value)}
                 />
               </label>
 
               {/* Post Button */}
               <button
                 type="button"
-                onClick={() => setOpen(false)}
+                onClick={() =>{
+                  setOpen(false);
+                  Createpost();
+                }}
                 className="h-12 w-[20%] bg-gray-500 text-white font-semibold rounded-3xl hover:bg-gray-700 transition"
               >
                 Post
