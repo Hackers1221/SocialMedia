@@ -43,8 +43,32 @@ const getAllPosts = async () => {
 };
 
 
+const updatePost = async (postId, updatedData) => {
+    const response = {};
+    try {
+
+        const updatedPost = await postsmodel.findByIdAndUpdate(
+            postId, 
+            updatedData, 
+            { new: true, runValidators: true } 
+        );
+
+        if (!updatedPost) {
+            response.error = "Post not found";
+            return response;
+        }
+        
+        response.post = updatedPost;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response;
+    }
+};
+
 
 module.exports = {
     CreatePost,
-    getAllPosts
+    getAllPosts,
+    updatePost
 };
