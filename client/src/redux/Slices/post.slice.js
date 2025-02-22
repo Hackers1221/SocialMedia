@@ -28,7 +28,7 @@ const PostSlice = createSlice({
             const id = action?.payload?.id;
             state.postList = state.downloadedPosts.filter((post) => post.userId == id);
             state.postList = JSON.parse(JSON.stringify(state.postList));
-            console.log (state.downloadedPosts.filter((post) => post.userId == id));
+            console.log (id);
         },
     },
     extraReducers: (builder) => {
