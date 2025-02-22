@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 function PostCard(post) {
     const [liked, setLiked] = useState(false);
     const [saved, setSaved] = useState(false);
-    const {image, video, likes, comments, interests, createdAt, userId, caption} = post.post;
+    const {image, video, likes, comments, interests, createdAt, userId, caption} = post?.post;
     const currUser = useSelector((state) => state.auth);
     const dispatch = useDispatch();
 

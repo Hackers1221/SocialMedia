@@ -3,9 +3,9 @@ const postsService = require('../services/posts.service');
 
 const createPost = async(req,res) => {
     // console.log("hello");
+    console.log("check")
     console.log(req.body);
     console.log(req.file);
-    console.log("ppp")
     // const response = await postsService.CreatePost(req.body);
     // if(response.error){
     //     return res.status(StatusCodes.BAD_REQUEST).send({

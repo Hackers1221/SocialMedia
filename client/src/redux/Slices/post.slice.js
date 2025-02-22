@@ -22,7 +22,6 @@ export const getAllPosts = createAsyncThunk('posts/getAllPosts', async () => {
 
 export const createPost = createAsyncThunk('post/createPost', async (postData) => {
     try {
-        console.log("hi",postData)
         const response = await axiosInstance.post('post/posts', postData, {
             headers: {
                 'x-access-token': localStorage.getItem('token')
