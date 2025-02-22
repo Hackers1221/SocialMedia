@@ -26,7 +26,8 @@ const userSchema = new Schema({
         type: String,
         minLength: 5,
         required: true,
-        match: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+        match: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%?&])[A-Za-z\d@$!%?&]{5,}$/
+,
     },
     following: {
         type: [String],
@@ -36,14 +37,40 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
-    savedImages : {
-        type : [String],
-        default : []
-    },
-    savedVideos : {
-        type : [String],
-        default : []
-    }
+    saved : [{
+        image:{
+            type: [String],
+            default: []
+        },
+        video:{
+            type: [String],
+            default: []
+        },
+        likes: {
+            type: [String],
+            default: []
+        },
+        caption: {
+            type: String,
+            default: ""
+        },
+        comments: {
+            type: [String],
+            default : []
+        },
+        interests : {
+            type : [String],
+            required : true
+        },
+        userId : {
+            type : String,
+            required : true
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now()
+        }
+    }]
 });
 
 userSchema.pre('save', function(next) {
