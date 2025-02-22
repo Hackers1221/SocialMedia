@@ -78,7 +78,7 @@ const DisplayPost = ({ open, setOpen, post }) => {
               <img src={photo} className="w-max h-full" alt="Image not found" />
             </div>
           ))}
-          <div className="absolute top-2 left-2 bg-black w-[50%] flex flex-col items-center bg-opacity-80 text-white text-sm px-3 py-1 rounded">
+          <div className="absolute top-2 left-2 bg-black w-[50%] flex flex-col items-start bg-opacity-80 text-white text-sm px-3 py-1 rounded">
             <p className="font-semibold">{creator?.name}</p>
             <p className="text-xs">{date}</p>
           </div>

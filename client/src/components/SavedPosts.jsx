@@ -5,13 +5,10 @@ import DisplayPost from "./DsiplayPost";
 
 const SavedPost = () => {
   const saved = useSelector((state) => state.auth.data.saved);
-  const savedvideos = useSelector((state) => state.auth.data.savedVideos);
 
   const [activeTab, setActiveTab] = useState("images");
   const [isDialogOpen, setDialogOpen] = useState (false);
   const [selectedPost, setSelectedPost] = useState ();
-
-  const defaultThumbnail = "https://tse3.mm.bing.net/th?id=OIP.Oc-T0TUXo2iuOBfQfLSbDAHaEo&w=296&h=296&c=7";
 
   return (
     <>
@@ -47,18 +44,11 @@ const SavedPost = () => {
               setDialogOpen(true);
               setSelectedPost (post);
             }}>
-              {activeTab === "images" ? (
+              {activeTab === "images" && (
                 <img
                   className="object-center w-[25rem] h-[10rem] object-cover rounded-lg transition-transform duration-300 group-hover:scale-110"
                   src={post.image}
                   alt="Post cannot be loaded"
-                />
-              ) : (
-                <video
-                  className="object-cover object-center w-[25rem] h-[10rem] rounded-lg"
-                  src={post}
-                  poster={defaultThumbnail} // Default thumbnail for videos
-                  controls
                 />
               )}
               <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-lg font-semibold">

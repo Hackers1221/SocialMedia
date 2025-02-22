@@ -8,7 +8,8 @@ function Stories () {
 
 
     return (
-        <section className="fixed top-[2rem] md:top-[0rem] md:right-0 w-full md:w-auto bg-transparent h-max md:min-h-screen flex flex-row md:flex-col items-center pt-5 px-4">
+        <section className="fixed top-[4rem] md:top-[0rem] left-0 md:left-auto right-full md:right-0 w-full md:w-auto h-max md:min-h-screen flex flex-row md:flex-col items-center md:pt-5 px-4">
+
 
             <ul className="flex flex-row md:flex-col items-center justify-center gap-4">
                 <li className="flex justify-end">

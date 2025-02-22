@@ -6,6 +6,7 @@ import Layout from "../Layout/Layout";
 import SavedPost from "../../components/SavedPosts";
 import Profile from "../../components/Profile";
 import Explore from "../../components/Explore";
+import Messenger from "../../components/Messenger";
 
 function MainRoutes() {
   return (
@@ -17,6 +18,7 @@ function MainRoutes() {
         <Route path="saved" element={<SavedPost />} />
         <Route path="profile" element={<Profile />} />
         <Route path="explore" element={<Explore />} />
+        <Route path="messenger" element={<Messenger />} />
       </Route>
     </Routes>
   );
