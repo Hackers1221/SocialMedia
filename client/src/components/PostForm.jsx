@@ -6,6 +6,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import {useDispatch, useSelector} from 'react-redux'
 import { createPost } from "../redux/Slices/post.slice";
+import toast from "react-hot-toast";
 
 export default function PostForm({ open, setOpen }) {
   const [image, setImage] = useState([]);
@@ -15,15 +16,25 @@ export default function PostForm({ open, setOpen }) {
   const authState = useSelector((state) => state.auth.data);
   const dispatch = useDispatch();
 
-  const postData = {
-      image, video,caption,interests,
-      userId :  authState._id
-  }
-
-  const Createpost = async() => {
-
-    const response = await dispatch(createPost(postData));
-  }
+  const Createpost = async () => {
+    const formData = new FormData();
+    
+    image.forEach((file) => formData.append("image", file));
+    video.forEach((file) => formData.append("video", file));
+  
+    formData.append("caption", caption);
+    formData.append("interests", interests);
+    formData.append("userId", authState._id);
+  
+    const response = await dispatch(createPost(formData));
+    
+    if (!response) {
+      toast.error("Something went wrong!");
+    } else {
+      toast.success("Post created successfully!");
+      setOpen(false);
+    }
+  };
 
 
 

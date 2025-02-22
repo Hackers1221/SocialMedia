@@ -1,25 +1,8 @@
-// const cloudinary = require('cloudinary').v2;
-// const { CloudinaryStorage } = require('multer-storage-cloudinary');
-
-// cloudinary.config({
-//     cloud_name: process.env.CLOUD_NAME,
-//     api_key: process.env.CLOUD_API_KEY,
-//     api_secret: process.env.CLOUD_API_SECRET,
-// });
-
-// const storage = new CloudinaryStorage({
-//     cloudinary: cloudinary,
-//     params: {
-//       folder: 'SocialMedia',
-//       resource_type: 'auto',
-//       allowedFormats: ["png", "jpg", "jpeg", "webp", "mp4", "avi", "mov", "mkv"],
-//     },
-//   });
-
-// module.exports = {cloudinary, storage};
-
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const multer = require('multer');
+const dotenv = require('dotenv');
+dotenv.config();
 
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
@@ -27,34 +10,53 @@ cloudinary.config({
     api_secret: process.env.CLOUD_API_SECRET,
 });
 
-// Allowed formats for images and videos only
-const allowedFormats = ["png", "jpg", "jpeg", "webp", "mp4", "avi", "mov", "mkv"];
-
 const storage = new CloudinaryStorage({
-    cloudinary: cloudinary,
-    params: async (req, file) => {
-        const fileFormat = file.mimetype.split('/')[1]; // Extract file extension from MIME type
+  cloudinary: cloudinary,
+  params: async (req, file) => {
+    try {
+      if (!file || !file.mimetype) {
+        throw new Error('Invalid file uploaded');
+      }
 
-        // Validate format
-        if (!allowedFormats.includes(fileFormat)) {
-            throw new Error("Invalid file format. Only images and videos are allowed.");
-        }
+      const isImage = file.mimetype.startsWith('image');
+      const folder = isImage ? 'socialMedia/images' : 'socialMedia/videos';
+      const resource_type = isImage ? 'image' : 'video';
 
-        return {
-            folder: 'SocialMedia',  // Fixed typo from 'SocialMeadia'
-            format: fileFormat,  
-            resource_type: "auto",  // Let Cloudinary determine the file type
-        };
+      // Normalize format (e.g., "jpeg" → "jpg")
+      let format = file.mimetype.split('/')[1];
+      if (format === 'jpeg') format = 'jpg';
+
+      return {
+        folder,
+        resource_type,
+        format,
+        public_id: `${Date.now()}-${file.originalname}`, // Ensures unique filename
+        transformation: [{ format }], // Correct way to apply format
+      };
+    } catch (error) {
+      console.error('Error in Cloudinary params:', error);
+      throw error; // Ensures error is caught by multer
     }
+  },
 });
 
-// File filter to ensure only images & videos are uploaded
-const fileFilter = (req, file, cb) => {
-    if (file.mimetype.startsWith("image/") || file.mimetype.startsWith("video/")) {
-        cb(null, true);
-    } else {
-        cb(new Error("Only images and videos are allowed"), false);
+const upload = multer({ 
+  storage,
+  limits: { fileSize: 50 * 1024 * 1024 }, // Limit file size (e.g., 50MB)
+  fileFilter: (req, file, cb) => {
+    if (!file.mimetype.startsWith('image') && !file.mimetype.startsWith('video')) {
+      return cb(new Error('Only image and video files are allowed!'), false);
     }
-};
+    cb(null, true);
+  },
+}).fields([
+  { name: 'image', maxCount: 10 },
+  { name: 'video', maxCount: 5 },
+]);
 
-module.exports = { cloudinary, storage, fileFilter };
+module.exports = upload;
+
+
+
+
+
