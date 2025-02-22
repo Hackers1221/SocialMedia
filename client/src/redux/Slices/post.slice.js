@@ -22,6 +22,7 @@ export const getAllPosts = createAsyncThunk('posts/getAllPosts', async () => {
 
 export const createPost = createAsyncThunk('post/createPost', async (postData) => {
     try {
+        console.log("hi",postData)
         const response = await axiosInstance.post('post/posts', postData, {
             headers: {
                 'x-access-token': localStorage.getItem('token')
@@ -47,14 +48,11 @@ const PostSlice = createSlice({
         builder
             .addCase(getAllPosts.fulfilled, (state, action) => {
                 if (!action.payload?.data) return;
-                console.log(action.payload);
                 state.downloadedPosts = action.payload?.data?.postsdata?.posts.reverse();
                 state.postList = state.downloadedPosts;
             })
             .addCase(createPost.fulfilled, (state, action) => {
                 if (!action.payload?.data) return;
-                console.log(action.payload);
-
                 const newPost = action.payload?.data?.postsdata?.post;
                 state.downloadedPosts = [newPost, ...state.downloadedPosts];
                 state.postList = state.downloadedPosts;
