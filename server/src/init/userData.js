@@ -6,7 +6,7 @@ const users = [
         email: "johndoe@example.com",
         password: "Secure@123",
         following: [],
-        birth: "1995-06-15"
+        birth: "1995-06-15",
     },
     {
         image: "https://i.pravatar.cc/200?img=2",
@@ -366,7 +366,22 @@ const users = [
         email: "rounak@gmail.com",
         password: "Rounak@123",
         following: [],
-        birth: "2004-05-19"
+        birth: "2004-05-19",
+        savedImages : [
+            "https://tse1.mm.bing.net/th?id=OIP.eD9-ocppLL5dduPpP7lzPAHaEK&w=266&h=266&c=7",
+            "https://tse3.mm.bing.net/th?id=OIP.URX3g3SmLfWwSuPr459ibwHaHw&w=474&h=474&c=7",
+            "https://tse3.mm.bing.net/th?id=OIP.Oc-T0TUXo2iuOBfQfLSbDAHaEo&w=296&h=296&c=7",
+            "https://tse4.mm.bing.net/th?id=OIP.Mvcr0QDsGXOx29cSBfXd6AHaE7&w=315&h=315&c=7",
+            "https://tse1.mm.bing.net/th?id=OIP.eD9-ocppLL5dduPpP7lzPAHaEK&w=266&h=266&c=7",
+            "https://tse3.mm.bing.net/th?id=OIP.URX3g3SmLfWwSuPr459ibwHaHw&w=474&h=474&c=7",
+            "https://tse3.mm.bing.net/th?id=OIP.Oc-T0TUXo2iuOBfQfLSbDAHaEo&w=296&h=296&c=7",
+            "https://tse4.mm.bing.net/th?id=OIP.Mvcr0QDsGXOx29cSBfXd6AHaE7&w=315&h=315&c=7",
+        ],
+        savedVideos : [
+            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+        ]
     }
 
 ];
