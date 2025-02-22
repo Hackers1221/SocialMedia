@@ -20,11 +20,7 @@ function Navbar () {
                 />
             </div>
 
-            <div className="flex justify-end">
-                <Link to={'/profile'}>
-                <Avatar url={authState?.data?.image} />
-                </Link>
-            </div>
+            
         </div>
     )
 }
