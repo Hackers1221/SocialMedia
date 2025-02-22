@@ -6,7 +6,7 @@ import { MdGif } from "react-icons/md";
 import { BsPersonCircle } from "react-icons/bs";
 import { useDispatch, useSelector } from 'react-redux'
 import PostCard from "../../components/PostCard";
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { getAllPosts } from "../../redux/Slices/post.slice";
 
 function PostPage() {

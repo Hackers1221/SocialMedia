@@ -4,6 +4,7 @@ import LogIn from "../LogIn/login";
 import Home from "../home";
 import Layout from "../Layout/Layout";
 import SavedPost from "../../components/SavedPosts";
+import Profile from "../../components/Profile";
 
 function MainRoutes() {
   return (
@@ -13,6 +14,7 @@ function MainRoutes() {
         <Route path="signup" element={<SignUp />} />
         <Route path="login" element={<LogIn />} />
         <Route path="saved" element={<SavedPost />} />
+        <Route path="profile" element={<Profile />} />
       </Route>
     </Routes>
   );

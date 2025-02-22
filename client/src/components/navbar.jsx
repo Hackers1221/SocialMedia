@@ -2,6 +2,7 @@ import { IoPerson } from "react-icons/io5";
 import { FaSearch } from "react-icons/fa";
 import Avatar from "./Avatar";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 function Navbar () {
 
@@ -21,7 +22,9 @@ function Navbar () {
             </div>
 
             <div className="flex justify-end">
+                <Link to={'/profile'}>
                 <Avatar url={authState?.data?.image} />
+                </Link>
             </div>
         </div>
     )

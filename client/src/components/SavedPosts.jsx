@@ -10,9 +10,9 @@ const SavedPost = () => {
         {/* Main Content (Centered) */}
         <div className="w-full">
           <div className="grid grid-cols-2 gap-1 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 ">
-            {savedposts.map((photo, index) => (
+            {savedposts?.map((photo, index) => (
               <div key={index}>
-                <img className="object-cover object-center w-[25rem] h-[10rem] rounded-sm" src={photo} alt={`gallery-photo-${index}`} />
+                <img className="object-cover object-center w-[25rem] h-[10rem] rounded-sm" src={photo} alt="Post cannot be loaded" />
               </div>
             ))}
           </div>

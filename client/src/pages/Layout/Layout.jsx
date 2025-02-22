@@ -22,7 +22,7 @@ function Layout () {
     }, []);
 
     return (
-        <div className={`min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-[${_COLOR.dark}] text-gray-800`}>
+        <div className={`min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-[${_COLOR.darkest}] text-gray-800`}>
             {!hideLayout && screenWidth >= 768 && <Navbar />}
             {!hideLayout && <Sidebar />}
             {!hideLayout && <Messages />}

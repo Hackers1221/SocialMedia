@@ -98,10 +98,10 @@ function Sidebar() {
                                 </div>
                             </li>
                             <li>
-                                <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}] pr-6`}>
+                                <Link to="/" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}] pr-6`}>
                                     <FaHome className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Home</span>
-                                </a>
+                                </Link>
                             </li>
                             <li>
                                 <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}] pr-6`}>
@@ -151,7 +151,7 @@ function Sidebar() {
                                 </li>
                             )}
                             <li>
-                                <div onClick={() => setDialogOpen(true)} className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}] pr-6`}>
+                                <div onClick={() => setDialogOpen(true)} className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}] pr-6 hover:cursor-pointer`}>
                                     <LuCircleFadingPlus className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Create Post</span>
                                 </div>
