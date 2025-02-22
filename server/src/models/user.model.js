@@ -17,6 +17,10 @@ const userSchema = new Schema({
         required: [true, 'Name cannot be empty'],
         match : /^[a-z0-9]+$/
     },
+    likedPosts : {
+        type : [String],
+        default : []
+    },
     email: {
         type: String,
         required: [true, 'Email cannot be empty'],

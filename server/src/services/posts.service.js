@@ -66,9 +66,36 @@ const updatePost = async (postId, updatedData) => {
     }
 };
 
+const likePost = async(id,userId) => {
+    const response = {};
+    try {
+        const likesArray = await postsmodel.findById(id);
+        if(!likesArray){
+            response.error = "Post not found";
+            return response;
+        }
+        if(likesArray.likes.includes(userId)){
+            likesArray.likes = likesArray.likes.filter((ids) => ids!=userId);
+        }else{
+            likesArray.likes.push(userId);
+        }
+        const updatedPost = await postsmodel.findByIdAndUpdate(
+            id,
+            { likes: likesArray.likes },
+            { new: true } 
+        );
+        response.post = updatedPost;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response;
+    }
+}
+
 
 module.exports = {
     CreatePost,
     getAllPosts,
-    updatePost
+    updatePost,
+    likePost
 };

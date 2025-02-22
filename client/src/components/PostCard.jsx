@@ -4,15 +4,20 @@ import toast from "react-hot-toast";
 import { getUserById } from "../redux/Slices/auth.slice";
 import Avatar from "./Avatar";
 import { useEffect, useState } from "react";
+import { likePost, updatePost } from "../redux/Slices/post.slice";
 
 function PostCard(post) {
     const [liked, setLiked] = useState(false);
     const [saved, setSaved] = useState(false);
-    const {image, video, likes, comments, interests, createdAt, userId, caption} = post.post;
+    const {_id,image, video, likes, comments, interests, createdAt, userId, caption} = post.post;
     const currUser = useSelector((state) => state.auth);
     const dispatch = useDispatch();
+    const authState = useSelector((state) => state.auth.data);
+
+
 
     const [date, setDate] = useState (0);
+    const [newLikes, setNewLikes] = useState([]);
     const [count, setCount] = useState (0);
     const [imageLength, setImageLength] = useState (0);
     const [creator, setCreator] = useState ({
@@ -28,11 +33,17 @@ function PostCard(post) {
       let date = createdAt?.toString()?.split('T')[0].split('-').reverse().join("/");
       setDate(date);
     }
-    function toggleLike() {
-      setLiked(!liked);
-    }
     function toggleBookmark() {
       setSaved(!saved);
+    }
+
+    const toggleLike = async() => {
+      const response = await dispatch(likePost(
+        _id, {id : authState._id}
+      ))
+      if(response){
+        setLiked(!liked);
+      }
     }
 
     async function getUser(userId) {
@@ -48,7 +59,15 @@ function PostCard(post) {
         getUser (userId);
         getDate ();
         setImageLength (image.length);
+        likes.map((id) => {
+          if(id==authState._id){
+            setLiked(true);
+          }
+        })
     }, [])
+
+
+
 
   return (
     <div className={`rounded-md mb-4 bg-[${_COLOR.less_light}] p-4 border border-16 border-[${_COLOR.darkest}]`} >

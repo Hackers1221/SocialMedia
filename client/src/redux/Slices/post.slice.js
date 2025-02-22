@@ -34,6 +34,36 @@ export const createPost = createAsyncThunk('post/createPost', async (postData) =
     }
 });
 
+export const updatePost = createAsyncThunk('post/updatePost',async(id,postdata) => {
+    try {
+        const response = await axiosInstance.patch(`post/posts/${id}`, postdata , {
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        });
+        if(response){
+            return response;
+        }
+    } catch (error) {
+        toast.error(error.message || "Failed to update post");
+    }
+})
+
+export const likePost = createAsyncThunk('post/likePost', async(id,userData) => {
+    try {
+        const response = await axiosInstance.patch(`post/like/${id}`,userData , {
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+        if(response){
+            return response;
+        }
+    } catch (error) {
+        toast.error(error.message || "Failed to update post");
+    }
+})
+
 const PostSlice = createSlice({
     name: 'post',
     initialState,
@@ -56,7 +86,11 @@ const PostSlice = createSlice({
                 const newPost = action.payload?.data?.postsdata?.post;
                 state.downloadedPosts = [newPost, ...state.downloadedPosts];
                 state.postList = state.downloadedPosts;
-            });
+            })
+            .addCase(updatePost.fulfilled, (state, action) => {
+                if (!action.payload?.data) return;
+                console.log(action.payload);
+            })
     }
 });
 
