@@ -14,8 +14,8 @@ export default defineConfig({
       // dark: "#343a40", 
       // darkest: "#212529",
         lightest: "#EAE7DC",
-        less_light: "#B5C0D0",
-        more_light: "#A77979",
+        less_light: "#3D3D3D",
+        more_light: "#EAE7DC",
         medium: "#4A5759",
         dark: "#2A2D34",
         darkest: "#1C1C1C"

@@ -34,16 +34,16 @@ function PostPage() {
                 <div className={`w-full mb-4 bg-[${_COLOR.less_light}] rounded-md p-4`}>
                     <div className={`flex gap-2 items-center border-b py-2 border-[${_COLOR.more_light}]`}>
                         <Avatar url={authState?.data?.image}/>
-                        <input className={`w-full bg-transparent px-2 focus:outline-none`} placeholder="What's your mood"/>
+                        <input className={`w-full bg-transparent px-2 focus:outline-none text-[${_COLOR.lightest}]`} placeholder="What's your mood"/>
                     </div>
                     <div className="flex justify-between mt-4 h-5">
                         <div className="flex gap-2 h-5">
-                            <MdAddAPhoto className="h-[100%] w-[100%] hover:cursor-pointer" />
-                            <IoMdPhotos className="h-[100%] w-[100%] hover:cursor-pointer"/>
-                            <MdVideoCameraBack className="h-[100%] w-[100%] hover:cursor-pointer"/>
-                            <MdGif className="h-[100%] w-[100%] hover:cursor-pointer"/>
+                            <MdAddAPhoto className="text-white h-[100%] w-[100%] hover:cursor-pointer" />
+                            <IoMdPhotos className="text-white h-[100%] w-[100%] hover:cursor-pointer"/>
+                            <MdVideoCameraBack className="text-white h-[100%] w-[100%] hover:cursor-pointer"/>
+                            <MdGif className="text-white h-[100%] w-[100%] hover:cursor-pointer"/>
                         </div>
-                        <FiSend className="h-[100%] hover:cursor-pointer"/>
+                        <i className={`text-white fa-solid fa-paper-plane text-[${_COLOR.lightest}] hover:cursor-pointer`}></i>
                     </div>
                 </div>
 
