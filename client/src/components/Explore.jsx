@@ -34,7 +34,7 @@ const Explore = () => {
           <input
             type="text"
             placeholder="Search for ideas..."
-            className={`w-full p-3 border border-gray-300 rounded-md shadow-md focus:outline-none text-[${_COLOR.less_light}]`}
+            className={`w-full p-3 border border-gray-300 rounded-md shadow-md focus:outline-none text-[${_COLOR.lightest}]`}
           />
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">

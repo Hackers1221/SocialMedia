@@ -386,4 +386,4 @@ const users = [
 
 ];
 
-module.exports = { sampleUsers: users };  
+module.exports = { sampleUsers: users };

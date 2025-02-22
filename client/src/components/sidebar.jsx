@@ -87,14 +87,14 @@ function Sidebar() {
                     } transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:shadow-none`}
                     onClick={(e) => e.stopPropagation()} // Prevents click inside from closing
                 >
-                    <div className={`py-4 flex items-center justify-center border-b border-[${_COLOR.more_light}]`}>
+                    <div className={`p-4 flex items-center border-b border-[${_COLOR.more_light}]`}>
                         <div className="text-xl text-white font-bold heading">DropChat</div>
                     </div>
                     <div className="overflow-y-auto overflow-x-hidden flex-grow">
                         <ul className="flex flex-col py-4 space-y-1">
                             <li className="px-5">
                                 <div className="flex flex-row items-center h-8">
-                                    <div className={`text-sm font-bold text-[${_COLOR.more_light}]`}>Menu</div>
+                                    <div className={`text-sm font-bold text-[${_COLOR.lightest}]`}>Menu</div>
                                 </div>
                             </li>
                             <li>

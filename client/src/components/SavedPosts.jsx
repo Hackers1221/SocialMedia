@@ -1,21 +1,27 @@
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { BsCameraReels } from "react-icons/bs";
+import DisplayPost from "./DsiplayPost";
 
 const SavedPost = () => {
-  const savedimages = useSelector((state) => state.auth.data.savedImages);
+  const saved = useSelector((state) => state.auth.data.saved);
   const savedvideos = useSelector((state) => state.auth.data.savedVideos);
+
   const [activeTab, setActiveTab] = useState("images");
+  const [isDialogOpen, setDialogOpen] = useState (false);
+  const [selectedPost, setSelectedPost] = useState ();
 
   const defaultThumbnail = "https://tse3.mm.bing.net/th?id=OIP.Oc-T0TUXo2iuOBfQfLSbDAHaEo&w=296&h=296&c=7";
 
   return (
-    <div className="fixed top-[10rem] md:top-[5rem] md:top-[4rem] md:left-[20rem] left-[1rem] w-[85%] md:w-[50%]">
+    <>
+      <DisplayPost open={isDialogOpen} setOpen={setDialogOpen} post={selectedPost}/>
+    <div className="fixed top-[10rem] md:top-[1rem] md:left-[20rem] left-[1rem] w-[85%] md:w-[50%]">
       {/* Tabs for Images and Reels */}
       <div className="flex justify-center space-x-4 border-b pb-2">
         <button
           className={`px-4 py-2 font-semibold flex items-center space-x-2 ${
-            activeTab === "images" ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-500"
+            activeTab === "images" ? `text-[${_COLOR.lightest}] border-b-2 border-[${_COLOR.lightest}]` : "text-gray-500"
           }`}
           onClick={() => setActiveTab("images")}
         >
@@ -24,7 +30,7 @@ const SavedPost = () => {
         </button>
         <button
           className={`px-4 py-2 font-semibold flex items-center space-x-2 ${
-            activeTab === "reels" ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-500"
+            activeTab === "reels" ? `text-[${_COLOR.lightest}] border-b-2 border-[${_COLOR.lightest}]` : "text-gray-500"
           }`}
           onClick={() => setActiveTab("reels")}
         >
@@ -34,14 +40,17 @@ const SavedPost = () => {
       </div>
 
       {/* Main Content */}
-      <div className="w-full">
+      <div className="w-full mt-4">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-          {(activeTab === "images" ? savedimages : savedvideos)?.map((post, index) => (
-            <div key={index} className="relative group hover:cursor-pointer overflow-hidden rounded-lg">
+          {(activeTab === "images" ? saved : savedvideos)?.map((post, index) => (
+            <div key={index} className="relative group hover:cursor-pointer overflow-hidden rounded-lg" onClick={() => {
+              setDialogOpen(true);
+              setSelectedPost (post);
+            }}>
               {activeTab === "images" ? (
                 <img
                   className="object-center w-[25rem] h-[10rem] object-cover rounded-lg transition-transform duration-300 group-hover:scale-110"
-                  src={post}
+                  src={post.image}
                   alt="Post cannot be loaded"
                 />
               ) : (
@@ -60,6 +69,7 @@ const SavedPost = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
