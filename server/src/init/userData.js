@@ -6,7 +6,7 @@ const users = [
         email: "johndoe@example.com",
         password: "Secure@123",
         following: [],
-        birth: "1995-06-15"
+        birth: "1995-06-15",
     },
     {
         image: "https://i.pravatar.cc/200?img=2",
@@ -367,17 +367,20 @@ const users = [
         password: "Rounak@123",
         following: [],
         birth: "2004-05-19",
-        saved : [
-            "https://images.unsplash.com/photo-1472214103451-9374bd1c798e",
-            "https://images.unsplash.com/photo-1484589065579-248aad0d8b13",
-            "https://images.unsplash.com/photo-1519682337058-a94d519337bc",
-            "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8",
-            "https://images.unsplash.com/photo-1483137140003-ae073b395549",
-            "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8",
-            "https://images.unsplash.com/photo-1472214103451-9374bd1c798e",
-            "https://images.unsplash.com/photo-1518609571773-39b7d30390fa",
-            "https://images.unsplash.com/photo-1472214103451-9374bd1c798e",
-            "https://images.unsplash.com/photo-1484589065579-248aad0d8b13"
+        savedImages : [
+            "https://tse1.mm.bing.net/th?id=OIP.eD9-ocppLL5dduPpP7lzPAHaEK&w=266&h=266&c=7",
+            "https://tse3.mm.bing.net/th?id=OIP.URX3g3SmLfWwSuPr459ibwHaHw&w=474&h=474&c=7",
+            "https://tse3.mm.bing.net/th?id=OIP.Oc-T0TUXo2iuOBfQfLSbDAHaEo&w=296&h=296&c=7",
+            "https://tse4.mm.bing.net/th?id=OIP.Mvcr0QDsGXOx29cSBfXd6AHaE7&w=315&h=315&c=7",
+            "https://tse1.mm.bing.net/th?id=OIP.eD9-ocppLL5dduPpP7lzPAHaEK&w=266&h=266&c=7",
+            "https://tse3.mm.bing.net/th?id=OIP.URX3g3SmLfWwSuPr459ibwHaHw&w=474&h=474&c=7",
+            "https://tse3.mm.bing.net/th?id=OIP.Oc-T0TUXo2iuOBfQfLSbDAHaEo&w=296&h=296&c=7",
+            "https://tse4.mm.bing.net/th?id=OIP.Mvcr0QDsGXOx29cSBfXd6AHaE7&w=315&h=315&c=7",
+        ],
+        savedVideos : [
+            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
         ]
     }
 

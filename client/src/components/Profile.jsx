@@ -10,7 +10,7 @@ const Profile = () => {
   const [postState] = usePosts (authState?.data?._id);
 
   return (
-    <div className={`fixed top-[10rem] md:top-[5rem] md:top-[4rem] md:left-[20rem] left-[1rem] w-[85%] md:w-[50%] h-[90vh] overflow-y-auto`}>
+    <div className={`fixed top-[10rem] md:top-[1rem] md:left-[20rem] left-[1rem] w-[85%] md:w-[50%] h-[97vh] flex flex-col flex-grow overflow-y-auto`}>
         <div className={`mb-4 w-full bg-[${_COLOR.less_light}] px-4 pt-4`}>
             <div className={`flex items-center gap-4 `}>
               <Avatar url={authState?.data?.image} size={'lg'}/>

@@ -36,7 +36,11 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
-    saved : {
+    savedImages : {
+        type : [String],
+        default : []
+    },
+    savedVideos : {
         type : [String],
         default : []
     }
