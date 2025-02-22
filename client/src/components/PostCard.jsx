@@ -64,19 +64,19 @@ function PostCard(post) {
               <div className="grow">
                 <p>
                   <Link href={'/profile/'+creator?._id}>
-                    <span className="mr-1 font-semibold cursor-pointer hover:underline">
+                    <span className={`mr-1 font-semibold cursor-pointer hover:underline text-white`}>
                       {creator?.name}
                     </span>
                   </Link>
                 </p>
-                <p className="text-gray-500 text-sm">
+                <p className={`text-[${_COLOR.more_light}] text-sm`}>
                 {date}
                 </p>
               </div>
             </div>
             <div className="dropdown dropdown-end">
               <div tabIndex={0} role="button" className="m-1">
-                <i className="fa-solid fa-ellipsis"></i>
+                <i className="text-white fa-solid fa-ellipsis"></i>
               </div>
               <ul tabIndex={0} className={`dropdown-content menu bg-[${_COLOR.medium}] text-[${_COLOR.lightest}] rounded-box z-[1] w-52 p-2 shadow-2xl shadow-[${_COLOR.medium}]`}>
                 <li><a>Follow</a></li>
@@ -105,23 +105,23 @@ function PostCard(post) {
       ))}
     </div>
   )}
-        <p className="text-sm">{caption}</p>
+        <p className={`text-sm text-[${_COLOR.more_light}]`}>{caption}</p>
       </div>
       <div className="mt-5 flex w-full justify-between px-2">
         <div className="flex gap-4">
-          <button className="flex gap-2 items-center" onClick={toggleLike}>
-            {liked ? (<i className="fa-solid fa-heart"></i>) : <i className="fa-regular fa-heart"></i>}
+          <button className={`flex gap-2 items-center text-[${_COLOR.more_light}]`} onClick={toggleLike}>
+            {liked ? (<i className="text-white fa-solid fa-heart"></i>) : <i className="text-white fa-regular fa-heart"></i>}
             {likes?.length}
           </button>
-          <button className="flex gap-2 items-center">
-          {/* <i className="fa-solid fa-comment"></i> */}
-            <i className="fa-regular fa-comment"></i>
+          <button className={`flex gap-2 items-center text-[${_COLOR.more_light}]`}>
+          {/* <i className="text-white fa-solid fa-comment"></i> */}
+            <i className="text-white fa-regular fa-comment"></i>
             {comments?.length}
           </button>
         </div>
         <div className="flex">
-        <button className="flex gap-2 items-center" onClick={toggleBookmark}>
-            {saved? <i className="fa-solid fa-bookmark"></i> : <i className="fa-regular fa-bookmark"></i>}
+        <button className={`flex gap-2 items-center text-[${_COLOR.more_light}]`} onClick={toggleBookmark}>
+            {saved? <i className="text-white fa-solid fa-bookmark"></i> : <i className="text-white fa-regular fa-bookmark"></i>}
             {comments?.length}
           </button>
         </div>
@@ -135,8 +135,8 @@ function PostCard(post) {
             <input
               className={`block w-full p-2 px-4 overflow-hidden h-12 focus:outline-none rounded-full bg-[${_COLOR.lightest}]`} placeholder="Leave a comment"/>
           </form>
-          <button className={`absolute top-3 right-4 text-[${_COLOR.medium}]`}>
-            <i className="fa-solid fa-paper-plane"></i>
+          <button className={`absolute top-3 right-4`}>
+            <i className={`text-white fa-solid fa-paper-plane text-[${_COLOR.darkest}]`}></i>
           </button>
         </div>
       </div>

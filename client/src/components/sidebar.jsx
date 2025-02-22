@@ -88,49 +88,49 @@ function Sidebar() {
                     onClick={(e) => e.stopPropagation()} // Prevents click inside from closing
                 >
                     <div className={`py-4 flex items-center justify-center border-b border-[${_COLOR.more_light}]`}>
-                        <div className="text-xl font-bold cursive-text">DropChat</div>
+                        <div className="text-xl text-white font-bold heading">DropChat</div>
                     </div>
                     <div className="overflow-y-auto overflow-x-hidden flex-grow">
                         <ul className="flex flex-col py-4 space-y-1">
                             <li className="px-5">
                                 <div className="flex flex-row items-center h-8">
-                                    <div className={`text-sm font-bold text-[${_COLOR.dark}]`}>Menu</div>
+                                    <div className={`text-sm font-bold text-[${_COLOR.more_light}]`}>Menu</div>
                                 </div>
                             </li>
                             <li>
-                                <Link to="/" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}] pr-6`}>
+                                <Link to="/" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
                                     <FaHome className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Home</span>
                                 </Link>
                             </li>
                             <li>
-                                <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}] pr-6`}>
+                                <Link to="/explore" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
                                     <MdExplore className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Explore</span>
-                                </a>
+                                </Link>
                             </li>
                             <li>
-                                <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}] pr-6`}>
+                                <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
                                     <ImVideoCamera className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Shorts</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}] pr-6`}>
+                                <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
                                     <IoChatboxEllipsesSharp className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Messages</span>
                                 </a>
                             </li>
                             {screenWidth < 768 && (
                                 <li>
-                                    <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}] pr-6`}>
+                                    <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-g hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
                                         <FaSearch className="ml-4" />
                                         <span className="ml-2 text-sm tracking-wide truncate">Search</span>
                                     </a>
                                 </li>
                             )}
                             <li>
-                                <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-gray-600 pr-4 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}]pr-6`}>
+                                <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] pr-4 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}]pr-6`}>
                                     <FaBell className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Notifications</span>
                                     <span className="px-2 py-0.5 ml-auto text-xs font-medium text-red-500 bg-red-50 rounded-full">1.2k</span>
@@ -139,31 +139,31 @@ function Sidebar() {
                             <div className={`mx-4 h-[1px] bg-[${_COLOR.more_light}]`}></div>
                             <li className="px-5">
                                 <div className="flex flex-row items-center h-8">
-                                    <div className={`text-sm font-bold text-[${_COLOR.dark}]`}>Settings</div>
+                                    <div className={`text-sm font-bold text-[${_COLOR.more_light}]`}>Settings</div>
                                 </div>
                             </li>
                             {screenWidth < 768 && (
                                 <li>
-                                    <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}] pr-6`}>
+                                    <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
                                         <IoPerson className="ml-4" />
                                         <span className="ml-2 text-sm tracking-wide truncate">Profile</span>
                                     </a>
                                 </li>
                             )}
                             <li>
-                                <div onClick={() => setDialogOpen(true)} className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}] pr-6 hover:cursor-pointer`}>
+                                <div onClick={() => setDialogOpen(true)} className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6 hover:cursor-pointer`}>
                                     <LuCircleFadingPlus className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Create Post</span>
                                 </div>
                             </li>
                             <li>
-                                <Link to="/saved" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}] pr-6`}>
+                                <Link to="/saved" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
                                     <FaBookmark className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Saved Posts</span>
                                 </Link>
                             </li>
                             <li>
-                                <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.dark}] pr-6`}>
+                                <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
                                     <IoIosSettings className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Settings</span>
                                 </a>
