@@ -366,7 +366,19 @@ const users = [
         email: "rounak@gmail.com",
         password: "Rounak@123",
         following: [],
-        birth: "2004-05-19"
+        birth: "2004-05-19",
+        saved : [
+            "https://images.unsplash.com/photo-1472214103451-9374bd1c798e",
+            "https://images.unsplash.com/photo-1484589065579-248aad0d8b13",
+            "https://images.unsplash.com/photo-1519682337058-a94d519337bc",
+            "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8",
+            "https://images.unsplash.com/photo-1483137140003-ae073b395549",
+            "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8",
+            "https://images.unsplash.com/photo-1472214103451-9374bd1c798e",
+            "https://images.unsplash.com/photo-1518609571773-39b7d30390fa",
+            "https://images.unsplash.com/photo-1472214103451-9374bd1c798e",
+            "https://images.unsplash.com/photo-1484589065579-248aad0d8b13"
+        ]
     }
 
 ];
