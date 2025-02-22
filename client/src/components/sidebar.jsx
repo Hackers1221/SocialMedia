@@ -58,19 +58,10 @@ function Sidebar() {
             <div className="fixed top-0 left-0 z-50">
                 {/* Wrapper to avoid misclicks */}
                 <div className="relative z-10 md:hidden p-4">
-                    {isOpen ? (
-                        <IoMdClose
-                            id="menu-toggle"
-                            className="text-3xl cursor-pointer"
-                            onClick={(e) => {
-                                e.stopPropagation(); // Prevents closing immediately
-                                setIsOpen(false);
-                            }}
-                        />
-                    ) : (
+                    {!isOpen && (
                         <GiHamburgerMenu
                             id="menu-toggle"
-                            className="text-3xl cursor-pointer"
+                            className="text-3xl text-white cursor-pointer"
                             onClick={(e) => {
                                 e.stopPropagation();
                                 setIsOpen(true);
@@ -97,39 +88,39 @@ function Sidebar() {
                                     <div className={`text-sm font-bold text-[${_COLOR.lightest}]`}>Menu</div>
                                 </div>
                             </li>
-                            <li>
+                            <li onClick={() => setIsOpen(false)}>
                                 <Link to="/" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
                                     <FaHome className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Home</span>
                                 </Link>
                             </li>
-                            <li>
+                            <li onClick={() => setIsOpen(false)}>
                                 <Link to="/explore" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
                                     <MdExplore className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Explore</span>
                                 </Link>
                             </li>
-                            <li>
+                            <li onClick={() => setIsOpen(false)}>
                                 <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
                                     <ImVideoCamera className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Shorts</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
+                            <li onClick={() => setIsOpen(false)}>
+                                <Link to="/messenger" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
                                     <IoChatboxEllipsesSharp className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Messages</span>
-                                </a>
+                                </Link>
                             </li>
                             {screenWidth < 768 && (
-                                <li>
-                                    <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-g hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
+                                <li onClick={() => setIsOpen(false)}>
+                                    <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
                                         <FaSearch className="ml-4" />
                                         <span className="ml-2 text-sm tracking-wide truncate">Search</span>
                                     </a>
                                 </li>
                             )}
-                            <li>
+                            <li onClick={() => setIsOpen(false)}>
                                 <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] pr-4 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}]pr-6`}>
                                     <FaBell className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Notifications</span>
@@ -142,27 +133,19 @@ function Sidebar() {
                                     <div className={`text-sm font-bold text-[${_COLOR.more_light}]`}>Settings</div>
                                 </div>
                             </li>
-                            {screenWidth < 768 && (
-                                <li>
-                                    <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
-                                        <IoPerson className="ml-4" />
-                                        <span className="ml-2 text-sm tracking-wide truncate">Profile</span>
-                                    </a>
-                                </li>
-                            )}
-                            <li>
+                            <li onClick={() => setIsOpen(false)}>
                                 <div onClick={() => setDialogOpen(true)} className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6 hover:cursor-pointer`}>
                                     <LuCircleFadingPlus className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Create Post</span>
                                 </div>
                             </li>
-                            <li>
+                            <li onClick={() => setIsOpen(false)}>
                                 <Link to="/saved" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
                                     <FaBookmark className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Saved Posts</span>
                                 </Link>
                             </li>
-                            <li>
+                            <li onClick={() => setIsOpen(false)}>
                                 <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
                                     <IoIosSettings className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Settings</span>

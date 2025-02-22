@@ -1,32 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import usePosts from '../hooks/usePosts';
+import DisplayPost from "./DsiplayPost";
 
 const Explore = () => {
-  const [images, setImages] = useState([]);
 
-  useEffect(() => {
-    setImages([
-      "https://tse1.mm.bing.net/th?id=OIP.eD9-ocppLL5dduPpP7lzPAHaEK&w=266&h=266&c=7",
-      "https://tse3.mm.bing.net/th?id=OIP.URX3g3SmLfWwSuPr459ibwHaHw&w=474&h=474&c=7",
-      "https://tse3.mm.bing.net/th?id=OIP.Oc-T0TUXo2iuOBfQfLSbDAHaEo&w=296&h=296&c=7",
-      "https://tse4.mm.bing.net/th?id=OIP.Mvcr0QDsGXOx29cSBfXd6AHaE7&w=315&h=315&c=7",
-      "https://tse3.mm.bing.net/th?id=OIP.Oc-T0TUXo2iuOBfQfLSbDAHaEo&w=296&h=296&c=7",
-      "https://tse4.mm.bing.net/th?id=OIP.Mvcr0QDsGXOx29cSBfXd6AHaE7&w=315&h=315&c=7",
-      "https://tse1.mm.bing.net/th?id=OIP.eD9-ocppLL5dduPpP7lzPAHaEK&w=266&h=266&c=7",
-      "https://tse3.mm.bing.net/th?id=OIP.URX3g3SmLfWwSuPr459ibwHaHw&w=474&h=474&c=7",
-      "https://tse3.mm.bing.net/th?id=OIP.Oc-T0TUXo2iuOBfQfLSbDAHaEo&w=296&h=296&c=7",
-      "https://tse4.mm.bing.net/th?id=OIP.Mvcr0QDsGXOx29cSBfXd6AHaE7&w=315&h=315&c=7",
-      "https://tse3.mm.bing.net/th?id=OIP.Oc-T0TUXo2iuOBfQfLSbDAHaEo&w=296&h=296&c=7",
-      "https://tse4.mm.bing.net/th?id=OIP.Mvcr0QDsGXOx29cSBfXd6AHaE7&w=315&h=315&c=7",
-      "https://tse1.mm.bing.net/th?id=OIP.eD9-ocppLL5dduPpP7lzPAHaEK&w=266&h=266&c=7",
-      "https://tse3.mm.bing.net/th?id=OIP.URX3g3SmLfWwSuPr459ibwHaHw&w=474&h=474&c=7",
-      "https://tse3.mm.bing.net/th?id=OIP.Oc-T0TUXo2iuOBfQfLSbDAHaEo&w=296&h=296&c=7",
-      "https://tse4.mm.bing.net/th?id=OIP.Mvcr0QDsGXOx29cSBfXd6AHaE7&w=315&h=315&c=7",
-      "https://tse3.mm.bing.net/th?id=OIP.Oc-T0TUXo2iuOBfQfLSbDAHaEo&w=296&h=296&c=7",
-      "https://tse4.mm.bing.net/th?id=OIP.Mvcr0QDsGXOx29cSBfXd6AHaE7&w=315&h=315&c=7",
-    ]);
-  }, []);
+  const [postState] = usePosts();
+
+  const [selectedPost, setSelectedPost] = useState ();
+  const [isDialogOpen, setDialogOpen] = useState (false);
 
   return (
+    <>
+    <DisplayPost open={isDialogOpen} setOpen={setDialogOpen} post={selectedPost}/>
     <div className="fixed top-[8rem] md:top-[1rem]  md:left-[20rem] left-[1rem] w-[85%] md:w-[49%] h-[97vh] flex flex-col flex-grow overflow-y-auto">
       <div className="max-w-5xl w-full">
       <h2 className={`text-[${_COLOR.lightest}] heading text-[2rem] mb-4`}>Explore</h2>
@@ -38,10 +23,13 @@ const Explore = () => {
           />
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-          {images.map((image, index) => (
-            <div key={index} className="relative group overflow-hidden rounded-lg shadow-lg hover:cursor-pointer">
+          {postState?.postList?.map((post, index) => (
+            <div key={index} className="relative group overflow-hidden rounded-lg shadow-lg hover:cursor-pointer" onClick={() => {
+              setDialogOpen(true);
+              setSelectedPost (post);
+            }}>
               <img
-                src={image}
+                src={post?.image}
                 alt="Explore"
                 className="w-full h-auto object-cover rounded-lg transition-transform duration-300 group-hover:scale-110"
               />
@@ -53,6 +41,7 @@ const Explore = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
