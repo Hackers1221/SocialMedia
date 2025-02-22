@@ -14,5 +14,6 @@ postRoutes.post('/posts',validators.isUserAuthenticated, upload.fields([
     { name: "video", maxCount: 2 },
   ]), postController.createPost);
 postRoutes.get('/posts',validators.isUserAuthenticated, postController.getallPosts);
+postRoutes.patch('/posts/:id',validators.isUserAuthenticated,postController.updatePost)
 
 module.exports = postRoutes
