@@ -90,7 +90,7 @@ function PostCard(post) {
     <div className="my-5 h-[28rem] carousel rounded-sm w-full bg-transparent">
       {/* Render videos first */}
       {video?.map((ele, key) => (
-        <div key={`video-${key}`} className="carousel-item flex justify-center bg-transparent w-full relative">
+        <div key={`video-${key}`} className="carousel-item  flex justify-center bg-transparent w-full relative">
           <video className="w-max" controls>
             <source src={ele} type="video/mp4" />
             Your browser does not support the video tag.

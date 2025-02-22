@@ -24,17 +24,24 @@ const PostSlice = createSlice({
     name: 'post',
     initialState,
     reducers: {
+        filterPostsByUser: (state, action) => {
+            const id = action?.payload?.id;
+            state.postList = state.downloadedPosts.filter((post) => post.userId == id);
+            state.postList = JSON.parse(JSON.stringify(state.postList));
+            console.log (state.downloadedPosts.filter((post) => post.userId == id));
+        },
     },
     extraReducers: (builder) => {
         builder
         .addCase(getAllPosts.fulfilled, (state, action) => {
             if(!action?.payload?.data) return;
             console.log (action.payload);
-            state.downloadedPosts = action?.payload?.data?.postsdata?.posts;
+            state.downloadedPosts = action?.payload?.data?.postsdata?.posts.reverse();
             state.postList = state.downloadedPosts;
         })
     }
 });
 
+export const { filterPostsByUser } = PostSlice.actions;
 
 export default PostSlice.reducer;

@@ -1,4 +1,3 @@
-import { IoPerson } from "react-icons/io5";
 import { FaSearch } from "react-icons/fa";
 import Avatar from "./Avatar";
 import { useSelector } from "react-redux";

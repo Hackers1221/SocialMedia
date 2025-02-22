@@ -8,8 +8,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import PostCard from "../../components/PostCard";
 import { useEffect } from "react";
 import { getAllPosts } from "../../redux/Slices/post.slice";
+import Avatar from "../../components/Avatar";
 
 function PostPage() {
+    const authState = useSelector ((state) => state.auth);
     const postState = useSelector ((state) => state.post);
     const dispatch = useDispatch ();
 
@@ -31,7 +33,7 @@ function PostPage() {
                 {/* Input Box */}
                 <div className={`w-full mb-4 bg-[${_COLOR.less_light}] rounded-md p-4`}>
                     <div className={`flex gap-2 items-center border-b py-2 border-[${_COLOR.more_light}]`}>
-                        <BsPersonCircle className="h-5 w-5"/>
+                        <Avatar url={authState?.data?.image}/>
                         <input className={`w-full bg-transparent px-2 focus:outline-none`} placeholder="What's your mood"/>
                     </div>
                     <div className="flex justify-between mt-4 h-5">

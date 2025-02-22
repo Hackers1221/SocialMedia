@@ -136,7 +136,7 @@ function Sidebar() {
                                     <span className="px-2 py-0.5 ml-auto text-xs font-medium text-red-500 bg-red-50 rounded-full">1.2k</span>
                                 </a>
                             </li>
-                            <div className="mx-4 h-[1px] bg-gray-300"></div>
+                            <div className={`mx-4 h-[1px] bg-[${_COLOR.more_light}]`}></div>
                             <li className="px-5">
                                 <div className="flex flex-row items-center h-8">
                                     <div className={`text-sm font-bold text-[${_COLOR.dark}]`}>Settings</div>

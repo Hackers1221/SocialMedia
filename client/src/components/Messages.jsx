@@ -302,7 +302,7 @@ function Messages () {
                     </div>
                 </div>
             </div>  */}
-            <div className={`flex justify-between items-center p-3 rounded-lg relative text-[${_COLOR.lightest}]`}>
+            <div className={`flex justify-between items-center p-3 rounded-lg relative text-[${_COLOR.less_light}]`}>
                     <div className="w-16 h-16 relative flex flex-shrink-0">
                         <img className="shadow-md rounded-full w-full h-full object-cover"
                             src="https://t4.ftcdn.net/jpg/03/83/25/83/360_F_383258331_D8imaEMl8Q3lf7EKU2Pi78Cn0R7KkW9o.jpg"
