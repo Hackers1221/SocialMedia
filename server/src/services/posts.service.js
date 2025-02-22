@@ -42,6 +42,8 @@ const getAllPosts = async () => {
     return response;  
 };
 
+
+
 module.exports = {
     CreatePost,
     getAllPosts
