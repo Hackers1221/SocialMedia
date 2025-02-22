@@ -4,7 +4,7 @@ import { BsCameraReels } from "react-icons/bs";
 import DisplayPost from "./DsiplayPost";
 
 const SavedPost = () => {
-  const savedimages = useSelector((state) => state.auth.data.savedImages);
+  const saved = useSelector((state) => state.auth.data.saved);
   const savedvideos = useSelector((state) => state.auth.data.savedVideos);
 
   const [activeTab, setActiveTab] = useState("images");
@@ -42,7 +42,7 @@ const SavedPost = () => {
       {/* Main Content */}
       <div className="w-full mt-4">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-          {(activeTab === "images" ? savedimages : savedvideos)?.map((post, index) => (
+          {(activeTab === "images" ? saved : savedvideos)?.map((post, index) => (
             <div key={index} className="relative group hover:cursor-pointer overflow-hidden rounded-lg" onClick={() => {
               setDialogOpen(true);
               setSelectedPost (post);
