@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { filterPostsByUser, getAllPosts } from "../redux/Slices/post.slice";
+import { filterPostsByUser, getAllPosts, getPostByUserId } from "../redux/Slices/post.slice";
 
 function usePosts () {
     const postState = useSelector((state) => state.post);
@@ -11,7 +11,7 @@ function usePosts () {
     async function loadPosts() {
         if(!postState?.downloadedPosts?.length || location.pathname === '/explore') dispatch(getAllPosts ());
 
-        if (location.pathname == '/profile') await dispatch (filterPostsByUser ( { id: authState?.data?._id } ));
+        if (location.pathname == '/profile') await dispatch (getPostByUserId (authState.data._id));
 
     }
 
