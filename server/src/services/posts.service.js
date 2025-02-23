@@ -1,4 +1,5 @@
 const postsmodel = require('../models/posts.model');
+const usermodel  = require('../models/user.model');
 
 const CreatePost = async (data) => {
     const response = {};
@@ -74,16 +75,25 @@ const likePost = async(id,userId) => {
             response.error = "Post not found";
             return response;
         }
+        const userLikesArray = await usermodel.findById(userId);
         if(likesArray.likes.includes(userId)){
             likesArray.likes = likesArray.likes.filter((ids) => ids!=userId);
+            userLikesArray.likedPosts = userLikesArray.likedPosts.filter((ids) => ids!=id);
+
         }else{
             likesArray.likes.push(userId);
+            userLikesArray.likedPosts.push(id);
         }
         const updatedPost = await postsmodel.findByIdAndUpdate(
             id,
             { likes: likesArray.likes },
             { new: true } 
         );
+        const updateuser = await usermodel.findByIdAndUpdate(
+            userId,
+            {likedPosts : userLikesArray.likedPosts},
+            {new  :true}
+        )
         response.post = updatedPost;
         return response;
     } catch (error) {

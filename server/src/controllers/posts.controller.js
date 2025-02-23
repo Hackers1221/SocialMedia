@@ -15,6 +15,7 @@ const createPost = async(req, res) => {
         image: imageUrls,
         video: videoUrls,
     } 
+
     const response = await postsService.CreatePost(newPost);
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
@@ -58,7 +59,7 @@ const updatePost = async(req,res) => {
 }
 
 const likePost = async(req,res) => {
-    const response = await postsService.likePost(req.params.id,req.body.id);
+    const response = await postsService.likePost(req.params.id,req.body.id)
     console.log(req.params.id);
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({

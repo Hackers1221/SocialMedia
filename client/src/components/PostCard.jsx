@@ -9,19 +9,20 @@ import { likePost, updatePost } from "../redux/Slices/post.slice";
 function PostCard(post) {
     const [liked, setLiked] = useState(false);
     const [saved, setSaved] = useState(false);
-    const {image, video, likes, comments, interests, createdAt, userId, caption} = post?.post;
+    const {_id,image, video, likes, comments, interests, createdAt, userId, caption} = post?.post;
     const currUser = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const authState = useSelector((state) => state.auth.data);
+    const [countLike,setcountLike] = useState(likes.length);
 
-
+    const photo = currUser.data?.image || "Empty Source"
 
     const [date, setDate] = useState (0);
     const [newLikes, setNewLikes] = useState([]);
     const [count, setCount] = useState (0);
     const [imageLength, setImageLength] = useState (0);
     const [creator, setCreator] = useState ({
-      image: "A",
+      image: "Empty Source",
       name: "",
       username: "",
       password: "",
@@ -37,14 +38,23 @@ function PostCard(post) {
       setSaved(!saved);
     }
 
-    const toggleLike = async() => {
-      const response = await dispatch(likePost(
-        _id, {id : authState._id}
-      ))
-      if(response){
-        setLiked(!liked);
+    const toggleLike = async () => {
+      const response = await dispatch(likePost({
+        _id, 
+        id: authState._id 
+      }));
+      
+      console.log(response);
+    
+      if (liked) {
+        setcountLike(countLike - 1);
+      } else {
+        setcountLike(countLike + 1);
       }
-    }
+      
+      setLiked(!liked);
+    };
+    
 
     async function getUser(userId) {
         const response = await dispatch(getUserById (userId));
@@ -60,11 +70,9 @@ function PostCard(post) {
         getUser (userId);
         getDate ();
         setImageLength (image.length);
-        likes.map((id) => {
-          if(id==authState._id){
-            setLiked(true);
-          }
-        })
+        if(likes.includes(authState._id)){
+          setLiked(true);
+        }
     }, [])
 
 
@@ -131,7 +139,7 @@ function PostCard(post) {
         <div className="flex gap-4">
           <button className={`flex gap-2 items-center text-[${_COLOR.more_light}]`} onClick={toggleLike}>
             {liked ? (<i className="text-white fa-solid fa-heart"></i>) : <i className="text-white fa-regular fa-heart"></i>}
-            {likes?.length}
+            {countLike}
           </button>
           <button className={`flex gap-2 items-center text-[${_COLOR.more_light}]`}>
           {/* <i className="text-white fa-solid fa-comment"></i> */}
@@ -148,7 +156,7 @@ function PostCard(post) {
       </div>
       <div className="flex mt-4 gap-3">
         <div>
-          <Avatar url={currUser?.data?.image} />
+          <Avatar url={photo} />
         </div>
         <div className="border grow rounded-full relative">
           <form >

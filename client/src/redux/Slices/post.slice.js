@@ -29,6 +29,7 @@ export const createPost = createAsyncThunk('post/createPost', async (postData) =
         });
         return response;
     } catch (error) {
+        console.log (error.message);
         toast.error(error.message || "Failed to create post");
     }
 });
@@ -48,9 +49,12 @@ export const updatePost = createAsyncThunk('post/updatePost',async(id,postdata) 
     }
 })
 
-export const likePost = createAsyncThunk('post/likePost', async(id,userData) => {
+export const likePost = createAsyncThunk('post/likePost', async(data) => {
     try {
-        const response = await axiosInstance.patch(`post/like/${id}`,userData , {
+        const resp = {
+            id : data.id
+        }
+        const response = await axiosInstance.patch(`post/like/${data._id}`,resp , {
             headers: {
                 'x-access-token': localStorage.getItem('token')
             }
