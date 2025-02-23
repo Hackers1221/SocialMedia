@@ -31,6 +31,8 @@ export default function PostForm({ open, setOpen }) {
     if (!response) {
       toast.error("Something went wrong!");
     } else {
+      setImage([]);
+      setVideo([]);
       toast.success("Post created successfully!");
       setOpen(false);
     }
