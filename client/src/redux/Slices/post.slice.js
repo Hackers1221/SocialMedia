@@ -9,6 +9,7 @@ const initialState = {
 
 export const getAllPosts = createAsyncThunk('posts/getAllPosts', async () => {
     try {
+        console.log ("FIre");
         const response = await axiosInstance.get('post/posts', {
             headers: {
                 'x-access-token': localStorage.getItem('token')

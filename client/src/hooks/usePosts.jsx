@@ -9,7 +9,7 @@ function usePosts () {
     const dispatch = useDispatch();
 
     async function loadPosts() {
-        if(!postState?.downloadedPosts?.length || location.pathname === '/explore') dispatch(getAllPosts ());
+        if(!postState?.downloadedPosts?.length) dispatch(getAllPosts ());
 
         if (location.pathname == '/profile') await dispatch (getPostByUserId (authState.data._id));
 

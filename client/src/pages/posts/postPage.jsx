@@ -24,7 +24,7 @@ function PostPage() {
 
     useEffect (() => {
         getPosts ();
-    }, [postState])
+    }, [])
 
     return (
         <>
