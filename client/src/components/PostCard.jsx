@@ -48,6 +48,7 @@ function PostCard(post) {
 
     async function getUser(userId) {
         const response = await dispatch(getUserById (userId));
+        console.log (response);
         if(!response){
             toast.error("Something went Wrong!");
         }

@@ -33,6 +33,8 @@ export default function PostForm({ open, setOpen }) {
     } else {
       setImage([]);
       setVideo([]);
+      setCaption("");
+      setInterests("");
       toast.success("Post created successfully!");
       setOpen(false);
     }
