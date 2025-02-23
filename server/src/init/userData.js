@@ -367,8 +367,25 @@ const users = [
         password: "Rounak@123",
         following: [],
         birth: "2004-05-19",
+    },
+    {
+        image: "https://i.pravatar.cc/200?img=42",
+        name: "Ebison Sojan",
+        username: "ebison12",
+        email: "ebison@gmail.com",
+        password: "Ebison@123",
+        following: [],
+        birth: "2004-05-20",
+    },
+    {
+        image: "https://i.pravatar.cc/200?img=43",
+        name: "Reshab Prasad",
+        username: "reshab12",
+        email: "reshab@gmail.com",
+        password: "Reshab@123",
+        following: [],
+        birth: "2004-05-21",
     }
-
 ];
 
 module.exports = { sampleUsers: users };
