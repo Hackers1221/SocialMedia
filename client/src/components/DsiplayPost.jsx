@@ -94,9 +94,12 @@ const DisplayPost = ({ open, setOpen, post }) => {
       {/* Close Button */}
       <div className="flex">
         <div className="relative flex w-[50%] h-[40rem] justify-center">
-          <div className="absolute top-2 left-2 bg-black w-[10rem] flex flex-col items-start bg-opacity-80 text-white text-sm px-3 py-1 rounded z-[20]">
-            <p className="font-semibold">{creator?.name}</p>
-            <p className="text-xs">{date}</p>
+          <div className="absolute top-2 left-2 bg-black w-[15rem] h-max flex gap-4 items-center bg-opacity-80 text-white text-sm px-3 py-1 rounded z-[20]">
+            <Avatar url={creator?.image} />
+            <div className="h-full flex flex-col justify-center ">
+              <p className="font-semibold">{creator?.name}</p>
+              <p className="text-xs">{date}</p>
+            </div>
           </div>
           {(post?.video?.length > 0 || post?.image?.length > 0) && (
             <div className="my-5 h-[38rem] carousel flex items-center rounded-sm w-full bg-transparent">
