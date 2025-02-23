@@ -72,7 +72,7 @@ const DisplayPost = ({ open, setOpen, post }) => {
       </button>
       {/* Close Button */}
       <div className="flex">
-        <div className="relative flex w-[50%] h-[40rem]">
+        <div className="relative flex w-[50%] h-[40rem] justify-center">
           <div className="absolute top-2 left-2 bg-black w-[10rem] flex flex-col items-start bg-opacity-80 text-white text-sm px-3 py-1 rounded z-[20]">
             <p className="font-semibold">{creator?.name}</p>
             <p className="text-xs">{date}</p>
