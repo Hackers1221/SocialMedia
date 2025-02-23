@@ -5,6 +5,7 @@ import axiosInstance from "../../config/axiosInstance";
 const initialState = {
     downloadedPosts: [],
     postList: [],
+    savedList:[],
 };
 
 export const getAllPosts = createAsyncThunk('posts/getAllPosts', async () => {
@@ -82,6 +83,21 @@ export const getPostByUserId = createAsyncThunk('post/getpost' ,async(id) => {
     }
 })
 
+export const getSavedPost = createAsyncThunk('post/getSavedPost' , async(id) => {
+    try {
+        const response = await axiosInstance.get(`post/save/${id}`, {
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+        if(response){
+            return response;
+        }
+    } catch (error) {
+        toast.error(error.message || "Failed to save post");
+    }
+})
+
 const PostSlice = createSlice({
     name: 'post',
     initialState,
@@ -110,6 +126,10 @@ const PostSlice = createSlice({
             .addCase(getPostByUserId.fulfilled , (state,action) => {
                 if(!action.payload?.data)return; 
                 state.postList = action.payload?.data?.postDetails.reverse();
+            })
+            .addCase(getSavedPost.fulfilled,(state,action) => {
+                if(!action.payload?.data)return; 
+                state.savedList = action.payload?.data?.postDetails.reverse();
             })
     }
 });

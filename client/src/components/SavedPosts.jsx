@@ -1,16 +1,23 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { BsCameraReels } from "react-icons/bs";
 import DisplayPost from "./DsiplayPost";
+import { getSavedPost } from "../redux/Slices/post.slice";
 
 const SavedPost = () => {
-  const saved = useSelector((state) => state.auth.data.saved);
+  const savedArray = useSelector((state) => state.post.savedList);
+  const dispatch = useDispatch();
+  const authState = useSelector ((state) => state.auth);
 
   const [activeTab, setActiveTab] = useState("images");
   const [isDialogOpen, setDialogOpen] = useState (false);
   const [selectedPost, setSelectedPost] = useState ();
 
   const [thumbnails, setThumbnails] = useState({});
+
+  useEffect(() => {
+    dispatch(getSavedPost(authState?.data?._id))
+  },[authState])
 
   const extractThumbnail = (videoURL, index) => {
     const video = document.createElement("video");
@@ -43,12 +50,12 @@ const SavedPost = () => {
   };
 
   useEffect (() => {
-      saved.forEach((post, index) => {
+    savedArray?.forEach((post, index) => {
         if (post?.video) {
           extractThumbnail(post.video[0], index);
         }
       });
-    }, [saved]);
+    }, [savedArray]);
 
   return (
     <>
@@ -79,7 +86,7 @@ const SavedPost = () => {
       {/* Main Content */}
       <div className="w-full mt-4">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-          {(activeTab === "images" ? saved : pulse)?.map((post, index) => (
+          {(activeTab === "images" ? savedArray : pulse)?.map((post, index) => (
             <div key={index} className="relative group hover:cursor-pointer overflow-hidden rounded-lg" onClick={() => {
               setDialogOpen(true);
               setSelectedPost (post);
