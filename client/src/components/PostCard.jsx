@@ -5,6 +5,7 @@ import { getUserById } from "../redux/Slices/auth.slice";
 import Avatar from "./Avatar";
 import { useEffect, useRef, useState } from "react";
 import { likePost, updatePost } from "../redux/Slices/post.slice";
+import DisplayPost from "./DsiplayPost";
 
 function PostCard(post) {
     const [liked, setLiked] = useState(false);
@@ -21,6 +22,7 @@ function PostCard(post) {
     const photo = currUser.data?.image || "Empty Source"
 
     const [date, setDate] = useState (0);
+    const [isDialogOpen, setDialogOpen] = useState (false);
     const [newLikes, setNewLikes] = useState([]);
     const [count, setCount] = useState (0);
     const [imageLength, setImageLength] = useState (0);
@@ -98,6 +100,7 @@ function PostCard(post) {
 
   return (
     <div className={`rounded-md mb-4 bg-[${_COLOR.less_light}] p-4 border border-16 border-[${_COLOR.darkest}]`} >
+      <DisplayPost open={isDialogOpen} setOpen={setDialogOpen} post={post?.post}/>
     <div className="flex justify-between">
       <div className="flex gap-3">
               <div>
@@ -124,16 +127,16 @@ function PostCard(post) {
               <div tabIndex={0} role="button" className="m-1">
                 <i className="text-white fa-solid fa-ellipsis"></i>
               </div>
-              <ul tabIndex={0} className={`dropdown-content menu bg-[${_COLOR.medium}] text-[${_COLOR.lightest}] rounded-box z-[1] w-52 p-2 shadow-2xl shadow-[${_COLOR.medium}]`}>
-                <li><a>Follow</a></li>
-                <li><a>Unfollow</a></li>
-                <li><a>Not Intrested</a></li>
+              <ul tabIndex={0} className={`dropdown-content menu bg-[${_COLOR.medium}] text-[${_COLOR.lightest}] rounded-box z-[1] w-52 p-4 gap-4 shadow-2xl shadow-[${_COLOR.medium}]`}>
+                <li className="hover:cursor-pointer">Follow</li>
+                <li onClick={() => setDialogOpen(true)} className="hover:cursor-pointer">View Post</li>
+                <li className="hover:cursor-pointer">Not Intrested</li>
               </ul>
             </div>
       </div>
       <div>
       {(video?.length > 0 || image?.length > 0) && (
-    <div className="my-5 h-[28rem] carousel rounded-sm w-full bg-transparent">
+    <div className="my-5 h-[28rem] carousel rounded-sm w-full bg-transparent" >
       {/* Render videos first */}
       {/* Render images next */}
       {image?.map((photo, key) => (

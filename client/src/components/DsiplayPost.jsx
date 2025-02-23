@@ -4,7 +4,8 @@ import { getUserById } from "../redux/Slices/auth.slice";
 import Avatar from "./Avatar";
 
 const DisplayPost = ({ open, setOpen, post }) => {
-  if (!post) return <></>;
+  if (!post || !open) return <></>;
+  console.log (post);
 
   const currUser = useSelector((state) => state.auth);
 
@@ -75,6 +76,7 @@ const DisplayPost = ({ open, setOpen, post }) => {
 
   const closeDialog = () => {
     setOpen(false);
+    videoRef.current.pause();
     dialogRef.current?.close(); // Ensure the dialog closes properly
   };
 
@@ -97,11 +99,11 @@ const DisplayPost = ({ open, setOpen, post }) => {
             <p className="text-xs">{date}</p>
           </div>
           {(post?.video?.length > 0 || post?.image?.length > 0) && (
-            <div className="my-5 h-[38rem] carousel rounded-sm w-full bg-transparent">
+            <div className="my-5 h-[38rem] carousel flex items-center rounded-sm w-full bg-transparent">
               {/* Render videos first */}
               {/* Render images next */}
               {post?.image?.map((photo, key) => (
-                <div key={`image-${key}`} className="carousel-item h-full flex justify-center focus:outline-none bg-transparent w-full relative">
+                <div key={`image-${key}`} className="carousel-item h-max flex justify-center focus:outline-none bg-transparent w-full relative">
                   <img src={photo} className="w-max h-[min(40rem,max-content)]" alt="Image not found" />
                 </div>
               ))}
