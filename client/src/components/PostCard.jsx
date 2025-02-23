@@ -14,14 +14,14 @@ function PostCard(post) {
     const dispatch = useDispatch();
     const authState = useSelector((state) => state.auth.data);
 
-
+    const photo = currUser.data?.image || "Empty Source"
 
     const [date, setDate] = useState (0);
     const [newLikes, setNewLikes] = useState([]);
     const [count, setCount] = useState (0);
     const [imageLength, setImageLength] = useState (0);
     const [creator, setCreator] = useState ({
-      image: "A",
+      image: "Empty Source",
       name: "",
       username: "",
       password: "",
@@ -38,12 +38,7 @@ function PostCard(post) {
     }
 
     const toggleLike = async() => {
-      const response = await dispatch(likePost(
-        _id, {id : authState._id}
-      ))
-      if(response){
-        setLiked(!liked);
-      }
+      setLiked(!liked);
     }
 
     async function getUser(userId) {
@@ -59,11 +54,6 @@ function PostCard(post) {
         getUser (userId);
         getDate ();
         setImageLength (image.length);
-        likes.map((id) => {
-          if(id==authState._id){
-            setLiked(true);
-          }
-        })
     }, [])
 
 
@@ -147,7 +137,7 @@ function PostCard(post) {
       </div>
       <div className="flex mt-4 gap-3">
         <div>
-          <Avatar url={currUser?.data?.image} />
+          <Avatar url={photo} />
         </div>
         <div className="border grow rounded-full relative">
           <form >

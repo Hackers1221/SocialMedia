@@ -15,6 +15,8 @@ function PostPage() {
     const postState = useSelector ((state) => state.post);
     const dispatch = useDispatch ();
 
+    const image = authState?.data?.image || "Empty Source"
+
     async function getPosts () {
         const res = await dispatch (getAllPosts());
         if (!res) toast.error ("Something went wrong");
@@ -33,7 +35,7 @@ function PostPage() {
                 {/* Input Box */}
                 <div className={`w-full mb-4 bg-[${_COLOR.less_light}] rounded-md p-4`}>
                     <div className={`flex gap-2 items-center border-b py-2 border-[${_COLOR.more_light}]`}>
-                        <Avatar url={authState?.data?.image}/>
+                        <Avatar url={image}/>
                         <input className={`w-full bg-transparent px-2 focus:outline-none text-[${_COLOR.lightest}]`} placeholder="What's your mood"/>
                     </div>
                     <div className="flex justify-between mt-4 h-5">

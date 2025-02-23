@@ -5,6 +5,9 @@ import { Link } from "react-router-dom";
 function Stories () {
 
     const authState = useSelector ((state) => state.auth);
+    const image = authState.data?.image || "Empty Source"
+
+    console.log (image)
 
 
     return (
@@ -14,7 +17,7 @@ function Stories () {
             <ul className="flex flex-row md:flex-col items-center justify-center gap-4">
                 <li className="flex justify-end">
                     <Link to={'/profile'}>
-                    <Avatar url={authState?.data?.image} />
+                    <Avatar url={image} />
                     </Link>
                 </li>
                 <li className="flex flex-col items-center space-y-2">

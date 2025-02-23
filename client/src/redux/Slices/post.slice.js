@@ -29,6 +29,7 @@ export const createPost = createAsyncThunk('post/createPost', async (postData) =
         });
         return response;
     } catch (error) {
+        console.log (error.message);
         toast.error(error.message || "Failed to create post");
     }
 });
