@@ -91,7 +91,7 @@ export default function PostForm({ open, setOpen }) {
                         </video>
                       )}
                       <button
-                        className="absolute top-3 right-3 bg-gray-400 w-10 h-10 text-white  rounded-[50%] shadow-md hover:bg-gray-500"
+                        className="absolute top-3 right-3 bg-gray-700 w-10 h-10 text-white  rounded-[50%] shadow-md hover:bg-gray-500"
                         onClick={() => handleDeleteFile(index, file.type.startsWith("image") ? "image" : "video")}
                       >
                         <i className ="fa-solid fa-trash"></i>
@@ -120,12 +120,12 @@ export default function PostForm({ open, setOpen }) {
             {/* Separate Add Buttons */}
             {(image.length > 0 || video.length > 0) && (
               <div className="absolute top-4 right-7 flex gap-2">
-                <label className="bg-gray-400 text-white px-3 py-2 rounded-full shadow-lg cursor-pointer hover:bg-gray-700 transition flex items-center gap-2">
+                <label className="bg-gray-400 text-white px-3 py-2 rounded-full shadow-lg cursor-pointer bg-gray-600  hover:bg-gray-800 transition flex items-center gap-2">
                   <i className="fa-solid fa-image text-lg"></i>
                   <span className="text-sm font-medium">Add Image</span>
                   <input type="file" className="hidden" accept="image/*" encType= "multipart/form-data" onChange={(e) => handleFileChange(e, "image")} multiple />
                 </label>
-                <label className="bg-gray-400 text-white px-3 py-2 rounded-full shadow-lg cursor-pointer hover:bg-gray-700 transition flex items-center gap-2">
+                <label className="bg-gray-400 text-white px-3 py-2 rounded-full shadow-lg cursor-pointer bg-gray-600  hover:bg-gray-800 transition flex items-center gap-2">
                   <i className="fa-solid fa-video text-lg"></i>
                   <span className="text-sm font-medium">Add Video</span>
                   <input type="file" className="hidden" accept="video/*" encType= "multipart/form-data" onChange={(e) => handleFileChange(e, "video")} multiple />
