@@ -366,6 +366,7 @@ const users = [
         password: "Rounak@123",
         following: [],
         birth: "2004-05-19",
+        saved:[],
     },
     {
         image: "https://i.pravatar.cc/200?img=42",
@@ -375,6 +376,7 @@ const users = [
         password: "Ebison@123",
         following: [],
         birth: "2004-05-20",
+        saved:[],
     },
     {
         image: "https://i.pravatar.cc/200?img=43",
@@ -384,6 +386,7 @@ const users = [
         password: "Reshab@123",
         following: [],
         birth: "2004-05-21",
+        saved : []
     }
 ];
 

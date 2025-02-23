@@ -64,6 +64,7 @@ function PostCard(post) {
         _id, 
         id: authState._id 
       }));
+      if(!response.payload)return;
     
       if (liked) {
         setcountLike(countLike - 1);
