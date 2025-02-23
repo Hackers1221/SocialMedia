@@ -43,7 +43,6 @@ function PostPage() {
                             <MdAddAPhoto className="text-white h-[100%] w-[100%] hover:cursor-pointer" />
                             <IoMdPhotos className="text-white h-[100%] w-[100%] hover:cursor-pointer"/>
                             <MdVideoCameraBack className="text-white h-[100%] w-[100%] hover:cursor-pointer"/>
-                            <MdGif className="text-white h-[100%] w-[100%] hover:cursor-pointer"/>
                         </div>
                         <i className={`text-white fa-solid fa-paper-plane text-[${_COLOR.lightest}] hover:cursor-pointer`}></i>
                     </div>

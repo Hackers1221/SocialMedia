@@ -168,7 +168,6 @@ function PostCard(post) {
               ))}
     </div>
   )}
-        <p className={`text-sm text-[${_COLOR.more_light}]`}>{caption}</p>
       </div>
       <div className="mt-5 flex w-full justify-between px-2">
         <div className="flex gap-4">
@@ -189,6 +188,7 @@ function PostCard(post) {
           </button>
         </div>
       </div>
+      <p className={`text-sm mt-4 text-[${_COLOR.more_light}]`}>{caption}</p>
       <div className="flex mt-4 gap-3">
         <div>
           <Avatar url={photo} />

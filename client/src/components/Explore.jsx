@@ -42,7 +42,7 @@ const Explore = () => {
   
 
   useEffect (() => {
-    postState?.postList?.forEach((post, index) => {
+    postState?.downloadedPosts?.forEach((post, index) => {
       if (post?.video) {
         extractThumbnail(post.video[0], index);
       }
@@ -63,7 +63,7 @@ const Explore = () => {
           />
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-          {postState?.postList?.map((post, index) => (
+          {postState?.downloadedPosts?.map((post, index) => (
             <div key={index} className="relative h-[10rem] group overflow-hidden rounded-lg shadow-lg hover:cursor-pointer" onClick={() => {
               setDialogOpen(true);
               setSelectedPost (post);

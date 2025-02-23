@@ -101,9 +101,7 @@ const PostSlice = createSlice({
             .addCase(createPost.fulfilled, (state, action) => {
                 if (!action.payload?.data) return;
                 const newPost = action.payload?.data?.postsdata?.post;
-                console.log(state.downloadedPosts);
                 state.downloadedPosts = [newPost, ...state.downloadedPosts];
-                console.log(state.downloadedPosts);
             })
             .addCase(updatePost.fulfilled, (state, action) => {
                 if (!action.payload?.data) return;
@@ -111,7 +109,7 @@ const PostSlice = createSlice({
             })
             .addCase(getPostByUserId.fulfilled , (state,action) => {
                 if(!action.payload?.data)return; 
-                state.postList = action.payload?.data.postDetails
+                state.postList = action.payload?.data?.postDetails.reverse();
             })
     }
 });
