@@ -60,7 +60,6 @@ const updatePost = async(req,res) => {
 
 const likePost = async(req,res) => {
     const response = await postsService.likePost(req.params.id,req.body.id)
-    console.log(req.params.id);
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
             msg : "Unable to update the Post",
@@ -73,11 +72,26 @@ const likePost = async(req,res) => {
     })
 }
 
+const getPostByUserId = async(req,res) => {
+    const response = await postsService.getPostByUserId(req.params.id);
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg : "Unable to get the Post",
+            error : response.error
+        })
+    }
+    return res.status(StatusCodes.OK).send({
+        msg : "Successfully fetched the post",
+        postDetails : response.post
+    })
+}
+
 
 
 module.exports = {
     createPost,
     getallPosts,
     updatePost,
-    likePost
+    likePost,
+    getPostByUserId
 }
