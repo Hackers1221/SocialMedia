@@ -66,7 +66,7 @@ const DisplayPost = ({ open, setOpen, post }) => {
     >
       <button
         onClick={closeDialog}
-        className="absolute top-2 right-2 bg-transparent hover:bg-gray-800 text-white text-sm px-3 py-1 rounded-md"
+        className="absolute top-2 right-2 bg-transparent hover:bg-gray-800 text-white text-sm px-3 py-1 rounded-md focus:outline-none"
       >
         ✕
       </button>
@@ -86,7 +86,7 @@ const DisplayPost = ({ open, setOpen, post }) => {
           </div>
         </div>
         <div className="flex flex-col justify-between w-[50%]">
-          <div className="flex bg-transparent text-white text-sm px-8 py-1">
+          <div className="flex bg-transparent text-white text-sm px-8 py-4">
             <p>{post?.caption}</p>
           </div>
           <div>

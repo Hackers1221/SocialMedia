@@ -73,8 +73,8 @@ const PostSlice = createSlice({
     reducers: {
         filterPostsByUser: (state, action) => {
             const id = action.payload?.id;
-            state.postList = state.downloadedPosts.filter((post) => post.userId === id);
-            console.log(id);
+            state.postList = JSON.parse(JSON.stringify(state.downloadedPosts)).filter((post) => post.userId === id);
+            state.postList = JSON.parse(JSON.stringify(state.postList));
         },
     },
     extraReducers: (builder) => {

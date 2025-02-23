@@ -1,23 +1,23 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { filterPostsByUser, getAllPosts } from "../redux/Slices/post.slice";
-import { useSearchParams } from "react-router-dom";
 
-function usePosts (userId) {
+function usePosts () {
     const postState = useSelector((state) => state.post);
+    const authState = useSelector ((state) => state.auth);
 
     const dispatch = useDispatch();
 
     async function loadPosts() {
-        if(!postState?.downloadedPosts?.length || location.pathname == '/explore') dispatch(getAllPosts ());
+        if(!postState?.downloadedPosts?.length || location.pathname === '/explore') dispatch(getAllPosts ());
 
-        if (userId) dispatch (filterPostsByUser ( { id: userId } ));
+        if (location.pathname == '/profile') await dispatch (filterPostsByUser ( { id: authState?.data?._id } ));
 
     }
 
     useEffect(() => {
         loadPosts ();
-    }, [postState?.downloadedPosts, userId]);
+    }, [postState?.downloadedPosts, location.pathname]);
 
     return [postState];
 }

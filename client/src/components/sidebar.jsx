@@ -8,7 +8,6 @@ import { LuCircleFadingPlus } from "react-icons/lu";
 import { ImVideoCamera } from "react-icons/im";
 import { useEffect, useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { IoMdClose } from "react-icons/io";
 import { FaBookmark } from "react-icons/fa6";
 import PostDialog from "./PostDialog";
 import { Link, useNavigate } from "react-router-dom"
@@ -111,10 +110,10 @@ function Sidebar() {
                                 </Link>
                             </li>
                             <li onClick={() => setIsOpen(false)}>
-                                <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
+                                <Link to="/pulse" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
                                     <ImVideoCamera className="ml-4" />
-                                    <span className="ml-2 text-sm tracking-wide truncate">Shorts</span>
-                                </a>
+                                    <span className="ml-2 text-sm tracking-wide truncate">Pulse</span>
+                                </Link>
                             </li>
                             <li onClick={() => setIsOpen(false)}>
                                 <Link to="/messenger" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
@@ -163,8 +162,8 @@ function Sidebar() {
                             </li>
                             <li onClick={onLogout}>
                                 <div className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
-                                    <IoIosSettings className="ml-4" />
-                                    <span className="ml-2 text-sm tracking-wide truncate">Logout</span>
+                                    <i className="fa-solid fa-power-off ml-4 text-[#ED4956]"></i>
+                                    <span className="ml-2 text-sm tracking-wide truncate text-[#ED4956]">Logout</span>
                                 </div>
                             </li>
                         </ul>

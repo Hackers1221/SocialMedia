@@ -15,6 +15,8 @@ function PostCard(post) {
     const authState = useSelector((state) => state.auth.data);
     const [countLike,setcountLike] = useState(likes.length);
 
+    // console.log (post?.post);
+
     const photo = currUser.data?.image || "Empty Source"
 
     const [date, setDate] = useState (0);
@@ -58,7 +60,7 @@ function PostCard(post) {
 
     async function getUser(userId) {
         const response = await dispatch(getUserById (userId));
-        console.log (response);
+        console.log (response.payload?.data?.userdetails);
         if(!response){
             toast.error("Something went Wrong!");
         }
@@ -73,7 +75,7 @@ function PostCard(post) {
         if(likes.includes(authState._id)){
           setLiked(true);
         }
-    }, [])
+    }, [userId])
 
 
 
