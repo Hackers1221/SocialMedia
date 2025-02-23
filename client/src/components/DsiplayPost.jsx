@@ -10,6 +10,7 @@ const DisplayPost = ({ open, setOpen, post }) => {
 
   const dispatch = useDispatch();
   const dialogRef = useRef(null); // Reference for the dialog
+  const videoRef = useRef(null);
 
   const [date, setDate] = useState(0);
   const [liked, setLiked] = useState(false);
@@ -22,6 +23,24 @@ const DisplayPost = ({ open, setOpen, post }) => {
     email: "",
     birth: "",
   });
+  const [showButton, setShowButton] = useState(false);
+
+
+  const handleVideoClick = () => {
+    setShowButton(true);
+
+    // Hide the button after 500ms
+    setTimeout(() => {
+      setShowButton(false);
+    }, 500);
+
+    // Toggle play/pause
+    if (videoRef.current.paused) {
+      videoRef.current.play();
+    } else {
+      videoRef.current.pause();
+    }
+  };
 
   function getDate() {
     let date = post?.createdAt?.toString()?.split("T")[0].split("-").reverse().join("/");
@@ -52,7 +71,7 @@ const DisplayPost = ({ open, setOpen, post }) => {
     } else {
       dialogRef.current?.close(); // Close the dialog when `open` is false
     }
-  }, [post, open]);
+  }, [post?._id, videoRef, open]);
 
   const closeDialog = () => {
     setOpen(false);
@@ -77,13 +96,42 @@ const DisplayPost = ({ open, setOpen, post }) => {
             <p className="font-semibold">{creator?.name}</p>
             <p className="text-xs">{date}</p>
           </div>
-          <div className="carousel">
-            {post?.image?.map((photo, key) => (
-              <div key={`image-${key}`} className="carousel-item h-full flex items-center justify-center w-full relative">
-                <img src={photo} className="w-max h-max" alt="Image not found" />
-              </div>
-            ))}
-          </div>
+          {(post?.video?.length > 0 || post?.image?.length > 0) && (
+            <div className="my-5 h-[38rem] carousel rounded-sm w-full bg-transparent">
+              {/* Render videos first */}
+              {/* Render images next */}
+              {post?.image?.map((photo, key) => (
+                <div key={`image-${key}`} className="carousel-item h-full flex justify-center focus:outline-none bg-transparent w-full relative">
+                  <img src={photo} className="w-max h-[min(40rem,max-content)]" alt="Image not found" />
+                </div>
+              ))}
+              {post?.video?.map((ele, key) => (
+                  <div 
+                  key={`video-${key}`} 
+                  className="carousel-item h-full flex justify-center focus:outline-none bg-transparent w-full relative"
+                >
+                  <video 
+                    ref={videoRef}
+                    src={ele}
+                    className="w-max h-[min(40rem,max-content)]" 
+                    onClick={handleVideoClick}
+                  >
+                    {/* <source src={ele} type="video/mp4" /> */}
+                    Your browser does not support the video tag.
+                  </video>
+            
+                  {showButton && (
+                    <div 
+                      className="absolute inset-0 flex items-center justify-center text-white text-3xl bg-black bg-opacity-0 p-4 transition-opacity duration-300"
+                      style={{ pointerEvents: "none" }} // Prevents unwanted clicks on the button itself
+                    >
+                      {videoRef.current?.paused ? <i className="fa-solid fa-pause"></i> : <i className="fa-solid fa-play"></i>}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
         <div className="flex flex-col justify-between w-[50%]">
           <div className="flex bg-transparent text-white text-sm px-8 py-4">

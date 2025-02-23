@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { getUserById } from "../redux/Slices/auth.slice";
 import Avatar from "./Avatar";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { likePost, updatePost } from "../redux/Slices/post.slice";
 
 function PostCard(post) {
@@ -13,6 +13,7 @@ function PostCard(post) {
     const currUser = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const authState = useSelector((state) => state.auth.data);
+    const videoRef = useRef(null);
     const [countLike,setcountLike] = useState(likes.length);
 
     // console.log (post?.post);
@@ -31,6 +32,24 @@ function PostCard(post) {
       email: "",
       birth: ""
     });
+    const [showButton, setShowButton] = useState(false);
+    
+    
+      const handleVideoClick = () => {
+        setShowButton(true);
+    
+        // Hide the button after 500ms
+        setTimeout(() => {
+          setShowButton(false);
+        }, 500);
+    
+        // Toggle play/pause
+        if (videoRef.current.paused) {
+          videoRef.current.play();
+        } else {
+          videoRef.current.pause();
+        }
+      };
 
     function getDate() {
       let date = createdAt?.toString()?.split('T')[0].split('-').reverse().join("/");
@@ -126,13 +145,30 @@ function PostCard(post) {
         </div>
       ))}
       {video?.map((ele, key) => (
-        <div key={`video-${key}`} className="carousel-item  flex justify-center bg-transparent w-full relative">
-          <video className="w-max" controls>
-            <source src={ele} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </div>
-      ))}
+                  <div 
+                  key={`video-${key}`} 
+                  className="carousel-item h-full flex justify-center focus:outline-none bg-transparent w-full relative"
+                >
+                  <video 
+                    ref={videoRef}
+                    src={ele}
+                    className="w-max h-[min(40rem,max-content)]" 
+                    onClick={handleVideoClick}
+                  >
+                    {/* <source src={ele} type="video/mp4" /> */}
+                    Your browser does not support the video tag.
+                  </video>
+            
+                  {showButton && (
+                    <div 
+                      className="absolute inset-0 flex items-center justify-center text-white text-3xl bg-black bg-opacity-0 p-4 transition-opacity duration-300"
+                      style={{ pointerEvents: "none" }} // Prevents unwanted clicks on the button itself
+                    >
+                      {videoRef.current?.paused ? <i className="fa-solid fa-pause"></i> : <i className="fa-solid fa-play"></i>}
+                    </div>
+                  )}
+                </div>
+              ))}
     </div>
   )}
         <p className={`text-sm text-[${_COLOR.more_light}]`}>{caption}</p>

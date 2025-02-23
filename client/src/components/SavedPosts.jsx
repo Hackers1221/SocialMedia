@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BsCameraReels } from "react-icons/bs";
 import DisplayPost from "./DsiplayPost";
 
@@ -9,6 +9,46 @@ const SavedPost = () => {
   const [activeTab, setActiveTab] = useState("images");
   const [isDialogOpen, setDialogOpen] = useState (false);
   const [selectedPost, setSelectedPost] = useState ();
+
+  const [thumbnails, setThumbnails] = useState({});
+
+  const extractThumbnail = (videoURL, index) => {
+    const video = document.createElement("video");
+    video.src = videoURL;
+    video.crossOrigin = "anonymous"; // Prevents CORS issues
+    video.preload = "metadata"; // Load only metadata, not the full video
+    video.muted = true; // Prevents autoplay issues in some browsers
+  
+    video.addEventListener("loadedmetadata", () => {
+      video.currentTime = Math.min(15, video.duration / 2); // Seek to a valid frame
+    });
+  
+    video.addEventListener("seeked", () => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+  
+      // Use full resolution
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+  
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  
+      setThumbnails((prev) => ({
+        ...prev,
+        [index]: canvas.toDataURL("image/png"),
+      }));
+    });
+  
+    video.load(); // Ensures metadata loads before seeking
+  };
+
+  useEffect (() => {
+      saved.forEach((post, index) => {
+        if (post?.video) {
+          extractThumbnail(post.video[0], index);
+        }
+      });
+    }, [saved]);
 
   return (
     <>
@@ -39,18 +79,16 @@ const SavedPost = () => {
       {/* Main Content */}
       <div className="w-full mt-4">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-          {(activeTab === "images" ? saved : savedvideos)?.map((post, index) => (
+          {(activeTab === "images" ? saved : pulse)?.map((post, index) => (
             <div key={index} className="relative group hover:cursor-pointer overflow-hidden rounded-lg" onClick={() => {
               setDialogOpen(true);
               setSelectedPost (post);
             }}>
-              {activeTab === "images" && (
-                <img
-                  className="object-center w-[25rem] h-[10rem] object-cover rounded-lg transition-transform duration-300 group-hover:scale-110"
-                  src={post.image}
-                  alt="Post cannot be loaded"
-                />
-              )}
+              {activeTab === "images" && <img
+                src={post?.image[0] || thumbnails[index]}
+                alt="Explore"
+                className="w-full h-full rounded-lg transition-transform duration-300 group-hover:scale-110"
+              />}
               <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-lg font-semibold">
                 View
               </div>
