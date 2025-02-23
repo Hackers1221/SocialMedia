@@ -72,15 +72,17 @@ const DisplayPost = ({ open, setOpen, post }) => {
       </button>
       {/* Close Button */}
       <div className="flex">
-        <div className="relative w-[50%] h-[40rem]">
-          {post?.image?.map((photo, key) => (
-            <div key={`image-${key}`} className="carousel-item h-full flex justify-center bg-transparent w-full relative">
-              <img src={photo} className="w-max h-full" alt="Image not found" />
-            </div>
-          ))}
-          <div className="absolute top-2 left-2 bg-black w-[50%] flex flex-col items-start bg-opacity-80 text-white text-sm px-3 py-1 rounded">
+        <div className="relative flex w-[50%] h-[40rem]">
+          <div className="absolute top-2 left-2 bg-black w-[10rem] flex flex-col items-start bg-opacity-80 text-white text-sm px-3 py-1 rounded z-[20]">
             <p className="font-semibold">{creator?.name}</p>
             <p className="text-xs">{date}</p>
+          </div>
+          <div className="carousel">
+            {post?.image?.map((photo, key) => (
+              <div key={`image-${key}`} className="carousel-item h-full flex items-center justify-center w-full relative">
+                <img src={photo} className="w-max h-max" alt="Image not found" />
+              </div>
+            ))}
           </div>
         </div>
         <div className="flex flex-col justify-between w-[50%]">

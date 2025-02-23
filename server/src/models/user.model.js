@@ -5,7 +5,6 @@ const bcrypt = require('bcrypt')
 const userSchema = new Schema({
     image:{
         type: String,
-        // required: [true, 'Image cannot be empty'],
         default: ""
     },
     name: {
@@ -30,7 +29,7 @@ const userSchema = new Schema({
         type: String,
         minLength: 5,
         required: true,
-        match: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%?&])[A-Za-z\d@$!%?&]{5,}$/
+        match: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%?&#])[A-Za-z\d@$!%?&#]{5,}$/
 ,
     },
     following: {

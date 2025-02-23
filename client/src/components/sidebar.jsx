@@ -11,14 +11,24 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { IoMdClose } from "react-icons/io";
 import { FaBookmark } from "react-icons/fa6";
 import PostDialog from "./PostDialog";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import PostForm from "./PostForm";
+import { useDispatch } from "react-redux";
+import { logout } from "../redux/Slices/auth.slice";
 
 function Sidebar() {
     const [isOpen, setIsOpen] = useState(false);
     const [isPostForm, setIsPostForm] = useState(false);
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+    const dispatch = useDispatch ();
+    const navigate = useNavigate ();
+
+    async function onLogout () {
+        await dispatch (logout ());
+        navigate ("/login"); return;
+    }
 
     useEffect(() => {
         const handleResize = () => setScreenWidth(window.innerWidth);
@@ -150,6 +160,12 @@ function Sidebar() {
                                     <IoIosSettings className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Settings</span>
                                 </a>
+                            </li>
+                            <li onClick={onLogout}>
+                                <div className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
+                                    <IoIosSettings className="ml-4" />
+                                    <span className="ml-2 text-sm tracking-wide truncate">Logout</span>
+                                </div>
                             </li>
                         </ul>
                     </div>
