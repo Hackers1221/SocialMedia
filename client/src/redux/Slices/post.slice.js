@@ -99,6 +99,24 @@ export const getSavedPost = createAsyncThunk('post/getSavedPost' , async(id) => 
     }
 })
 
+export const updateSavedPost = createAsyncThunk('post/updatesavedPost', async(data) => {
+    try {
+        const resp = {
+            id : data.id
+        }
+        const response = await axiosInstance.patch(`post/save/${data._id1}`,resp , {
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+        if(response){
+            return response;
+        }
+    } catch (error) {
+        toast.error(error.message || "Failed to update post");
+    }
+})
+
 const PostSlice = createSlice({
     name: 'post',
     initialState,
@@ -131,6 +149,9 @@ const PostSlice = createSlice({
             .addCase(getSavedPost.fulfilled,(state,action) => {
                 if(!action.payload?.data)return; 
                 state.savedList = action.payload?.data?.postDetails.reverse();
+            })
+            .addCase(updateSavedPost.fulfilled,(state,action) => {
+                console.log(action.payload);
             })
     }
 });

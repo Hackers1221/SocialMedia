@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { getUserById } from "../redux/Slices/auth.slice";
 import Avatar from "./Avatar";
 import { useEffect, useRef, useState } from "react";
-import { likePost, updatePost } from "../redux/Slices/post.slice";
+import { likePost, updatePost, updateSavedPost } from "../redux/Slices/post.slice";
 import DisplayPost from "./DsiplayPost";
 
 function PostCard(post) {
@@ -57,8 +57,11 @@ function PostCard(post) {
       let date = createdAt?.toString()?.split('T')[0].split('-').reverse().join("/");
       setDate(date);
     }
-    function toggleBookmark() {
-      setSaved(!saved);
+    const toggleBookmark = async() => {
+      const response = await dispatch(updateSavedPost({
+        _id1  : authState._id,
+        id : _id
+      }))
     }
 
     const toggleLike = async () => {
@@ -188,7 +191,6 @@ function PostCard(post) {
         <div className="flex">
         <button className={`flex gap-2 items-center text-[${_COLOR.more_light}]`} onClick={toggleBookmark}>
             {saved? <i className="text-white fa-solid fa-bookmark"></i> : <i className="text-white fa-regular fa-bookmark"></i>}
-            {comments?.length}
           </button>
         </div>
       </div>
