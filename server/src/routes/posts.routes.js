@@ -10,5 +10,6 @@ postRoutes.post('/posts', validators.isUserAuthenticated, upload, postController
 postRoutes.get('/posts',validators.isUserAuthenticated, postController.getallPosts);
 postRoutes.patch('/posts/:id',validators.isUserAuthenticated,postController.updatePost)
 postRoutes.patch('/like/:id',validators.isUserAuthenticated,postController.likePost);
+postRoutes.get('/posts/:id',validators.isUserAuthenticated,postController.getPostByUserId);
 
 module.exports = postRoutes

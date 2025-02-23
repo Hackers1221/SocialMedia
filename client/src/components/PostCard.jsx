@@ -64,8 +64,6 @@ function PostCard(post) {
         _id, 
         id: authState._id 
       }));
-      
-      console.log(response);
     
       if (liked) {
         setcountLike(countLike - 1);
@@ -79,7 +77,6 @@ function PostCard(post) {
 
     async function getUser(userId) {
         const response = await dispatch(getUserById (userId));
-        console.log (response.payload?.data?.userdetails);
         if(!response){
             toast.error("Something went Wrong!");
         }

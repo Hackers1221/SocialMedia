@@ -67,6 +67,21 @@ export const likePost = createAsyncThunk('post/likePost', async(data) => {
     }
 })
 
+export const getPostByUserId = createAsyncThunk('post/getpost' ,async(id) => {
+    try {
+        const response = await axiosInstance.get(`post/posts/${id}`, { 
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+        if(response){
+            return response;
+        }
+    } catch (error) {
+        toast.error(error.message || "Failed to get post");
+    }
+})
+
 const PostSlice = createSlice({
     name: 'post',
     initialState,
@@ -82,7 +97,6 @@ const PostSlice = createSlice({
             .addCase(getAllPosts.fulfilled, (state, action) => {
                 if (!action.payload?.data) return;
                 state.downloadedPosts = action.payload?.data?.postsdata?.posts.reverse();
-                state.postList = state.downloadedPosts;
             })
             .addCase(createPost.fulfilled, (state, action) => {
                 if (!action.payload?.data) return;
@@ -90,11 +104,14 @@ const PostSlice = createSlice({
                 console.log(state.downloadedPosts);
                 state.downloadedPosts = [newPost, ...state.downloadedPosts];
                 console.log(state.downloadedPosts);
-                state.postList = state.downloadedPosts;
             })
             .addCase(updatePost.fulfilled, (state, action) => {
                 if (!action.payload?.data) return;
                 console.log(action.payload);
+            })
+            .addCase(getPostByUserId.fulfilled , (state,action) => {
+                if(!action.payload?.data)return; 
+                state.postList = action.payload?.data.postDetails
             })
     }
 });

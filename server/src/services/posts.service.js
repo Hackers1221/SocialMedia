@@ -102,10 +102,28 @@ const likePost = async(id,userId) => {
     }
 }
 
+const getPostByUserId = async(id) => {
+    const response = {};
+    try {
+        const postdata = await postsmodel.find({userId : id });
+        console.log(postdata);
+        if(!postdata){
+            response.error = "Post not found";
+            return response;
+        }
+        response.post = postdata;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response
+    }
+}
+
 
 module.exports = {
     CreatePost,
     getAllPosts,
     updatePost,
-    likePost
+    likePost,
+    getPostByUserId
 };
