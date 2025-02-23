@@ -11,5 +11,7 @@ postRoutes.get('/posts',validators.isUserAuthenticated, postController.getallPos
 postRoutes.patch('/posts/:id',validators.isUserAuthenticated,postController.updatePost)
 postRoutes.patch('/like/:id',validators.isUserAuthenticated,postController.likePost);
 postRoutes.get('/posts/:id',validators.isUserAuthenticated,postController.getPostByUserId);
+postRoutes.patch('/save/:id',validators.isUserAuthenticated,postController.savePost);
+postRoutes.get('/save/:id',validators.isUserAuthenticated,postController.getAllSavedPost);
 
 module.exports = postRoutes

@@ -86,6 +86,47 @@ const getPostByUserId = async(req,res) => {
     })
 }
 
+const getPostById= async(req,res) => {
+    const response = await postsService.getPostById(req.params.id);
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg : "Unable to get the Post",
+            error : response.error
+        })
+    }
+    return res.status(StatusCodes.OK).send({
+        msg : "Successfully fetched the post",
+        postDetails : response.post
+    })
+}
+
+const savePost = async(req,res) => {
+    const response = await postsService.savePost(req.params.id,req.body.id);
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg : "Unable to save the Post",
+            error : response.error
+        })
+    }
+    return res.status(StatusCodes.OK).send({
+        msg : "Successfully saved the post",
+        postDetails : response.post
+    })
+}
+
+const getAllSavedPost = async(req,res) => {
+    const response = await postsService.getAllSavedPost(req.params.id);
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg : "Unable to load the save Post",
+            error : response.error
+        })
+    }
+    return res.status(StatusCodes.OK).send({
+        msg : "Successfully loaded the saved post",
+        postDetails : response.post
+    })
+}
 
 
 module.exports = {
@@ -93,5 +134,8 @@ module.exports = {
     getallPosts,
     updatePost,
     likePost,
-    getPostByUserId
+    getPostByUserId,
+    getPostById,
+    savePost,
+    getAllSavedPost
 }

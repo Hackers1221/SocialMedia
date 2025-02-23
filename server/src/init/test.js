@@ -29,15 +29,12 @@ const initDB = async () => {
   let objectIds = data.map((ele) => (String(ele._id)));
 
   // Get any random id from list
-  const workingUser = await User.findById(objectIds[objectIds.length - 1]);
   const getRandomId = () => objectIds[Math.floor(Math.random() * objectIds.length)];
   const video_url = "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
 
   const posts = samplePosts.map((ele) => ({ ...ele, userId: getRandomId(), caption: "festive vibes", video: video_url}));
   await Post.deleteMany({});
-  const allPosts = await Post.insertMany(posts);
-
-  await User.findByIdAndUpdate (workingUser._id, {saved: allPosts});
+  await Post.insertMany(posts);
   console.log("posts was initialized");
 };
 

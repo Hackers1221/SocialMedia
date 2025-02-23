@@ -106,7 +106,6 @@ const getPostByUserId = async(id) => {
     const response = {};
     try {
         const postdata = await postsmodel.find({userId : id });
-        console.log(postdata);
         if(!postdata){
             response.error = "Post not found";
             return response;
@@ -119,11 +118,74 @@ const getPostByUserId = async(id) => {
     }
 }
 
+const getPostById = async(id) => {
+    const response = {};
+    try {
+        const postdata = await postsmodel.find(id);
+        if(!postdata){
+            response.error = "Post not found";
+            return response;
+        }
+        response.post = postdata;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response
+    }
+}
+
+const getAllSavedPost = async(userId) => {
+    const response = {};
+    try {
+        const userData = await usermodel.findById(userId);
+        if(!userData){
+            response.error = "User not found";
+            return response;
+        }
+        const savedPostDetails = await postsmodel.find({ _id: { $in: userData.saved } });
+        response.post = savedPostDetails;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response
+    }
+}
+
+const savePost = async(userId, id) => {
+    const response = {};
+    try {
+        let userData = await usermodel.findById(userId);
+        if(!userData){
+            response.error = "User not found";
+            return response;
+        }
+        console.log(userData);
+        if(userData.saved.includes(id)){
+            userData.saved = userData.saved.filter((ids) => ids!==id);
+        }else{
+            userData.saved.push(id);
+        }
+        const updateuser = await usermodel.findByIdAndUpdate(
+            userId,
+            {saved : userData.saved},
+            {new  :true}
+        )
+        const savedPostDetails = await postsmodel.find({ _id: { $in: updateuser.saved } });
+        response.post = savedPostDetails;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response
+    }
+}
 
 module.exports = {
     CreatePost,
     getAllPosts,
     updatePost,
     likePost,
-    getPostByUserId
+    getPostByUserId,
+    getPostById,
+    savePost,
+    getAllSavedPost
 };
