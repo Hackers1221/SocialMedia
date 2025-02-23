@@ -8,14 +8,21 @@ import { likePost, updatePost, updateSavedPost } from "../redux/Slices/post.slic
 import DisplayPost from "./DsiplayPost";
 
 function PostCard(post) {
+
+    const authState = useSelector((state) => state.auth.data);
+    const currUser = useSelector((state) => state.auth);
+    const postState = useSelector ((state) => state.post);
+    const videoRef = useRef(null);
+
+    const dispatch = useDispatch();
+
+    const {_id,image, video, likes, comments, interests, createdAt, userId, caption} = post?.post;
+
     const [liked, setLiked] = useState(false);
     const [saved, setSaved] = useState(false);
-    const {_id,image, video, likes, comments, interests, createdAt, userId, caption} = post?.post;
-    const currUser = useSelector((state) => state.auth);
-    const dispatch = useDispatch();
-    const authState = useSelector((state) => state.auth.data);
-    const videoRef = useRef(null);
     const [countLike,setcountLike] = useState(likes.length);
+
+    // console.log (post?.post);
 
     // console.log (post?.post);
 
@@ -37,21 +44,21 @@ function PostCard(post) {
     const [showButton, setShowButton] = useState(false);
     
     
-      const handleVideoClick = () => {
-        setShowButton(true);
-    
-        // Hide the button after 500ms
-        setTimeout(() => {
-          setShowButton(false);
-        }, 500);
-    
-        // Toggle play/pause
-        if (videoRef.current.paused) {
-          videoRef.current.play();
-        } else {
-          videoRef.current.pause();
-        }
-      };
+    const handleVideoClick = () => {
+      setShowButton(true);
+  
+      // Hide the button after 500ms
+      setTimeout(() => {
+        setShowButton(false);
+      }, 500);
+  
+      // Toggle play/pause
+      if (videoRef.current.paused) {
+        videoRef.current.play();
+      } else {
+        videoRef.current.pause();
+      }
+    };
 
     function getDate() {
       let date = createdAt?.toString()?.split('T')[0].split('-').reverse().join("/");
@@ -62,6 +69,9 @@ function PostCard(post) {
         _id1  : authState._id,
         id : _id
       }))
+
+      if (!response?.payload) return;
+      setSaved ((prev) => !prev);
     }
 
     const toggleLike = async () => {
@@ -89,6 +99,10 @@ function PostCard(post) {
         
         setCreator(response.payload?.data?.userdetails);
     }   
+
+    useEffect (() => {
+      setSaved (postState?.savedList?.find ((post) => post._id === _id));
+    }, [postState])
 
     useEffect (() => {
         getUser (userId);

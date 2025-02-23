@@ -1,23 +1,18 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { BsCameraReels } from "react-icons/bs";
 import DisplayPost from "./DsiplayPost";
-import { getSavedPost } from "../redux/Slices/post.slice";
+import usePosts from "../hooks/usePosts";
 
 const SavedPost = () => {
   const savedArray = useSelector((state) => state.post.savedList);
-  const dispatch = useDispatch();
-  const authState = useSelector ((state) => state.auth);
+  const [postState] = usePosts();
 
   const [activeTab, setActiveTab] = useState("images");
   const [isDialogOpen, setDialogOpen] = useState (false);
   const [selectedPost, setSelectedPost] = useState ();
 
   const [thumbnails, setThumbnails] = useState({});
-
-  useEffect(() => {
-    dispatch(getSavedPost(authState?.data?._id))
-  },[authState])
 
   const extractThumbnail = (videoURL, index) => {
     const video = document.createElement("video");
