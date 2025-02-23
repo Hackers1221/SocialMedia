@@ -83,7 +83,9 @@ const PostSlice = createSlice({
             .addCase(createPost.fulfilled, (state, action) => {
                 if (!action.payload?.data) return;
                 const newPost = action.payload?.data?.postsdata?.post;
+                console.log(state.downloadedPosts);
                 state.downloadedPosts = [newPost, ...state.downloadedPosts];
+                console.log(state.downloadedPosts);
                 state.postList = state.downloadedPosts;
             })
             .addCase(updatePost.fulfilled, (state, action) => {
