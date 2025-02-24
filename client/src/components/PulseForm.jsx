@@ -5,7 +5,7 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { createPulse } from "../redux/Slices/post.slice";
+import { createPulse } from "../redux/Slices/pulse.slice";
 import toast from "react-hot-toast";
 
 export default function PulseForm({ open, setOpen }) {
