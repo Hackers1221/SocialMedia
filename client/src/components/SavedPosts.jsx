@@ -82,14 +82,14 @@ const SavedPost = () => {
       <div className="w-full mt-4">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
           {(activeTab === "images" ? savedArray : pulse)?.map((post, index) => (
-            <div key={index} className="relative group hover:cursor-pointer overflow-hidden rounded-lg" onClick={() => {
+            <div key={index} className="relative h-[10rem] group hover:cursor-pointer overflow-hidden rounded-lg" onClick={() => {
               setDialogOpen(true);
               setSelectedPost (post);
             }}>
               {activeTab === "images" && <img
                 src={post?.image[0] || thumbnails[index]}
                 alt="Explore"
-                className="w-full h-full rounded-lg transition-transform duration-300 group-hover:scale-110"
+                className="w-full h-full object-cover rounded-lg transition-transform duration-300 group-hover:scale-110"
               />}
               <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-lg font-semibold">
                 View
