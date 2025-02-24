@@ -118,7 +118,7 @@ const getUserByUserName = async(name) => {
     const response = {};
     console.log("heeeee" ,typeof(name));
     try {
-        const userData = await usermodel.find({username : name});
+        const userData = await usermodel.findOne({username : name});
         if(!userData){
             response.error = "User not found";
             return response;

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { getUserById } from "../redux/Slices/auth.slice";
 import Avatar from "./Avatar";
@@ -15,6 +15,7 @@ function PostCard(post) {
     const videoRef = useRef(null);
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const {_id,image, video, likes, comments, interests, createdAt, userId, caption} = post?.post;
 
@@ -89,6 +90,11 @@ function PostCard(post) {
       
       setLiked(!liked);
     };
+
+    function goProfile (username) {
+      console.log
+        navigate(`/profile?username=${username}`);
+    }
     
 
     async function getUser(userId) {
@@ -129,13 +135,13 @@ function PostCard(post) {
                 </Link>
               </div>
               <div className="grow">
-                <p>
-                  <Link href={'/profile/'+creator?._id}>
+                <div>
+                  <Link to={`/profile/${creator?.username}`}>
                     <span className={`mr-1 font-semibold cursor-pointer hover:underline text-white`}>
                       {creator?.name}
                     </span>
                   </Link>
-                </p>
+                </div>
                 <p className={`text-[${_COLOR.more_light}] text-sm`}>
                 {date}
                 </p>
