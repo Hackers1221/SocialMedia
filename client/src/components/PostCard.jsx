@@ -35,7 +35,7 @@ function PostCard(post) {
     const [count, setCount] = useState (0);
     const [imageLength, setImageLength] = useState (0);
     const [creator, setCreator] = useState ({
-      image: "Empty Source",
+      image: "https://t3.ftcdn.net/jpg/03/02/88/46/360_F_302884605_actpipOdPOQHDTnFtp4zg4RtlWzhOASp.jpg",
       name: "",
       username: "",
       password: "",
@@ -130,7 +130,7 @@ function PostCard(post) {
               <div>
                 <Link href={'/profile'}>
                   <span className="cursor-pointer">
-                    <Avatar url={creator?.image} />
+                    <Avatar url={creator?.image || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} />
                   </span>
                 </Link>
               </div>

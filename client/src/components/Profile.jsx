@@ -21,11 +21,8 @@ const Profile = () => {
   async function getUser () {
       const user = await dispatch(getUserByUsername (username));
       if (!user.payload) toast.error ("Something went wrong");
-      else setCreator (user.payload?.data?.userDetails);
-  }
-
-  const toggleFollow = async() => {
-    
+      else 
+        setCreator (user.payload?.data?.userDetails);
   }
 
   useEffect (() => {
@@ -36,7 +33,7 @@ const Profile = () => {
     <div className={`fixed top-[10rem] md:top-[1rem] md:left-[20rem] left-[1rem] w-[85%] md:w-[50%] h-[97vh] flex flex-col flex-grow overflow-y-auto`}>
         <div className={`mb-4 w-full bg-[${_COLOR.less_light}] px-4 pt-4`}>
             <div className={`flex items-center gap-4 `}>
-              <Avatar url={creator?.image} size={'lg'}/>
+              <Avatar url={creator?.image || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} size={'lg'}/>
               <div>
                 <h2 className={`font-bold text-xl text-[${_COLOR.lightest}]`}>{creator?.name}</h2>
                 <h2 className={`text-lg  text-[${_COLOR.more_light}]`}>{creator?.email}</h2>
