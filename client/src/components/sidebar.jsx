@@ -12,12 +12,14 @@ import { FaBookmark } from "react-icons/fa6";
 import PostDialog from "./PostDialog";
 import { Link, useNavigate } from "react-router-dom"
 import PostForm from "./PostForm";
+import PulseForm from "./PulseForm";
 import { useDispatch } from "react-redux";
 import { logout } from "../redux/Slices/auth.slice";
 
 function Sidebar() {
     const [isOpen, setIsOpen] = useState(false);
     const [isPostForm, setIsPostForm] = useState(false);
+    const [isPulseForm, setIsPulseForm] = useState(false);
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
@@ -57,11 +59,20 @@ function Sidebar() {
     return (
         <>
             {/* add post dialog box */}
-            <PostDialog open={isDialogOpen} setOpen={setDialogOpen} onAddPost={() => {
-                setDialogOpen(false); 
-                setIsPostForm(true); 
-            }} />
+            <PostDialog 
+                open={isDialogOpen} 
+                setOpen={setDialogOpen} 
+                onAddPost={() => {
+                    setDialogOpen(false); 
+                    setIsPostForm(true); 
+                }} 
+                onAddPulse={() => {
+                    setDialogOpen(false); 
+                    setIsPulseForm(true); 
+                }} 
+            />
             <PostForm open={isPostForm} setOpen={setIsPostForm}/>
+            <PulseForm open={isPulseForm} setOpen={setIsPulseForm} />
             
 
             <div className="fixed top-0 left-0 z-50">

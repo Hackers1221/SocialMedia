@@ -1,27 +1,44 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Avatar from './Avatar';
 import PostCard from './PostCard';
 import usePosts from '../hooks/usePosts';
+import { getUserByUsername } from '../redux/Slices/auth.slice';
+import toast from 'react-hot-toast';
+import { useParams } from 'react-router-dom';
 
 const Profile = () => {
   const authState = useSelector ((state) => state.auth);
 
+  const [creator, setCreator] = useState ();
+
+  const dispatch = useDispatch ();
+
+  const { username } = useParams();
+
   const [postState] = usePosts ();
 
-  console.log("PostList", postState.postList);
+  async function getUser () {
+      const user = await dispatch(getUserByUsername (username));
+      if (!user.payload) toast.error ("Something went wrong");
+      else setCreator (user.payload?.data?.userDetails);
+  }
+
+  useEffect (() => {
+    getUser ();
+  }, [username])
 
   return (
     <div className={`fixed top-[10rem] md:top-[1rem] md:left-[20rem] left-[1rem] w-[85%] md:w-[50%] h-[97vh] flex flex-col flex-grow overflow-y-auto`}>
         <div className={`mb-4 w-full bg-[${_COLOR.less_light}] px-4 pt-4`}>
             <div className={`flex items-center gap-4 `}>
-              <Avatar url={authState?.data?.image} size={'lg'}/>
+              <Avatar url={creator?.image} size={'lg'}/>
               <div>
-                <h2 className={`font-bold text-xl text-[${_COLOR.lightest}]`}>{authState?.data?.name}</h2>
-                <h2 className={`text-lg  text-[${_COLOR.more_light}]`}>{authState?.data?.email}</h2>
+                <h2 className={`font-bold text-xl text-[${_COLOR.lightest}]`}>{creator?.name}</h2>
+                <h2 className={`text-lg  text-[${_COLOR.more_light}]`}>{creator?.email}</h2>
                 <div className={`flex gap-4`}>
-                  <h2 className={`text-sm text-[${_COLOR.lightest}]`}>{authState?.data?.following?.length} Followers</h2>
-                  <h2 className={`text-sm text-[${_COLOR.lightest}]`}>{authState?.data?.following?.length} Following</h2>
+                  <h2 className={`text-sm text-[${_COLOR.lightest}]`}>{creator?.following?.length} Followers</h2>
+                  <h2 className={`text-sm text-[${_COLOR.lightest}]`}>{creator?.following?.length} Following</h2>
                 </div>
               </div>
             </div>
