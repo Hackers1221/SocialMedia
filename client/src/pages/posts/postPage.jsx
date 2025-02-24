@@ -13,7 +13,7 @@ function PostPage() {
     const postState = useSelector ((state) => state.post);
     const dispatch = useDispatch ();
 
-    const image = authState?.data?.image || "Empty Source"
+    const image = authState?.data?.image || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"
 
     async function getSavedPosts () {
         const response = await dispatch(getSavedPost (authState?.data?._id));

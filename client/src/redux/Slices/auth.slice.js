@@ -10,9 +10,9 @@ const initialState = {
 
 export const login = createAsyncThunk('/auth/login', async (data) => {    
     try {
-        const response = axiosInstance.post("auth/signin", data);
+        const response = await axiosInstance.post("auth/signin", data);
         if(!response) toast.error('Something went wrong, try again');
-        return await response;
+        return  response;
     } catch (error) {
         console.log(error);
     }
@@ -20,9 +20,9 @@ export const login = createAsyncThunk('/auth/login', async (data) => {
 
 export const signup = createAsyncThunk('/auth/signup', async (data) => {     
     try {
-        const response = axiosInstance.post("auth/signup", data);
+        const response = await axiosInstance.post("auth/signup", data);
         if(!response) toast.error('Something went wrong, try again');
-        return await response;
+        return  response;
     } catch (error) {
         console.log(error);
     }
@@ -30,13 +30,13 @@ export const signup = createAsyncThunk('/auth/signup', async (data) => {
 
 export const getUserById = createAsyncThunk('/auth/user', async (id) => {     
     try {
-        const response = axiosInstance.get(`auth/user/${id}`, {
+        const response = await axiosInstance.get(`auth/user/${id}`, {
             headers: {
                 'x-access-token': localStorage.getItem('token')
             }
         });
         if(!response) toast.error('Something went wrong, try again');
-        return await response;
+        return  response;
     } catch (error) {
         console.log(error);
     }
@@ -44,13 +44,13 @@ export const getUserById = createAsyncThunk('/auth/user', async (id) => {
 
 export const getUserByUsername = createAsyncThunk('/auth/user', async (username) => {     
     try {
-        const response = axiosInstance.get(`auth/users/${username}`, {
+        const response =  await axiosInstance.get(`auth/users/${username}`, {
             headers: {
                 'x-access-token': localStorage.getItem('token')
             }
         });
         if(!response) toast.error('Something went wrong, try again');
-        return await response;
+        return response;
     } catch (error) {
         console.log(error);
     }
@@ -61,13 +61,13 @@ export const followUser = createAsyncThunk('/auth/follow' , async(data) => {
         const resp= {
             id : data.id
         }
-        const response = await axiosInstance.patch(`auth/follow/${data.id}` , resp , {
+        const response = await axiosInstance.patch(`auth/follow/${data.id1}` , resp , {
             headers: {
                 'x-access-token': localStorage.getItem('token')
             }
         })
         if(!response)toast.error('Something went wrong, try again');
-        return await response;
+        return response;
     } catch (error) {
         console.log(error);
     }

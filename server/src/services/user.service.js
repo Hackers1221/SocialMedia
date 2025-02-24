@@ -91,6 +91,7 @@ const updateUser = async (userId, updatedData) => {
 const followUser = async(userId , followingId) => {
     const response = {};
     try {
+        console.log(userId,followingId);
         const userData = await usermodel.findById(userId);
         if(!userData){
             response.error = error.message;
