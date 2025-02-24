@@ -5,7 +5,6 @@ import Avatar from "./Avatar";
 
 const DisplayPost = ({ open, setOpen, post }) => {
   if (!post || !open) return <></>;
-  console.log (post);
 
   const currUser = useSelector((state) => state.auth);
 
