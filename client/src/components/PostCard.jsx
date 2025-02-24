@@ -27,7 +27,7 @@ function PostCard(post) {
 
     // console.log (post?.post);
 
-    const photo = currUser.data?.image || "Empty Source"
+    const photo = currUser.data?.image || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"
 
     const [date, setDate] = useState (0);
     const [isDialogOpen, setDialogOpen] = useState (false);
@@ -230,24 +230,6 @@ function PostCard(post) {
         </div>
       </div>
       <div> 
-        {/* {comments.length > 0 && comments.map(comment => (
-          <div key={comment.id} className="mt-2 flex gap-2 items-center">
-            <Avatar url={comment.profiles.avatar} />
-            <div className="bg-gray-200 py-2 px-4 rounded-3xl">
-              <div>
-                <Link href={'/profile/'+comment.profiles.id}>
-                  <span className="hover:underline font-semibold mr-1">
-                    {comment.profiles.name}
-                  </span>
-                </Link>
-                <span className="text-sm text-gray-400">
-                  <ReactTimeAgo timeStyle={'twitter'} date={(new Date(comment.created_at)).getTime()} />
-                </span>
-              </div>
-              <p className="text-sm">{comment.content}</p>
-            </div>
-          </div>
-        ))} */}
       </div>
     </div>
   );

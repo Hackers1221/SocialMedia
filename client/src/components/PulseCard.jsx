@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 
 export default function PulseCard({ URL }) {
+  if (!URL) return null;
+  
   const [isPlaying, setIsPlaying] = useState(true);
   const [isLiked, setIsLiked] = useState(false);
   const [isSaved, setIsSaved] = useState(false);

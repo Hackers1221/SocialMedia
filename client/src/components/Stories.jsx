@@ -70,7 +70,7 @@ function Stories () {
                     </Link>
                 </li>
                 {videoUrls?.map((story, index) => (
-                    <li key={index} className="flex flex-col items-center space-y-2" onClick={() => {
+                    <li key={index} className="flex flex-col items-center space-y-2 hover:cursor-pointer" onClick={() => {
                         setIdx(index); setDialogOpen(true)}}>
                         <div className="bg-gradient-to-tr from-yellow-500 to-pink-600 rounded-full p-1">
                             <div className="block bg-white p-1 rounded-full transform transition hover:-rotate-12 duration-300" href="#">

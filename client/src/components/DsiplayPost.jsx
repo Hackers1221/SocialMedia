@@ -94,7 +94,7 @@ const DisplayPost = ({ open, setOpen, post }) => {
       <div className="flex">
         <div className="relative flex w-[50%] h-[40rem] justify-center">
           <div className="absolute top-2 left-2 bg-black w-[15rem] h-max flex gap-4 items-center bg-opacity-80 text-white text-sm px-3 py-1 rounded z-[20]">
-            <Avatar url={creator?.image} />
+            <Avatar url={creator?.image || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} />
             <div className="h-full flex flex-col justify-center ">
               <p className="font-semibold">{creator?.name}</p>
               <p className="text-xs">{date}</p>
@@ -166,7 +166,7 @@ const DisplayPost = ({ open, setOpen, post }) => {
           </div>
             <div className="flex mt-4 p-4 gap-3">
               <div>
-                <Avatar url={currUser?.data?.image} />
+                <Avatar url={currUser?.data?.image || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} />
               </div>
               <div className="grow rounded-full relative">
                 <form >
