@@ -30,16 +30,33 @@ export default function PulseCard({ URL }) {
 
   const resetHideButtonTimer = () => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(() => setShowButton(false), 500);
+    timeoutRef.current = setTimeout(() => setShowButton(false), 1000);
   };
+  useEffect(() => {
+    const handleAutoPlay = () => {
+      if (videoRef.current && document.readyState === "complete") {
+        videoRef.current.play().then(() => {
+          setIsPlaying(true);
+          resetHideButtonTimer();
+        }).catch(() => {
+          console.warn("Autoplay blocked by browser.");
+          setIsPlaying(false);
+        });
+      }
+    };
+
+    document.addEventListener("readystatechange", handleAutoPlay);
+    return () => document.removeEventListener("readystatechange", handleAutoPlay);
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          videoRef.current?.play();
-          setIsPlaying(true);
-          resetHideButtonTimer();
+          videoRef.current?.play().then(() => {
+            setIsPlaying(true);
+            resetHideButtonTimer();
+          })
         } else {
           videoRef.current?.pause();
           setIsPlaying(false);
@@ -65,7 +82,7 @@ export default function PulseCard({ URL }) {
       className="reel-container w-80 h-[28rem] md:w-96 md:h-[33rem] overflow-hidden rounded-xl shadow-lg relative"
       onClick={togglePlay}
     >
-      <video ref={videoRef} className="w-full h-full object-cover" src={URL} loop></video>
+      <video ref={videoRef} className="w-full h-full object-cover" src={URL[0]} loop></video>
 
       {/* Play/Pause Button */}
       {showButton && (
