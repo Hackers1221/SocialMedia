@@ -34,7 +34,6 @@ const signin = async(req,res) => {
 }
 
 const getuserByid = async(req,res) => {
-    console.log (req.params.id);
     const response = await userService.getuserByid(req.params.id);
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({

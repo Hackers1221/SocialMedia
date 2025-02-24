@@ -117,7 +117,7 @@ function PostCard(post) {
 
 
   return (
-    <div className={`rounded-md mb-4 bg-[${_COLOR.less_light}] p-4 border border-16 border-[${_COLOR.darkest}]`} >
+    <div className={`rounded-md mb-4 bg-[${_COLOR.darkest}] p-4 border border-[${_COLOR.medium}]`} >
       <DisplayPost open={isDialogOpen} setOpen={setDialogOpen} post={post?.post}/>
     <div className="flex justify-between">
       <div className="flex gap-3">
@@ -154,7 +154,7 @@ function PostCard(post) {
       </div>
       <div>
       {(video?.length > 0 || image?.length > 0) && (
-    <div className="my-5 h-[28rem] carousel rounded-sm w-full bg-transparent" >
+    <div className="my-5 h-[28rem] carousel rounded-sm w-full bg-black" >
       {/* Render videos first */}
       {/* Render images next */}
       {image?.map((photo, key) => (
@@ -213,13 +213,13 @@ function PostCard(post) {
         <div>
           <Avatar url={photo} />
         </div>
-        <div className="border grow rounded-full relative">
+        <div className="grow rounded-full relative">
           <form >
             <input
-              className={`block w-full p-2 px-4 overflow-hidden h-12 focus:outline-none rounded-full bg-[${_COLOR.lightest}]`} placeholder="Leave a comment"/>
+              className={`block w-full p-2 px-4 overflow-hidden h-12 focus:outline-none rounded-full bg-[${_COLOR.less_light}] text-white`} placeholder="Leave a comment"/>
           </form>
           <button className={`absolute top-3 right-4`}>
-            <i className={`text-white fa-solid fa-paper-plane text-[${_COLOR.darkest}]`}></i>
+            <i className={`text-white fa-solid fa-paper-plane text-[${_COLOR.lightest}]`}></i>
           </button>
         </div>
       </div>
