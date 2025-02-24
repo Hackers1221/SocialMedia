@@ -29,27 +29,27 @@ export const createPulse = createAsyncThunk('post/createPulse', async (pulseData
         return response;
     } catch (error) {
         console.log (error.message);
-        toast.error(error.message || "Failed to create post");
+        toast.error(error.message || "Failed to create pulse");
     }
 });
 
-export const likePulse = createAsyncThunk('pulse/likePulse', async(data) => {
-    try {
-        const resp = {
-            id : data.id
-        }
-        const response = await axiosInstance.patch(`pulse/like/${data._id}`,resp , {
-            headers: {
-                'x-access-token': localStorage.getItem('token')
-            }
-        })
-        if(response){
-            return response;
-        }
-    } catch (error) {
-        toast.error(error.message || "Failed to like Pulse");
-    }
-})
+// export const likePulse = createAsyncThunk('pulse/likePulse', async(data) => {
+//     try {
+//         const resp = {
+//             id : data.id
+//         }
+//         const response = await axiosInstance.patch(`pulse/like/${data._id}`,resp , {
+//             headers: {
+//                 'x-access-token': localStorage.getItem('token')
+//             }
+//         })
+//         if(response){
+//             return response;
+//         }
+//     } catch (error) {
+//         toast.error(error.message || "Failed to like Pulse");
+//     }
+// })
 
 // export const getPostByUserId = createAsyncThunk('post/getpost' ,async(id) => {
 //     try {
@@ -106,7 +106,7 @@ const PulseSlice = createSlice({
         builder
             .addCase(getAllPulse.fulfilled, (state, action) => {
                 if (!action.payload?.data) return;
-                state.downloadedPulse = action.payload?.data?.pulseData?.pulse.reverse();
+                state.downloadedPulse = action.payload?.data?.pulsedata?.pulse.reverse();
             })
             .addCase(createPulse.fulfilled, (state, action) => {
                 if (!action.payload?.data) return;

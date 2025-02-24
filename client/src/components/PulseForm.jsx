@@ -113,7 +113,7 @@ export default function PulseForm({ open, setOpen }) {
                 type="button"
                 onClick={() => {
                   setOpen(false);
-                  Createpost();
+                  Createpulse();
                 }}
                 className="h-12 w-[20%] bg-red-500 text-white font-semibold rounded-3xl hover:bg-gray-800 transition"
               >
