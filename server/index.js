@@ -22,6 +22,8 @@ app.use(bodyParser.text());
 app.use('/social/auth',userroutes);
 app.use('/social/post',postRoutes);
 
+
+// Error handling middleware
 app.use((err,req,res,next) => {
     const {statusCode = 500 , message = "Something went wrong"} = err;
     res.status(statusCode).send({

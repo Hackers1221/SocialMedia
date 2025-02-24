@@ -1,6 +1,6 @@
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from "@headlessui/react";
 
-export default function PostDialog({ open, setOpen, onAddPost }) {
+export default function PostDialog({ open, setOpen, onAddPost, onAddPulse }) {
   return (
     <Dialog open={open} onClose={setOpen} className="relative z-[9999]">
       <DialogBackdrop
@@ -34,7 +34,7 @@ export default function PostDialog({ open, setOpen, onAddPost }) {
               </button>
               <button
                 type="button"
-                onClick={() => setOpen(false)}
+                onClick={onAddPulse}
                 className="flex items-center w-full md:w-1/2  justify-center rounded-md bg-white px-4 py-3 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 shadow-xs hover:bg-gray-100"
               >
                 <i className="fa-solid fa-film text-blue-600 text-lg mr-2"></i> Add a reel
