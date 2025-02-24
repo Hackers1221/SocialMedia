@@ -123,6 +123,7 @@ const getUserByUserName = async(name) => {
             response.error = "User not found";
             return response;
         }
+        console.log(userData);
         response.user = userData;
         return response;
     } catch (error) {
