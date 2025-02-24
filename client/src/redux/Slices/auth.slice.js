@@ -56,6 +56,23 @@ export const getUserByUsername = createAsyncThunk('/auth/user', async (username)
     }
 });
 
+export const followUser = createAsyncThunk('/auth/follow' , async(data) => {
+    try {
+        const resp= {
+            id : data.id
+        }
+        const response = await axiosInstance.patch(`auth/follow/${data.id}` , resp , {
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+        if(!response)toast.error('Something went wrong, try again');
+        return await response;
+    } catch (error) {
+        console.log(error);
+    }
+})
+
 
 const authSlice = createSlice({
     name: 'auth',

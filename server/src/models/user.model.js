@@ -40,6 +40,10 @@ const userSchema = new Schema({
         type: [String],
         default :[]
     },
+    follower: {
+        type: [String],
+        default :[]
+    },
     birth:{
         type: String,
         required: true,

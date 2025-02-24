@@ -88,7 +88,7 @@ const updateUser = async (userId, updatedData) => {
     }
 };
 
-const followUser = async(userId , followerId) => {
+const followUser = async(userId , followingId) => {
     const response = {};
     try {
         const userData = await usermodel.findById(userId);
@@ -96,14 +96,29 @@ const followUser = async(userId , followerId) => {
             response.error = error.message;
             return response;
         }
-        if(userData.following.includes(followerId)){
-            userData.following = userData.following.filter ((ids) => ids!=followerId);
+        if(userData.following.includes(followingId)){
+            userData.following = userData.following.filter ((ids) => ids!=followingId);
         }else{
-            userData.following.push(followerId);
+            userData.following.push(followingId);
+        }
+        const followingData = await usermodel.findById(followingId);
+        if(!followingId){
+            response.error = error.message;
+            return response;
+        }
+        if(followingData.follower.includes(userId)){
+            followingData.follower = followingData.follower.filter((ids) => ids!=userId);
+        }else{
+            followingData.follower.push(userId);
         }
         const updatedUser = await usermodel.findByIdAndUpdate(
             userId, 
             {following : userData.following},
+            { new: true, runValidators: true } 
+        );
+        const updatefollower= await usermodel.findByIdAndUpdate(
+            followingId, 
+            {follower : followingData.follower},
             { new: true, runValidators: true } 
         );
         response.user = updatedUser;

@@ -24,6 +24,10 @@ const Profile = () => {
       else setCreator (user.payload?.data?.userDetails);
   }
 
+  const toggleFollow = async() => {
+    
+  }
+
   useEffect (() => {
     getUser ();
   }, [username])
@@ -40,6 +44,7 @@ const Profile = () => {
                   <h2 className={`text-sm text-[${_COLOR.lightest}]`}>{creator?.following?.length} Followers</h2>
                   <h2 className={`text-sm text-[${_COLOR.lightest}]`}>{creator?.following?.length} Following</h2>
                 </div>
+                <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Follow</button>
               </div>
             </div>
             <div className={`w-full flex justify-evenly mt-4 pb-4`}>
