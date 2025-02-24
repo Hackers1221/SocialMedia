@@ -21,7 +21,7 @@ function Pulse() {
       <div className="h-full overflow-y-auto snap-y snap-mandatory scrollbar-hide">
         {pulseState?.downloadedPulse?.map((ele, index) => (
           <div key={index} className="snap-start h-full flex justify-center pt-[2.5rem]">
-            <PulseCard URL={ele.video} />
+            <PulseCard URL={ele?.video} />
           </div>
         ))}
       </div>
