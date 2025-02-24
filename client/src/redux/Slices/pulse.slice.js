@@ -104,14 +104,14 @@ const PulseSlice = createSlice({
     initialState,
     extraReducers: (builder) => {
         builder
-            .addCase(getAllPosts.fulfilled, (state, action) => {
+            .addCase(getAllPulse.fulfilled, (state, action) => {
                 if (!action.payload?.data) return;
-                state.downloadedPosts = action.payload?.data?.postsdata?.posts.reverse();
+                state.downloadedPulse = action.payload?.data?.pulseData?.pulse.reverse();
             })
-            .addCase(createPost.fulfilled, (state, action) => {
+            .addCase(createPulse.fulfilled, (state, action) => {
                 if (!action.payload?.data) return;
-                const newPost = action.payload?.data?.postsdata?.post;
-                state.downloadedPosts = [newPost, ...state.downloadedPosts];
+                const newPulse = action.payload?.data?.pulseData?.pulse;
+                state.downloadedPulse = [newPulse, ...state.downloadedPulse];
             })
     }
 });
