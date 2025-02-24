@@ -34,22 +34,6 @@ export default function PulseCard({ URL }) {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => setShowButton(false), 1000);
   };
-  useEffect(() => {
-    const handleAutoPlay = () => {
-      if (videoRef.current && document.readyState === "complete") {
-        videoRef.current.play().then(() => {
-          setIsPlaying(true);
-          resetHideButtonTimer();
-        }).catch(() => {
-          console.warn("Autoplay blocked by browser.");
-          setIsPlaying(false);
-        });
-      }
-    };
-
-    document.addEventListener("readystatechange", handleAutoPlay);
-    return () => document.removeEventListener("readystatechange", handleAutoPlay);
-  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -58,7 +42,10 @@ export default function PulseCard({ URL }) {
           videoRef.current?.play().then(() => {
             setIsPlaying(true);
             resetHideButtonTimer();
-          })
+          }).catch(() => {
+            console.warn("Autoplay blocked by browser.");
+            setIsPlaying(false);
+          });
         } else {
           videoRef.current?.pause();
           setIsPlaying(false);
