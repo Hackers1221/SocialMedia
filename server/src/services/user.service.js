@@ -88,10 +88,55 @@ const updateUser = async (userId, updatedData) => {
     }
 };
 
+const followUser = async(userId , followerId) => {
+    const response = {};
+    try {
+        const userData = await usermodel.findById(userId);
+        if(!userData){
+            response.error = error.message;
+            return response;
+        }
+        if(userData.following.includes(followerId)){
+            userData.following = userData.following.filter ((ids) => ids!=followerId);
+        }else{
+            userData.following.push(followerId);
+        }
+        const updatedUser = await usermodel.findByIdAndUpdate(
+            userId, 
+            {following : userData.following},
+            { new: true, runValidators: true } 
+        );
+        response.user = updatedUser;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response;
+    }
+}
+
+const getUserByUserName = async(name) => {
+    const response = {};
+    console.log("heeeee" ,typeof(name));
+    try {
+        const userData = await usermodel.find({username : name});
+        if(!userData){
+            response.error = "User not found";
+            return response;
+        }
+        response.user = userData;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response;
+    }
+}
+
 module.exports = {
     CreateUser,
     ValidateUser,
     getuserByid,
-    updateUser
+    updateUser,
+    followUser,
+    getUserByUserName
 }
 

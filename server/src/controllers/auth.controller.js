@@ -62,9 +62,39 @@ const updateUser = async(req,res) => {
     })
 }
 
+const followUser = async(req,res) => {
+    const response = await userService.followUser(req.params.id,req.body.id);
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg : "Unable to follow the user",
+            error : response.error
+        })
+    }
+    return res.status(StatusCodes.OK).send({
+        msg : "Successfully followed the user",
+        userDetails : response.user
+    })
+}
+
+const getUserByUserName = async(req,res) => {
+    const response = await userService.getUserByUserName((req.params.name));
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg : "Unable to Fetch the user",
+            error : response.error
+        })
+    }
+    return res.status(StatusCodes.OK).send({
+        msg : "Successfully fetched the userdetails",
+        userDetails : response.user
+    })
+}
+
 module.exports = {
     signup,
     signin,
     getuserByid,
-    updateUser
+    updateUser,
+    followUser,
+    getUserByUserName
 }

@@ -9,5 +9,7 @@ userroutes.post('/signup',checkUser,authcontroller.signup);
 userroutes.post('/signin',authcontroller.signin);
 userroutes.get('/user/:id',validators.isUserAuthenticated,authcontroller.getuserByid);
 userroutes.patch('/user/:id',validators.isUserAuthenticated,authcontroller.updateUser);
+userroutes.patch('/follow/:id',validators.isUserAuthenticated,authcontroller.followUser);
+userroutes.get('/users/:name',validators.isUserAuthenticated,authcontroller.getUserByUserName)
 
 module.exports = userroutes
