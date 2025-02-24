@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Avatar from './Avatar';
 import PostCard from './PostCard';
 import usePosts from '../hooks/usePosts';
-import { getUserByUsername } from '../redux/Slices/auth.slice';
+import { followUser, getUserByUsername } from '../redux/Slices/auth.slice';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 
@@ -25,7 +25,8 @@ const Profile = () => {
   }
 
   const toggleFollow = async() => {
-    
+    const response = await dispatch(followUser({
+    }))
   }
 
   useEffect (() => {
