@@ -4,18 +4,25 @@ import toast from "react-hot-toast";
 import { getUserById } from "../redux/Slices/auth.slice";
 import Avatar from "./Avatar";
 import { useEffect, useRef, useState } from "react";
-import { likePost, updatePost } from "../redux/Slices/post.slice";
+import { likePost, updatePost, updateSavedPost } from "../redux/Slices/post.slice";
 import DisplayPost from "./DsiplayPost";
 
 function PostCard(post) {
+
+    const authState = useSelector((state) => state.auth.data);
+    const currUser = useSelector((state) => state.auth);
+    const postState = useSelector ((state) => state.post);
+    const videoRef = useRef(null);
+
+    const dispatch = useDispatch();
+
+    const {_id,image, video, likes, comments, interests, createdAt, userId, caption} = post?.post;
+
     const [liked, setLiked] = useState(false);
     const [saved, setSaved] = useState(false);
-    const {_id,image, video, likes, comments, interests, createdAt, userId, caption} = post?.post;
-    const currUser = useSelector((state) => state.auth);
-    const dispatch = useDispatch();
-    const authState = useSelector((state) => state.auth.data);
-    const videoRef = useRef(null);
     const [countLike,setcountLike] = useState(likes.length);
+
+    // console.log (post?.post);
 
     // console.log (post?.post);
 
@@ -37,28 +44,34 @@ function PostCard(post) {
     const [showButton, setShowButton] = useState(false);
     
     
-      const handleVideoClick = () => {
-        setShowButton(true);
-    
-        // Hide the button after 500ms
-        setTimeout(() => {
-          setShowButton(false);
-        }, 500);
-    
-        // Toggle play/pause
-        if (videoRef.current.paused) {
-          videoRef.current.play();
-        } else {
-          videoRef.current.pause();
-        }
-      };
+    const handleVideoClick = () => {
+      setShowButton(true);
+  
+      // Hide the button after 500ms
+      setTimeout(() => {
+        setShowButton(false);
+      }, 500);
+  
+      // Toggle play/pause
+      if (videoRef.current.paused) {
+        videoRef.current.play();
+      } else {
+        videoRef.current.pause();
+      }
+    };
 
     function getDate() {
       let date = createdAt?.toString()?.split('T')[0].split('-').reverse().join("/");
       setDate(date);
     }
-    function toggleBookmark() {
-      setSaved(!saved);
+    const toggleBookmark = async() => {
+      const response = await dispatch(updateSavedPost({
+        _id1  : authState._id,
+        id : _id
+      }))
+
+      if (!response?.payload) return;
+      setSaved ((prev) => !prev);
     }
 
     const toggleLike = async () => {
@@ -88,6 +101,10 @@ function PostCard(post) {
     }   
 
     useEffect (() => {
+      setSaved (postState?.savedList?.find ((post) => post._id === _id));
+    }, [postState])
+
+    useEffect (() => {
         getUser (userId);
         getDate ();
         setImageLength (image.length);
@@ -100,7 +117,7 @@ function PostCard(post) {
 
 
   return (
-    <div className={`rounded-md mb-4 bg-[${_COLOR.less_light}] p-4 border border-16 border-[${_COLOR.darkest}]`} >
+    <div className={`rounded-md mb-4 bg-[${_COLOR.darkest}] p-4 border border-[${_COLOR.medium}]`} >
       <DisplayPost open={isDialogOpen} setOpen={setDialogOpen} post={post?.post}/>
     <div className="flex justify-between">
       <div className="flex gap-3">
@@ -137,7 +154,7 @@ function PostCard(post) {
       </div>
       <div>
       {(video?.length > 0 || image?.length > 0) && (
-    <div className="my-5 h-[28rem] carousel rounded-sm w-full bg-transparent" >
+    <div className="my-5 h-[28rem] carousel rounded-sm w-full bg-black" >
       {/* Render videos first */}
       {/* Render images next */}
       {image?.map((photo, key) => (
@@ -188,7 +205,6 @@ function PostCard(post) {
         <div className="flex">
         <button className={`flex gap-2 items-center text-[${_COLOR.more_light}]`} onClick={toggleBookmark}>
             {saved? <i className="text-white fa-solid fa-bookmark"></i> : <i className="text-white fa-regular fa-bookmark"></i>}
-            {comments?.length}
           </button>
         </div>
       </div>
@@ -197,13 +213,13 @@ function PostCard(post) {
         <div>
           <Avatar url={photo} />
         </div>
-        <div className="border grow rounded-full relative">
+        <div className="grow rounded-full relative">
           <form >
             <input
-              className={`block w-full p-2 px-4 overflow-hidden h-12 focus:outline-none rounded-full bg-[${_COLOR.lightest}]`} placeholder="Leave a comment"/>
+              className={`block w-full p-2 px-4 overflow-hidden h-12 focus:outline-none rounded-full bg-[${_COLOR.less_light}] text-white`} placeholder="Leave a comment"/>
           </form>
           <button className={`absolute top-3 right-4`}>
-            <i className={`text-white fa-solid fa-paper-plane text-[${_COLOR.darkest}]`}></i>
+            <i className={`text-white fa-solid fa-paper-plane text-[${_COLOR.lightest}]`}></i>
           </button>
         </div>
       </div>

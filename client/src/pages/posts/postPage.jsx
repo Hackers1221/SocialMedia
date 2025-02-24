@@ -1,14 +1,12 @@
-import { FiSend } from "react-icons/fi";
 import { IoMdPhotos } from "react-icons/io";
 import { MdAddAPhoto } from "react-icons/md";
 import { MdVideoCameraBack } from "react-icons/md";
-import { MdGif } from "react-icons/md";
-import { BsPersonCircle } from "react-icons/bs";
 import { useDispatch, useSelector } from 'react-redux'
 import PostCard from "../../components/PostCard";
 import { useEffect } from "react";
-import { getAllPosts } from "../../redux/Slices/post.slice";
+import { getAllPosts, getSavedPost } from "../../redux/Slices/post.slice";
 import Avatar from "../../components/Avatar";
+import toast from "react-hot-toast";
 
 function PostPage() {
     const authState = useSelector ((state) => state.auth);
@@ -17,6 +15,11 @@ function PostPage() {
 
     const image = authState?.data?.image || "Empty Source"
 
+    async function getSavedPosts () {
+        const response = await dispatch(getSavedPost (authState?.data?._id));
+        if (!response) toast.error ("Something went wrong");
+    }
+
     async function getPosts () {
         const res = await dispatch (getAllPosts());
         if (!res) toast.error ("Something went wrong");
@@ -24,6 +27,7 @@ function PostPage() {
 
     useEffect (() => {
         getPosts ();
+        getSavedPosts ();
     }, [])
 
     return (
