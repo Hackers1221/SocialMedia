@@ -135,7 +135,7 @@ export default function PostForm({ open, setOpen }) {
 
             {/* Caption Input */}
             <textarea
-              className="mt-4 bg-gray-200 text-black w-full p-3 border rounded-lg focus:ring focus:ring-gray-300 resize-none"
+              className="mt-4 bg-gray-200 text-black w-full p-3 border rounded-lg resize-none focus:outline-none"
               rows="2"
               placeholder="Write a caption..."
               value={caption}
@@ -150,7 +150,7 @@ export default function PostForm({ open, setOpen }) {
                 <input 
                   type="text"
                   value={interests}
-                  className="bg-transparent outline-none text-gray-700 w-full"
+                  className="bg-transparent outline-none text-gray-700 w-full focus:outline-none"
                   placeholder="Add hashtags Ex: games, sports"
                   onChange={(e) => setInterests(e.target.value)}
                 />

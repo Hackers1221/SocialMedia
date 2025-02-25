@@ -74,7 +74,7 @@ const SavedPost = () => {
           onClick={() => setActiveTab("reels")}
         >
           <BsCameraReels />
-          <span>Reels</span>
+          <span>Pulse</span>
         </button>
       </div>
 

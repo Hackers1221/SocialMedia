@@ -23,6 +23,8 @@ function PostCard(post) {
     const [saved, setSaved] = useState(false);
     const [countLike,setcountLike] = useState(likes.length);
 
+    console.log (interests);
+
     // console.log (post?.post);
 
     // console.log (post?.post);
@@ -123,7 +125,7 @@ function PostCard(post) {
 
 
   return (
-    <div className={`rounded-md mb-4 bg-[${_COLOR.darkest}] p-4 border border-[${_COLOR.medium}]`} >
+    <div className={`rounded-md mb-4 bg-[${_COLOR.darkest}] p-4 border border-[${_COLOR.medium}] relative`} >
       <DisplayPost open={isDialogOpen} setOpen={setDialogOpen} post={post?.post}/>
     <div className="flex justify-between">
       <div className="flex gap-3">
@@ -159,10 +161,12 @@ function PostCard(post) {
             </div>
       </div>
       <div>
+      {interests[0] && <div className="absolute bottom-[12rem] left-[2rem] right-[2rem] w-min[80%, max-content] h-[4rem] px-4 flex gap-2 items-center bg-black/80 bg-opacity-80 z-[10] rounded-md">
+        <i className="fa-solid fa-hashtag text-white text-lg"></i>
+        <p className={`text-[${_COLOR.more_light}]`}>{interests[0]}</p>
+      </div>}
       {(video?.length > 0 || image?.length > 0) && (
     <div className="my-5 h-[28rem] carousel rounded-sm w-full bg-black" >
-      {/* Render videos first */}
-      {/* Render images next */}
       {image?.map((photo, key) => (
         <div key={`image-${key}`} className="carousel-item flex justify-center bg-transparent w-full relative">
           <img src={photo} className="w-max" alt="Image not found" />

@@ -8,6 +8,11 @@ import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 import Loader from './Loader';
 
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
+import SkeletonPostCard from './SkeletonPostCard';
+import ProfileInfo from './ProfileInfo';
+
 const Profile = () => {
   const authState = useSelector ((state) => state.auth);
 
@@ -16,7 +21,7 @@ const Profile = () => {
   const [countFollowers, setCountFollowers] = useState(0);
   const [countFollowing, setCountFollowing] = useState(0);
   const [check,setCheck] = useState(false);
-  const [IsLoading,setIsLoading] = useState(true);
+  const [isLoading,setIsLoading] = useState(true);
 
   const dispatch = useDispatch ();
   const { username } = useParams();
@@ -61,11 +66,9 @@ const Profile = () => {
   };
 
   return (
-    IsLoading ? (
-      <Loader />
-    ) : (
       <div className={`fixed top-[10rem] md:top-[1rem] md:left-[20rem] left-[1rem] w-[85%] md:w-[50%] h-[97vh] flex flex-col flex-grow overflow-y-auto`}>
-        <div className={`mb-4 w-full bg-[${_COLOR.less_light}] px-4 pt-4`}>
+        {isLoading && <ProfileInfo />}
+        {!isLoading && <div className={`mb-4 w-full bg-[${_COLOR.less_light}] px-4 pt-4`}>
           <div className={`flex items-center gap-4 `}>
             <Avatar url={creator?.image || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} size={'lg'}/>
             <div>
@@ -76,7 +79,7 @@ const Profile = () => {
                 <h2 className={`text-sm text-[${_COLOR.lightest}]`}>{countFollowing} Following</h2>
               </div>
               {!check && (
-                <button className="mt-2 px-2 py-1 bg-gray-200 text-gray-800 rounded hover:bg-gray-400 transition-all duration-300 ease-in-out  hover:cursor-pointer" onClick={toggleFollow}>
+                <button className={`mt-2 px-4 py-1 bg-transparent border border-[${_COLOR.more_light}] text-white rounded hover:bg-[${_COLOR.dark}]`} onClick={toggleFollow}>
                   {follow ? "Unfollow" : "Follow"}
                 </button>
               )}
@@ -96,20 +99,16 @@ const Profile = () => {
               <h2>About</h2>
             </div>
           </div>
-        </div>
+        </div>}
+
+        {isLoading && <SkeletonPostCard />}
         <div className="w-full h-screen">
-          {postState.postList.length > 0 ? (
-            postState?.postList?.map((post, key) => (
+          {!isLoading && postState?.postList?.map((post, key) => (
               <PostCard post={post} key={key}/>
-            ))
-          ) : (
-            <p className="text-center text-gray-500">No posts available</p>
-          )}
+            ))}
         </div>
       </div>
-    )
-  );
-  
+  )
 };
 
 export default Profile;
