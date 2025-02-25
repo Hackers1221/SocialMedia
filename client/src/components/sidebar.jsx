@@ -13,10 +13,13 @@ import PostDialog from "./PostDialog";
 import { Link, useNavigate } from "react-router-dom"
 import PostForm from "./PostForm";
 import PulseForm from "./PulseForm";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/Slices/auth.slice";
 
 function Sidebar() {
+
+    const authState = useSelector ((state) => state.auth);
+
     const [isOpen, setIsOpen] = useState(false);
     const [isPostForm, setIsPostForm] = useState(false);
     const [isPulseForm, setIsPulseForm] = useState(false);
@@ -32,6 +35,9 @@ function Sidebar() {
     }
 
     useEffect(() => {
+        if (!authState?.isLoggedIn) {
+            navigate ("/login"); return;
+        }
         const handleResize = () => setScreenWidth(window.innerWidth);
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);

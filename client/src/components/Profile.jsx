@@ -79,7 +79,7 @@ const Profile = () => {
                 <h2 className={`text-sm text-[${_COLOR.lightest}]`}>{countFollowing} Following</h2>
               </div>
               {!check && (
-                <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" onClick={toggleFollow}>
+                <button className={`mt-2 px-4 py-1 bg-transparent border border-[${_COLOR.more_light}] text-white rounded hover:bg-[${_COLOR.dark}]`} onClick={toggleFollow}>
                   {follow ? "Unfollow" : "Follow"}
                 </button>
               )}

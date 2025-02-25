@@ -6,13 +6,6 @@ export default defineConfig({
   plugins: [react()],
   define: {
     _COLOR: JSON.stringify({
-      // lightest: "#ffffff",
-      // less_light: "#ced4da",
-      // more_light: "#adb5bd", 
-      // light: "#495057", 
-      // medium: "#495057",
-      // dark: "#343a40", 
-      // darkest: "#212529",
         lightest: "#EAE7DC",
         less_light: "#3D3D3D",
         more_light: "#EAE7DC",

@@ -69,11 +69,11 @@ function PostPage() {
 
                 {/* Scrollable Post List */}
                 {isLoading && <SkeletonPostCard />}
-                <div className="w-full h-screen">
+                {!isLoading && <div className="w-full h-screen">
                     {postState?.downloadedPosts?.map((post, key) => (
                         <PostCard post={post} key={key}/>
                     ))}
-                </div>
+                </div>}
             </div>
         </>
     )
