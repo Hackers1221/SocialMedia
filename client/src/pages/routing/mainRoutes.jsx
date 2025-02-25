@@ -9,7 +9,6 @@ import Explore from "../../components/Explore";
 import Messenger from "../../components/Messenger";
 import Pulse from "../Pulse/Pulse";
 import DisplayStory from "../../components/DisplayStory";
-import ExploreGrid from "../../components/ExploreGrid";
 
 function MainRoutes() {
   return (
@@ -24,7 +23,6 @@ function MainRoutes() {
         <Route path="messenger" element={<Messenger />} />
         <Route path="pulse" element={<Pulse />} />
         <Route path="story" element={<DisplayStory />}/>
-        <Route path="exp" element={<ExploreGrid />}/>
       </Route>
     </Routes>
   );
