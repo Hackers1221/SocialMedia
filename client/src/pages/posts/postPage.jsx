@@ -3,26 +3,41 @@ import { MdAddAPhoto } from "react-icons/md";
 import { MdVideoCameraBack } from "react-icons/md";
 import { useDispatch, useSelector } from 'react-redux'
 import PostCard from "../../components/PostCard";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getAllPosts, getSavedPost } from "../../redux/Slices/post.slice";
 import Avatar from "../../components/Avatar";
 import toast from "react-hot-toast";
+import SkeletonPostCard from "../../components/SkeletonPostCard";
 
 function PostPage() {
     const authState = useSelector ((state) => state.auth);
     const postState = useSelector ((state) => state.post);
     const dispatch = useDispatch ();
 
+    const [isLoading, setIsLoading] = useState (false);
+
     const image = authState?.data?.image || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"
 
     async function getSavedPosts () {
-        const response = await dispatch(getSavedPost (authState?.data?._id));
-        if (!response) toast.error ("Something went wrong");
+        setIsLoading(true);
+        try {
+            await dispatch(getSavedPost (authState?.data?._id));
+        } catch {
+            toast.error ("Something went wrong");
+        } finally {
+            setIsLoading(false);
+        }
     }
 
     async function getPosts () {
-        const res = await dispatch (getAllPosts());
-        if (!res) toast.error ("Something went wrong");
+        setIsLoading(true);
+        try {
+            await dispatch (getAllPosts());
+        } catch {
+            toast.error ("Something went wrong");
+        } finally {
+            setIsLoading(false);
+        }
     }
 
     useEffect (() => {
@@ -53,6 +68,7 @@ function PostPage() {
                 </div>
 
                 {/* Scrollable Post List */}
+                {isLoading && <SkeletonPostCard />}
                 <div className="w-full h-screen">
                     {postState?.downloadedPosts?.map((post, key) => (
                         <PostCard post={post} key={key}/>

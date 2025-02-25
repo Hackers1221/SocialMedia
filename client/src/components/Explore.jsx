@@ -52,9 +52,9 @@ const Explore = () => {
   return (
     <>
     <DisplayPost open={isDialogOpen} setOpen={setDialogOpen} post={selectedPost}/>
-    <div className="fixed top-[8rem] md:top-[1rem]  md:left-[20rem] left-[1rem] w-[85%] md:w-[49%] h-[97vh] flex flex-col flex-grow overflow-y-auto">
+    <div className="fixed top-[8rem] md:top-[1rem] md:left-[20rem] left-[1rem] w-[85%] md:w-[49%] h-[82vh] md:h-[97vh] flex flex-col flex-grow overflow-y-auto">
       <div className="max-w-5xl w-full">
-      <h2 className={`text-[${_COLOR.lightest}] heading text-[2rem] mb-4`}>Explore</h2>
+        <h2 className={`text-[${_COLOR.lightest}] heading text-[2rem] mb-4`}>Explore</h2>
         <div className="relative w-full mb-6">
           <input
             type="text"
@@ -62,9 +62,9 @@ const Explore = () => {
             className={`w-full p-3 border border-gray-300 rounded-md shadow-md focus:outline-none text-[${_COLOR.lightest}]`}
           />
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 grid-auto-rows-40">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 h-screen">
           {postState?.downloadedPosts?.map((post, index) => (
-            <div key={index} className={`relative h-[10rem] group overflow-hidden rounded-lg shadow-lg hover:cursor-pointer ${index % 3 === 0 ? "row-span-2 h-[20rem]" : ""}`} onClick={() => {
+            <div key={index} className={`relative h-[10rem] group overflow-hidden rounded-lg shadow-lg hover:cursor-pointer ${index % 3 === 0 ? "row-span-2 h-[23rem]" : ""}`} onClick={() => {
               setDialogOpen(true);
               setSelectedPost (post);
             }}>
