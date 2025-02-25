@@ -7,6 +7,7 @@ const {Mongo_DB_URL} = require('./src/config/db.config');
 const mongoose = require('mongoose');
 const postRoutes = require("./src/routes/posts.routes");
 const pulseRoutes = require("./src/routes/pulse.route");
+const commentRoutes = require('./src/routes/comments.routes');
 
 app.use(function (req, res, next) {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -23,6 +24,7 @@ app.use(bodyParser.text());
 app.use('/social/auth',userroutes);
 app.use('/social/post',postRoutes);
 app.use('/social/pulse',pulseRoutes);
+app.use('/social/comment',commentRoutes);
 
 
 // Error handling middleware

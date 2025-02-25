@@ -6,6 +6,7 @@ import Avatar from "./Avatar";
 import { useEffect, useRef, useState } from "react";
 import { likePost, updatePost, updateSavedPost } from "../redux/Slices/post.slice";
 import DisplayPost from "./DsiplayPost";
+import { CreateComment } from "../redux/Slices/comment.slice";
 
 function PostCard(post) {
 
@@ -23,8 +24,6 @@ function PostCard(post) {
     const [saved, setSaved] = useState(false);
     const [countLike,setcountLike] = useState(likes.length);
 
-    console.log (interests);
-
     // console.log (post?.post);
 
     // console.log (post?.post);
@@ -36,6 +35,8 @@ function PostCard(post) {
     const [newLikes, setNewLikes] = useState([]);
     const [count, setCount] = useState (0);
     const [imageLength, setImageLength] = useState (0);
+    const [commentDescription , setDescription] = useState("");
+    const [countComment,setCountComment] = useState(comments?.length);
     const [creator, setCreator] = useState ({
       image: "https://t3.ftcdn.net/jpg/03/02/88/46/360_F_302884605_actpipOdPOQHDTnFtp4zg4RtlWzhOASp.jpg",
       name: "",
@@ -45,7 +46,6 @@ function PostCard(post) {
       birth: ""
     });
     const [showButton, setShowButton] = useState(false);
-    
     
     const handleVideoClick = () => {
       setShowButton(true);
@@ -120,6 +120,25 @@ function PostCard(post) {
           setLiked(true);
         }
     }, [userId])
+
+
+    function handleChange (e) {
+      const {name, value} = e.target;
+      setDescription(value);
+    }
+
+    const postComment = async() => {
+      const data = {
+          description : commentDescription ,
+          userId : authState._id,
+          postId : _id
+      };
+      const response = await dispatch(CreateComment(data));
+      if(response.payload){
+        setCountComment(countComment + 1);
+        setDescription("");
+      }
+    }
 
 
 
@@ -209,7 +228,7 @@ function PostCard(post) {
           <button className={`flex gap-2 items-center text-[${_COLOR.more_light}]`}>
           {/* <i className="text-white fa-solid fa-comment"></i> */}
             <i className="text-white fa-regular fa-comment"></i>
-            {comments?.length}
+            {countComment}
           </button>
         </div>
         <div className="flex">
@@ -226,9 +245,14 @@ function PostCard(post) {
         <div className="grow rounded-full relative">
           <form >
             <input
-              className={`block w-full p-2 px-4 overflow-hidden h-12 focus:outline-none rounded-full bg-[${_COLOR.less_light}] text-white`} placeholder="Leave a comment"/>
+              className=
+              {`block w-full p-2 px-4 overflow-hidden h-12 focus:outline-none rounded-full bg-[${_COLOR.less_light}] text-white`} 
+              placeholder="Leave a comment"
+              name="description"
+              value={commentDescription}
+              onChange={handleChange}/>
           </form>
-          <button className={`absolute top-3 right-4`}>
+          <button className={`absolute top-3 right-4`} onClick={postComment}>
             <i className={`text-white fa-solid fa-paper-plane text-[${_COLOR.lightest}]`}></i>
           </button>
         </div>
