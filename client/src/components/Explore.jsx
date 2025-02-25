@@ -62,9 +62,9 @@ const Explore = () => {
             className={`w-full p-3 border border-gray-300 rounded-md shadow-md focus:outline-none text-[${_COLOR.lightest}]`}
           />
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 grid-auto-rows-40">
           {postState?.downloadedPosts?.map((post, index) => (
-            <div key={index} className="relative h-[10rem] group overflow-hidden rounded-lg shadow-lg hover:cursor-pointer" onClick={() => {
+            <div key={index} className={`relative h-[10rem] group overflow-hidden rounded-lg shadow-lg hover:cursor-pointer ${index % 3 === 0 ? "row-span-2 h-[20rem]" : ""}`} onClick={() => {
               setDialogOpen(true);
               setSelectedPost (post);
             }}>
