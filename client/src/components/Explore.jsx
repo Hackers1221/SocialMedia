@@ -48,7 +48,7 @@ const Explore = () => {
         extractThumbnail(post.video[0], index);
       }
     });
-  }, [postState]);
+  }, []);
 
   return (
     <>
