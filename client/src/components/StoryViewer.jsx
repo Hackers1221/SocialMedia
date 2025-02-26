@@ -2,11 +2,64 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 const StoryViewer = ({ stories, currentIndex, onClose }) => {
+
   const [index, setIndex] = useState(currentIndex);
+  const [isPlaying, setIsPlaying] = useState([false]);
+  const [showButton, setShowButton] = useState([true]);
   const [progress, setProgress] = useState(0);
+
   const videoRef = useRef(null);
+  const videoRefs = useRef([]);
   const intervalRef = useRef(null);
+  const timeoutRef = useRef(null);
   const startX = useRef(0); // For touch swipe
+
+  const togglePlay = (index) => {
+    videoRefs.current.forEach((video, i) => {
+      if (video && i !== index) {
+        video.pause();
+        setIsPlaying((prev) => ({
+          ...prev,
+          [i]: false,
+        }));
+      }
+    });
+  
+    const video = videoRefs.current[index];
+    if (!video) return;
+  
+    if (video.paused) {
+      video.play();
+      setIsPlaying((prev) => ({
+        ...prev,
+        [index]: true,
+      }));
+    } else {
+      video.pause();
+      setIsPlaying((prev) => ({
+        ...prev,
+        [index]: false,
+      }));
+    }
+  
+    setShowButton((prev) => ({
+      ...prev,
+      [index]: true,
+    }));
+  
+    resetHideButtonTimer(index);
+  };
+  
+
+  const resetHideButtonTimer = (index) => {
+    if (timeoutRef.current[index]) clearTimeout(timeoutRef.current[index]);
+    timeoutRef.current[index] = setTimeout(() => {
+      setShowButton((prev) => ({
+        ...prev,
+        [index]: false,
+      }));
+    }, 500);
+  };
 
   useEffect(() => {
     startProgress();
@@ -93,22 +146,33 @@ const StoryViewer = ({ stories, currentIndex, onClose }) => {
 
         {/* Story Media */}
         <div className="relative w-full h-[80vh] flex items-center justify-center">
-          {stories[index].type === "image" ? (
-            <img
-              src={stories[index]?.url}
-              alt="Story"
-              className="max-h-full max-w-full object-contain"
-            />
-          ) : (
-            <video
-              ref={videoRef}
-              src={stories[index]?.url}
-              className="max-h-full max-w-full object-contain"
-              onEnded={nextStory}
-              autoPlay
-              controls
-            ></video>
-          )}
+            {stories[index].type === "image" ? (
+              <img
+                src={stories[index]?.url}
+                alt="Story"
+                className="max-h-full max-w-full object-contain"
+              />
+            ) : (
+              <>
+                <video ref={(el) => (videoRefs.current[index] = el)} className="max-h-[40rem] max-h-full max-w-full object-contain" onEnded={nextStory} onClick={() => togglePlay (index)}>
+                  <source src={stories[index]?.url} type="video/mp4" />
+                </video>
+
+                {showButton[index] && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="bg-black bg-opacity-30 rounded-full w-16 h-16 flex items-center justify-center">
+                      {isPlaying[index] ? (
+                        <i className="fa-solid fa-pause text-white"></i>
+                      ) : (
+                        <i className="fa-solid fa-play text-white"></i>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+
 
           {/* Navigation Buttons */}
           <button className="absolute left-2 h-full w-1/3" onClick={prevStory}></button>
@@ -118,7 +182,6 @@ const StoryViewer = ({ stories, currentIndex, onClose }) => {
           <button className="absolute top-4 right-4 text-white text-2xl" onClick={onClose}>
             ✖
           </button>
-        </div>
 
         {/* Username & Time */}
         <div className="absolute top-4 left-4 text-white flex items-center space-x-2">

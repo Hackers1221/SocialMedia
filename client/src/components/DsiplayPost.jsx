@@ -38,6 +38,7 @@ const DisplayPost = ({ open, setOpen, post }) => {
       const response = await dispatch(CreateComment(data));
       if(response.payload){
         setDescription("");
+        await dispatch (getAllPosts ());
         await dispatch(getCommentByPostId(post?._id));
       }
   }

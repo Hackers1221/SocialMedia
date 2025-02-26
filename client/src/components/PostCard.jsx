@@ -209,7 +209,6 @@ function PostCard(post) {
                 <i className="text-white fa-solid fa-ellipsis"></i>
               </div>
               <ul tabIndex={0} className={`dropdown-content menu bg-[${_COLOR.medium}] text-[${_COLOR.lightest}] rounded-box z-[1] w-52 p-4 gap-4 shadow-2xl shadow-[${_COLOR.medium}]`}>
-                <li className="hover:cursor-pointer">Follow</li>
                 <li onClick={() => setDialogOpen(true)} className="hover:cursor-pointer">View Post</li>
                 <li className="hover:cursor-pointer">Not Intrested</li>
               </ul>
@@ -282,7 +281,7 @@ function PostCard(post) {
           <Avatar url={photo} />
         </div>
         <div className="grow rounded-full relative">
-          <form >
+          <div >
             <input
               className=
               {`block w-full p-2 px-4 overflow-hidden h-12 focus:outline-none rounded-full bg-[${_COLOR.less_light}] text-white`} 
@@ -290,7 +289,7 @@ function PostCard(post) {
               name="description"
               value={commentDescription}
               onChange={handleChange}/>
-          </form>
+          </div>
           <button className={`absolute top-3 right-4`} onClick={postComment}>
             <i className={`text-white fa-solid fa-paper-plane text-[${_COLOR.lightest}]`}></i>
           </button>

@@ -26,7 +26,7 @@ function Stories () {
         },
         {
           type: "video",
-          url: "https://www.youtube.com/embed/hKcrDuWaOkc",
+          url: "https://res.cloudinary.com/dxyeuw5s7/video/upload/v1740488060/socialMedia/videos/1740488057017-videoplayback%20%284%29.mp4.mp4",
           profile: "https://source.unsplash.com/40x40/?portrait",
           username: "Alice",
           time: "10",
