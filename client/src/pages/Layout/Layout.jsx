@@ -11,9 +11,8 @@ function Layout () {
     
     // Hide Navbar and Sidebar on these pages
     const location = useLocation();
-    const hideMainLayout = ["/login", "/signup"].includes(location.pathname);
-    const hideLayout = ["/messenger"].includes(location.pathname);
-
+    const hideSidebar = ["/login", "/signup"].includes(location.pathname);
+    const hideOthers = ["/messenger", "/settings"].includes(location.pathname);
     
     // Handle screen resizing
     useEffect(() => {
@@ -24,10 +23,10 @@ function Layout () {
 
     return (
         <div className={`min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-[${_COLOR.darkest}] text-gray-800`}>
-            {/* {!hideLayout && screenWidth >= 768 && <Navbar />} */}
-            {!hideMainLayout && <Sidebar />}
-            {!hideLayout && screenWidth >= 1480 && !hideMainLayout && <Messages />}
-            {!hideMainLayout && <Stories />}
+            {/* {!hideOthers && screenWidth >= 768 && <Navbar />} */}
+            {!hideSidebar && <Sidebar />}
+            {!hideOthers && screenWidth >= 1480 && !hideSidebar && <Messages />}
+            {!hideSidebar && !hideOthers && <Stories />}
             <Outlet />
         </div>
     )

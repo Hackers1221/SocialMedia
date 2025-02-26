@@ -172,10 +172,10 @@ function Sidebar() {
                                 </Link>
                             </li>
                             <li onClick={() => setIsOpen(false)}>
-                                <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
+                                <Link to="/settings" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
                                     <IoIosSettings className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Settings</span>
-                                </a>
+                                </Link>
                             </li>
                             <li onClick={onLogout}>
                                 <div className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6 hover:cursor-pointer`}>

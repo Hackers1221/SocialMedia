@@ -199,7 +199,7 @@ const DisplayPost = ({ open, setOpen, post }) => {
               <input
                 type="text"
                 value={commentDescription}
-                className="w-full p-2 pr-10 rounded-full bg-gray-700 text-white font-normal outline-none"
+                className="w-full p-2 px-4 pr-10 rounded-full bg-gray-700 text-white font-normal outline-none"
                 placeholder="Write a comment..."
                 onChange={handleChange}
               />

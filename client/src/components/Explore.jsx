@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import usePosts from '../hooks/usePosts';
-import DisplayPost from "./DsiplayPost";
+import DisplayPost from "./DisplayPost";
 import { useDispatch } from "react-redux";
 
 const Explore = () => {

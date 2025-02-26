@@ -9,7 +9,7 @@ import Explore from "../../components/Explore";
 import Messenger from "../../components/Messenger";
 import Pulse from "../Pulse/Pulse";
 import DisplayStory from "../../components/DisplayStory";
-import StoryViewer from "../../components/StoryViewer";
+import Settings from "../../components/Settings";
 
 function MainRoutes() {
   return (
@@ -24,7 +24,7 @@ function MainRoutes() {
         <Route path="messenger" element={<Messenger />} />
         <Route path="pulse" element={<Pulse />} />
         <Route path="story" element={<DisplayStory />}/>
-        <Route path="st" element={<StoryViewer />} />
+        <Route path="settings" element={<Settings />} />
       </Route>
     </Routes>
   );

@@ -52,7 +52,14 @@ const StoryViewer = ({ stories, currentIndex, onClose }) => {
   
 
   const resetHideButtonTimer = (index) => {
-    if (timeoutRef.current[index]) clearTimeout(timeoutRef.current[index]);
+    if (!timeoutRef.current) {
+      timeoutRef.current = {}; // Ensure it's initialized
+    }
+  
+    if (timeoutRef.current[index]) {
+      clearTimeout(timeoutRef.current[index]);
+    }
+  
     timeoutRef.current[index] = setTimeout(() => {
       setShowButton((prev) => ({
         ...prev,

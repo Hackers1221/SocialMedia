@@ -38,6 +38,13 @@ function Stories () {
           username: "Emma",
           time: "2",
         },
+        {
+          type: "image",
+          url: "https://i.pinimg.com/236x/dd/5d/b3/dd5db3bf11d43bdde82825bae73db691.jpg",
+          profile: "https://source.unsplash.com/40x40/?avatar",
+          username: "Emma",
+          time: "2",
+        },
       ];
 
     const [thumbnails, setThumbnails] = useState({});

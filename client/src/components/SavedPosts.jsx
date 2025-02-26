@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { BsCameraReels } from "react-icons/bs";
-import DisplayPost from "./DsiplayPost";
+import DisplayPost from "./DisplayPost";
 import usePosts from "../hooks/usePosts";
 
 const SavedPost = () => {
