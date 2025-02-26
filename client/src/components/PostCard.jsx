@@ -5,7 +5,7 @@ import { getUserById } from "../redux/Slices/auth.slice";
 import Avatar from "./Avatar";
 import { useEffect, useRef, useState } from "react";
 import { DeletePost, getAllPosts, likePost, updatePost, updateSavedPost } from "../redux/Slices/post.slice";
-import DisplayPost from "./DsiplayPost";
+import DisplayPost from "./DisplayPost";
 import { CreateComment, getCommentByPostId } from "../redux/Slices/comment.slice";
 
 function PostCard(post) {
@@ -18,13 +18,11 @@ function PostCard(post) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const {_id, image, video, likes, comments, interests, createdAt, userId, caption} = post?.post;
+    const {_id,image, video, likes, comments, interests, createdAt, userId, caption} = post?.post;
 
     const [liked, setLiked] = useState(false);
     const [saved, setSaved] = useState(false);
-    const [countLike,setcountLike] = useState(0);
-
-    if (caption === "Girls") console.log (post?.post);
+    const [countLike,setcountLike] = useState(likes.length);
 
     // console.log (post?.post);
 
@@ -38,9 +36,9 @@ function PostCard(post) {
     const [count, setCount] = useState (0);
     const [imageLength, setImageLength] = useState (0);
     const [commentDescription , setDescription] = useState("");
-    const [countComment,setCountComment] = useState(0);
+    const [countComment,setCountComment] = useState(comments?.length);
     const [creator, setCreator] = useState ({
-      image: "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png",
+      image: "https://t3.ftcdn.net/jpg/03/02/88/46/360_F_302884605_actpipOdPOQHDTnFtp4zg4RtlWzhOASp.jpg",
       name: "",
       username: "",
       password: "",
@@ -141,28 +139,6 @@ function PostCard(post) {
         
         setCreator(response.payload?.data?.userdetails);
     }   
-
-    function getLikesComments () {
-      setcountLike (likes?.length);
-      setCountComment (comments?.length);
-      if (caption == "Chotu") console.log ("Chotu", likes);
-      if(likes?.includes(authState._id)){
-        setLiked(true);
-      }
-    }
-
-    useEffect (() => {
-      setSaved (postState?.savedList?.find ((post) => post._id === _id));
-    }, [postState])
-
-    useEffect (() => {
-        getUser (userId);
-        getDate ();
-        setImageLength (image.length);
-        if(likes.includes(authState._id)){
-          setLiked(true);
-        }
-    }, [userId])
 
 
     function handleChange (e) {
