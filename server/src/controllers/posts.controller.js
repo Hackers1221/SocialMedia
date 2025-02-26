@@ -128,6 +128,20 @@ const getAllSavedPost = async(req,res) => {
     })
 }
 
+const DeletePost = async(req,res) => {
+    const response = await postsService.DeletePost(req.params.id,req.body.userId);
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg : "Unable to delete the  Post",
+            error : response.error
+        })
+    }
+    return res.status(StatusCodes.OK).send({
+        msg : "Successfully deleted the saved post",
+        postDetails : response.post
+    })
+}
+
 
 module.exports = {
     createPost,
@@ -137,5 +151,6 @@ module.exports = {
     getPostByUserId,
     getPostById,
     savePost,
-    getAllSavedPost
+    getAllSavedPost,
+    DeletePost
 }
