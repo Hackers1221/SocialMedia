@@ -3,17 +3,17 @@ import { MdAddAPhoto } from "react-icons/md";
 import { MdVideoCameraBack } from "react-icons/md";
 import { useDispatch, useSelector } from 'react-redux'
 import PostCard from "../../components/PostCard";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getAllPosts, getSavedPost } from "../../redux/Slices/post.slice";
 import Avatar from "../../components/Avatar";
 import toast from "react-hot-toast";
 import SkeletonPostCard from "../../components/SkeletonPostCard";
+import usePosts from "../../hooks/usePosts";
 
 function PostPage() {
     const authState = useSelector ((state) => state.auth);
     const postState = useSelector ((state) => state.post);
     const dispatch = useDispatch ();
-
     const [isLoading, setIsLoading] = useState (false);
 
     const image = authState?.data?.image || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"
@@ -43,7 +43,7 @@ function PostPage() {
     useEffect (() => {
         getPosts ();
         getSavedPosts ();
-    }, [])
+    },[])
 
     return (
         <>

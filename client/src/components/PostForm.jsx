@@ -5,7 +5,7 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import {useDispatch, useSelector} from 'react-redux'
-import { createPost } from "../redux/Slices/post.slice";
+import { createPost, getAllPosts } from "../redux/Slices/post.slice";
 import toast from "react-hot-toast";
 
 export default function PostForm({ open, setOpen }) {

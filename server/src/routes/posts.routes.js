@@ -13,6 +13,6 @@ postRoutes.patch('/like/:id',validators.isUserAuthenticated,postController.likeP
 postRoutes.get('/posts/:id',validators.isUserAuthenticated,postController.getPostByUserId);
 postRoutes.patch('/save/:id',validators.isUserAuthenticated,postController.savePost);
 postRoutes.get('/save/:id',validators.isUserAuthenticated,postController.getAllSavedPost);
-postRoutes.delete('/delete/:id',validators.isUserAuthenticated,postController.DeletePost);
+postRoutes.delete('/:id',validators.isUserAuthenticated,postController.DeletePost);
 
 module.exports = postRoutes
