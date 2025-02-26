@@ -45,22 +45,54 @@ function PostCard(post) {
       email: "",
       birth: ""
     });
-    const [showButton, setShowButton] = useState(false);
+      const [isPlaying, setIsPlaying] = useState([false]);
+      const [showButton, setShowButton] = useState([true]);
     
-    const handleVideoClick = () => {
-      setShowButton(true);
-  
-      // Hide the button after 500ms
-      setTimeout(() => {
-        setShowButton(false);
-      }, 500);
-  
-      // Toggle play/pause
-      if (videoRef.current.paused) {
-        videoRef.current.play();
+    const togglePlay = (index) => {
+      videoRefs.current.forEach((video, i) => {
+        if (video && i !== index) {
+          video.pause();
+          setIsPlaying((prev) => ({
+            ...prev,
+            [i]: false,
+          }));
+        }
+      });
+    
+      const video = videoRefs.current[index];
+      if (!video) return;
+    
+      if (video.paused) {
+        video.play();
+        setIsPlaying((prev) => ({
+          ...prev,
+          [index]: true,
+        }));
       } else {
-        videoRef.current.pause();
+        video.pause();
+        setIsPlaying((prev) => ({
+          ...prev,
+          [index]: false,
+        }));
       }
+    
+      setShowButton((prev) => ({
+        ...prev,
+        [index]: true,
+      }));
+    
+      resetHideButtonTimer(index);
+    };
+    
+  
+    const resetHideButtonTimer = (index) => {
+      if (timeoutRef.current[index]) clearTimeout(timeoutRef.current[index]);
+      timeoutRef.current[index] = setTimeout(() => {
+        setShowButton((prev) => ({
+          ...prev,
+          [index]: false,
+        }));
+      }, 500);
     };
 
     function getDate() {
@@ -204,7 +236,7 @@ function PostCard(post) {
                     ref={videoRef}
                     src={ele}
                     className="w-max h-[min(40rem,max-content)]" 
-                    onClick={handleVideoClick}
+                    onClick={togglePlay}
                   >
                     {/* <source src={ele} type="video/mp4" /> */}
                     Your browser does not support the video tag.
