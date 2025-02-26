@@ -5,7 +5,7 @@ import Avatar from "./Avatar";
 import { FaPaperPlane, FaPlay, FaPause } from "react-icons/fa";
 import Comment from "./Comment";
 import Loader from "./Loader";
-import { getCommentByPostId } from "../redux/Slices/comment.slice";
+import { CreateComment, getCommentByPostId } from "../redux/Slices/comment.slice";
 
 
 const DisplayPost = ({ open, setOpen, post }) => {
@@ -15,7 +15,7 @@ const DisplayPost = ({ open, setOpen, post }) => {
   const commentState = useSelector((state) => state.comment);
   const dispatch = useDispatch();
   const dialogRef = useRef(null);
-  const videoRef = useRef(null);
+  const videoRefs = useRef([]);
   const timeoutRef = useRef(null);
   const defaultImage = "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png";
 
@@ -24,40 +24,76 @@ const DisplayPost = ({ open, setOpen, post }) => {
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(true);
   const [creator, setCreator] = useState({ image: "", name: "Anonymous" });
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [showButton, setShowButton] = useState(true);
+  const [isPlaying, setIsPlaying] = useState([false]);
+  const [showButton, setShowButton] = useState([true]);
+  const [commentDescription , setDescription] = useState("");
+  const [countComment,setCountComment] = useState(post?.comment?.length);
 
-  const SampleComments = [
-    "Nice post !",
-    "ye sab hatao lauda e sab hatao lauda e sab hatao lauda",
-    "randi sai",
-    "Nice post !",
-    "ye sab hatao lauda e sab hatao lauda e sab hatao lauda",
-    "randi sai",
-    "Nice post !",
-    "ye sab hatao lauda e sab hatao lauda e sab hatao lauda",
-    "randi sai",
-  ];
-
-  function postCommentHandler() { }
-
-  const togglePlay = () => {
-    if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause();
-      } else {
-        videoRef.current.play();
+  async function postCommentHandler() {
+    const data = {
+          description : commentDescription ,
+          userId : currUser.data?._id,
+          postId : post?._id
+      };
+      const response = await dispatch(CreateComment(data));
+      if(response.payload){
+        setCountComment(countComment + 1);
+        setDescription("");
       }
-      setIsPlaying(!isPlaying);
-      setShowButton(true);
-      resetHideButtonTimer();
-    }
-  };
+  }
 
-  const resetHideButtonTimer = () => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(() => setShowButton(false), 500);
+  function handleChange (e) {
+    const {name, value} = e.target;
+    setDescription(value);
+  }
+
+  const togglePlay = (index) => {
+    videoRefs.current.forEach((video, i) => {
+      if (video && i !== index) {
+        video.pause();
+        setIsPlaying((prev) => ({
+          ...prev,
+          [i]: false,
+        }));
+      }
+    });
+  
+    const video = videoRefs.current[index];
+    if (!video) return;
+  
+    if (video.paused) {
+      video.play();
+      setIsPlaying((prev) => ({
+        ...prev,
+        [index]: true,
+      }));
+    } else {
+      video.pause();
+      setIsPlaying((prev) => ({
+        ...prev,
+        [index]: false,
+      }));
+    }
+  
+    setShowButton((prev) => ({
+      ...prev,
+      [index]: true,
+    }));
+  
+    resetHideButtonTimer(index);
   };
+  
+
+  const resetHideButtonTimer = (index) => {
+    if (timeoutRef.current[index]) clearTimeout(timeoutRef.current[index]);
+    timeoutRef.current[index] = setTimeout(() => {
+      setShowButton((prev) => ({
+        ...prev,
+        [index]: false,
+      }));
+    }, 500);
+  };
+  
 
   const closeDialog = () => {
     setOpen(false);
@@ -65,12 +101,7 @@ const DisplayPost = ({ open, setOpen, post }) => {
     dialogRef.current?.close();
   };
 
-  //   const getComments = async(id) => {
-  //   console.log(id);
-  //   const response = await dispatch(getCommentByPostId(id));
-  // }
-  
-
+  // fetching data
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -96,15 +127,17 @@ const DisplayPost = ({ open, setOpen, post }) => {
       fetchData();
     }  
     
-  }, [post, dispatch]);
-  useEffect(() => {
+  }, [post, dispatch, ]);
+
+  // open close dialog
+  useEffect(() => {  
     if (open && !loading) {
       dialogRef.current?.showModal();
     } else {
       dialogRef.current?.close();
     }
-  }, [open, loading]);
-  
+  }, [open, loading]);  
+
 
   return loading ? <Loader /> : (
     <dialog ref={dialogRef} className="w-[60%] h-[90vh] bg-black rounded-lg shadow-xl p-4">
@@ -112,30 +145,30 @@ const DisplayPost = ({ open, setOpen, post }) => {
       <div className="flex h-full">
         {/* Left Half */}
         <div className="w-1/2 p-4 flex flex-col relative">
-          <div className="flex items-center gap-3 mb-4">
+          <div className="absolute top-0 left-0 flex items-center gap-3 mb-4 z-[100] bg-black bg-opacity-50 px-4 py-2">
             <Avatar url={creator.image || defaultImage} />
             <div>
               <p className="text-white font-semibold">{creator.name}</p>
               <p className="text-gray-400 text-sm">{date}</p>
             </div>
           </div>
-          <div className="flex justify-center items-center relative w-[50%]">
-            <div className="carousel w-max">
+          <div className="flex justify-center items-center relative w-full h-full">
+            <div className="carousel w-full">
               {post.image?.map((img, idx) => (
                 <div key={idx} className="carousel-item w-full flex justify-center relative">
-                  <img src={img} className="h-auto max-w-full" alt="Post" />
+                  <img src={img} className="h-auto w-full" alt="Post" />
                 </div>
               ))}
-              {post.video && (
-                <div className="carousel-item w-full flex justify-center relative" onClick={togglePlay}>
-                  <video ref={videoRef} className="w-full max-h-[40rem]">
-                    <source src={post.video} type="video/mp4" />
+              {post.video?.map((video, idx) => (
+                <div key={idx} className="carousel-item w-full flex justify-center relative" onClick={() => togglePlay (idx)}>
+                  <video ref={(el) => (videoRefs.current[idx] = el)} loop className="w-full max-h-[40rem]">
+                    <source src={video} type="video/mp4" />
                   </video>
                   {/* Play/Pause Button */}
-                  {showButton && (
+                  {showButton[idx] && (
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="bg-black bg-opacity-30 rounded-full w-16 h-16 flex items-center justify-center">
-                        {isPlaying ? (
+                        {isPlaying[idx] ? (
                           <i className="fa-solid fa-pause text-white"></i>
                         ) : (
                           <i className="fa-solid fa-play text-white"></i>
@@ -144,10 +177,10 @@ const DisplayPost = ({ open, setOpen, post }) => {
                     </div>
                   )}
                 </div>
-              )}
+              ))}
             </div>
           </div>
-          <p className="text-white mt-2">{post.caption}</p>
+          <p className="absolute bottom-0 left-0 text-white mt-2 z-[100] bg-black bg-opacity-50 px-4 py-2">{post.caption}</p>
         </div>
 
         {/* Right Half */}
@@ -164,8 +197,10 @@ const DisplayPost = ({ open, setOpen, post }) => {
             <div className="flex-1 relative">
               <input
                 type="text"
+                value={commentDescription}
                 className="w-full p-2 pr-10 rounded-full bg-gray-700 text-white font-normal outline-none"
                 placeholder="Write a comment..."
+                onChange={handleChange}
               />
               <FaPaperPlane onClick={postCommentHandler} className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white cursor-pointer" />
             </div>
