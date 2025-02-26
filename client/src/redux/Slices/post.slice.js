@@ -116,6 +116,25 @@ export const updateSavedPost = createAsyncThunk('post/updatesavedPost', async(da
     }
 })
 
+export const DeletePost = createAsyncThunk('post/delete' , async(data) => {
+    try {
+        // console.log(id,JSON.stringify(userId));
+        console.log (data);
+        
+        const response = axiosInstance.delete(`post/${data.postId}`, {
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            },
+            data: data.userId
+        })
+        if(response){
+            return response;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+})
+
 const PostSlice = createSlice({
     name: 'post',
     initialState,

@@ -4,8 +4,8 @@ import toast from "react-hot-toast";
 import { getUserById } from "../redux/Slices/auth.slice";
 import Avatar from "./Avatar";
 import { useEffect, useRef, useState } from "react";
-import { likePost, updatePost, updateSavedPost } from "../redux/Slices/post.slice";
-import DisplayPost from "./DisplayPost";
+import { DeletePost, getAllPosts, likePost, updatePost, updateSavedPost } from "../redux/Slices/post.slice";
+import DisplayPost from "./DsiplayPost";
 import { CreateComment, getCommentByPostId } from "../redux/Slices/comment.slice";
 
 function PostCard(post) {
@@ -84,7 +84,7 @@ function PostCard(post) {
       }));
     
       resetHideButtonTimer(index);
-    };
+    };  
     
   
     const resetHideButtonTimer = (index) => {
@@ -156,17 +156,20 @@ function PostCard(post) {
     }, [postState])
 
     useEffect (() => {
-        getLikesComments ();
         getUser (userId);
         getDate ();
         setImageLength (image.length);
-    }, [post])
+        if(likes.includes(authState._id)){
+          setLiked(true);
+        }
+    }, [userId])
 
 
     function handleChange (e) {
       const {name, value} = e.target;
       setDescription(value);
     }
+
 
     const postComment = async() => {
       const data = {
@@ -186,6 +189,34 @@ function PostCard(post) {
       const response = await dispatch(getCommentByPostId(_id));
     }
 
+    const Deletepost = async() => {
+      const resp = {
+          postId: _id,
+          userId: {
+            id: userId
+          }
+        }
+      const response = await dispatch(DeletePost(resp));
+      if(response.payload){
+        await dispatch(getAllPosts());
+      }
+    }
+
+    useEffect (() => {
+      setSaved (postState?.savedList?.find ((post) => post._id === _id));
+    }, [postState])
+
+    useEffect (() => {
+        getUser (userId);
+        getDate ();
+        setImageLength (image.length);
+        if(likes.includes(authState._id)){
+          setLiked(true);
+        }
+        else setLiked(false);
+        setCountComment(comments.length);
+        setcountLike(likes.length);
+    }, [post])
 
 
   return (
@@ -204,7 +235,7 @@ function PostCard(post) {
                 <div>
                   <Link to={`/profile/${creator?.username}`}>
                     <span className={`mr-1 font-semibold cursor-pointer hover:underline text-white`}>
-                      {creator?.name}
+                      {creator?.username}
                     </span>
                   </Link>
                 </div>
@@ -220,6 +251,7 @@ function PostCard(post) {
               <ul tabIndex={0} className={`dropdown-content menu bg-[${_COLOR.medium}] text-[${_COLOR.lightest}] rounded-box z-[1] w-52 p-4 gap-4 shadow-2xl shadow-[${_COLOR.medium}]`}>
                 <li onClick={() => setDialogOpen(true)} className="hover:cursor-pointer">View Post</li>
                 <li className="hover:cursor-pointer">Not Intrested</li>
+                {(authState._id === userId)  && <li className="hover:cursor-pointer bg-red" onClick={Deletepost}>Delete Post</li>}
               </ul>
             </div>
       </div>
