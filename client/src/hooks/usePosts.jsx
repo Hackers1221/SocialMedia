@@ -18,8 +18,6 @@ function usePosts () {
 
         if (location.pathname === '/saved') await dispatch(getSavedPost (authState?.data?._id));
 
-        console.log(location.pathname.split('/')[1]);
-
         if (location.pathname.split('/')[1] == 'profile') {
             const user = await dispatch (getUserByUsername (username));
 
@@ -27,7 +25,6 @@ function usePosts () {
         }
 
     }
-
     useEffect(() => {
         loadPosts ();
     }, [postState?.downloadedPosts, location.pathname]);

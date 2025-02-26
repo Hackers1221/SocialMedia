@@ -39,7 +39,7 @@ const commentSlice = createSlice({
     reducers : {},
     extraReducers : (builder) => {
         builder.addCase(getCommentByPostId.fulfilled,(state,action)=>{
-            console.log(action.payload);
+            state.comments = action.payload?.data?.commentDetails;
         })
     }
 })
