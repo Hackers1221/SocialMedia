@@ -6,7 +6,7 @@ import Avatar from "./Avatar";
 import { useEffect, useRef, useState } from "react";
 import { likePost, updatePost, updateSavedPost } from "../redux/Slices/post.slice";
 import DisplayPost from "./DsiplayPost";
-import { CreateComment } from "../redux/Slices/comment.slice";
+import { CreateComment, getCommentByPostId } from "../redux/Slices/comment.slice";
 
 function PostCard(post) {
 
@@ -139,7 +139,11 @@ function PostCard(post) {
         setDescription("");
       }
     }
-
+ 
+     
+    const getComments = async() => {
+      const response = await dispatch(getCommentByPostId(_id));
+    }
 
 
 
@@ -225,7 +229,7 @@ function PostCard(post) {
             {liked ? (<i className="text-white fa-solid fa-heart"></i>) : <i className="text-white fa-regular fa-heart"></i>}
             {countLike}
           </button>
-          <button className={`flex gap-2 items-center text-[${_COLOR.more_light}]`}>
+          <button className={`flex gap-2 items-center text-[${_COLOR.more_light}]`} onClick={getComments}>
           {/* <i className="text-white fa-solid fa-comment"></i> */}
             <i className="text-white fa-regular fa-comment"></i>
             {countComment}

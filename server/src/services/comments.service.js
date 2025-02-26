@@ -7,7 +7,7 @@ const CreateComment = async(data) => {
     try {
         const commentsData = {
             description : data.description,
-            userId : data.userId,
+            user: data.userId,
             postId : data.postId,
         }
         const result = await commentsModel.create(commentsData);
@@ -28,6 +28,20 @@ const CreateComment = async(data) => {
     }
 }
 
+const getCommentByPostId = async(id) => {
+    const response = {};
+    try {
+        const commentsData = await commentsModel.find({postId : id}).populate("user");
+        response.comments = commentsData;
+        return response;
+
+    } catch (error) {
+        response.error = error.message;
+        return response;
+    }
+}
+
 module.exports = {
-    CreateComment
+    CreateComment,
+    getCommentByPostId
 }
