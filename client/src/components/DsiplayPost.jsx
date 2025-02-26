@@ -6,6 +6,7 @@ import { FaPaperPlane, FaPlay, FaPause } from "react-icons/fa";
 import Comment from "./Comment";
 import Loader from "./Loader";
 import { CreateComment, getCommentByPostId } from "../redux/Slices/comment.slice";
+import { getAllPosts } from "../redux/Slices/post.slice";
 
 
 const DisplayPost = ({ open, setOpen, post }) => {
@@ -27,7 +28,6 @@ const DisplayPost = ({ open, setOpen, post }) => {
   const [isPlaying, setIsPlaying] = useState([false]);
   const [showButton, setShowButton] = useState([true]);
   const [commentDescription , setDescription] = useState("");
-  const [countComment,setCountComment] = useState(post?.comment?.length);
 
   async function postCommentHandler() {
     const data = {
@@ -37,8 +37,8 @@ const DisplayPost = ({ open, setOpen, post }) => {
       };
       const response = await dispatch(CreateComment(data));
       if(response.payload){
-        setCountComment(countComment + 1);
         setDescription("");
+        await dispatch(getCommentByPostId(post?._id));
       }
   }
 
@@ -127,7 +127,7 @@ const DisplayPost = ({ open, setOpen, post }) => {
       fetchData();
     }  
     
-  }, [post, dispatch, ]);
+  }, []);
 
   // open close dialog
   useEffect(() => {  
