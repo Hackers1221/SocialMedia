@@ -41,6 +41,8 @@ const getCommentByPostId = async(id) => {
     }
 }
 
+
+
 module.exports = {
     CreateComment,
     getCommentByPostId
