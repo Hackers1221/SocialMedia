@@ -4,11 +4,15 @@ import { getUserById } from "../redux/Slices/auth.slice";
 import Avatar from "./Avatar";
 import { FaPaperPlane, FaPlay, FaPause } from "react-icons/fa";
 import Comment from "./Comment";
+import Loader from "./Loader";
+import { getCommentByPostId } from "../redux/Slices/comment.slice";
+
 
 const DisplayPost = ({ open, setOpen, post }) => {
   if (!post || !open) return null;
 
   const currUser = useSelector((state) => state.auth);
+  const commentState = useSelector((state) => state.comment);
   const dispatch = useDispatch();
   const dialogRef = useRef(null);
   const videoRef = useRef(null);
@@ -18,6 +22,7 @@ const DisplayPost = ({ open, setOpen, post }) => {
   const [date, setDate] = useState("");
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [creator, setCreator] = useState({ image: "", name: "Anonymous" });
   const [isPlaying, setIsPlaying] = useState(false);
   const [showButton, setShowButton] = useState(true);
@@ -60,25 +65,50 @@ const DisplayPost = ({ open, setOpen, post }) => {
     dialogRef.current?.close();
   };
 
+  //   const getComments = async(id) => {
+  //   console.log(id);
+  //   const response = await dispatch(getCommentByPostId(id));
+  // }
+  
+
   useEffect(() => {
-    if (post?.createdAt) {
-      setDate(post.createdAt.split("T")[0].split("-").reverse().join("/"));
-    }
-    if (post?.userId) {
-      dispatch(getUserById(post.userId)).then((response) => {
-        setCreator(response.payload?.data?.userdetails || {});
-      });
-    }
-    if (open) {
+    const fetchData = async () => {
+      setLoading(true);
+  
+      try {
+        if (post?.createdAt) {
+          setDate(post.createdAt.split("T")[0].split("-").reverse().join("/"));
+        }
+  
+        if (post?.userId) {
+          const userResponse = await dispatch(getUserById(post.userId));
+          setCreator(userResponse.payload?.data?.userdetails || {});
+  
+          await dispatch(getCommentByPostId(post._id)); // Fetch comments only after user data is received
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (post) {
+      fetchData();
+    }  
+    
+  }, [post, dispatch]);
+  useEffect(() => {
+    if (open && !loading) {
       dialogRef.current?.showModal();
     } else {
       dialogRef.current?.close();
     }
-  }, [post, open]);
+  }, [open, loading]);
+  
 
-  return (
+  return loading ? <Loader /> : (
     <dialog ref={dialogRef} className="w-[60%] h-[90vh] bg-black rounded-lg shadow-xl p-4">
-      <button onClick={closeDialog} className="absolute top-5 right-6 text-white text-xl">✕</button>
+      <button onClick={closeDialog} className="absolute top-5 right-6 text-white text-xl focus:outline-none">✕</button>
       <div className="flex h-full">
         {/* Left Half */}
         <div className="w-1/2 p-4 flex flex-col relative">
@@ -123,9 +153,9 @@ const DisplayPost = ({ open, setOpen, post }) => {
         {/* Right Half */}
         <div className="w-1/2 flex flex-col bg-gray-900 bg-opacity-50 p-4 rounded-lg">
           <div className="flex-1 overflow-y-auto space-y-3 pt-2">
-            {SampleComments?.map((comment, idx) => (
+            {commentState.comments.map((comment, idx) => (
               <div key={idx}>
-                <Comment avatar={defaultImage} username={"Rounak kumar"} text={comment} time={"10 h"} />
+                <Comment avatar={comment.user.image} username={comment.user.username} text={comment.description} time={"10 h"} />
               </div>
             ))}
           </div>
