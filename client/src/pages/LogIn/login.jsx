@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { LuEyeClosed } from "react-icons/lu";
 import { useDispatch } from "react-redux";
@@ -49,6 +49,17 @@ function LogIn () {
             toast.error(error);
         }
     }
+
+    const handleKeyPress = useCallback((e) => {
+        if (e.key === 'Enter') document.getElementById('submitButton').click();
+    }, []);
+
+    useEffect(() => {
+        document.addEventListener('keydown', handleKeyPress);
+        return () => {
+            document.removeEventListener('keydown', handleKeyPress);
+        };
+    }, [handleKeyPress]);
 
     return (
         // eslint-disable-next-line no-undef
@@ -102,7 +113,7 @@ function LogIn () {
                 </div>
             </div>
             <div className="mt-8">
-                <button onClick={onSubmit} className="text-white font-bold py-2 px-4 w-full rounded" style={{backgroundColor: _COLOR.dark}}>
+                <button onClick={onSubmit} id="submitButton" className="text-white font-bold py-2 px-4 w-full rounded" style={{backgroundColor: _COLOR.dark}}>
                 Log In
                 </button>
             </div>

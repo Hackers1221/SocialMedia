@@ -89,8 +89,8 @@ const DisplayPost = ({ open, setOpen, post }) => {
               <p className="text-gray-400 text-sm">{date}</p>
             </div>
           </div>
-          <div className="flex-1 overflow-hidden relative">
-            <div className="carousel w-full h-[90%]">
+          <div className="flex justify-center items-center relative w-[50%]">
+            <div className="carousel w-max">
               {post.image?.map((img, idx) => (
                 <div key={idx} className="carousel-item w-full flex justify-center relative">
                   <img src={img} className="h-auto max-w-full" alt="Post" />

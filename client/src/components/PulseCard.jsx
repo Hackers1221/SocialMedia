@@ -71,7 +71,7 @@ export default function PulseCard({ URL }) {
       className="reel-container w-80 h-[28rem] md:w-96 md:h-[33rem] overflow-hidden rounded-xl shadow-lg relative"
       onClick={togglePlay}
     >
-      <video ref={videoRef} className="w-full h-full object-cover" src={URL[0]} loop></video>
+      <video ref={videoRef} className="w-full h-full bg-black" src={URL[0]} loop></video>
 
       {/* Play/Pause Button */}
       {showButton && (
