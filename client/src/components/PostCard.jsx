@@ -229,7 +229,10 @@ function PostCard(post) {
             {liked ? (<i className="text-white fa-solid fa-heart"></i>) : <i className="text-white fa-regular fa-heart"></i>}
             {countLike}
           </button>
-          <button className={`flex gap-2 items-center text-[${_COLOR.more_light}]`} onClick={getComments}>
+          <button className={`flex gap-2 items-center text-[${_COLOR.more_light}]`} onClick={() => {
+            getComments;
+            setDialogOpen(true);
+          }}>
           {/* <i className="text-white fa-solid fa-comment"></i> */}
             <i className="text-white fa-regular fa-comment"></i>
             {countComment}
