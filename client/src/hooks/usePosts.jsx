@@ -16,19 +16,17 @@ function usePosts () {
     async function loadPosts() {
         if(!postState?.downloadedPosts?.length) dispatch(getAllPosts ()); 
 
-        if (location.pathname === '/saved' || location.pathname === '/explore') await dispatch(getSavedPost (authState?.data?._id));
+        if (location.pathname === '/saved' || location.pathname === '/explore') dispatch(getSavedPost (authState?.data?._id));
 
         if (location.pathname.split('/')[1] == 'profile') {
-            const user = await dispatch (getUserByUsername (username));
-
-            await dispatch (getPostByUserId (user.payload?.data?.userDetails?._id));
+            const user = dispatch (getUserByUsername (username));
+             dispatch (getPostByUserId (user.payload?.data?.userDetails?._id));
         }
 
     }
     useEffect(() => {
         loadPosts ();
-        console.log ("Hello");
-    }, [postState?.downloadedPosts, location.pathname]);
+    }, []);
 
     return [postState];
 }

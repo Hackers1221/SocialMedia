@@ -6,7 +6,7 @@ import { FaPaperPlane, FaPlay, FaPause } from "react-icons/fa";
 import Comment from "./Comment";
 import Loader from "./Loader";
 import { CreateComment, getCommentByPostId } from "../redux/Slices/comment.slice";
-import { getAllPosts } from "../redux/Slices/post.slice";
+import { getAllPosts, getPostById, getSavedPost, likePost, updateSavedPost } from "../redux/Slices/post.slice";
 import usePosts from "../hooks/usePosts";
 
 
@@ -15,7 +15,7 @@ const DisplayPost = ({ open, setOpen, post }) => {
 
   const authState = useSelector((state) => state.auth);
   const commentState = useSelector((state) => state.comment);
-  const postState = usePosts ();
+  const [postState] = usePosts ();
 
   const dispatch = useDispatch();
   const dialogRef = useRef(null);
@@ -33,6 +33,7 @@ const DisplayPost = ({ open, setOpen, post }) => {
   const [commentDescription , setDescription] = useState("");
   const [countLike,setcountLike] = useState(post?.likes.length);
   const [countComment,setCountComment] = useState(post?.comments?.length);
+
 
   async function postCommentHandler() {
     const data = {
@@ -109,28 +110,31 @@ const DisplayPost = ({ open, setOpen, post }) => {
 
   const toggleLike = async () => {
     const response = await dispatch(likePost({
-      _id, 
-      id: authState._id 
+      _id: post?._id, 
+      id: authState.data?._id 
     }));
-    if(!response.payload)return;
+
+    if(!response.payload) return;
   
     if (liked) {
       setcountLike(countLike - 1);
     } else {
       setcountLike(countLike + 1);
     }
-    
     setLiked(!liked);
+    dispatch (getPostById (post?._id));
   }; 
 
     const toggleBookmark = async() => {
       const response = await dispatch(updateSavedPost({
-        _id1  : authState._id,
-        id : _id
+        _id1  : authState.data?._id,
+        id : post?._id
       }))
 
+      console.log (response);
       if (!response?.payload) return;
       setSaved ((prev) => !prev);
+      await dispatch (getSavedPost(authState.data?._id));
     }
 
   // fetching data
@@ -162,14 +166,14 @@ const DisplayPost = ({ open, setOpen, post }) => {
   }, []);
 
   useEffect (() => {
-    setSaved (postState?.savedList?.find ((savedPost) => savedPost._id === post?._id));
     if(post?.likes.includes(authState?.data?._id)){
       setLiked(true);
     }
     else setLiked(false);
     setCountComment(post?.comments.length);
     setcountLike(post?.likes.length);
-  }, [post])
+    console.log (post?._id);
+  }, [post?._id]);
 
   // open close dialog
   useEffect(() => {  
@@ -180,13 +184,18 @@ const DisplayPost = ({ open, setOpen, post }) => {
     }
   }, [open, loading]);  
 
+  useEffect(() => {  
+    setSaved (postState.savedList?.find ((savedPost) => savedPost._id === post?._id));
+    }, [postState.savedList]); 
+
+
 
   return loading ? <Loader /> : (
     <dialog ref={dialogRef} className="w-[60%] h-[90vh] bg-black rounded-lg shadow-xl p-4">
       <button onClick={closeDialog} className="absolute top-5 right-6 text-white text-xl focus:outline-none">✕</button>
       <div className="flex h-full">
         {/* Left Half */}
-        <div className="w-1/2 p-4 flex flex-col relative">
+        <div className="w-1/2 p-4 flex relative items-center">
           <div className="absolute top-0 left-0 flex items-center gap-3 mb-4 z-[100] bg-black bg-opacity-50 px-4 py-2">
             <Avatar url={creator.image || defaultImage} />
             <div>
@@ -197,8 +206,8 @@ const DisplayPost = ({ open, setOpen, post }) => {
           <div className="flex justify-center items-center relative w-full">
             <div className="carousel w-full">
               {post.image?.map((img, idx) => (
-                <div key={idx} className="carousel-item w-full flex justify-center relative">
-                  <img src={img.url} className="w-full" alt="Post" />
+                <div key={idx} className="carousel-item w-full flex justify-center items-center relative">
+                  <img src={img.url} className="w-full h-max" alt="Post" />
                 </div>
               ))}
               {post.video?.map((video, idx) => (

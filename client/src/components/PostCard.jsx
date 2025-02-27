@@ -7,12 +7,13 @@ import { useEffect, useRef, useState } from "react";
 import { DeletePost, getAllPosts, likePost, updateSavedPost } from "../redux/Slices/post.slice";
 import DisplayPost from "./DisplayPost";
 import { CreateComment, getCommentByPostId } from "../redux/Slices/comment.slice";
+import usePosts from "../hooks/usePosts";
 
 function PostCard(post) {
 
     const authState = useSelector((state) => state.auth.data);
     const currUser = useSelector((state) => state.auth);
-    const postState = useSelector ((state) => state.post);
+    const [postState] = usePosts ();
     const videoRefs = useRef([]);
     const timeoutRef = useRef({});
 

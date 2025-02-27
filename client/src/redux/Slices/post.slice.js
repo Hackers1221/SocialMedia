@@ -83,6 +83,21 @@ export const getPostByUserId = createAsyncThunk('post/getpost' ,async(id) => {
     }
 })
 
+export const getPostById = createAsyncThunk('post/getpostnyId' ,async(id) => {
+    try {
+        const response = await axiosInstance.get(`post/${id}`, { 
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+        if(response){
+            return response;
+        }
+    } catch (error) {
+        toast.error(error.message || "Failed to get post");
+    }
+})
+
 export const getSavedPost = createAsyncThunk('post/getSavedPost' , async(id) => {
     try {
         const response = await axiosInstance.get(`post/save/${id}`, {
@@ -170,6 +185,9 @@ const PostSlice = createSlice({
             })
             .addCase(updateSavedPost.fulfilled,(state,action) => {
                 console.log(action.payload);
+            })
+            .addCase (getPostById.fulfilled, (state, action) => {
+                console.log ("Dealer chotu", action.payload)
             })
     }
 });
