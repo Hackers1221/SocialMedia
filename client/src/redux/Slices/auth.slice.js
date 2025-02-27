@@ -73,6 +73,21 @@ export const followUser = createAsyncThunk('/auth/follow' , async(data) => {
     }
 })
 
+export const updateUser = createAsyncThunk('/user/update' , async(data) => {
+    try {
+        console.log(data);
+        const response = await axiosInstance.patch(`auth/${data.id}`,data.newData,{
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+        if(!response)toast.error('Something went wrong, try again');
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+})
+
 
 const authSlice = createSlice({
     name: 'auth',
@@ -99,6 +114,11 @@ const authSlice = createSlice({
         })
         .addCase(followUser.fulfilled , (state,action) => {
             if(!action.payload)return;
+            console.log(action.payload);
+            state.data = action.payload.data?.userDetails;
+            localStorage.setItem("data", JSON.stringify(action.payload.data?.userDetails));
+        })
+        .addCase(updateUser.fulfilled, (state,action) => {
             console.log(action.payload);
             state.data = action.payload.data?.userDetails;
             localStorage.setItem("data", JSON.stringify(action.payload.data?.userDetails));

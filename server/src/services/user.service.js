@@ -131,13 +131,12 @@ const updateUser = async(id,newData) => {
         }
         if(newData.curpassword){
             const result = bcrypt.compareSync(newData.curpassword, userData.password);
-            console.log(newData.curpassword);
-            console.log(userData.password);
             if(!result){
                 response.error = "Current password does not match";
                 return response;
             }
-            newData.password = await bcrypt.hash(newData.password, 10);
+            newData.password = await bcrypt.hash(newData.password, 11);
+            console.log(newData.password);
         }
         const updateuser = await usermodel.findByIdAndUpdate(
             id , 
