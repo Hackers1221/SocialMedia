@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { getUserById } from "../redux/Slices/auth.slice";
 import Avatar from "./Avatar";
 import { useEffect, useRef, useState } from "react";
-import { DeletePost, getAllPosts, likePost, updateSavedPost } from "../redux/Slices/post.slice";
+import { DeletePost, getAllPosts, getPostById, likePost, updateSavedPost } from "../redux/Slices/post.slice";
 import DisplayPost from "./DisplayPost";
 import { CreateComment, getCommentByPostId } from "../redux/Slices/comment.slice";
 import usePosts from "../hooks/usePosts";
@@ -124,6 +124,7 @@ function PostCard(post) {
       }
       
       setLiked(!liked);
+      await dispatch (getPostById (_id));
     };    
 
     async function getUser(userId) {
@@ -176,7 +177,7 @@ function PostCard(post) {
 
     useEffect (() => {
       setSaved (postState?.savedList?.find ((post) => post._id === _id));
-    }, [postState])
+    }, [postState?.savedList])
 
     useEffect (() => {
         getUser (userId);
@@ -287,7 +288,7 @@ function PostCard(post) {
       </div>
       <p className={`text-md mt-4 text-[${_COLOR.more_light}]`}>
         {tempCaption} {caption?.toString().length > 1000 && (
-        <span onClick={() => setCheck(!check)} className={`text-pink-400 font-extralight hover:cursor-pointer`}>
+        <span onClick={() => setCheck(!check)} className={`text-blue-300 font-extralight hover:cursor-pointer`}>
             {check ? ' Show Less' : '... Read More'}
         </span>)}
       </p>

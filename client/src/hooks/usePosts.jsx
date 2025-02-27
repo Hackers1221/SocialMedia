@@ -19,8 +19,9 @@ function usePosts () {
         if (location.pathname === '/saved' || location.pathname === '/explore') dispatch(getSavedPost (authState?.data?._id));
 
         if (location.pathname.split('/')[1] == 'profile') {
-            const user = dispatch (getUserByUsername (username));
-             dispatch (getPostByUserId (user.payload?.data?.userDetails?._id));
+            const user = await dispatch (getUserByUsername (username));
+
+            await dispatch (getPostByUserId (user.payload?.data?.userDetails?._id));
         }
 
     }

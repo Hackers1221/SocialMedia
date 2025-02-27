@@ -187,13 +187,21 @@ const PostSlice = createSlice({
                 console.log(action.payload);
             })
             .addCase (getPostById.fulfilled, (state, action) => {
-                if (!action.payload.data) return;
+                if (!action.payload?.data) return;
                 const idx = state.downloadedPosts.findIndex(
                     (post) => post._id === action.payload.data.postDetails._id
                 );
             
                 if (idx !== -1) {
                     state.downloadedPosts[idx] = action.payload.data.postDetails;
+                }
+
+                const index = state.postList.findIndex(
+                    (post) => post._id === action.payload.data.postDetails._id
+                );
+            
+                if (index !== -1) {
+                    state.postList[index] = action.payload.data.postDetails;
                 }
             })
     }
