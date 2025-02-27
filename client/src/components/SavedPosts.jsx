@@ -47,7 +47,7 @@ const SavedPost = () => {
   useEffect (() => {
     savedArray?.forEach((post, index) => {
         if (post?.video[0]?.url) {
-          extractThumbnail(post.video[0].url, index);
+          extractThumbnail(post?.video[0].url, index);
         }
       });
     }, [savedArray]);

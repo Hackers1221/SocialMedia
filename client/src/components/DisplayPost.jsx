@@ -194,11 +194,11 @@ const DisplayPost = ({ open, setOpen, post }) => {
               <p className="text-gray-400 text-sm">{date}</p>
             </div>
           </div>
-          <div className="flex justify-center items-center relative w-full h-full">
+          <div className="flex justify-center items-center relative w-full">
             <div className="carousel w-full">
               {post.image?.map((img, idx) => (
                 <div key={idx} className="carousel-item w-full flex justify-center relative">
-                  <img src={img.url} className="h-auto w-full" alt="Post" />
+                  <img src={img.url} className="w-full" alt="Post" />
                 </div>
               ))}
               {post.video?.map((video, idx) => (
