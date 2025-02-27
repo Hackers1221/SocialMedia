@@ -16,6 +16,15 @@ const userSchema = new Schema({
         required: [true, 'Name cannot be empty'],
         match : /^[a-z0-9]+$/
     },
+    type : {
+        type : String , 
+        enum : ["public","private"],
+        default : "public"
+    },
+    about : {
+        type : String , 
+        default : ""
+    },
     likedPosts : {
         type : [String],
         default : []
