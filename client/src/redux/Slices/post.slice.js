@@ -187,7 +187,14 @@ const PostSlice = createSlice({
                 console.log(action.payload);
             })
             .addCase (getPostById.fulfilled, (state, action) => {
-                console.log ("Dealer chotu", action.payload)
+                if (!action.payload.data) return;
+                const idx = state.downloadedPosts.findIndex(
+                    (post) => post._id === action.payload.data.postDetails._id
+                );
+            
+                if (idx !== -1) {
+                    state.downloadedPosts[idx] = action.payload.data.postDetails;
+                }
             })
     }
 });

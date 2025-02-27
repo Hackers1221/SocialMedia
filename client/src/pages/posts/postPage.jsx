@@ -32,7 +32,7 @@ function PostPage() {
     async function getPosts () {
         setIsLoading(true);
         try {
-            await dispatch (getAllPosts());
+            await dispatch (getAllPosts ());
         } catch {
             toast.error ("Something went wrong");
         } finally {
@@ -43,7 +43,7 @@ function PostPage() {
     useEffect (() => {
         getPosts ();
         getSavedPosts ();
-    },[])
+    }, [])
 
     return (
         <>
