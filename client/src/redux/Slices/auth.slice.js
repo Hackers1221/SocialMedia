@@ -30,7 +30,7 @@ export const signup = createAsyncThunk('/auth/signup', async (data) => {
 
 export const getUserById = createAsyncThunk('/auth/user', async (id) => {     
     try {
-        const response = await axiosInstance.get(`auth/user/${id}`, {
+        const response = await axiosInstance.get(`auth/users/${id}`, {
             headers: {
                 'x-access-token': localStorage.getItem('token')
             }
