@@ -65,7 +65,7 @@ const Explore = () => {
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
           {postState?.downloadedPosts?.map((post, index) => (
-            <div key={index} className="relative h-[10rem] group overflow-hidden rounded-lg shadow-lg hover:cursor-pointer" onClick={() => {              setDialogOpen(true);
+            <div key={index} className="relative h-[10rem] group overflow-hidden rounded-lg shadow-lg hover:cursor-pointer" onClick={() => {setDialogOpen(true);
               setSelectedPost (post);
             }}>
               {<img
