@@ -14,7 +14,6 @@ const userSchema = new Schema({
     username: {
         type: String,
         required: [true, 'Name cannot be empty'],
-        match : /^[a-z0-9]+$/
     },
     likedPosts : {
         type : [String],
@@ -29,8 +28,6 @@ const userSchema = new Schema({
         type: String,
         minLength: 5,
         required: true,
-        match: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%?&#])[A-Za-z\d@$!%?&#]{5,}$/
-,
     },
     saved : {
         type : [String],
