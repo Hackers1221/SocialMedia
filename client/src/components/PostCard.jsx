@@ -122,13 +122,7 @@ function PostCard(post) {
       }
       
       setLiked(!liked);
-    };
-
-    function goProfile (username) {
-      console.log
-        navigate(`/profile?username=${username}`);
-    }
-    
+    };    
 
     async function getUser(userId) {
         const response = await dispatch(getUserById (userId));
@@ -174,6 +168,7 @@ function PostCard(post) {
       const response = await dispatch(DeletePost(resp));
       if(response.payload){
         await dispatch(getAllPosts());
+        toast.success("Deleted successfully");
       }
     }
 
@@ -237,7 +232,7 @@ function PostCard(post) {
               <img src={photo} className="w-max" alt="Image not found" />
             </div>
           ))}
-          {video.length && video?.map((ele, key) => (
+          {video?.map((ele, key) => (
                   <div 
                   key={`video-${key}`} 
                   className="carousel-item h-full flex justify-center focus:outline-none bg-transparent w-full relative hover:cursor-pointer"

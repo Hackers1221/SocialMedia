@@ -98,7 +98,7 @@ const DisplayPost = ({ open, setOpen, post }) => {
 
   const closeDialog = () => {
     setOpen(false);
-    videoRef.current?.pause();
+    videoRefs.current?.pause();
     dialogRef.current?.close();
   };
 
@@ -181,7 +181,7 @@ const DisplayPost = ({ open, setOpen, post }) => {
               ))}
             </div>
           </div>
-          <p className="absolute bottom-0 left-0 text-white mt-2 z-[100] bg-black bg-opacity-50 px-4 py-2">{post.caption}</p>
+          <p className="absolute bottom-0 left-0 text-white mt-2 z-[100] bg-black bg-opacity-50 px-4 py-2 h-[1rem]">{post.caption}</p>
         </div>
 
         {/* Right Half */}
