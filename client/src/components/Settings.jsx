@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUser } from "../redux/Slices/auth.slice";
+import toast from "react-hot-toast";
 
 const menuItems = [
   { name: "Profile", key: "profile" },
@@ -11,6 +13,8 @@ const menuItems = [
 function Settings () {
 
   const authState = useSelector ((state) => state.auth);
+  const [confirmPassword,setconfirmPassword] = useState("");
+  const dispatch = useDispatch();
 
   const [selectedOption, setSelectedOption] = useState("profile");
   const [userDetails, setUserDetails] = useState ({
@@ -18,16 +22,38 @@ function Settings () {
     name: authState?.data?.name,
     username: authState?.data?.username,
     email: authState?.data?.email,
-    password: "**************",
+    curpassword : "",
+    password: "",
     about: authState?.data?.about
   })
 
   function handleChange (e) {
     const {name, value} = e.target;
-    setUserDetails ({
+    if(name=="confirmPassword"){
+      setconfirmPassword(value);
+    }else{
+      setUserDetails({
         ...userDetails,
         [name] : value
+      })
+    }
+}
+
+const updateuser = async() => {
+  const response = await dispatch(updateUser({
+    id : authState?.data._id,
+    newData : userDetails
+  }))
+  if(response.payload){
+    toast.success("Successfully updated your information");
+    setUserDetails({
+      password : "",
+      curpassword : "",
     })
+    setconfirmPassword("");
+  }else{
+    toast.error("Something went wrong");
+  }
 }
 
   return (
@@ -121,7 +147,7 @@ function Settings () {
             </div>
 
             <div className="flex justify-end">
-                <button className={`px-6 py-3 bg-transparent border border-[${_COLOR.less_light}] text-white rounded-lg hover:bg-[${_COLOR.medium}] transition-all`}>
+                <button className={`px-6 py-3 bg-transparent border border-[${_COLOR.less_light}] text-white rounded-lg hover:bg-[${_COLOR.medium}] transition-all`} onClick={updateuser}>
                   Save Changes
                 </button>
               </div>
@@ -162,6 +188,9 @@ function Settings () {
                 type="password"
                 className="w-full p-3 border rounded-lg mt-1 focus:outline-none text-white mb-4"
                 placeholder="********"
+                name = "curpassword"
+                value = {userDetails.curpassword}
+                onChange={handleChange}
               />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -170,6 +199,9 @@ function Settings () {
                     type="password"
                     className="w-full p-3 border rounded-lg mt-1 focus:outline-none text-white"
                     placeholder="********"
+                    name = "password"
+                    value = {userDetails.password}
+                    onChange={handleChange}
                   />
                   <p className={`text-xs text-[${_COLOR.medium}] mt-1`}>
                     Must be at least 8 characters long.
@@ -181,13 +213,16 @@ function Settings () {
                     type="password"
                     className="w-full p-3 border rounded-lg mt-1 focus:outline-none text-white"
                     placeholder="********"
+                    name = "confirmPassword"
+                    value = {confirmPassword}
+                    onChange={handleChange}
                   />
                 </div>
               </div>
             </div>
 
             <div className="w-full flex justify-end mb-4">
-              <button className={`px-6 py-3 bg-transparent border border-[${_COLOR.less_light}] text-white rounded-lg hover:bg-[${_COLOR.medium}] transition-all`}>
+              <button className={`px-6 py-3 bg-transparent border border-[${_COLOR.less_light}] text-white rounded-lg hover:bg-[${_COLOR.medium}] transition-all`} onClick={updateuser}>
                 Save Changes
               </button>
             </div>

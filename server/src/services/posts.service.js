@@ -113,7 +113,7 @@ const getPostByUserId = async(id) => {
 const getPostById = async(id) => {
     const response = {};
     try {
-        const postdata = await postsmodel.find(id);
+        const postdata = await postsmodel.findById(id);
         if(!postdata){
             response.error = "Post not found";
             return response;
