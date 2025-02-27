@@ -5,14 +5,18 @@ const createPulse = async(req, res) => {
     const { caption, interests, userId } = req.body;
 
     // Extract file URLs from Cloudinary response
-    const videoUrls = req.files.video ? req.files.video.map(file => file.path) : [];
+    const videoUrl = req.file.path;
+    const videoName = req.file.filename;
+    console.log(req.file);
 
     const newPulse = {
         userId,
         caption,
         interests,
-        video: videoUrls,
+        video: videoUrl,
+        filename: videoName
     } 
+    console.log(newPulse);
 
     const response = await pulseService.CreatePulse(newPulse);
     if(response.error){

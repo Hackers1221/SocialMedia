@@ -157,13 +157,13 @@ const DisplayPost = ({ open, setOpen, post }) => {
             <div className="carousel w-full">
               {post.image?.map((img, idx) => (
                 <div key={idx} className="carousel-item w-full flex justify-center relative">
-                  <img src={img} className="h-auto w-full" alt="Post" />
+                  <img src={img.url} className="h-auto w-full" alt="Post" />
                 </div>
               ))}
               {post.video?.map((video, idx) => (
                 <div key={idx} className="carousel-item w-full flex justify-center relative" onClick={() => togglePlay (idx)}>
                   <video ref={(el) => (videoRefs.current[idx] = el)} loop className="w-full max-h-[40rem]">
-                    <source src={video} type="video/mp4" />
+                    <source src={video.url} type="video/mp4" />
                   </video>
                   {/* Play/Pause Button */}
                   {showButton[idx] && (

@@ -19,7 +19,9 @@ function PostCard(post) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const {_id, image, video, likes, comments, interests, createdAt, userId, caption} = post?.post;
+    const {_id, likes, comments, interests, createdAt, userId, caption} = post?.post;
+    const imageData = post?.post.image;
+    const videoData = post?.post.video;
 
     const [liked, setLiked] = useState(false);
     const [saved, setSaved] = useState(false);
@@ -230,14 +232,14 @@ function PostCard(post) {
             </div>
       </div>
       <div>
-      {(video?.length > 0 || image?.length > 0) && (
+      {(videoData?.length > 0 || imageData?.length > 0) && (
         <div className="my-5 h-[28rem] carousel rounded-sm w-full bg-black" >
-          {image?.map((photo, key) => (
+          {imageData?.map((photo, key) => (
             <div key={`image-${key}`} className="carousel-item flex justify-center bg-transparent w-full relative">
-              <img src={photo} className="w-max" alt="Image not found" />
+              <img src={photo.url} className="w-max" alt="Image not found" />
             </div>
           ))}
-          {video.length && video?.map((ele, key) => (
+          {videoData.length && videoData?.map((ele, key) => (
                   <div 
                   key={`video-${key}`} 
                   className="carousel-item h-full flex justify-center focus:outline-none bg-transparent w-full relative hover:cursor-pointer"
@@ -245,7 +247,7 @@ function PostCard(post) {
                 >
                   <video 
                     ref={(el) => (videoRefs.current[key] = el)}
-                    src={ele}
+                    src={ele.url}
                     className="w-max h-[min(40rem,max-content)]" 
                   >
                     Your browser does not support the video tag.

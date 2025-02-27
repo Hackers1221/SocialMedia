@@ -3,12 +3,16 @@ const Schema = mongoose.Schema;
 
 const pulseSchema = new Schema({
     video:{
-        type: [String],
+        type: String,
         default: []
     },
     likes: {
         type: [String],
         default: []
+    },
+    filename: {
+        type: String, 
+        required: true 
     },
     caption: {
         type: String,
@@ -20,7 +24,6 @@ const pulseSchema = new Schema({
     },
     interests : {
         type : String,
-        required : true
     },
     userId : {
         type : String,
