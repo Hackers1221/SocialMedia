@@ -233,7 +233,7 @@ function PostCard(post) {
               <img src={photo.url} className="w-max" alt="Image not found" />
             </div>
           ))}
-          {videoData.length && videoData?.map((ele, key) => (
+          {videoData?.map((ele, key) => (
                   <div 
                   key={`video-${key}`} 
                   className="carousel-item h-full flex justify-center focus:outline-none bg-transparent w-full relative hover:cursor-pointer"
