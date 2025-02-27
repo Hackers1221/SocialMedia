@@ -50,6 +50,7 @@ const Profile = () => {
         setIsLoading(false);
       });
   }, [username, dispatch]);
+  
 
 
   const toggleFollow = async () => {
