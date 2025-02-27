@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { getUserById } from "../redux/Slices/auth.slice";
 import Avatar from "./Avatar";
 import { useEffect, useRef, useState } from "react";
-import { DeletePost, getAllPosts, likePost, updatePost, updateSavedPost } from "../redux/Slices/post.slice";
+import { DeletePost, getAllPosts, likePost, updateSavedPost } from "../redux/Slices/post.slice";
 import DisplayPost from "./DisplayPost";
 import { CreateComment, getCommentByPostId } from "../redux/Slices/comment.slice";
 
@@ -17,7 +17,6 @@ function PostCard(post) {
     const timeoutRef = useRef({});
 
     const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     const {_id, image, video, likes, comments, interests, createdAt, userId, caption} = post?.post;
 
@@ -226,7 +225,7 @@ function PostCard(post) {
       </div>
       <div>
       {(video?.length > 0 || image?.length > 0) && (
-        <div className="my-5 h-[28rem] carousel rounded-sm w-full bg-black" >
+        <div className="mt-4 h-[28rem] carousel rounded-sm w-full bg-black" >
           {image?.map((photo, key) => (
             <div key={`image-${key}`} className="carousel-item flex justify-center bg-transparent w-full relative">
               <img src={photo} className="w-max" alt="Image not found" />
@@ -262,10 +261,10 @@ function PostCard(post) {
         </div>
       )}
       </div>
-      <div className="mt-5 flex w-full justify-between px-2">
+      <div className="mt-2 flex w-full justify-between px-2">
         <div className="flex gap-4">
           <button className={`flex gap-2 items-center text-[${_COLOR.more_light}]`} onClick={toggleLike}>
-            {liked ? (<i className="text-white fa-solid fa-heart"></i>) : <i className="text-white fa-regular fa-heart"></i>}
+            {liked ? (<i className="text-red-600 fa-solid fa-heart"></i>) : <i className="text-white fa-regular fa-heart"></i>}
             {countLike}
           </button>
           <button className={`flex gap-2 items-center text-[${_COLOR.more_light}]`} onClick={() => {

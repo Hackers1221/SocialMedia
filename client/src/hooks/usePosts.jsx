@@ -16,7 +16,7 @@ function usePosts () {
     async function loadPosts() {
         if(!postState?.downloadedPosts?.length) dispatch(getAllPosts ()); 
 
-        if (location.pathname === '/saved') await dispatch(getSavedPost (authState?.data?._id));
+        if (location.pathname === '/saved' || location.pathname === '/explore') await dispatch(getSavedPost (authState?.data?._id));
 
         if (location.pathname.split('/')[1] == 'profile') {
             const user = await dispatch (getUserByUsername (username));
@@ -27,6 +27,7 @@ function usePosts () {
     }
     useEffect(() => {
         loadPosts ();
+        console.log ("Hello");
     }, [postState?.downloadedPosts, location.pathname]);
 
     return [postState];

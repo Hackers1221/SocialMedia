@@ -13,7 +13,7 @@ function Pulse() {
   }
   useEffect (() => {
     getPulses();
-  }, [pulseState])
+  }, [])
 
   return (
     <div className="fixed top-[9rem] md:top-[2rem] md:left-[20rem] left-[1rem] w-[85%] md:w-[50%] h-[75vh] md:h-[92vh]">

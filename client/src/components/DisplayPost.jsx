@@ -7,13 +7,16 @@ import Comment from "./Comment";
 import Loader from "./Loader";
 import { CreateComment, getCommentByPostId } from "../redux/Slices/comment.slice";
 import { getAllPosts } from "../redux/Slices/post.slice";
+import usePosts from "../hooks/usePosts";
 
 
 const DisplayPost = ({ open, setOpen, post }) => {
   if (!post || !open) return null;
 
-  const currUser = useSelector((state) => state.auth);
+  const authState = useSelector((state) => state.auth);
   const commentState = useSelector((state) => state.comment);
+  const postState = usePosts ();
+
   const dispatch = useDispatch();
   const dialogRef = useRef(null);
   const videoRefs = useRef([]);
@@ -28,11 +31,13 @@ const DisplayPost = ({ open, setOpen, post }) => {
   const [isPlaying, setIsPlaying] = useState([false]);
   const [showButton, setShowButton] = useState([true]);
   const [commentDescription , setDescription] = useState("");
+  const [countLike,setcountLike] = useState(post?.likes.length);
+  const [countComment,setCountComment] = useState(post?.comments?.length);
 
   async function postCommentHandler() {
     const data = {
           description : commentDescription ,
-          userId : currUser.data?._id,
+          userId : authState.data?._id,
           postId : post?._id
       };
       const response = await dispatch(CreateComment(data));
@@ -102,6 +107,32 @@ const DisplayPost = ({ open, setOpen, post }) => {
     dialogRef.current?.close();
   };
 
+  const toggleLike = async () => {
+    const response = await dispatch(likePost({
+      _id, 
+      id: authState._id 
+    }));
+    if(!response.payload)return;
+  
+    if (liked) {
+      setcountLike(countLike - 1);
+    } else {
+      setcountLike(countLike + 1);
+    }
+    
+    setLiked(!liked);
+  }; 
+
+    const toggleBookmark = async() => {
+      const response = await dispatch(updateSavedPost({
+        _id1  : authState._id,
+        id : _id
+      }))
+
+      if (!response?.payload) return;
+      setSaved ((prev) => !prev);
+    }
+
   // fetching data
   useEffect(() => {
     const fetchData = async () => {
@@ -129,6 +160,16 @@ const DisplayPost = ({ open, setOpen, post }) => {
     }  
     
   }, []);
+
+  useEffect (() => {
+    setSaved (postState?.savedList?.find ((savedPost) => savedPost._id === post?._id));
+    if(post?.likes.includes(authState?.data?._id)){
+      setLiked(true);
+    }
+    else setLiked(false);
+    setCountComment(post?.comments.length);
+    setcountLike(post?.likes.length);
+  }, [post])
 
   // open close dialog
   useEffect(() => {  
@@ -193,8 +234,29 @@ const DisplayPost = ({ open, setOpen, post }) => {
               </div>
             ))}
           </div>
-          <div className="mt-auto flex items-center gap-3 border-t border-gray-700 p-2 relative">
-            <Avatar url={currUser?.data?.image || defaultImage} />
+          <div className="mt-2 flex w-full justify-between p-2 border-t border-gray-700">
+            <div className="flex gap-4">
+              <button className={`flex gap-2 items-center text-[${_COLOR.more_light}]`} onClick={toggleLike}>
+                {liked ? (<i className="text-red-600 fa-solid fa-heart"></i>) : <i className="text-white fa-regular fa-heart"></i>}
+                {countLike}
+              </button>
+              <button className={`flex gap-2 items-center text-[${_COLOR.more_light}]`} onClick={() => {
+                getComments;
+                setDialogOpen(true);
+              }}>
+              {/* <i className="text-white fa-solid fa-comment"></i> */}
+                <i className="text-white fa-regular fa-comment"></i>
+                {countComment}
+              </button>
+            </div>
+            <div className="flex">
+            <button className={`flex gap-2 items-center text-[${_COLOR.more_light}]`} onClick={toggleBookmark}>
+                {saved? <i className="text-white fa-solid fa-bookmark"></i> : <i className="text-white fa-regular fa-bookmark"></i>}
+              </button>
+            </div>
+          </div>
+          <div className="mt-auto flex items-center gap-3 p-2 relative">
+            <Avatar url={authState?.data?.image || defaultImage} />
             <div className="flex-1 relative">
               <input
                 type="text"
