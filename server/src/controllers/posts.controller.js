@@ -3,17 +3,23 @@ const postsService = require('../services/posts.service');
 
 const createPost = async(req, res) => {
     const { caption, interests, userId } = req.body;
+    console.log(req.files);
 
     // Extract file URLs from Cloudinary response
-    const imageUrls = req.files.image ? req.files.image.map(file => file.path) : [];
-    const videoUrls = req.files.video ? req.files.video.map(file => file.path) : [];
+    const images = req.files.image 
+    ? req.files.image.map(file => ({ url: file.path, filename: file.filename })) 
+    : [];
+
+    const videos = req.files.video 
+    ? req.files.video.map(file => ({ url: file.path, filename: file.filename })) 
+    : [];
 
     const newPost = {
         userId,
         caption,
         interests,
-        image: imageUrls,
-        video: videoUrls,
+        image: images,
+        video: videos,
     } 
 
     const response = await postsService.CreatePost(newPost);

@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 
-export default function PulseCard({ URL }) {
-  if (!URL) return null;
+export default function PulseCard({ pulse }) {
+  if (!pulse) return null;
+  console.log(pulse);
   
   const [isPlaying, setIsPlaying] = useState(true);
   const [isLiked, setIsLiked] = useState(false);
@@ -71,7 +72,7 @@ export default function PulseCard({ URL }) {
       className="reel-container w-80 h-[65vh] md:w-96 md:h-[78vh] overflow-hidden rounded-xl shadow-lg relative"
       onClick={togglePlay}
     >
-      <video ref={videoRef} className="w-full h-full bg-black" src={URL[0]} loop></video>
+      <video ref={videoRef} className="w-full h-full bg-black" src={pulse.video} loop></video>
 
       {/* Play/Pause Button */}
       {showButton && (

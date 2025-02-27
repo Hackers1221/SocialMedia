@@ -40,9 +40,11 @@ const storage = new CloudinaryStorage({
   },
 });
 
+
+// Upload multiple image and videos
 const upload = multer({ 
   storage,
-  limits: { fileSize: 50 * 1024 * 1024 }, // Limit file size (e.g., 50MB)
+  limits: { fileSize: 20 * 1024 * 1024 }, // Limit file size (e.g., 20MB)
   fileFilter: (req, file, cb) => {
     if (!file.mimetype.startsWith('image') && !file.mimetype.startsWith('video')) {
       return cb(new Error('Only image and video files are allowed!'), false);
@@ -54,7 +56,84 @@ const upload = multer({
   { name: 'video', maxCount: 5 },
 ]);
 
-module.exports = upload;
+// upload single image
+const uploadSingleImage = multer({ 
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size (e.g., 5MB)
+  fileFilter: (req, file, cb) => {
+    if (!file.mimetype.startsWith('image')) {
+      return cb(new Error('Only image file is allowed!'), false);
+    }
+    cb(null, true);
+  },
+}).single("image");
+
+
+//upload single video
+const uploadSingleVideo = multer({ 
+  storage,
+  limits: { fileSize: 10 * 1024 * 1024 }, // Limit file size (e.g., 10MB)
+  fileFilter: (req, file, cb) => {
+    if (!file.mimetype.startsWith('video')) {
+      return cb(new Error('Only video file is allowed!'), false);
+    }
+    cb(null, true);
+  },
+}).single("video");
+
+
+
+// Delete multiple images from Cloudinary
+const deleteImages = async (publicIds) => {
+  try {
+    if (!Array.isArray(publicIds)) {
+      throw new Error('Invalid publicIds array');
+    }
+    await Promise.all(
+      publicIds.map(id => cloudinary.uploader.destroy(id, { resource_type: "image" }))
+    );
+    console.log(`Deleted: ${publicIds.join(', ')}`);
+    return { success: true, message: 'Images deleted successfully' };
+  } catch (error) {
+    console.error('Cloudinary Delete Error:', error);
+    return { success: false, message: 'Failed to delete Images' };
+  }
+};
+
+// Delete multiple videos from Cloudinary
+const deleteVideos = async (publicIds) => {
+  try {
+    if (!Array.isArray(publicIds)) {
+      throw new Error('Invalid publicIds array');
+    }
+    await Promise.all(
+      publicIds.map(id => cloudinary.uploader.destroy(id, { resource_type: "video" }))
+    );
+    console.log(`Deleted: ${publicIds.join(', ')}`);
+    return { success: true, message: 'Videos deleted successfully' };
+  } catch (error) {
+    console.error('Cloudinary Delete Error:', error);
+    return { success: false, message: 'Videos to delete files' };
+  }
+};
+
+// Update profile image
+const updateImage = async (oldPublicId) => {
+  try {
+    await deleteImages([oldPublicId]);
+    const uploadResponse = await cloudinary.uploader.upload(file.path, {
+      folder: 'socialMedia/images',
+      resource_type: 'image'
+    });
+    return { success: true, url: uploadResponse.secure_url, public_id: uploadResponse.public_id };
+  } catch (error) {
+    console.error('Cloudinary Update Error:', error);
+    return { success: false, message: 'Failed to update image' };
+  }
+};
+
+
+module.exports = {upload, uploadSingleImage, uploadSingleVideo, updateImage, deleteImages, deleteVideos};
 
 
 

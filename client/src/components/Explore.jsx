@@ -44,8 +44,8 @@ const Explore = () => {
 
   useEffect (() => {
     postState?.downloadedPosts?.forEach((post, index) => {
-      if (post?.video) {
-        extractThumbnail(post.video[0], index);
+      if (post?.video.url) {
+        extractThumbnail(post.video[0].url, index);
       }
     });
   }, []);
@@ -69,7 +69,7 @@ const Explore = () => {
               setSelectedPost (post);
             }}>
               {<img
-                src={post?.image[0] || thumbnails[index]}
+                src={post?.image[0].url || thumbnails[index]}
                 alt="Explore"
                 className="w-full h-full object-cover rounded-lg transition-transform duration-300 group-hover:scale-110"
               />}

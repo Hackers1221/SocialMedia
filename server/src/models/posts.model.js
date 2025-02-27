@@ -4,14 +4,14 @@ const bcrypt = require('bcrypt');
 const { required } = require("joi");
 
 const postSchema = new Schema({
-    image:{
-        type: [String],
-        default: []
-    },
-    video:{
-        type: [String],
-        default: []
-    },
+    image: [{
+        url: { type: String, required: true },
+        filename: { type: String, required: true }
+    }],
+    video: [{
+        url: { type: String, required: true },
+        filename: { type: String, required: true }
+    }],
     likes: {
         type: [String],
         default: []

@@ -19,9 +19,9 @@ function Pulse() {
     <div className="fixed top-[9rem] md:top-[2rem] md:left-[20rem] left-[1rem] w-[85%] md:w-[50%] h-[75vh] md:h-[92vh]">
       <div className="heading flex justify-center text-white text-3xl">Pulses</div>
       <div className="h-full overflow-y-auto snap-y snap-mandatory scrollbar-hide">
-        {pulseState?.downloadedPulse?.map((ele, index) => (
+        {pulseState?.downloadedPulse?.map((pulse, index) => (
           <div key={index} className="snap-start h-full flex justify-center pt-[2.5rem]">
-            <PulseCard URL={ele?.video} />
+            <PulseCard pulse={pulse} />
           </div>
         ))}
       </div>

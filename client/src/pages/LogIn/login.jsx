@@ -39,8 +39,6 @@ function LogIn () {
                 toast.error ('Fields cannot be empty'); return;
             }
 
-            console.log (userDetails);
-
             const res = await dispatch (login (userDetails));
             if (res.payload) navigate('/');
             else resetDetails();

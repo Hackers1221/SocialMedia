@@ -3,13 +3,7 @@ const pulsemodel = require('../models/pulse.model');
 const CreatePulse = async (data) => {
     const response = {};
     try {
-        const pulseObject = {
-            video: data.video,
-            interests: data.interests,
-            userId: data.userId,
-            caption: data.caption,
-        };
-        const pulseResponse = await pulsemodel.create(pulseObject);
+        const pulseResponse = await pulsemodel.create(data);
         
         if (!pulseResponse) {
             response.error = "Pulse not created";

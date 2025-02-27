@@ -47,7 +47,7 @@ const SavedPost = () => {
   useEffect (() => {
     savedArray?.forEach((post, index) => {
         if (post?.video) {
-          extractThumbnail(post.video[0], index);
+          extractThumbnail(post.video[0].url, index);
         }
       });
     }, [savedArray]);
@@ -87,7 +87,7 @@ const SavedPost = () => {
               setSelectedPost (post);
             }}>
               {activeTab === "images" && <img
-                src={post?.image[0] || thumbnails[index]}
+                src={post?.image[0].url || thumbnails[index]}
                 alt="Explore"
                 className="w-full h-full object-cover rounded-lg transition-transform duration-300 group-hover:scale-110"
               />}
