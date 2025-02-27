@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Avatar from './Avatar';
 import PostCard from './PostCard';
 import usePosts from '../hooks/usePosts';
-import { followUser, getUserByUsername } from '../redux/Slices/auth.slice';
+import { followUser, getUserById, getUserByUsername } from '../redux/Slices/auth.slice';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 import Loader from './Loader';
@@ -15,7 +15,6 @@ import ProfileInfo from './ProfileInfo';
 
 const Profile = () => {
   const authState = useSelector ((state) => state.auth);
-
   const [creator, setCreator] = useState (null);
   const [follow, setFollow] = useState(false);
   const [countFollowers, setCountFollowers] = useState(0);
@@ -50,7 +49,7 @@ const Profile = () => {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [username, dispatch, authState]);
+  }, [username, dispatch]);
 
 
   const toggleFollow = async () => {

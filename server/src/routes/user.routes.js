@@ -10,6 +10,6 @@ userroutes.post('/signin',authcontroller.signin);
 userroutes.get('/users/:id',validators.isUserAuthenticated,authcontroller.getuserByid);
 userroutes.patch('/:id',validators.isUserAuthenticated,authcontroller.updateUser);
 userroutes.patch('/follow/:id',validators.isUserAuthenticated,authcontroller.followUser);
-userroutes.get('/users/:name',validators.isUserAuthenticated,authcontroller.getUserByUserName);
+userroutes.get('/user/:name',validators.isUserAuthenticated,authcontroller.getUserByUserName);
 
 module.exports = userroutes

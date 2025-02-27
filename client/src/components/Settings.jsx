@@ -18,7 +18,7 @@ function Settings () {
     name: authState?.data?.name,
     username: authState?.data?.username,
     email: authState?.data?.email,
-    passwrod: "**************",
+    password: "**************",
     about: authState?.data?.about
   })
 
