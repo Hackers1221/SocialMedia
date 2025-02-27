@@ -62,32 +62,6 @@ const getuserByid = async(id) => {
     }
 }
 
-const updateUser = async (userId, updatedData) => {
-    const response = {};
-    try {
-        if (updatedData.password) {
-            updatedData.password = await bcrypt.hash(updatedData.password, 11);
-        }
-
-        const updatedUser = await usermodel.findByIdAndUpdate(
-            userId, 
-            updatedData, 
-            { new: true, runValidators: true } 
-        );
-
-        if (!updatedUser) {
-            response.error = "User not found";
-            return response;
-        }
-        
-        response.user = updatedUser;
-        return response;
-    } catch (error) {
-        response.error = error.message;
-        return response;
-    }
-};
-
 const followUser = async(userId , followingId) => {
     const response = {};
     try {
@@ -147,7 +121,36 @@ const getUserByUserName = async(name) => {
         return response;
     }
 }
-
+const updateUser = async(id,newData) => {
+    const response = {};
+    try {
+        const userData = await usermodel.findById(id);
+        if (!userData) {
+            response.error = "User not found";
+            return response;
+        }
+        if(newData.curpassword){
+            const result = bcrypt.compareSync(newData.curpassword, userData.password);
+            console.log(newData.curpassword);
+            console.log(userData.password);
+            if(!result){
+                response.error = "Current password does not match";
+                return response;
+            }
+            newData.password = await bcrypt.hash(newData.password, 10);
+        }
+        const updateuser = await usermodel.findByIdAndUpdate(
+            id , 
+            newData,
+            {new : true}
+        )
+        response.user = updateuser;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response
+    }
+}
 module.exports = {
     CreateUser,
     ValidateUser,
