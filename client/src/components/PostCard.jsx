@@ -124,13 +124,7 @@ function PostCard(post) {
       }
       
       setLiked(!liked);
-    };
-
-    function goProfile (username) {
-      console.log
-        navigate(`/profile?username=${username}`);
-    }
-    
+    };    
 
     async function getUser(userId) {
         const response = await dispatch(getUserById (userId));
@@ -176,6 +170,7 @@ function PostCard(post) {
       const response = await dispatch(DeletePost(resp));
       if(response.payload){
         await dispatch(getAllPosts());
+        toast.success("Deleted successfully");
       }
     }
 

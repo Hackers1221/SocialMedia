@@ -18,7 +18,7 @@ function Settings () {
     name: authState?.data?.name,
     username: authState?.data?.username,
     email: authState?.data?.email,
-    passwrod: "**************",
+    password: "**************",
     about: authState?.data?.about
   })
 
@@ -40,9 +40,7 @@ function Settings () {
             <li
               key={item.key}
               onClick={() => setSelectedOption(item.key)}
-              className={`cursor-pointer p-3 text-[${_COLOR.lightest}] hover:bg-[${_COLOR.medium}] ${
-                selectedOption === item.key ? `bg-[${_COLOR.medium}]` : ""
-              }`}
+              className={`cursor-pointer p-3 text-[${_COLOR.lightest}] hover:bg-[${_COLOR.medium}]`}
             >
               {item.name}
             </li>

@@ -30,7 +30,7 @@ export const signup = createAsyncThunk('/auth/signup', async (data) => {
 
 export const getUserById = createAsyncThunk('/auth/user', async (id) => {     
     try {
-        const response = await axiosInstance.get(`auth/user/${id}`, {
+        const response = await axiosInstance.get(`auth/users/${id}`, {
             headers: {
                 'x-access-token': localStorage.getItem('token')
             }
@@ -44,7 +44,7 @@ export const getUserById = createAsyncThunk('/auth/user', async (id) => {
 
 export const getUserByUsername = createAsyncThunk('/auth/user', async (username) => {     
     try {
-        const response =  await axiosInstance.get(`auth/users/${username}`, {
+        const response =  await axiosInstance.get(`auth/user/${username}`, {
             headers: {
                 'x-access-token': localStorage.getItem('token')
             }
@@ -96,6 +96,12 @@ const authSlice = createSlice({
             localStorage.setItem("token", action.payload.data?.token);
             localStorage.setItem("data", JSON.stringify(action.payload.data?.userdata));
             localStorage.setItem("isLoggedIn", (action.payload.data?.token != undefined));
+        })
+        .addCase(followUser.fulfilled , (state,action) => {
+            if(!action.payload)return;
+            console.log(action.payload);
+            state.data = action.payload.data?.userDetails;
+            localStorage.setItem("data", JSON.stringify(action.payload.data?.userDetails));
         })
     }
 });

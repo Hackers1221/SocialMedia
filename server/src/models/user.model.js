@@ -15,6 +15,15 @@ const userSchema = new Schema({
         type: String,
         required: [true, 'Name cannot be empty'],
     },
+    type : {
+        type : String , 
+        enum : ["public","private"],
+        default : "public"
+    },
+    about : {
+        type : String , 
+        default : ""
+    },
     likedPosts : {
         type : [String],
         default : []
