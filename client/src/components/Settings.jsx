@@ -40,6 +40,20 @@ function Settings () {
 }
 
 const updateuser = async() => {
+  if(userDetails.curpassword.trim().length>0){
+    if(userDetails.password.trim().length==0 || confirmPassword.length==0){
+      toast.error("Password field can't be empty");
+      return;
+    }
+    if(userDetails.curpassword.trim() == userDetails.password.trim()){
+      toast.error("Old and new password can't be same");
+      return;
+    }
+    if(userDetails.password.trim() != confirmPassword.trim()){
+      toast.error("Password does not match");
+      return;
+    }
+  }
   const response = await dispatch(updateUser({
     id : authState?.data._id,
     newData : userDetails
