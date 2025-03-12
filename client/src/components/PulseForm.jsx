@@ -83,13 +83,16 @@ export default function PulseForm({ open, setOpen }) {
             ></textarea>
 
             <div className="flex justify-between items-center mt-4">
-              <input 
-                type="text"
-                value={interests}
-                className="bg-gray-200 text-black w-[75%] p-3 border rounded-lg outline-none"
-                placeholder="Add hashtags Ex: games, sports"
-                onChange={(e) => setInterests(e.target.value)}
-              />
+            <label className="flex items-center gap-2 px-3 h-12 border-2 border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition w-[75%]">
+                <i className="fa-solid fa-hashtag text-gray-800 text-lg"></i>
+                <input 
+                  type="text"
+                  value={interests}
+                  className="bg-transparent outline-none text-gray-700 w-full focus:outline-none"
+                  placeholder="Add hashtags Ex: games, sports"
+                  onChange={(e) => setInterests(e.target.value)}
+                />
+              </label>
               <button
                 type="button"
                 onClick={() => {

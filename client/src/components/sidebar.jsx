@@ -15,6 +15,7 @@ import PostForm from "./PostForm";
 import PulseForm from "./PulseForm";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/Slices/auth.slice";
+import { IoMdPulse } from "react-icons/io";
 
 function Sidebar() {
 
@@ -128,7 +129,7 @@ function Sidebar() {
                             </li>
                             <li onClick={() => setIsOpen(false)}>
                                 <Link to="/pulse" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
-                                    <ImVideoCamera className="ml-4" />
+                                    <IoMdPulse className="ml-4"/>
                                     <span className="ml-2 text-sm tracking-wide truncate">Pulse</span>
                                 </Link>
                             </li>
