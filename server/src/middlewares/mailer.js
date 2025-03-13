@@ -48,8 +48,8 @@ const sendWelcomeEmail = async (email) => {
       from: `"Social Media App" <${EMAIL}>`,
       to: email,
       subject: "Welcome to Social Media App!",
-      text: `Welcome to Social Media App! We're excited to have you on board. Start exploring and connecting with friends today!`,
-      html: `
+      text: "Welcome to Social Media App! We're excited to have you on board. Start exploring and connecting with friends today!",
+      html:`
       <div style="font-family: Arial, sans-serif; max-width: 500px; margin: auto; border: 1px solid #ddd; padding: 20px; border-radius: 10px; box-shadow: 2px 2px 10px rgba(0,0,0,0.1);">
         <h2 style="text-align: center; color: #333;">Welcome to Social Media App!</h2>
         <p style="font-size: 16px; text-align: center; color: #555;">We're excited to have you on board.</p>

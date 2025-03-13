@@ -71,12 +71,8 @@ function SignUp() {
             const signupRes = await dispatch(signup(userDetails));
 
             if (signupRes.payload) {
-                // If signup is successful, attempt login
-                const loginRes = await dispatch(login({ email: userDetails.email, password: userDetails.password }));
-
-            if (res.payload) {
-                const signin = await dispatch (login (userDetails));
-                if (signin.payload) navigate ('/');
+                const signIn = await dispatch (login (userDetails));
+                if (signIn.payload) navigate ('/'); 
             }
             else resetDetails();
 
