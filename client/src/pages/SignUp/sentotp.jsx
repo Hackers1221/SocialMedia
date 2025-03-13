@@ -19,6 +19,8 @@ function SendOtp() {
     const response = await dispatch(sendOtp({ email }));
     
     if (response.payload) {
+      localStorage.setItem("otpTimer", 60);
+      localStorage.setItem("otpStartTime", Date.now());
       navigate("/verifyotp");
     } else {
       toast.error("Unable to send OTP. Please verify your email.");
