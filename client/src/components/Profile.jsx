@@ -68,7 +68,7 @@ const Profile = () => {
         {isLoading && <ProfileInfo />}
         {!isLoading && <div className={`mb-4 w-full bg-transparent px-4 pt-4`}>
           <div className={`flex items-center gap-4 `}>
-            <Avatar url={creator?.image || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} size={'lg'}/>
+            <Avatar url={creator?.image?.url || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} size={'lg'}/>
             <div>
               <h2 className={`font-bold text-xl text-[${_COLOR.lightest}]`}>{creator?.name}</h2>
               <h2 className={`text-lg text-[${_COLOR.more_light}]`}>{creator?.email}</h2>
