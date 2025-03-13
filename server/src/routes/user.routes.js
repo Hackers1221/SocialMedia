@@ -1,5 +1,6 @@
 const express = require('express');
 const authcontroller = require('../controllers/auth.controller')
+const otpcontroller = require("../controllers/sentOtp.controller.js");
 const {checkUser, updateProfileImage} = require('../middlewares/middlewares')
 const {uploadSingleImage} = require("../../cloudConfig.js")
 const validators = require('../validators/authenticate.user')
