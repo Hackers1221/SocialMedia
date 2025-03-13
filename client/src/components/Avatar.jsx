@@ -7,9 +7,9 @@ function Avatar ({size, url}) {
     width = 'w-8';
   }
   return (
-    <div className={`${width}`}>
-      <div className="rounded-full overflow-hidden hover:cursor-pointer object-cover bg-yellow-600">
-        <img src={url} alt="" className="w-full h-full"/>
+    <div className={`${width} h-full`}>
+      <div className="rounded-full overflow-hidden hover:cursor-pointer bg-black">
+        <img src={url} alt="" className="object-cover"/>
       </div>
     </div>
   );

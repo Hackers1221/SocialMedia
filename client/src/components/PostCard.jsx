@@ -27,7 +27,7 @@ function PostCard(post) {
     const [saved, setSaved] = useState(false);
     const [countLike,setcountLike] = useState(likes.length);
 
-    const photo = currUser.data?.image || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"
+    const photo = currUser.data?.image?.url || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"
     const hashtags = interests[0].split(" ");
     
 
@@ -200,7 +200,7 @@ function PostCard(post) {
               <div className="flex items-center">
                 <Link href={'/profile'}>
                   <span className="cursor-pointer">
-                    <Avatar url={creator?.image || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} size={'md'}/>
+                    <Avatar url={creator?.image?.url || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} size={'md'}/>
                   </span>
                 </Link>
               </div>

@@ -196,7 +196,7 @@ const DisplayPost = ({ open, setOpen, post }) => {
         {/* Left Half */}
         <div className="w-1/2 p-4 flex relative items-center">
           <div className="absolute top-0 left-0 flex items-center gap-3 mb-4 z-[100] bg-black bg-opacity-50 px-4 py-2">
-            <Avatar url={creator.image || defaultImage} />
+            <Avatar url={creator?.image?.url || defaultImage} />
             <div>
               <p className="text-white font-semibold">{creator.name}</p>
               <p className="text-gray-400 text-sm">{date}</p>
@@ -264,7 +264,7 @@ const DisplayPost = ({ open, setOpen, post }) => {
             </div>
           </div>
           <div className="mt-auto flex items-center gap-3 p-2 relative">
-            <Avatar url={authState?.data?.image || defaultImage} />
+            <Avatar url={authState?.data?.image?.url || defaultImage} />
             <div className="flex-1 relative">
               <input
                 type="text"

@@ -14,7 +14,7 @@ function Stories () {
      const [showStories, setShowStories] = useState(false);
      const [idx, setIdx] = useState (-1);
 
-    const image = authState.data?.image || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"
+    const image = authState.data?.image?.url || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"
 
     const stories = [
         {
