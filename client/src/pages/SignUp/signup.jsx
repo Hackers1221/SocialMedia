@@ -18,7 +18,7 @@ function SignUp () {
     const [userDetails, setUserDetails] = useState ({
         name: "",
         username: "",
-        email: "",
+        email: localStorage.getItem("email"),
         password: "",
         birth: ""
     });
@@ -128,25 +128,6 @@ function SignUp () {
                 type="text"
                 autoComplete="false" autoCorrect="false" spellCheck="false"
                 placeholder="Your username"
-                required
-                />
-            </div>
-            <div className="mt-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                Email Address
-                </label>
-                <input
-                name="email"
-                value={userDetails.email}
-                onChange={handleChange}
-                className="text-black border border-[2px] rounded py-2 px-4 block w-full focus:outline-none"
-                style={{
-                    // borderColor: _COLOR.light,
-                    backgroundColor: _COLOR.lightest,
-                  }}
-                type="email"
-                autoComplete="off" autoCorrect="off" spellCheck="false"
-                placeholder="Email address"
                 required
                 />
             </div>
