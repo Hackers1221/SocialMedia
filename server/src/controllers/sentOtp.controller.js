@@ -29,7 +29,37 @@ const verifyotp = async(req,res) => {
     })
 }
 
+const forgetPasswordLink = async(req,res) => {
+    const response = await otpService.forgetPasswordLink(req.body.email);
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg : "Unable to send reset password link",
+            error : response.error
+        })
+    }
+    return res.status(StatusCodes.CREATED).send({
+        msg : "Successfully sent the verification link",
+        user: response.user
+    })
+}
+
+const resetPassword = async(req,res) => {
+    const response = await otpService.resetPassword(req.body.email,req.body.password);
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg : "Unable to reset the password",
+            error : response.error
+        })
+    }
+    return res.status(StatusCodes.CREATED).send({
+        msg : "Successfully reset the password",
+        user: response.user
+    })
+}
+
 module.exports = {
     sendOtp,
-    verifyotp
+    verifyotp,
+    forgetPasswordLink,
+    resetPassword
 }

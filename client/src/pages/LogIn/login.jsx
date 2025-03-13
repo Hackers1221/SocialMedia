@@ -48,6 +48,10 @@ function LogIn () {
         }
     }
 
+    const forget = () => {
+        navigate('/forgetpass')
+    }
+
     const handleKeyPress = useCallback((e) => {
         if (e.key === 'Enter') document.getElementById('submitButton').click();
     }, []);
@@ -124,6 +128,10 @@ function LogIn () {
                 <Link to={'/signup'} style={{color: _COLOR.dark}}> Sign Up</Link>
                 </div>
             </div>
+            <div className="text-xs text-gray-800 capitalize text-center w-full hover:cursor-pointer hover:underline hover:font-bold"
+            onClick = {forget}>
+                    Forgot password?
+                </div >
             </div>
         </div>
         </div>

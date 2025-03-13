@@ -51,6 +51,26 @@ export const signup = createAsyncThunk('/auth/signup', async (data) => {
     }
 });
 
+export const forgetPass = createAsyncThunk('auth/forget',async(data) => {
+    try {
+        const response = await axiosInstance.post('auth/forgetpass',data);
+        if(!response) toast.error('Something went wrong, try again');
+        return  response;
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+export const resetPass = createAsyncThunk('auth/reset',async(data) => {
+    try {
+        const response = await axiosInstance.post('auth/resetpass',data);
+        if(!response) toast.error('Something went wrong, try again');
+        return  response;
+    } catch (error) {
+        console.log(error);
+    }
+})
+
 export const getUserById = createAsyncThunk('/auth/user', async (id) => {     
     try {
         const response = await axiosInstance.get(`auth/users/${id}`, {

@@ -5,6 +5,8 @@ const EMAIL = process.env.EMAIL;
 const PASS = process.env.PASS;
 const url = "https://res.cloudinary.com/dxyeuw5s7/image/upload/v1741879576/socialMedia/images/1741879571244-Logo.png.png"
 const webpage = "http://localhost:5173/"
+const resetLink = "http://localhost:5173/resetpass"
+const login = "http://localhost:5173/login"
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -95,8 +97,99 @@ const sendWelcomeEmail = async (email) => {
   }
 };
 
+const forgetPasswordLink = async (email) => {
+  try {
+    const mailOptions = {
+      from: `"DropChat" <${EMAIL}>`,
+      to: email,
+      subject: "Reset Your Password - DropChat",
+      text: `You requested a password reset. Click the link below to reset your password: ${resetLink}`,
+      html: `
+      <div style="font-family: Arial, sans-serif; max-width: 500px; margin: auto; border: 1px solid #ddd; padding: 20px; border-radius: 10px; box-shadow: 2px 2px 10px rgba(0,0,0,0.1); text-align: center; background-color: #f9f9f9;">
+        <h2 style="color: #023e8a;">Reset Your Password</h2>
+        
+        <p style="font-size: 16px; color: #555;">We received a request to reset your DropChat password.</p>
+        <p style="font-size: 14px; color: #777;">
+            Click the button below to set a new password. If you did not request this, please ignore this email.
+        </p>
+
+        <div style="margin-top: 20px;">
+            <a href="${resetLink}" 
+              style="display: inline-block; background-color: #023e8a; color: #fff; text-decoration: none; 
+                      padding: 10px 20px; border-radius: 5px; font-weight: bold;">
+                Reset Password
+            </a>
+        </div>
+
+        <p style="font-size: 12px; color: #999; margin-top: 20px;">
+            This link will expire in 1 hour for security reasons.
+        </p>
+
+        <p style="font-size: 12px; color: #999;">
+            If you have any issues, contact our support team.
+        </p>
+    </div>
+      `,
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    return { success: true, messageId: info.messageId };
+  } catch (error) {
+    console.log("Error sending password reset email:", error);
+    return { success: false, error: error.message };
+  }
+};
+
+const passwordChangedEmail = async (email) => {
+  try {
+    const mailOptions = {
+      from: `"DropChat" <${EMAIL}>`,
+      to: email,
+      subject: "Your Password Has Been Successfully Changed - DropChat",
+      text: `Hello,
+
+Your password has been successfully changed. If you made this change, no further action is needed.
+
+If you did not request this change, please reset your password immediately or contact our support team.
+
+Stay safe,
+The DropChat Team
+`,
+      html: `
+      <div style="font-family: Arial, sans-serif; max-width: 500px; margin: auto; border: 1px solid #ddd; padding: 20px; border-radius: 10px; box-shadow: 2px 2px 10px rgba(0,0,0,0.1); text-align: center; background-color: #f9f9f9;">
+        <h2 style="color: #023e8a;">Password Changed Successfully</h2>
+        
+        <p style="font-size: 16px; color: #555;">Your password has been updated successfully.</p>
+        <p style="font-size: 14px; color: #777;">
+            If you made this change, no further action is required.
+        </p>
+
+        <p style="font-size: 14px; color: #777;">
+            However, if you did not request this change, please 
+            <a href="${resetLink}" style="color: #023e8a; text-decoration: none; font-weight: bold;">reset your password</a> 
+            immediately or contact our support team.
+        </p>
+
+        <p style="font-size: 12px; color: #999; margin-top: 20px;">
+            Stay safe, <br> The DropChat Team
+        </p>
+      </div>
+      `,
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    return { success: true, messageId: info.messageId };
+  } catch (error) {
+    console.log("Error sending password changed confirmation email:", error);
+    return { success: false, error: error.message };
+  }
+};
+
+
 
 module.exports = {
     sendOtp,
-    sendWelcomeEmail
+    sendWelcomeEmail,
+    forgetPasswordLink,
+    passwordChangedEmail
 };

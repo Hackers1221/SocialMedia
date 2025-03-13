@@ -4,6 +4,7 @@ const sendOtpmiddleware = require('../middlewares/mailer.js');
 const crypto = require('crypto');
 const otpModel = require('../models/otp.model.js');
 const usermodel = require('../models/user.model.js')
+const bcrypt = require("bcrypt");
 
 
 
@@ -62,7 +63,63 @@ const verifyotp = async(email,otp) => {
         return response
     }
 }
+
+const forgetPasswordLink = async(email) => {
+    const response = {};
+    try {
+        const userdata = await usermodel.findOne({
+            email 
+        });
+        if(!userdata){
+            response.error = "email not found";
+            return response;
+        }
+        const sent = await sendOtpmiddleware.forgetPasswordLink(email);
+        if(!sent){
+            response.error = sent;
+            msg = "Reset password link not sent";
+            return response;
+        }
+        response.user = userdata;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response
+    }
+}
+
+const resetPassword = async (email, newPassword) => {
+    const response = {};
+    try {
+        const hashedPassword = await bcrypt.hash(newPassword, 11);
+        const updatedUser = await usermodel.findOneAndUpdate(
+            { email }, 
+            { password: hashedPassword }, 
+            { new: true }
+        );
+        if (!updatedUser) {
+            response.error = "Unable to reset the password";
+            return response;
+        }
+        const sent = sendOtpmiddleware.passwordChangedEmail(email);
+        if(!sent){
+            response.error = sent;
+            msg = "Reset password link not sent";
+            return response;
+        }
+        response.user = updatedUser;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response;
+    }
+};
+
+module.exports = { resetPassword };
+
 module.exports = {
     sendotp,
-    verifyotp
+    verifyotp,
+    forgetPasswordLink,
+    resetPassword
 }

@@ -12,6 +12,8 @@ import DisplayStory from "../../components/DisplayStory";
 import Settings from "../../components/Settings";
 import SendOtp from "../SignUp/sentotp";
 import VerifyOtp from "../SignUp/verifyotp";
+import ForgetPassword from "../Forgot/Forget";
+import ResetPassword from "../Forgot/reset";
 
 function MainRoutes() {
   return (
@@ -20,6 +22,8 @@ function MainRoutes() {
         <Route index element={<Home />} />
         <Route path="signup" element={<SendOtp />} />
         <Route path="verifyotp" element={<VerifyOtp />} />
+        <Route path="forgetpass" element={<ForgetPassword />} />
+        <Route path="resetpass" element={<ResetPassword />} />
         <Route path="register" element={<SignUp />} />
         <Route path="login" element={<LogIn />} />
         <Route path="saved" element={<SavedPost />} />
