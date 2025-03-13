@@ -1,6 +1,7 @@
 
 const usermodel = require('../models/user.model')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const mailer = require('../middlewares/mailer')
 
 const CreateUser = async(data) => { 
     const response  = {};
@@ -13,7 +14,8 @@ const CreateUser = async(data) => {
             password  : data.password,
             birth : data.birth
         }
-        response.user = await usermodel.create(userObject)
+        response.user = await usermodel.create(userObject);
+        await mailer.sendWelcomeEmail(data.email); 
         return response;
     } catch (error) {
         console.log("Error" , error);

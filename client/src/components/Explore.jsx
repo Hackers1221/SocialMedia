@@ -44,7 +44,7 @@ const Explore = () => {
 
   useEffect (() => {
     postState?.downloadedPosts?.forEach((post, index) => {
-      if (post?.video.url) {
+      if (post?.video[0]?.url) {
         extractThumbnail(post.video[0].url, index);
       }
     });

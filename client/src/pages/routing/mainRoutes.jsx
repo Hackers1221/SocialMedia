@@ -10,13 +10,17 @@ import Messenger from "../../components/Messenger";
 import Pulse from "../Pulse/Pulse";
 import DisplayStory from "../../components/DisplayStory";
 import Settings from "../../components/Settings";
+import SendOtp from "../SignUp/sentotp";
+import VerifyOtp from "../SignUp/verifyotp";
 
 function MainRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
-        <Route path="signup" element={<SignUp />} />
+        <Route path="signup" element={<SendOtp />} />
+        <Route path="verifyotp" element={<VerifyOtp />} />
+        <Route path="register" element={<SignUp />} />
         <Route path="login" element={<LogIn />} />
         <Route path="saved" element={<SavedPost />} />
         <Route path="profile/:username" element={<Profile />} />

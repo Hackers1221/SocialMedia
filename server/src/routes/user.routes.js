@@ -6,6 +6,8 @@ const validators = require('../validators/authenticate.user')
 
 const userroutes = express.Router();
 
+userroutes.post('/sendotp',otpcontroller.sendOtp);
+userroutes.post('/verifyotp',otpcontroller.verifyotp);
 userroutes.post('/signup',checkUser,authcontroller.signup);
 userroutes.post('/signin',authcontroller.signin);
 userroutes.get('/users/:id',validators.isUserAuthenticated,authcontroller.getuserByid);

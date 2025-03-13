@@ -1,6 +1,6 @@
 function Messages () {
     return (
-        <section className={`fixed top-[2rem] md:top-[1rem] right-[6rem] hidden md:flex md:flex-col overflow-auto w-[20rem] lg:max-w-sm bg-transparent rounded-md border-[1px] border-[${_COLOR.medium}]`}>
+        <section className={`fixed top-[2rem] md:top-[1rem] right-[6rem] hidden md:flex md:flex-col overflow-auto w-[20rem] lg:max-w-sm bg-black bg-opacity-[20%] rounded-md`}>
             <div className="search-box p-4 flex-none">
                 <form>
                     <div className="relative">

@@ -1,4 +1,5 @@
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from "@headlessui/react";
+import { IoMdPulse } from "react-icons/io";
 
 export default function PostDialog({ open, setOpen, onAddPost, onAddPulse }) {
   return (
@@ -37,7 +38,7 @@ export default function PostDialog({ open, setOpen, onAddPost, onAddPulse }) {
                 onClick={onAddPulse}
                 className="flex items-center w-full md:w-1/2  justify-center rounded-md bg-white px-4 py-3 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 shadow-xs hover:bg-gray-100"
               >
-                <i className="fa-solid fa-film text-blue-600 text-lg mr-2"></i> Add a reel
+                <IoMdPulse className="text-blue-600 text-lg mr-2"/> Add a pulse
               </button>
             </div>
           </DialogPanel>

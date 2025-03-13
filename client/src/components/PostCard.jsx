@@ -4,15 +4,16 @@ import toast from "react-hot-toast";
 import { getUserById } from "../redux/Slices/auth.slice";
 import Avatar from "./Avatar";
 import { useEffect, useRef, useState } from "react";
-import { DeletePost, getAllPosts, likePost, updateSavedPost } from "../redux/Slices/post.slice";
+import { DeletePost, getAllPosts, getPostById, likePost, updateSavedPost } from "../redux/Slices/post.slice";
 import DisplayPost from "./DisplayPost";
 import { CreateComment, getCommentByPostId } from "../redux/Slices/comment.slice";
+import usePosts from "../hooks/usePosts";
 
 function PostCard(post) {
 
     const authState = useSelector((state) => state.auth.data);
     const currUser = useSelector((state) => state.auth);
-    const postState = useSelector ((state) => state.post);
+    const [postState] = usePosts ();
     const videoRefs = useRef([]);
     const timeoutRef = useRef({});
 
@@ -123,9 +124,11 @@ function PostCard(post) {
       }
       
       setLiked(!liked);
+      await dispatch (getPostById (_id));
     };    
 
-    async function getUser(userId) {
+    async function getUser (userId) {
+        if (!userId) return;
         const response = await dispatch(getUserById (userId));
         if(!response){
             toast.error("Something went Wrong!");
@@ -156,7 +159,7 @@ function PostCard(post) {
  
      
     const getComments = async() => {
-      const response = await dispatch(getCommentByPostId(_id));
+      await dispatch(getCommentByPostId(_id));
     }
 
     const Deletepost = async() => {
@@ -175,7 +178,7 @@ function PostCard(post) {
 
     useEffect (() => {
       setSaved (postState?.savedList?.find ((post) => post._id === _id));
-    }, [postState])
+    }, [postState?.savedList])
 
     useEffect (() => {
         getUser (userId);
@@ -190,27 +193,27 @@ function PostCard(post) {
 
 
   return (
-    <div className={`rounded-md mb-4 bg-[${_COLOR.darkest}] p-4 border border-[${_COLOR.medium}] relative`} >
+    <div className={`rounded-md mb-4 bg-black p-4 relative bg-opacity-[20%] box-shadow`} >
       <DisplayPost open={isDialogOpen} setOpen={setDialogOpen} post={post?.post}/>
     <div className="flex justify-between">
       <div className="flex gap-3">
-              <div>
+              <div className="flex items-center">
                 <Link href={'/profile'}>
                   <span className="cursor-pointer">
-                    <Avatar url={creator?.image || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} />
+                    <Avatar url={creator?.image || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} size={'md'}/>
                   </span>
                 </Link>
               </div>
               <div className="grow">
                 <div>
                   <Link to={`/profile/${creator?.username}`}>
-                    <span className={`mr-1 font-semibold cursor-pointer hover:underline text-white`}>
+                    <span className={`mr-1 text-sm font-semibold cursor-pointer hover:underline text-white`}>
                       {creator?.username}
                     </span>
                   </Link>
                 </div>
-                <p className={`text-[${_COLOR.more_light}] text-sm`}>
-                {date}
+                <p className={`text-[${_COLOR.more_light}] text-xs font-extralight`}>
+                  {date}
                 </p>
               </div>
             </div>
@@ -225,9 +228,9 @@ function PostCard(post) {
               </ul>
             </div>
       </div>
-      <div>
+      <div className="px-4">
       {(videoData?.length > 0 || imageData?.length > 0) && (
-        <div className="my-5 h-[28rem] carousel rounded-sm w-full bg-black" >
+        <div className="mt-5 h-[28rem] carousel rounded-[2rem] w-full bg-black" >
           {imageData?.map((photo, key) => (
             <div key={`image-${key}`} className="carousel-item flex justify-center bg-transparent w-full relative">
               <img src={photo.url} className="w-max" alt="Image not found" />
@@ -284,18 +287,18 @@ function PostCard(post) {
           </button>
         </div>
       </div>
-      <p className={`text-md mt-4 text-[${_COLOR.more_light}]`}>
+      <p className={`text-sm mt-2 ml-2 text-[${_COLOR.more_light}]`}>
         {tempCaption} {caption?.toString().length > 1000 && (
-        <span onClick={() => setCheck(!check)} className={`text-pink-400 font-extralight hover:cursor-pointer`}>
+        <span onClick={() => setCheck(!check)} className={`text-blue-300 font-extralight hover:cursor-pointer`}>
             {check ? ' Show Less' : '... Read More'}
         </span>)}
       </p>
-      <p>
+      {/* <p>
         {interests[0].length > 0 && hashtags?.map ((interest, index) => (
           <span key={index} className={`text-[${_COLOR.more_light}] font-extralight text-xs`}>#{interest} &nbsp;</span>
         ))}
-      </p>
-      <div className="flex mt-4 gap-3">
+      </p> */}
+      {/* <div className="flex mt-4 gap-3">
         <div>
           <Avatar url={photo} />
         </div>
@@ -313,7 +316,7 @@ function PostCard(post) {
             <i className={`text-white fa-solid fa-paper-plane text-[${_COLOR.lightest}]`}></i>
           </button>
         </div>
-      </div>
+      </div> */}
       <div> 
       </div>
     </div>

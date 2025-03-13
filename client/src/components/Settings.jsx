@@ -78,7 +78,7 @@ function Settings() {
   return (
     <div className="fixed top-[9rem] md:top-[1rem]  md:left-[20rem] left-[1rem] w-[75vw] h-[82vh] md:h-[97vh] flex flex-grow overflow-y-auto">
       {/* Sidebar Menu */}
-      <aside className="w-[20%] fixed h-full bg-transparent shadow-md p-6">
+      <aside className="w-[20%] fixed h-full bg-transparent p-6">
         <h2 className="text-[2rem] text-white heading font-semibold mb-4">Settings</h2>
         <ul>
           {menuItems.map((item) => (
@@ -94,7 +94,7 @@ function Settings() {
       </aside>
 
       {/* Settings Form */}
-      <main className="flex-1 p-6 bg-transparent shadow-md ml-[25%]">
+      <main className="flex-1 p-6 bg-transparent ml-[25%]">
         {selectedOption === "profile" && (
           <div className="max-w-4xl mx-auto p-8 bg-transparent shadow-xl rounded-lg">
             <h2 className={`text-3xl font-semibold text-[${_COLOR.lightest}] mb-8`}>Profile Settings</h2>

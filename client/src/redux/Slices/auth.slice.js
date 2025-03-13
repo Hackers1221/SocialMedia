@@ -8,6 +8,29 @@ const initialState = {
     isLoggedIn: localStorage.getItem("isLoggedIn") || false,
 };
 
+
+export const sendOtp = createAsyncThunk('/auth/sendotp',async(data) => {
+    try {
+        const response = await axiosInstance.post("auth/sendotp",data);
+        if(!response) toast.error('Something went wrong, try again');
+        localStorage.setItem("email", data.email);
+        return  response;
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+export const verifyOtp = createAsyncThunk('/auth/verifyotp',async(data) => {
+    try {
+        console.log(data);
+        const response = await axiosInstance.post("auth/verifyotp",data);
+        if(!response) toast.error('Something went wrong, try again');
+        return  response;
+    } catch (error) {
+        console.log(error);
+    }
+});
+
 export const login = createAsyncThunk('/auth/login', async (data) => {    
     try {
         const response = await axiosInstance.post("auth/signin", data);

@@ -84,6 +84,21 @@ export const getPostByUserId = createAsyncThunk('post/getpost' ,async(id) => {
     }
 })
 
+export const getPostById = createAsyncThunk('post/getpostnyId' ,async(id) => {
+    try {
+        const response = await axiosInstance.get(`post/${id}`, { 
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+        if(response){
+            return response;
+        }
+    } catch (error) {
+        toast.error(error.message || "Failed to get post");
+    }
+})
+
 export const getSavedPost = createAsyncThunk('post/getSavedPost' , async(id) => {
     try {
         const response = await axiosInstance.get(`post/save/${id}`, {
@@ -118,10 +133,7 @@ export const updateSavedPost = createAsyncThunk('post/updatesavedPost', async(da
 })
 
 export const DeletePost = createAsyncThunk('post/delete' , async(data) => {
-    try {
-        // console.log(id,JSON.stringify(userId));
-        console.log (data);
-        
+    try {        
         const response = axiosInstance.delete(`post/${data.postId}`, {
             headers: {
                 'x-access-token': localStorage.getItem('token')
@@ -171,6 +183,24 @@ const PostSlice = createSlice({
             })
             .addCase(updateSavedPost.fulfilled,(state,action) => {
                 console.log(action.payload);
+            })
+            .addCase (getPostById.fulfilled, (state, action) => {
+                if (!action.payload?.data) return;
+                const idx = state.downloadedPosts.findIndex(
+                    (post) => post._id === action.payload.data.postDetails._id
+                );
+            
+                if (idx !== -1) {
+                    state.downloadedPosts[idx] = action.payload.data.postDetails;
+                }
+
+                const index = state.postList.findIndex(
+                    (post) => post._id === action.payload.data.postDetails._id
+                );
+            
+                if (index !== -1) {
+                    state.postList[index] = action.payload.data.postDetails;
+                }
             })
     }
 });

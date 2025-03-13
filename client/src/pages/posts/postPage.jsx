@@ -8,7 +8,6 @@ import { getAllPosts, getSavedPost } from "../../redux/Slices/post.slice";
 import Avatar from "../../components/Avatar";
 import toast from "react-hot-toast";
 import SkeletonPostCard from "../../components/SkeletonPostCard";
-import usePosts from "../../hooks/usePosts";
 
 function PostPage() {
     const authState = useSelector ((state) => state.auth);
@@ -32,7 +31,7 @@ function PostPage() {
     async function getPosts () {
         setIsLoading(true);
         try {
-            await dispatch (getAllPosts());
+            await dispatch (getAllPosts ());
         } catch {
             toast.error ("Something went wrong");
         } finally {
@@ -43,7 +42,7 @@ function PostPage() {
     useEffect (() => {
         getPosts ();
         getSavedPosts ();
-    },[])
+    }, [])
 
     return (
         <>
@@ -52,7 +51,7 @@ function PostPage() {
                 <h2 className={`text-[${_COLOR.lightest}] heading text-[2rem]`}>Activity Feed</h2>
                 
                 {/* Input Box */}
-                <div className={`w-full mb-4 bg-[${_COLOR.less_light}] rounded-md p-4`}>
+                <div className={`w-full mb-4 bg-black bg-opacity-[20%] rounded-md p-4`}>
                     <div className={`flex gap-2 items-center border-b py-2 border-[${_COLOR.more_light}]`}>
                         <Avatar url={image}/>
                         <input className={`w-full bg-transparent px-2 focus:outline-none text-[${_COLOR.lightest}]`} placeholder="What's your mood"/>

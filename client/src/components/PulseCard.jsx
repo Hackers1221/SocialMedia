@@ -69,10 +69,10 @@ export default function PulseCard({ pulse }) {
 
   return (
     <div
-      className="reel-container w-80 h-[65vh] md:w-96 md:h-[78vh] overflow-hidden rounded-xl shadow-lg relative"
+      className="reel-container w-80 h-[65vh] md:w-96 md:h-[78vh] overflow-hidden rounded-xl shadow-lg flex justify-center relative bg-black"
       onClick={togglePlay}
     >
-      <video ref={videoRef} className="w-full h-full bg-black" src={pulse.video} loop></video>
+      <video ref={videoRef} className="w-max bg-black" src={pulse.video} loop></video>
 
       {/* Play/Pause Button */}
       {showButton && (
