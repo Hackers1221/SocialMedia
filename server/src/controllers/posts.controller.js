@@ -3,7 +3,6 @@ const postsService = require('../services/posts.service');
 
 const createPost = async(req, res) => {
     const { caption, interests, userId } = req.body;
-    console.log(req.files);
 
     // Extract file URLs from Cloudinary response
     const images = req.files.image 

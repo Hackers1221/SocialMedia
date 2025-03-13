@@ -3,9 +3,9 @@ const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt')
 
 const userSchema = new Schema({
-    image:{
-        type: String,
-        default: ""
+    image: {
+        url: { type: String },
+        filename: { type: String }
     },
     name: {
         type: String,

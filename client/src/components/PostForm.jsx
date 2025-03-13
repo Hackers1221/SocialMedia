@@ -24,8 +24,7 @@ export default function PostForm({ open, setOpen }) {
   
     formData.append("caption", caption);
     formData.append("interests", interests);
-    formData.append("userId", authState._id);
-  
+    formData.append("userId", authState._id);  
     const response = await dispatch(createPost(formData));
     
     if (!response) {

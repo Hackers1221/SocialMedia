@@ -58,7 +58,7 @@ export const getUserByUsername = createAsyncThunk('/auth/user', async (username)
 
 export const followUser = createAsyncThunk('/auth/follow' , async(data) => {
     try {
-        const resp= {
+        const resp = {
             id : data.id
         }
         const response = await axiosInstance.patch(`auth/follow/${data.id1}` , resp , {
@@ -66,7 +66,7 @@ export const followUser = createAsyncThunk('/auth/follow' , async(data) => {
                 'x-access-token': localStorage.getItem('token')
             }
         })
-        if(!response)toast.error('Something went wrong, try again');
+        if(!response) toast.error('Something went wrong, try again');
         return response;
     } catch (error) {
         console.log(error);
@@ -75,16 +75,16 @@ export const followUser = createAsyncThunk('/auth/follow' , async(data) => {
 
 export const updateUser = createAsyncThunk('/user/update' , async(data) => {
     try {
-        console.log(data);
-        const response = await axiosInstance.patch(`auth/${data.id}`,data.newData,{
+        const response = await axiosInstance.patch("auth", data, {
             headers: {
                 'x-access-token': localStorage.getItem('token')
             }
         })
-        if(!response)toast.error('Something went wrong, try again');
+        if(!response) toast.error('Something went wrong, try again');
         return response;
     } catch (error) {
-        console.log(error);
+        console.log(error.response);
+        toast.error(error.response.data.msg);
     }
 })
 
@@ -104,7 +104,6 @@ const authSlice = createSlice({
         builder
         .addCase(login.fulfilled, (state, action) => {
             if(!action.payload) return;
-            // console.log (action.payload);
             state.isLoggedIn = (action.payload.data?.token != undefined);
             state.data = action.payload.data?.userdata;
             state.token = action.payload.data?.token;
@@ -119,9 +118,10 @@ const authSlice = createSlice({
             localStorage.setItem("data", JSON.stringify(action.payload.data?.userDetails));
         })
         .addCase(updateUser.fulfilled, (state,action) => {
-            console.log(action.payload);
-            state.data = action.payload.data?.userDetails;
-            localStorage.setItem("data", JSON.stringify(action.payload.data?.userDetails));
+            if(action.payload){
+                state.data = action.payload?.data?.userDetails;
+                localStorage.setItem("data", JSON.stringify(action.payload?.data?.userDetails));
+            }
         })
     }
 });

@@ -65,7 +65,6 @@ const getuserByid = async(id) => {
 const followUser = async(userId , followingId) => {
     const response = {};
     try {
-        console.log(userId,followingId);
         const userData = await usermodel.findById(userId);
         if(!userData){
             response.error = error.message;
@@ -106,7 +105,6 @@ const followUser = async(userId , followingId) => {
 
 const getUserByUserName = async(name) => {
     const response = {};
-    console.log("heeeee" ,typeof(name));
     try {
         const userData = await usermodel.findOne({username : name});
         if(!userData){
@@ -121,10 +119,10 @@ const getUserByUserName = async(name) => {
         return response;
     }
 }
-const updateUser = async(id,newData) => {
+const updateUser = async(newData) => {
     const response = {};
     try {
-        const userData = await usermodel.findById(id);
+        const userData = await usermodel.findById(newData.id);
         if (!userData) {
             response.error = "User not found";
             return response;
@@ -136,10 +134,16 @@ const updateUser = async(id,newData) => {
                 return response;
             }
             newData.password = await bcrypt.hash(newData.password, 11);
-            console.log(newData.password);
         }
+        else {
+            newData.password = userData.password;
+        }
+
+        const val = newData.id;
+        delete newData.id;
+        delete newData.curpassword;
         const updateuser = await usermodel.findByIdAndUpdate(
-            id , 
+            val , 
             newData,
             {new : true}
         )

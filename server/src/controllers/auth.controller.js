@@ -49,7 +49,7 @@ const getuserByid = async(req,res) => {
 }
 
 const updateUser = async(req,res) => {
-    const response = await userService.updateUser(req.params.id,req.body);
+    const response = await userService.updateUser(req.body);
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
             msg : "Unable to update the user",

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { use, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../redux/Slices/auth.slice";
 import toast from "react-hot-toast";
@@ -10,51 +10,70 @@ const menuItems = [
   { name: "Notifications", key: "notifications" },
 ];
 
-function Settings () {
+function Settings() {
 
-  const authState = useSelector ((state) => state.auth);
-  const [confirmPassword,setconfirmPassword] = useState("");
+  const defalutImage = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
+  const authState = useSelector((state) => state.auth);
+  const [confirmPassword, setconfirmPassword] = useState("");
   const dispatch = useDispatch();
 
   const [selectedOption, setSelectedOption] = useState("profile");
-  const [userDetails, setUserDetails] = useState ({
-    image: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
-    name: authState?.data?.name,
-    username: authState?.data?.username,
-    email: authState?.data?.email,
-    curpassword : "",
+  const [imageUrl, setImageUrl] = useState("");
+  const [userDetails, setUserDetails] = useState({
+    image: authState?.data?.image?.url || "",
+    name: authState?.data?.name || "",
+    username: authState?.data?.username || "",
+    email: authState?.data?.email || "",
+    curpassword: "",
     password: "",
-    about: authState?.data?.about
-  })
+    about: authState?.data?.about || ""
+  });
+  const [image, setImage] = useState(null);
 
-  function handleChange (e) {
-    const {name, value} = e.target;
-    if(name=="confirmPassword"){
+  function handleChange(e) {
+    const { name, value } = e.target;
+    if (name == "confirmPassword") {
       setconfirmPassword(value);
-    }else{
+    } else {
       setUserDetails({
         ...userDetails,
-        [name] : value
+        [name]: value
       })
     }
-}
-
-const updateuser = async() => {
-  const response = await dispatch(updateUser({
-    id : authState?.data._id,
-    newData : userDetails
-  }))
-  if(response.payload){
-    toast.success("Successfully updated your information");
-    setUserDetails({
-      password : "",
-      curpassword : "",
-    })
-    setconfirmPassword("");
-  }else{
-    toast.error("Something went wrong");
   }
-}
+  const handleImageChange = (event) => {
+    const uploadedFile = event.target.files[0];
+    setImageUrl(URL.createObjectURL(uploadedFile));
+    setImage(uploadedFile);
+  };
+
+  const updateuser = async () => {
+    const formData = new FormData();
+    formData.append("id", authState.data?._id);
+    formData.append("name", userDetails.name);
+    formData.append("username", userDetails.username);
+    formData.append("email", userDetails.email);
+    formData.append("curpassword", userDetails.curpassword);
+    formData.append("password", userDetails.password);
+    formData.append("about", userDetails.about);
+
+    if (image) {
+      formData.append("image", image); // Append only if an image is selected
+    }
+    
+    const response = await dispatch(updateUser(formData));
+    if (response.payload) {
+      toast.success("Successfully updated your information");
+      setUserDetails({
+        ...userDetails,
+        password: "",
+        curpassword: "",
+      })
+      setconfirmPassword("");
+    } else {
+      toast.error("Something went wrong");
+    }
+  }
 
   return (
     <div className="fixed top-[9rem] md:top-[1rem]  md:left-[20rem] left-[1rem] w-[75vw] h-[82vh] md:h-[97vh] flex flex-grow overflow-y-auto">
@@ -79,7 +98,7 @@ const updateuser = async() => {
         {selectedOption === "profile" && (
           <div className="max-w-4xl mx-auto p-8 bg-transparent shadow-xl rounded-lg">
             <h2 className={`text-3xl font-semibold text-[${_COLOR.lightest}] mb-8`}>Profile Settings</h2>
-      
+
             {/* Profile Information */}
             <div className="bg-transparent p-6 rounded-lg shadow-sm mb-6">
               <h3 className={`text-lg font-medium text-[${_COLOR.lightest}] mb-2`}>Profile Information</h3>
@@ -88,19 +107,23 @@ const updateuser = async() => {
               </p>
               <div className="flex items-center gap-6">
                 <img
-                  src={userDetails?.image}
+                  src={imageUrl || userDetails?.image || defalutImage}
                   alt="Profile"
                   className="w-20 h-20 rounded-full border"
                 />
                 <div>
-                  <button className={`px-4 py-2 border border-[${_COLOR.less_light}] rounded-md text-sm text-white font-medium hover:bg-[${_COLOR.medium}]`}>
-                    Change Photo
-                  </button>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className={`px-4 py-2 border-[${_COLOR.less_light}] rounded-md text-sm text-white font-medium hover:bg-[${_COLOR.medium}]`}
+                    onChange={handleImageChange}
+                    encType= "multipart/form-data" 
+                  />
                   <p className="text-xs text-gray-500 mt-1">JPG, PNG, or GIF (Max 2MB)</p>
                 </div>
               </div>
             </div>
-      
+
             {/* Account Details */}
             <div className={`bg-transparent border border-[${_COLOR.less_light}] p-6 rounded-lg shadow-sm mb-6`}>
               <h3 className={`text-lg font-medium text-white mb-2`}>Personal Details</h3>
@@ -108,7 +131,7 @@ const updateuser = async() => {
                 Your account information is private and will not be shared.
               </p>
               <div className="flex flex-col gap-4">
-              <div>
+                <div>
                   <label className={`text-sm font-medium text-[${_COLOR.more_light}]`}>Username</label>
                   <input
                     type="text"
@@ -131,7 +154,7 @@ const updateuser = async() => {
                     onChange={handleChange}
                   />
                 </div>
-                
+
                 <div>
                   <label className={`text-sm font-medium text-[${_COLOR.more_light}]`}>About</label>
                   <textarea
@@ -147,17 +170,17 @@ const updateuser = async() => {
             </div>
 
             <div className="flex justify-end">
-                <button className={`px-6 py-3 bg-transparent border border-[${_COLOR.less_light}] text-white rounded-lg hover:bg-[${_COLOR.medium}] transition-all`} onClick={updateuser}>
-                  Save Changes
-                </button>
-              </div>
+              <button className={`px-6 py-3 bg-transparent border border-[${_COLOR.less_light}] text-white rounded-lg hover:bg-[${_COLOR.medium}] transition-all`} onClick={updateuser}>
+                Save Changes
+              </button>
+            </div>
           </div>
         )}
 
         {selectedOption === "account" && (
           <div className="max-w-4xl mx-auto p-8 bg-transparent shadow-xl rounded-lg">
             <h2 className={`text-3xl font-semibold text-[${_COLOR.lightest}] mb-8`}>Account Settings</h2>
-      
+
             {/* Account Details */}
             <div className={`bg-transparent border border-[${_COLOR.less_light}] p-6 rounded-lg shadow-sm mb-6`}>
               <h3 className={`text-lg font-medium text-white mb-2`}>Account Details</h3>
@@ -176,7 +199,7 @@ const updateuser = async() => {
                 />
               </div>
             </div>
-      
+
             {/* Security Settings */}
             <div className={`bg-transparent border border-[${_COLOR.less_light}] p-6 rounded-lg shadow-sm mb-6`}>
               <h3 className={`text-lg font-medium text-white mb-2`}>Security Settings</h3>
@@ -188,8 +211,8 @@ const updateuser = async() => {
                 type="password"
                 className="w-full p-3 border rounded-lg mt-1 focus:outline-none text-white mb-4"
                 placeholder="********"
-                name = "curpassword"
-                value = {userDetails.curpassword}
+                name="curpassword"
+                value={userDetails.curpassword}
                 onChange={handleChange}
               />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -199,8 +222,8 @@ const updateuser = async() => {
                     type="password"
                     className="w-full p-3 border rounded-lg mt-1 focus:outline-none text-white"
                     placeholder="********"
-                    name = "password"
-                    value = {userDetails.password}
+                    name="password"
+                    value={userDetails.password}
                     onChange={handleChange}
                   />
                   <p className={`text-xs text-[${_COLOR.medium}] mt-1`}>
@@ -213,8 +236,8 @@ const updateuser = async() => {
                     type="password"
                     className="w-full p-3 border rounded-lg mt-1 focus:outline-none text-white"
                     placeholder="********"
-                    name = "confirmPassword"
-                    value = {confirmPassword}
+                    name="confirmPassword"
+                    value={confirmPassword}
                     onChange={handleChange}
                   />
                 </div>
@@ -226,13 +249,13 @@ const updateuser = async() => {
                 Save Changes
               </button>
             </div>
-      
+
             {/* Account Actions */}
             <div className={`bg-transparent border border-red-500 p-6 rounded-lg shadow-sm`}>
               <h3 className={`text-lg font-medium text-[${_COLOR.lightest}] mb-2`}>Delete Account</h3>
               <p className={`text-sm text-[${_COLOR.lightest}] mb-4`}>
-              Deleting your account is irreversible. All your data will be permanently removed.
-              If you are part of any company, you must leave or transfer ownership before deletion.
+                Deleting your account is irreversible. All your data will be permanently removed.
+                If you are part of any company, you must leave or transfer ownership before deletion.
               </p>
               <div className="flex justify-between items-center">
                 <button className="px-6 py-3 font-bold bg-transparent border border-red-700 text-red-700 hover:text-white rounded-lg hover:bg-red-700 transition-all">
