@@ -35,8 +35,8 @@ function Sidebar() {
         navigate ("/login"); return;
     }
 
-    useEffect(() => {
-        if (!authState?.isLoggedIn) {
+    useEffect (() => {
+        if (!authState?.isLoggedIn || !authState?.data?.email) {
             navigate ("/login"); return;
         }
         const handleResize = () => setScreenWidth(window.innerWidth);

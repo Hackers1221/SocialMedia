@@ -127,7 +127,8 @@ function PostCard(post) {
       await dispatch (getPostById (_id));
     };    
 
-    async function getUser(userId) {
+    async function getUser (userId) {
+        if (!userId) return;
         const response = await dispatch(getUserById (userId));
         if(!response){
             toast.error("Something went Wrong!");
@@ -158,7 +159,7 @@ function PostCard(post) {
  
      
     const getComments = async() => {
-      const response = await dispatch(getCommentByPostId(_id));
+      await dispatch(getCommentByPostId(_id));
     }
 
     const Deletepost = async() => {

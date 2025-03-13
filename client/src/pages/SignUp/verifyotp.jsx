@@ -100,7 +100,18 @@ function VerifyOtp() {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen w-full px-5 sm:px-0">
+    <div className="flex flex-col gap-4 items-center justify-center h-screen w-full px-5 sm:px-0">
+      <div className="flex justify-between steps gap-2 max-w-md">
+        <div className={`step step-accent step-neutral`}>
+          <p className={`text-accent text-xs`}>Email Entry</p>
+        </div>
+        <div className="step step-accent step-neutral">
+          <p className={`text-accent text-xs`}>Otp Verification</p>
+        </div>
+        <div className="step step-neutral">
+          <p className={`text-accent text-xs`}>Personal Details</p>
+        </div>
+      </div>
       <div className="flex rounded-lg shadow-lg border overflow-hidden max-w-md w-full p-8" style={{ backgroundColor: _COLOR.lightest }}>
         <div className="w-full text-center">
           <p className="text-xl text-gray-600">Enter OTP</p>

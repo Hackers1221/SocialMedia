@@ -31,9 +31,20 @@ function SendOtp() {
 
   return (
     <div
-      className="flex items-center justify-center h-screen w-full px-5 sm:px-0"
+      className="flex flex-col gap-4 items-center justify-center h-screen w-full px-5 sm:px-0"
       style={{ backgroundColor: _COLOR.light }}
     >
+      <div className="flex justify-between steps gap-2 max-w-md">
+        <div className={`step step-accent step-neutral`}>
+          <p className={`text-accent text-xs`}>Email Entry</p>
+        </div>
+        <div className="step step-neutral">
+          <p className={`text-accent text-xs`}>Otp Verification</p>
+        </div>
+        <div className="step step-neutral">
+          <p className={`text-accent text-xs`}>Personal Details</p>
+        </div>
+      </div>
       <div
         className="flex flex-col rounded-lg shadow-lg border py-5 overflow-hidden max-w-md w-full"
         style={{ backgroundColor: _COLOR.lightest }}
@@ -76,7 +87,7 @@ function SendOtp() {
         </div>
         <div className="flex items-center w-full text-center">
                 <div
-                className="text-xs text-gray-500 capitalize text-center w-full"
+                className="text-xs text-gray-500 text-center w-full"
                 >
                 Already have an account?
                 <Link to={'/login'} style={{

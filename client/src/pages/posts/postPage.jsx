@@ -8,15 +8,12 @@ import { getAllPosts, getSavedPost } from "../../redux/Slices/post.slice";
 import Avatar from "../../components/Avatar";
 import toast from "react-hot-toast";
 import SkeletonPostCard from "../../components/SkeletonPostCard";
-import usePosts from "../../hooks/usePosts";
 
 function PostPage() {
     const authState = useSelector ((state) => state.auth);
     const postState = useSelector ((state) => state.post);
     const dispatch = useDispatch ();
     const [isLoading, setIsLoading] = useState (false);
-
-    console.log (authState?.data?.image)
 
     const image = authState?.data?.image || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"
 

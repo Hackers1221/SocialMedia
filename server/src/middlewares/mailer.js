@@ -3,6 +3,7 @@ require("dotenv").config();
 
 const EMAIL = process.env.EMAIL;
 const PASS = process.env.PASS;
+const url = "https://res.cloudinary.com/dxyeuw5s7/image/upload/v1741879576/socialMedia/images/1741879571244-Logo.png.png"
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -17,7 +18,7 @@ const transporter = nodemailer.createTransport({
 const sendOtp = async (email, otp) => {
   try {
     const mailOptions = {
-      from: `"Social Media App" <${EMAIL}>`, // Sender email
+      from: `"DropChat" <${EMAIL}>`, // Sender email
       to: email, // Receiver email
       subject: "Your OTP Code for Verification",
       text: `Your OTP is: ${otp}`, // Fallback for email clients that don't support HTML
@@ -45,13 +46,16 @@ const sendOtp = async (email, otp) => {
 const sendWelcomeEmail = async (email) => {
   try {
     const mailOptions = {
-      from: `"Social Media App" <${EMAIL}>`,
+      from: `"DropChat" <${EMAIL}>`,
       to: email,
-      subject: "Welcome to Social Media App!",
-      text: "Welcome to Social Media App! We're excited to have you on board. Start exploring and connecting with friends today!",
-      html:`
+      subject: "Welcome to DropChat!",
+      text: "Welcome to DropChat! We're excited to have you on board. Start exploring and connecting with friends today!",
+      html: `
       <div style="font-family: Arial, sans-serif; max-width: 500px; margin: auto; border: 1px solid #ddd; padding: 20px; border-radius: 10px; box-shadow: 2px 2px 10px rgba(0,0,0,0.1);">
-        <h2 style="text-align: center; color: #333;">Welcome to Social Media App!</h2>
+        <div style="display: flex; width: full align-items: center; justify-content: center; gap: 10px;">
+          <img src="${url}" alt="Welcome Image" style="width: 40px; height: 40px; border-radius: 50%;">
+          <h2 style="color: #333; margin: 0;">Welcome to DropChat!</h2>
+        </div>
         <p style="font-size: 16px; text-align: center; color: #555;">We're excited to have you on board.</p>
         <p style="text-align: center; font-size: 14px; color: #777;">Start exploring, connecting, and enjoying your new social experience.</p>
       </div>
