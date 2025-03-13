@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { sendOtp } from "../../redux/Slices/auth.slice";
 import toast from "react-hot-toast";
 
@@ -33,10 +33,10 @@ function SendOtp() {
       style={{ backgroundColor: _COLOR.light }}
     >
       <div
-        className="flex rounded-lg shadow-lg border overflow-hidden max-w-md w-full"
+        className="flex flex-col rounded-lg shadow-lg border py-5 overflow-hidden max-w-md w-full"
         style={{ backgroundColor: _COLOR.lightest }}
       >
-        <div className="w-full p-8">
+        <div className="w-full px-8 py-4">
           <p className="text-xl text-gray-600 text-center">Enter Your Email</p>
           <div className="mt-4">
             <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -72,6 +72,16 @@ function SendOtp() {
             </button>
           </div>
         </div>
+        <div className="flex items-center w-full text-center">
+                <div
+                className="text-xs text-gray-500 capitalize text-center w-full"
+                >
+                Already have an account?
+                <Link to={'/login'} style={{
+                    color: _COLOR.dark,
+                  }} id="submitButton"> Sign In</Link>
+                </div>
+            </div>
       </div>
     </div>
   );

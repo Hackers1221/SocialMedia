@@ -12,7 +12,6 @@ const initialState = {
 export const sendOtp = createAsyncThunk('/auth/sendotp',async(data) => {
     try {
         const response = await axiosInstance.post("auth/sendotp",data);
-        console.log(data);
         if(!response) toast.error('Something went wrong, try again');
         localStorage.setItem("email", data.email);
         return  response;

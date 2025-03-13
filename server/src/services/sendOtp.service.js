@@ -13,7 +13,6 @@ const sendotp = async(email) => {
         const userdata = await usermodel.findOne({
             email
         })
-        console.log(userdata);
         if(userdata){
             response.error = "Email already in Use";
             return response;

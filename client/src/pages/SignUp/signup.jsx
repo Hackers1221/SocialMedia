@@ -5,7 +5,7 @@ import { LuEyeClosed } from "react-icons/lu";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import { signup } from "../../redux/Slices/auth.slice";
+import { login, signup } from "../../redux/Slices/auth.slice";
 
 function SignUp () {
 
@@ -68,11 +68,14 @@ function SignUp () {
 
             const res = await dispatch (signup (userDetails));
 
-            if (res.payload) navigate('/login');
+            if (res.payload) {
+                const signin = await dispatch (login (userDetails));
+                if (signin.payload) navigate ('/');
+            }
             else resetDetails();
 
         } catch (error) {
-            toast.error(error);
+            toast.error(error.message);
         }
     }
 

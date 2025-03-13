@@ -16,6 +16,8 @@ function PostPage() {
     const dispatch = useDispatch ();
     const [isLoading, setIsLoading] = useState (false);
 
+    console.log (authState?.data?.image)
+
     const image = authState?.data?.image || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"
 
     async function getSavedPosts () {
@@ -52,7 +54,7 @@ function PostPage() {
                 <h2 className={`text-[${_COLOR.lightest}] heading text-[2rem]`}>Activity Feed</h2>
                 
                 {/* Input Box */}
-                <div className={`w-full mb-4 bg-[${_COLOR.less_light}] rounded-md p-4`}>
+                <div className={`w-full mb-4 bg-black bg-opacity-[20%] rounded-md p-4`}>
                     <div className={`flex gap-2 items-center border-b py-2 border-[${_COLOR.more_light}]`}>
                         <Avatar url={image}/>
                         <input className={`w-full bg-transparent px-2 focus:outline-none text-[${_COLOR.lightest}]`} placeholder="What's your mood"/>

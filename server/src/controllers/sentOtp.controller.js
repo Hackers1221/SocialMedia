@@ -2,7 +2,6 @@ const otpService = require('../services/sendOtp.service')
 const {StatusCodes} = require('http-status-codes')
 
 const sendOtp = async(req,res) => {
-    console.log(req.body.email);
     const response = await otpService.sendotp(req.body.email);
     if(response.error){
             return res.status(StatusCodes.BAD_REQUEST).send({

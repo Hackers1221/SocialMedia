@@ -135,7 +135,6 @@ const getAllSavedPost = async(req,res) => {
 }
 
 const DeletePost = async(req,res) => {
-    console.log(req.body);
     const response = await postsService.DeletePost(req.params.id,req.body.id);
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
