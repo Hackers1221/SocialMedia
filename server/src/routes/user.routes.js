@@ -1,10 +1,13 @@
 const express = require('express');
-const authcontroller = require('../controllers/auth.controller')
+const authcontroller = require('../controllers/auth.controller');
+const otpcontroller = require('../controllers/sentOtp.controller')
 const {checkUser} = require('../middlewares/middlewares')
-const validators = require('../validators/authenticate.user')
+const validators = require('../validators/authenticate.user');
 
 const userroutes = express.Router();
 
+userroutes.post('/sendotp',otpcontroller.sendOtp);
+userroutes.post('/verifyotp',otpcontroller.verifyotp);
 userroutes.post('/signup',checkUser,authcontroller.signup);
 userroutes.post('/signin',authcontroller.signin);
 userroutes.get('/users/:id',validators.isUserAuthenticated,authcontroller.getuserByid);
