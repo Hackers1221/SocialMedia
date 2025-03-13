@@ -20,7 +20,7 @@ const createPost = async(req, res) => {
         interests,
         image: images,
         video: videos,
-    } 
+    }
 
     const response = await postsService.CreatePost(newPost);
     if(response.error){
