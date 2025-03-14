@@ -18,33 +18,12 @@ function Stories () {
 
     const stories = [
         {
-          type: "image",
-          url: "https://i.pinimg.com/236x/dd/5d/b3/dd5db3bf11d43bdde82825bae73db691.jpg",
-          profile: "https://source.unsplash.com/40x40/?face",
-          username: "John Doe",
-          time: "5",
-        },
-        {
           type: "video",
-          url: "https://res.cloudinary.com/dxyeuw5s7/video/upload/v1740488060/socialMedia/videos/1740488057017-videoplayback%20%284%29.mp4.mp4",
+          url: "https://res.cloudinary.com/dxyeuw5s7/video/upload/v1741935861/socialMedia/videos/1741935855427-videoplayback%20%287%29.mp4.mp4",
           profile: "https://source.unsplash.com/40x40/?portrait",
           username: "Alice",
           time: "10",
-        },
-        {
-          type: "image",
-          url: "https://i.pinimg.com/236x/dd/5d/b3/dd5db3bf11d43bdde82825bae73db691.jpg",
-          profile: "https://source.unsplash.com/40x40/?avatar",
-          username: "Emma",
-          time: "2",
-        },
-        {
-          type: "image",
-          url: "https://i.pinimg.com/236x/dd/5d/b3/dd5db3bf11d43bdde82825bae73db691.jpg",
-          profile: "https://source.unsplash.com/40x40/?avatar",
-          username: "Emma",
-          time: "2",
-        },
+        }
       ];
 
     const [thumbnails, setThumbnails] = useState({});

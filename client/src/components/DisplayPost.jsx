@@ -238,7 +238,7 @@ const DisplayPost = ({ open, setOpen, post }) => {
           <div className="flex-1 overflow-y-auto space-y-3 pt-2">
             {commentState.comments.map((comment, idx) => (
               <div key={idx}>
-                <Comment avatar={comment.user.image} username={comment.user.username} text={comment.description} time={"10 h"} />
+                <Comment avatar={comment.user.image?.url} username={comment.user.username} text={comment.description} time={"10 h"} />
               </div>
             ))}
           </div>

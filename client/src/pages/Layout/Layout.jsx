@@ -11,7 +11,7 @@ function Layout () {
     
     // Hide Navbar and Sidebar on these pages
     const location = useLocation();
-    const hideSidebar = ["/login", "/signup","/verifyotp","/register","/forgetpass","/resetpass"].includes(location.pathname);
+    const hideSidebar = ["/login", "/signup","/verifyotp","/register","/forgetpass","/resetpass", "/sign"].includes(location.pathname);
     const hideOthers = ["/messenger", "/settings"].includes(location.pathname);
     
     // Handle screen resizing
