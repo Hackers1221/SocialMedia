@@ -87,12 +87,12 @@ function SendOtp() {
         </div>
         <div className="flex items-center w-full text-center">
                 <div
-                className="text-xs text-gray-500 text-center w-full"
+                className="text-xs text-gray-500 text-center w-full "
                 >
                 Already have an account?
                 <Link to={'/login'} style={{
                     color: _COLOR.dark,
-                  }} id="submitButton"> Sign In</Link>
+                  }} id="submitButton" className="hover:underline"> Sign In</Link>
                 </div>
             </div>
       </div>

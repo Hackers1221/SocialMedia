@@ -115,11 +115,11 @@ function Settings() {
                   <input
                     type="file"
                     accept="image/*"
-                    className={`px-4 py-2 border-[${_COLOR.less_light}] rounded-md text-sm text-white font-medium hover:bg-[${_COLOR.medium}]`}
+                    className={`px-4 py-2 border-[${_COLOR.less_light}] rounded-md text-sm text-white font-medium`}
                     onChange={handleImageChange}
                     encType= "multipart/form-data" 
                   />
-                  <p className="text-xs text-gray-500 mt-1">JPG, PNG, or GIF (Max 2MB)</p>
+                  <p className="text-xs text-gray-500 mt-1">JPG, PNG (Max 2MB)</p>
                 </div>
               </div>
             </div>
@@ -180,25 +180,6 @@ function Settings() {
         {selectedOption === "account" && (
           <div className="max-w-4xl mx-auto p-8 bg-transparent shadow-xl rounded-lg">
             <h2 className={`text-3xl font-semibold text-[${_COLOR.lightest}] mb-8`}>Account Settings</h2>
-
-            {/* Account Details */}
-            <div className={`bg-transparent border border-[${_COLOR.less_light}] p-6 rounded-lg shadow-sm mb-6`}>
-              <h3 className={`text-lg font-medium text-white mb-2`}>Account Details</h3>
-              <p className={`text-sm text-[${_COLOR.more_light}] mb-4`}>
-                Your account information is private and will not be shared.
-              </p>
-              <div>
-                <label className={`text-sm font-medium text-[${_COLOR.more_light}]`}>Email Address</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={userDetails?.email}
-                  className="w-full p-3 border rounded-lg mt-1 text-white focus:outline-none"
-                  placeholder="john@example.com"
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
 
             {/* Security Settings */}
             <div className={`bg-transparent border border-[${_COLOR.less_light}] p-6 rounded-lg shadow-sm mb-6`}>
