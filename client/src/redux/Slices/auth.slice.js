@@ -63,7 +63,7 @@ export const forgetPass = createAsyncThunk('auth/forget',async(data) => {
 
 export const resetPass = createAsyncThunk('auth/reset',async(data) => {
     try {
-        const response = await axiosInstance.post('auth/resetpass',data);
+        const response = await axiosInstance.post(`auth/resetpass/${data.token}`,data);
         if(!response) toast.error('Something went wrong, try again');
         return  response;
     } catch (error) {
@@ -131,6 +131,24 @@ export const updateUser = createAsyncThunk('/user/update' , async(data) => {
     }
 })
 
+export const deleteUser = createAsyncThunk('/user/delete', async (userId) => {
+    try {
+        const response = await axiosInstance.delete(`auth/${userId}`, {
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        });
+        if (!response) toast.error('Something went wrong, try again');
+        else toast.success(response.data.msg);
+        console.log(response);
+        
+        return response;
+    } catch (error) {
+        console.log(error.response);
+        toast.error(error.response?.data?.msg || 'An error occurred');
+    }
+});
+
 
 const authSlice = createSlice({
     name: 'auth',
@@ -161,10 +179,16 @@ const authSlice = createSlice({
             localStorage.setItem("data", JSON.stringify(action.payload.data?.userDetails));
         })
         .addCase(updateUser.fulfilled, (state,action) => {
-            if(action.payload){
-                state.data = action.payload?.data?.userDetails;
-                localStorage.setItem("data", JSON.stringify(action.payload?.data?.userDetails));
-            }
+            if(!action.payload) return;
+            state.data = action.payload?.data?.userDetails;
+            localStorage.setItem("data", JSON.stringify(action.payload?.data?.userDetails));
+        })
+        .addCase(deleteUser.fulfilled, (state,action) => {
+            if(!action.payload) return;
+            localStorage.clear();
+            state.data = "";
+            state.isLoggedIn = false;
+            state.token = "";
         })
     }
 });

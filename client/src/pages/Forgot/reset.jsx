@@ -1,7 +1,7 @@
 
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { resetPass } from "../../redux/Slices/auth.slice";
@@ -12,6 +12,7 @@ function ResetPassword() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
+    const [searchParams] = useSearchParams();
 
     function handleChange(e) {
         const { name, value } = e.target;
@@ -31,12 +32,17 @@ function ResetPassword() {
             setLoading(true);
             const response = await dispatch(resetPass({
                 email : localStorage.getItem("email"),
-                password : password
+                password : password,
+                token : searchParams.get("token")
             }))
             if(response.payload){
                 toast.success("Password reset successful!");
-                 navigate("/login");
+                setConfirmPassword("");
+                setPassword("");
+                navigate("/login");
             }else{
+                setConfirmPassword("");
+                setPassword("");
                 toast.error("Unable to reset the password , Pls try again");
             }
         } catch (error) {

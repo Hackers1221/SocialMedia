@@ -1,5 +1,9 @@
 
 const usermodel = require('../models/user.model')
+const Pulse = require("../models/pulse.model");
+const Post = require("../models/posts.model");
+const Comment = require("../models/comment.model")
+const Otp = require("../models/otp.model");
 const bcrypt = require('bcrypt');
 const mailer = require('../middlewares/mailer')
 
@@ -113,7 +117,6 @@ const getUserByUserName = async(name) => {
             response.error = "User not found";
             return response;
         }
-        console.log(userData);
         response.user = userData;
         return response;
     } catch (error) {
@@ -140,7 +143,7 @@ const updateUser = async(newData) => {
         else {
             newData.password = userData.password;
         }
-
+        
         const val = newData.id;
         delete newData.id;
         delete newData.curpassword;
@@ -156,12 +159,63 @@ const updateUser = async(newData) => {
         return response
     }
 }
+const deleteUser = async(id) => {
+    const response = {};
+    try {
+        const userData = await usermodel.findById(id);
+        if(!userData){
+            response.error = "User not found";
+            return response;
+        }
+
+        // Remove user from other users' following & follower lists
+        await usermodel.updateMany({ following: id }, { $pull: { following: id } });
+        await usermodel.updateMany({ follower: id }, { $pull: { follower: id } });
+
+        // Remove user likes from posts, pulses and comments
+        await Post.updateMany({ likes: id }, { $pull: { likes: id } });
+        await Pulse.updateMany({ likes: id }, { $pull: { likes: id } });
+        await Comment.updateMany({ likes: id }, { $pull: { likes: id } });
+
+        // Find all comments made by the user
+        const userComments = await Comment.find({ user: id });
+
+        // Remove user's comments from posts
+        await Post.updateMany({ comments: id }, { $pull: { comments: id } });
+
+        // Remove user's comments from pulse
+        await Pulse.updateMany({ comments: id }, { $pull: { comments: id } });
+
+        // Delete the user's comments
+        await Comment.deleteMany({ user: id });
+
+        // Delete user's posts & pulses
+        await Post.deleteMany({ userId: id });
+        await Pulse.deleteMany({ userId: id });
+
+
+        // Remove OTP data (if any)
+        await Otp.deleteMany({ email: userData.email });
+
+        // Finally, delete the user
+        await usermodel.findByIdAndDelete(id);
+
+        response.success = true;
+        response.message = "User deleted successfully along with related data";
+        return response;
+
+    } catch (error) {
+        response.error = error.message;
+        return response;
+    }
+}
 module.exports = {
     CreateUser,
     ValidateUser,
     getuserByid,
     updateUser,
     followUser,
-    getUserByUserName
+    getUserByUserName,
+    deleteUser
 }
 

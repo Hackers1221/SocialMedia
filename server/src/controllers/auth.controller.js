@@ -1,6 +1,7 @@
 const userService = require('../services/user.service');
 const {StatusCodes} = require('http-status-codes');
 const jwt = require('jsonwebtoken')
+const authservice = require('../services/auth.service')
 
 const signup = async(req,res) =>  {
         const response  = await userService.CreateUser(req.body);
@@ -32,6 +33,39 @@ const signin = async(req,res) => {
         token : token
     })
 }
+
+const deleteUser = async(req, res) => {
+    const { id } = req.params;
+    console.log(id);
+
+    // Extract token from headers and decode it
+    const token = req.headers['x-access-token']
+    const decoded = await authservice.verfiyJwtToken(token);
+
+    const UserResponse = await userService.getuserByid(id);
+    if(UserResponse.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg:"This account does not exist! Try after relogin",
+            error : UserResponse.error
+        })
+    }
+    const user = UserResponse.user;
+    if (!user || user.email !== decoded.email) {
+        return res.status(StatusCodes.FORBIDDEN).send({ msg: "Forbidden: You can only delete your own account" });
+    }
+
+    const response = await userService.deleteUser(id);
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg:"Delete Unsuccessful due to some error!",
+            error : response.error
+        })
+    }
+    return res.status(StatusCodes.ACCEPTED).json({
+        msg : response.message,
+    })
+}
+
 
 const getuserByid = async(req,res) => {
     const response = await userService.getuserByid(req.params.id);
@@ -96,5 +130,6 @@ module.exports = {
     getuserByid,
     updateUser,
     followUser,
-    getUserByUserName
+    getUserByUserName,
+    deleteUser
 }
