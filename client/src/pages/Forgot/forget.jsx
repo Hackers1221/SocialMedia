@@ -38,48 +38,55 @@ function ForgetPassword() {
     };
 
     return (
-        <div className="flex items-center justify-center h-screen w-full px-5 sm:px-0" style={{ backgroundColor: _COLOR.light }}>
-            <div className="flex rounded-lg shadow-lg border overflow-hidden max-w-md w-full" style={{ backgroundColor: _COLOR.lightest }}>
-                <div className="w-full p-8">
-                    <p className="text-xl text-gray-600 text-center">Forgot Password?</p>
-                    <div className="mt-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2">
-                            Enter Your Email
-                        </label>
-                        <input
-                            name="email"
-                            value={email}
-                            onChange={handleChange}
-                            className="text-black border border-[2px] rounded py-2 px-4 block w-full focus:outline-none"
-                            style={{ borderColor: _COLOR.light, backgroundColor: _COLOR.lightest }}
-                            type="email"
-                            autoComplete="off"
-                            autoCorrect="off"
-                            spellCheck="false"
-                            placeholder="Email address"
-                            required
-                        />
-                    </div>
-                    <div className="mt-8">
-                        <button
-                            className="text-white font-bold py-2 px-4 w-full rounded flex items-center justify-center"
-                            style={{ backgroundColor: _COLOR.dark }}
-                            onClick={forget}
-                            disabled={loading}
+        <div className={`flex items-center justify-center h-screen w-full px-5 sm:px-0 bg-[url("https://images.stockcake.com/public/2/9/c/29cc0acd-d266-46bf-b9b8-b5330cd2918b_large/greenery-on-wood-stockcake.jpg")]  bg-no-repeat bg-cover bg-center`}>
+            <div className={`flex items-center justify-center bg-[#131842] bg-opacity-[40%] backdrop-blur-lg backdrop-saturate-300 w-full h-full`}>
+                <div className="flex justify-evenly w-[90%] h-[80%]">
+                <div className="flex flex-col justify-center text-[3rem] w-[40%] text-white font-bold leading-[1.2]">
+                    <span>Moments become</span>
+                    <span className={`text-[${_COLOR.buttons}]`}>memories</span>
+                    <span>— don't miss out!</span>
+                </div>
+                <div className="flex items-center overflow-hidden w-[40%] h-full">
+                    <div className="w-full p-8">
+                        <p className="text-[3rem] text-white text-center">Forgot Password?</p>
+                        <div className="mt-4">
+                            <label className="block text-white text-sm font-bold mb-2">
+                                Enter Your Email
+                            </label>
+                            <input
+                                name="email"
+                                value={email}
+                                onChange={handleChange}
+                                className={`text-white rounded-xl py-[0.6rem] px-4 block w-full focus:outline-none bg-[${_COLOR.input}]`}
+                                type="email"
+                                autoComplete="off"
+                                autoCorrect="off"
+                                spellCheck="false"
+                                placeholder="Email address"
+                                required
+                            />
+                        </div>
+                        <div className="mt-8">
+                            <button
+                                className={`flex justify-center text-white font-bold py-[0.6rem] w-full rounded-2xl bg-[${_COLOR.buttons}]`}
+                                onClick={forget}
+                                disabled={loading}
+                            >
+                                {loading ? (
+                                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                ) : (
+                                    "Send Reset Link"
+                                )}
+                            </button>
+                        </div>
+                        <div
+                            className={`mt-4 text-center text-xs text-[${_COLOR.buttons}] capitalize hover:cursor-pointer hover:underline`}
+                            onClick={() => navigate("/login")}
                         >
-                            {loading ? (
-                                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                            ) : (
-                                "Send Reset Link"
-                            )}
-                        </button>
+                            Back to Login
+                        </div>
                     </div>
-                    <div
-                        className="mt-4 text-center text-xs text-gray-800 capitalize hover:cursor-pointer hover:underline hover:font-bold"
-                        onClick={() => navigate("/login")}
-                    >
-                        Back to Login
-                    </div>
+                </div>
                 </div>
             </div>
         </div>

@@ -6,7 +6,7 @@ import { forwardRef } from "react";
 const Calendar = forwardRef(({value, onChange}, ref) => {
   return (
     <div className="flex flex-col gap-2">
-      <label className="text-gray-700 font-medium">Select Birthdate</label>
+      <label className="text-sm text-white font-bold">Select Birthdate</label>
       <DatePicker
         selected={value}
         onChange={onChange}
@@ -15,7 +15,8 @@ const Calendar = forwardRef(({value, onChange}, ref) => {
         scrollableYearDropdown
         yearDropdownItemNumber={100}
         maxDate={new Date()}
-        className={`text-black border border-[2px] rounded-lg px-3 py-2 w-full focus:outline-none bg-[${_COLOR.lightest}]`}
+        className={`text-white rounded-xl py-[0.6rem] px-4 block w-full focus:outline-none bg-[${_COLOR.input}]`}
+        // className={`text-black border border-[2px] rounded-lg px-3 py-2 w-full focus:outline-none bg-[${_COLOR.lightest}]`}
         onKeyDown={(e) => e.preventDefault()}
         placeholderText="dd/mm/yyyy"
         ref={ref}

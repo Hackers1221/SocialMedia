@@ -30,72 +30,76 @@ function SendOtp() {
   };
 
   return (
-    <div
-      className="flex flex-col gap-4 items-center justify-center h-screen w-full px-5 sm:px-0"
-      style={{ backgroundColor: _COLOR.light }}
-    >
-      <div className="flex justify-between steps gap-2 max-w-md">
-        <div className={`step step-accent step-neutral`}>
-          <p className={`text-accent text-xs`}>Email Entry</p>
-        </div>
-        <div className="step step-neutral">
-          <p className={`text-accent text-xs`}>Otp Verification</p>
-        </div>
-        <div className="step step-neutral">
-          <p className={`text-accent text-xs`}>Personal Details</p>
-        </div>
-      </div>
-      <div
-        className="flex flex-col rounded-lg shadow-lg border py-5 overflow-hidden max-w-md w-full"
-        style={{ backgroundColor: _COLOR.lightest }}
-      >
-        <div className="w-full px-8 py-4">
-          <p className="text-xl text-gray-600 text-center">Enter Your Email</p>
-          <div className="mt-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Email Address
-            </label>
-            <input
-              name="email"
-              value={email}
-              onChange={handleChange}
-              className="text-black border border-[2px] rounded py-2 px-4 block w-full focus:outline-none"
-              style={{ backgroundColor: _COLOR.lightest }}
-              type="email"
-              autoComplete="off"
-              autoCorrect="off"
-              spellCheck="false"
-              placeholder="Email address"
-              required
-            />
-          </div>
-          <div className="mt-8">
-            <button
-              id="submitButton"
-              className="text-white font-bold py-2 px-4 w-full rounded flex items-center justify-center"
-              style={{ backgroundColor: "#1f2937" }}
-              onClick={submit}
-              disabled={isLoading} // Disable button while loading
-            >
-              {isLoading ? (
-                <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-white border-solid"></div>
-              ) : (
-                "Send OTP"
-              )}
-            </button>
-          </div>
-        </div>
-        <div className="flex items-center w-full text-center">
-                <div
-                className="text-xs text-gray-500 text-center w-full "
-                >
-                Already have an account?
-                <Link to={'/login'} style={{
-                    color: _COLOR.dark,
-                  }} id="submitButton" className="hover:underline"> Sign In</Link>
-                </div>
-            </div>
-      </div>
+    <div className={`flex items-center justify-center h-screen w-full px-5 sm:px-0 bg-[url("https://images.stockcake.com/public/2/9/c/29cc0acd-d266-46bf-b9b8-b5330cd2918b_large/greenery-on-wood-stockcake.jpg")]  bg-no-repeat bg-cover bg-center`}>
+      <div className={`flex items-center justify-center bg-[#131842] bg-opacity-[40%] backdrop-blur-lg backdrop-saturate-300 w-full h-full`}>
+                      <div className="flex justify-evenly w-[90%] h-[80%]">
+                      <div className="flex flex-col justify-center text-[3rem] w-[40%] text-white font-bold leading-[1.2]">
+                          <span>Be part of</span>
+                          <span className={`text-[${_COLOR.buttons}]`}>something bigger by</span>
+                          <span>joining today</span>
+                      </div>
+      
+                      <div className="flex flex-col items-center h-full justify-center">
+                        <div className="flex steps gap-4 max-w-full">
+                          <div className={`step step-info step-neutral`}>
+                            <p className={`text-info text-xs`}>Email Entry</p>
+                          </div>
+                          <div className="step step-neutral">
+                            <p className={`text-info text-xs`}>Otp Verification</p>
+                          </div>
+                          <div className="step step-neutral">
+                            <p className={`text-info text-xs`}>Personal Details</p>
+                          </div>
+                        </div>
+                        <div
+                          className="flex flex-col r py-5 overflow-hidden max-w-md w-full"
+                        >
+                          <div className="w-full px-8 py-4">
+                            <p className="text-[3rem] text-white text-center font-bold">Enter Your Email</p>
+                            <div className="mt-4">
+                              <label className="block text-white text-sm font-bold mb-2">
+                                Email Address
+                              </label>
+                              <input
+                                name="email"
+                                value={email}
+                                onChange={handleChange}
+                                className={`text-white rounded-xl py-[0.6rem] px-4 block w-full focus:outline-none bg-[${_COLOR.input}]`}
+                                type="email"
+                                autoComplete="off"
+                                autoCorrect="off"
+                                spellCheck="false"
+                                placeholder="Email address"
+                                required
+                              />
+                            </div>
+                            <div className="mt-8">
+                              <button
+                                id="submitButton"
+                                className={`flex justify-center text-white font-bold py-[0.6rem] w-full rounded-2xl bg-[${_COLOR.buttons}]`}
+                                onClick={submit}
+                                disabled={isLoading} // Disable button while loading
+                              >
+                                {isLoading ? (
+                                  <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-white border-solid"></div>
+                                ) : (
+                                  "Send OTP"
+                                )}
+                              </button>
+                            </div>
+                          </div>
+                          <div className="flex items-center w-full text-center">
+                                  <div
+                                  className="text-xs text-gray-500 text-center w-full "
+                                  >
+                                  Already have an account?
+                                  <Link to={'/login'} id="submitButton" className={`hover:underline text-[${_COLOR.buttons}]`}> Sign In</Link>
+                                  </div>
+                              </div>
+                        </div>
+                      </div>
+                      </div>
+                  </div>
     </div>
   );
 }

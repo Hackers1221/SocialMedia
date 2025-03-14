@@ -112,9 +112,22 @@ function PostCard(post) {
     }
 
     function getTimeDifference(dateString) {
-      const now = new Date();
+      const now = new Date(); 
       const targetDate = new Date(dateString);
-      const diffInSeconds = Math.floor((now - targetDate) / 1000);
+  
+      const nowUTC = Date.UTC(
+          now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),
+          now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()
+      );
+  
+      const targetDateUTC = Date.UTC(
+          targetDate.getUTCFullYear(), targetDate.getUTCMonth(), targetDate.getUTCDate(),
+          targetDate.getUTCHours(), targetDate.getUTCMinutes(), targetDate.getUTCSeconds()
+      );
+  
+      const diffInSeconds = Math.floor((nowUTC - targetDateUTC) / 1000);
+
+      console.log (diffInSeconds);
   
       if (diffInSeconds < 60) {
           return `${diffInSeconds} second${diffInSeconds === 1 ? '' : 's'} ago`;
@@ -143,6 +156,7 @@ function PostCard(post) {
       const diffInYears = Math.floor(diffInMonths / 12);
       return `${diffInYears} year${diffInYears === 1 ? '' : 's'} ago`;
   }
+  
   
 
     const toggleLike = async () => {
@@ -318,7 +332,7 @@ function PostCard(post) {
         </div>
         <div className="flex">
         <button className={`flex gap-2 items-center text-[${_COLOR.more_light}]`} onClick={toggleBookmark}>
-            {saved? <i className="text-white fa-solid fa-bookmark"></i> : <i className="text-white fa-regular fa-bookmark"></i>}
+            {saved? <i className={`text-[${_COLOR.buttons}] fa-solid fa-bookmark`}></i> : <i className={`text-[${_COLOR.lightest}] fa-regular fa-bookmark`}></i>}
           </button>
         </div>
       </div>

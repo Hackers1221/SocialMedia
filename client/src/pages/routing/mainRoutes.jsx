@@ -14,7 +14,6 @@ import SendOtp from "../SignUp/sentotp";
 import VerifyOtp from "../SignUp/verifyotp";
 import ForgetPassword from "../Forgot/Forget";
 import ResetPassword from "../Forgot/reset";
-import Check from "../../components/Check";
 
 function MainRoutes() {
   return (
@@ -34,7 +33,6 @@ function MainRoutes() {
         <Route path="pulse" element={<Pulse />} />
         <Route path="story" element={<DisplayStory />}/>
         <Route path="settings" element={<Settings />} />
-        <Route path="sign" element={<Check />} />
       </Route>
     </Routes>
   );

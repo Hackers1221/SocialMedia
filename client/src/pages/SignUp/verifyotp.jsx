@@ -100,70 +100,81 @@ function VerifyOtp() {
   };
 
   return (
-    <div className="flex flex-col gap-4 items-center justify-center h-screen w-full px-5 sm:px-0">
-      <div className="flex justify-between steps gap-2 max-w-md">
-        <div className={`step step-accent step-neutral`}>
-          <p className={`text-accent text-xs`}>Email Entry</p>
-        </div>
-        <div className="step step-accent step-neutral">
-          <p className={`text-accent text-xs`}>Otp Verification</p>
-        </div>
-        <div className="step step-neutral">
-          <p className={`text-accent text-xs`}>Personal Details</p>
-        </div>
-      </div>
-      <div className="flex rounded-lg shadow-lg border overflow-hidden max-w-md w-full p-8" style={{ backgroundColor: _COLOR.lightest }}>
-        <div className="w-full text-center">
-          <p className="text-xl text-gray-600">Enter OTP</p>
-          <p className="text-sm text-gray-500 mt-2">
-            If your email is correct, an OTP must have been sent to your inbox.
-          </p>
+    <div className={`flex items-center justify-center h-screen w-full px-5 sm:px-0 bg-[url("https://images.stockcake.com/public/2/9/c/29cc0acd-d266-46bf-b9b8-b5330cd2918b_large/greenery-on-wood-stockcake.jpg")]  bg-no-repeat bg-cover bg-center`}>
+      <div className={`flex items-center justify-center bg-[#131842] bg-opacity-[40%] backdrop-blur-lg backdrop-saturate-300 w-full h-full`}>
+                      <div className="flex justify-evenly w-[90%] h-[80%]">
+                      <div className="flex flex-col justify-center text-[3rem] w-[40%] text-white font-bold leading-[1.2]">
+                          <span>Be part of</span>
+                          <span className={`text-[${_COLOR.buttons}]`}>something bigger by</span>
+                          <span>joining today</span>
+                      </div>
+      
+                      <div className="flex flex-col items-center h-full justify-center w-[50%]">
+                        <div className="flex steps gap-4 max-w-full">
+                          <div className={`step step-info step-neutral`}>
+                            <p className={`text-info text-xs`}>Email Entry</p>
+                          </div>
+                          <div className="step step-info step-neutral">
+                            <p className={`text-info text-xs`}>Otp Verification</p>
+                          </div>
+                          <div className="step step-neutral">
+                            <p className={`text-info text-xs`}>Personal Details</p>
+                          </div>
+                        </div>
+                        <div className="flex overflow-hidden max-w-md w-full p-8">
+                          <div className="w-full text-center">
+                            <p className="text-[3rem] font-bold text-white">Enter OTP</p>
+                            <p className="text-sm text-gray-300 mt-2">
+                              If your email is correct, you must have recieved an OTP at your registered email address.
+                            </p>
 
-          {/* Timer */}
-          <p className="text-sm text-red-500 mt-2">
-            {timer > 0 ? `Time remaining: ${Math.floor(timer)}s` : "OTP expired!"}
-          </p>
+                            {/* Timer */}
+                            <p className="text-sm text-red-600 mt-2">
+                              {timer > 0 ? `Time remaining: ${Math.floor(timer)}s` : "OTP expired!"}
+                            </p>
 
-          <div className="mt-4 flex justify-center gap-2">
-            {otp.map((digit, index) => (
-              <input
-                key={index}
-                ref={(el) => (inputRefs.current[index] = el)}
-                type="text"
-                value={digit}
-                onChange={(e) => handleChange(index, e)}
-                onKeyDown={(e) => handleKeyDown(index, e)}
-                className="w-12 h-12 text-center text-xl font-bold border-2 rounded-md focus:outline-none focus:border-gray-500 text-white bg-gray-800"
-                maxLength="1"
-                inputMode="numeric"
-                pattern="[0-9]*"
-                disabled={timer === 0}
-              />
-            ))}
-          </div>
+                            <div className="mt-4 flex justify-center gap-2">
+                              {otp.map((digit, index) => (
+                                <input
+                                  key={index}
+                                  ref={(el) => (inputRefs.current[index] = el)}
+                                  type="text"
+                                  value={digit}
+                                  onChange={(e) => handleChange(index, e)}
+                                  onKeyDown={(e) => handleKeyDown(index, e)}
+                                  className={`w-12 h-12 text-center text-xl font-bold border-2 border-[${_COLOR.buttons}] rounded-md focus:outline-none text-white bg-gray-800`}
+                                  maxLength="1"
+                                  inputMode="numeric"
+                                  pattern="[0-9]*"
+                                  disabled={timer === 0}
+                                />
+                              ))}
+                            </div>
 
-          {/* Verify Button */}
-          <button
-            className="mt-6 w-full py-2 rounded text-white font-bold flex items-center justify-center"
-            style={{ backgroundColor: "#1f2937" }}
-            onClick={submit}
-            disabled={loading || timer === 0}
-          >
-            {loading ? (
-              <div className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
-            ) : (
-              "Verify OTP"
-            )}
-          </button>
+                            {/* Verify Button */}
+                            <button
+                              className={`mt-6 py-[0.6rem] w-full rounded-2xl text-white font-bold flex items-center justify-center bg-[${_COLOR.buttons}]`}
+                              onClick={submit}
+                              disabled={loading || timer === 0}
+                            >
+                              {loading ? (
+                                <div className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                              ) : (
+                                "Verify OTP"
+                              )}
+                            </button>
 
-          {/* Resend OTP Button */}
-          {canResend && (
-            <button className="mt-4 text-blue-500 underline" onClick={resendOtp}>
-              Resend OTP
-            </button>
-          )}
-        </div>
-      </div>
+                            {/* Resend OTP Button */}
+                            {canResend && (
+                              <button className={`mt-4 text-[${_COLOR.buttons}] hover:underline`} onClick={resendOtp}>
+                                Resend OTP
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      </div>
+                  </div>
     </div>
   );
 }
