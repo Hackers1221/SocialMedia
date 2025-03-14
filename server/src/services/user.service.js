@@ -6,6 +6,7 @@ const Comment = require("../models/comment.model")
 const Otp = require("../models/otp.model");
 const bcrypt = require('bcrypt');
 const mailer = require('../middlewares/mailer')
+const {deleteImages, deleteVideos} = require("../../cloudConfig.js");
 
 const CreateUser = async(data) => { 
     const response  = {};
@@ -188,6 +189,38 @@ const deleteUser = async(id) => {
 
         // Delete the user's comments
         await Comment.deleteMany({ user: id });
+
+        // Delete posts and pulse from cloudinary
+        const allPosts = await Post.find({ userId: id });
+        const allPulse = await Pulse.find({ userId: id });
+        
+        let imageFilenames = [];
+        let videoFilenames = [];
+
+        if (userData.image && userData.image.filename) {
+            imageFilenames.push(userData.image.filename);
+        } // profile image
+
+        allPosts.forEach(post => {
+            if (post.image) {
+                imageFilenames = imageFilenames.concat(post.image.map(img => img.filename));
+            }
+            if (post.video) {
+                videoFilenames = videoFilenames.concat(post.video.map(vid => vid.filename));
+            }
+        });
+        allPulse.forEach(pulse => {
+            if (pulse.filename) {
+                videoFilenames.push(pulse.filename);
+            }
+        });
+    
+        try {
+            if (imageFilenames.length) await deleteImages(imageFilenames);
+            if (videoFilenames.length) await deleteVideos(videoFilenames);
+        } catch (cloudError) {
+            console.log("Error deleting media:", cloudError);
+        }
 
         // Delete user's posts & pulses
         await Post.deleteMany({ userId: id });

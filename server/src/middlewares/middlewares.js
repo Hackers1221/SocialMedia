@@ -21,7 +21,7 @@ const updateProfileImage = async (req, res, next) => {
        
         if(req.file) {
             if(user.image?.url) {
-                deleteImages([user.image.filename]);
+                await deleteImages([user.image.filename]);
             }
             const image = {};
             image.url = req.file.path;
