@@ -1,6 +1,7 @@
 const postsmodel = require('../models/posts.model');
 const usermodel  = require('../models/user.model');
-const commentsModel = require('../models/comment.model')
+const commentsModel = require('../models/comment.model');
+const { deleteImages, deleteVideos } = require('../../cloudConfig');
 
 const CreatePost = async (data) => {
     const response = {};
@@ -175,6 +176,26 @@ const DeletePost = async(id,userId) => {
     const response = {};
     try {
         const PostDetails = await postsmodel.findByIdAndDelete(id);
+
+        // Cloudinary post data delete
+        let imageFilenames = [];
+        let videoFilenames = [];
+        console.log(PostDetails);
+
+        if (PostDetails.image) {
+            imageFilenames = imageFilenames.concat(PostDetails.image.map(img => img.filename));
+        }
+        if (PostDetails.video) {
+            videoFilenames = videoFilenames.concat(PostDetails.video.map(vid => vid.filename));
+        }
+        try {
+            if (imageFilenames.length) await deleteImages(imageFilenames);
+            if (videoFilenames.length) await deleteVideos(videoFilenames);
+        } catch (cloudError) {
+            console.log("Error deleting media:", cloudError);
+        }
+        //----------------------------
+
         const deletecomments = await commentsModel.deleteMany({postId : id});
         const userDetails = await usermodel.findById(userId);
         let userDetailsSaved = userDetails.saved;

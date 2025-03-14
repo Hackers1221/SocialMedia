@@ -27,6 +27,9 @@ function PostCard(post) {
     const [saved, setSaved] = useState(false);
     const [countLike,setcountLike] = useState(likes.length);
 
+    // Delete related
+    const [deleting, setDeleting] = useState(false);
+
     const photo = currUser.data?.image?.url || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"
     const hashtags = interests[0].split(" ");
     
@@ -210,6 +213,7 @@ function PostCard(post) {
     }
 
     const Deletepost = async() => {
+      setDeleting(true);
       const resp = {
           postId: _id,
           userId: {
@@ -221,6 +225,10 @@ function PostCard(post) {
         await dispatch(getAllPosts());
         toast.success("Deleted successfully");
       }
+      else {
+        toast.error("Something went wrong");
+      }
+      setDeleting(false);
     }
 
     useEffect (() => {
@@ -269,9 +277,17 @@ function PostCard(post) {
                 <i className="text-white fa-solid fa-ellipsis"></i>
               </div>
               <ul tabIndex={0} className={`dropdown-content menu bg-[${_COLOR.medium}] text-[${_COLOR.lightest}] rounded-box z-[1] w-52 p-4 gap-4 shadow-2xl shadow-[${_COLOR.medium}]`}>
-                <li onClick={() => setDialogOpen(true)} className="hover:cursor-pointer">View Post</li>
-                <li className="hover:cursor-pointer">Not Intrested</li>
-                {(authState._id === userId)  && <li className="hover:cursor-pointer bg-red" onClick={Deletepost}>Delete Post</li>}
+                <li onClick={() => setDialogOpen(true)} className="hover:cursor-pointer"><span>View Post</span></li>
+                <li className="hover:cursor-pointer"><span>Not Intrested</span></li>
+                {(authState._id === userId)  && <li 
+                  className="hover:cursor-pointer text-red-300 flex flex-row justify-between" 
+                  onClick={Deletepost}>
+                    <span>Delete Post </span> 
+                    {deleting && (
+                        <i className="fa-solid fa-spinner animate-spin text-lg text-white"></i>
+                      )}
+                  </li>
+                }
               </ul>
             </div>
       </div>
