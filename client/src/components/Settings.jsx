@@ -54,6 +54,14 @@ function Settings() {
     setImage(uploadedFile);
   };
 
+  const handleDeleteAccount = async () => {
+    setDeleting(true);
+    const Deleted = await dispatch(deleteUser(authState?.data?._id));
+    if(Deleted.payload) navigate("/signup");
+    setIsdeleteDialog(false); 
+    setDeleting(false);
+  }
+
   const updateuser = async () => {
     const formData = new FormData();
     formData.append("id", authState.data?._id);
@@ -90,13 +98,8 @@ function Settings() {
       open={isDeleteDialog} 
       setOpen={setIsdeleteDialog} 
       deleting={deleting}
-      onDelete={async () => {
-        setDeleting(true);
-        const Deleted = await dispatch(deleteUser(authState?.data?._id));
-        if(Deleted.payload) navigate("/signup");
-        setIsdeleteDialog(false); 
-        setDeleting(false);
-      }}  />
+      onDelete={handleDeleteAccount} 
+    />
 
     <div className="fixed top-[9rem] md:top-[1rem]  md:left-[20rem] left-[1rem] w-[75vw] h-[82vh] md:h-[97vh] flex flex-grow overflow-y-auto">
       {/* Sidebar Menu */}
