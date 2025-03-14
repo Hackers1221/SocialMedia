@@ -157,12 +157,23 @@ const PostSlice = createSlice({
             state.postList = JSON.parse(JSON.stringify(state.downloadedPosts)).filter((post) => post.userId === id);
             state.postList = JSON.parse(JSON.stringify(state.postList));
         },
+        filterPostsByLiked: (state, action) => {
+            const id = action.payload?.id;
+            state.postList = JSON.parse(JSON.stringify(state.downloadedPosts)).filter((post) => post.likes?.includes (id));
+            state.postList = JSON.parse(JSON.stringify(state.postList));
+        },
+        filterPostsByFollowing: (state, action) => {
+            const following = action.payload?.following;
+            state.postList = JSON.parse(JSON.stringify(state.downloadedPosts)).filter((post) => following.includes(post.userId));
+            state.postList = JSON.parse(JSON.stringify(state.postList));
+        }
     },
     extraReducers: (builder) => {
         builder
             .addCase(getAllPosts.fulfilled, (state, action) => {
                 if (!action.payload?.data) return;
                 state.downloadedPosts = action.payload?.data?.postsdata?.posts.reverse();
+                state.postList = state.downloadedPosts;
             })
             .addCase(createPost.fulfilled, (state, action) => {
                 if (!action.payload?.data) return;
@@ -205,6 +216,6 @@ const PostSlice = createSlice({
     }
 });
 
-export const { filterPostsByUser } = PostSlice.actions;
+export const { filterPostsByUser, filterPostsByLiked, filterPostsByFollowing } = PostSlice.actions;
 
 export default PostSlice.reducer;

@@ -126,8 +126,6 @@ function PostCard(post) {
       );
   
       const diffInSeconds = Math.floor((nowUTC - targetDateUTC) / 1000);
-
-      console.log (diffInSeconds);
   
       if (diffInSeconds < 60) {
           return `${diffInSeconds} second${diffInSeconds === 1 ? '' : 's'} ago`;

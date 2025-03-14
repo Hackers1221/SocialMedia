@@ -26,7 +26,6 @@ function Layout () {
             {/* {!hideOthers && screenWidth >= 768 && <Navbar />} */}
             {!hideSidebar && <Sidebar />}
             {!hideOthers && screenWidth >= 1480 && !hideSidebar && <Messages />}
-            {!hideSidebar && !hideOthers && <Stories />}
             <Outlet />
         </div>
     )

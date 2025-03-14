@@ -16,6 +16,7 @@ import PulseForm from "./PulseForm";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/Slices/auth.slice";
 import { IoMdPulse } from "react-icons/io";
+import Avatar from "./Avatar";
 
 function Sidebar() {
 
@@ -105,21 +106,31 @@ function Sidebar() {
                     } transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:shadow-none`}
                     onClick={(e) => e.stopPropagation()} // Prevents click inside from closing
                 >
-                    <div className={`p-4 flex items-center border-b border-[${_COLOR.more_light}]`}>
-                        <div className="text-xl text-white font-bold heading">DropChat</div>
+                    <div className={`p-4 flex items-center`}>
+                        <div className={`text-xl text-white font-bold heading`}>Drop</div>
+                        <div className="text-xl text-white font-bold heading">Chat</div>
                     </div>
                     <div className="overflow-y-auto overflow-x-hidden flex-grow">
+                        <ul className="flex flex-col py-4 space-y-1">
+                            <li onClick={() => setIsOpen(false)}>
+                                <Link to="/" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
+                                    <FaHome className="ml-4" />
+                                    <span className="ml-2 text-sm tracking-wide truncate">Feed</span>
+                                </Link>
+                            </li>
+                            <li onClick={() => setIsOpen(false)}>
+                                <Link to={`/profile/${authState?.data?.username}`} className={`relative flex items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6 pl-4`}>
+                                    <Avatar url={authState?.data?.image?.url} size={"sm"}/>
+                                    <span className="ml-2 text-sm tracking-wide truncate">Profile</span>
+                                </Link>
+                            </li>
+                        </ul>
+                        <div className={`mx-4 h-[1px] bg-[${_COLOR.lightest}]`}></div>
                         <ul className="flex flex-col py-4 space-y-1">
                             <li className="px-5">
                                 <div className="flex flex-row items-center h-8">
                                     <div className={`text-sm font-bold text-[${_COLOR.lightest}]`}>Menu</div>
                                 </div>
-                            </li>
-                            <li onClick={() => setIsOpen(false)}>
-                                <Link to="/" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
-                                    <FaHome className="ml-4" />
-                                    <span className="ml-2 text-sm tracking-wide truncate">Home</span>
-                                </Link>
                             </li>
                             <li onClick={() => setIsOpen(false)}>
                                 <Link to="/explore" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
@@ -154,10 +165,10 @@ function Sidebar() {
                                     <span className="px-2 py-0.5 ml-auto text-xs font-medium text-red-500 bg-red-50 rounded-full">1.2k</span>
                                 </a>
                             </li>
-                            <div className={`mx-4 h-[1px] bg-[${_COLOR.more_light}]`}></div>
+                            <div className={`mx-4 h-[1px] bg-[${_COLOR.lightest}]`}></div>
                             <li className="px-5">
                                 <div className="flex flex-row items-center h-8">
-                                    <div className={`text-sm font-bold text-[${_COLOR.more_light}]`}>Settings</div>
+                                    <div className={`text-sm font-bold text-[${_COLOR.lightest}]`}>Settings</div>
                                 </div>
                             </li>
                             <li onClick={() => setIsOpen(false)}>

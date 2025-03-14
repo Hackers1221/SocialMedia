@@ -4,18 +4,22 @@ import { MdVideoCameraBack } from "react-icons/md";
 import { useDispatch, useSelector } from 'react-redux'
 import PostCard from "../../components/PostCard";
 import { useEffect, useRef, useState } from "react";
-import { getAllPosts, getSavedPost } from "../../redux/Slices/post.slice";
+import { filterPostsByFollowing, filterPostsByLiked, getAllPosts, getSavedPost } from "../../redux/Slices/post.slice";
 import Avatar from "../../components/Avatar";
 import toast from "react-hot-toast";
 import SkeletonPostCard from "../../components/SkeletonPostCard";
+import Stories from "../../components/Stories";
 
 function PostPage() {
     const authState = useSelector ((state) => state.auth);
     const postState = useSelector ((state) => state.post);
-    const dispatch = useDispatch ();
-    const [isLoading, setIsLoading] = useState (false);
 
-    const image = authState?.data?.image?.url || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"
+    const dispatch = useDispatch ();
+
+    const [isLoading, setIsLoading] = useState (false);
+    const [selected, setSelected] = useState ("All");
+
+    const options = ["All", "Following", "Liked"]
 
     async function getSavedPosts () {
         setIsLoading(true);
@@ -39,6 +43,13 @@ function PostPage() {
         }
     }
 
+    async function optionChange (option) {
+        setSelected (option);
+        if (option === "Liked") await dispatch( filterPostsByLiked ({id : authState?.data?._id}));
+        if (option === "Following") await dispatch( filterPostsByFollowing ({following : authState?.data?.following}));
+        if (option === "All") await dispatch (getAllPosts ());
+    }
+
     useEffect (() => {
         getPosts ();
         getSavedPosts ();
@@ -48,28 +59,30 @@ function PostPage() {
         <>
             <div className="fixed top-[9rem] md:top-[1rem]  md:left-[20rem] left-[1rem] w-[85%] md:w-[50%] h-[82vh] md:h-[97vh] flex flex-col flex-grow overflow-y-auto">
                 {/* Header */}
-                <h2 className={`text-[${_COLOR.lightest}] heading text-[2rem]`}>Activity Feed</h2>
+                <h2 className={`text-[${_COLOR.lightest}] font-bold text-[1.5rem]`}>Moments</h2>
                 
                 {/* Input Box */}
-                <div className={`w-full mb-4 bg-black bg-opacity-[20%] rounded-md p-4`}>
-                    <div className={`flex gap-2 items-center border-b py-2 border-[${_COLOR.more_light}]`}>
-                        <Avatar url={image}/>
-                        <input className={`w-full bg-transparent px-2 focus:outline-none text-[${_COLOR.lightest}]`} placeholder="What's your mood"/>
-                    </div>
-                    <div className="flex justify-between mt-4 h-5">
-                        <div className="flex gap-2 h-5">
-                            <MdAddAPhoto className="text-white h-[100%] w-[100%] hover:cursor-pointer" />
-                            <IoMdPhotos className="text-white h-[100%] w-[100%] hover:cursor-pointer"/>
-                            <MdVideoCameraBack className="text-white h-[100%] w-[100%] hover:cursor-pointer"/>
-                        </div>
-                        <i className={`text-white fa-solid fa-paper-plane text-[${_COLOR.lightest}] hover:cursor-pointer`}></i>
+                <div className={`w-full mb-4 rounded-md py-4`}>
+                    <Stories />
+                </div>
+
+                <div className="flex justify-between items-center">
+                    <h2 className={`text-[${_COLOR.lightest}] font-bold text-[1.5rem]`}>Recent Post</h2>
+                    <div className="flex gap-4">
+                        {options?.map ((option, index) => {
+                           return (<h2 
+                            key={index} 
+                            className={`${ selected === option ? `text-[${_COLOR.lightest}]` : `text-[${_COLOR.less_light}]` // Default color
+                            } font-bold text-[1rem] hover:cursor-pointer`} 
+                            onClick={() => optionChange(option)}>{option}</h2>)
+                        })}
                     </div>
                 </div>
 
                 {/* Scrollable Post List */}
                 {isLoading && <SkeletonPostCard />}
-                {!isLoading && <div className="w-full h-screen">
-                    {postState?.downloadedPosts?.map((post, key) => (
+                {!isLoading && <div className="pt-4 w-full h-screen">
+                    {postState?.postList?.map((post, key) => (
                         <PostCard post={post} key={key}/>
                     ))}
                 </div>}
