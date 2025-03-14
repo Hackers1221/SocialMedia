@@ -1,7 +1,9 @@
 import { use, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updateUser } from "../redux/Slices/auth.slice";
+import { updateUser, deleteUser } from "../redux/Slices/auth.slice";
+import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const menuItems = [
   { name: "Profile", key: "profile" },
@@ -16,6 +18,11 @@ function Settings() {
   const authState = useSelector((state) => state.auth);
   const [confirmPassword, setconfirmPassword] = useState("");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  // Delete related
+  const [deleting, setDeleting] = useState(false);
+  const [isDeleteDialog, setIsdeleteDialog] = useState(false);
 
   const [selectedOption, setSelectedOption] = useState("profile");
   const [imageUrl, setImageUrl] = useState("");
@@ -76,6 +83,21 @@ function Settings() {
   }
 
   return (
+    <>
+
+    {/* Confirm delete dialog */}
+    <ConfirmDeleteDialog 
+      open={isDeleteDialog} 
+      setOpen={setIsdeleteDialog} 
+      deleting={deleting}
+      onDelete={async () => {
+        setDeleting(true);
+        const Deleted = await dispatch(deleteUser(authState?.data?._id));
+        if(Deleted.payload) navigate("/signup");
+        setIsdeleteDialog(false); 
+        setDeleting(false);
+      }}  />
+
     <div className="fixed top-[9rem] md:top-[1rem]  md:left-[20rem] left-[1rem] w-[75vw] h-[82vh] md:h-[97vh] flex flex-grow overflow-y-auto">
       {/* Sidebar Menu */}
       <aside className="w-[20%] fixed h-full bg-transparent p-6">
@@ -250,7 +272,7 @@ function Settings() {
               </button>
             </div>
 
-            {/* Account Actions */}
+            {/* Account Actions (Delete Account) */}
             <div className={`bg-transparent border border-red-500 p-6 rounded-lg shadow-sm`}>
               <h3 className={`text-lg font-medium text-[${_COLOR.lightest}] mb-2`}>Delete Account</h3>
               <p className={`text-sm text-[${_COLOR.lightest}] mb-4`}>
@@ -258,7 +280,9 @@ function Settings() {
                 If you are part of any company, you must leave or transfer ownership before deletion.
               </p>
               <div className="flex justify-between items-center">
-                <button className="px-6 py-3 font-bold bg-transparent border border-red-700 text-red-700 hover:text-white rounded-lg hover:bg-red-700 transition-all">
+                <button 
+                onClick={() => setIsdeleteDialog(true)}
+                  className="px-6 py-3 font-bold bg-transparent border border-red-700 text-red-700 hover:text-white rounded-lg hover:bg-red-700 transition-all">
                   Delete Account
                 </button>
               </div>
@@ -281,6 +305,7 @@ function Settings() {
         )}
       </main>
     </div>
+    </>
   );
 }
 
