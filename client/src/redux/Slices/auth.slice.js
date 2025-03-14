@@ -63,7 +63,7 @@ export const forgetPass = createAsyncThunk('auth/forget',async(data) => {
 
 export const resetPass = createAsyncThunk('auth/reset',async(data) => {
     try {
-        const response = await axiosInstance.post('auth/resetpass',data);
+        const response = await axiosInstance.post(`auth/resetpass/${data.token}`,data);
         if(!response) toast.error('Something went wrong, try again');
         return  response;
     } catch (error) {

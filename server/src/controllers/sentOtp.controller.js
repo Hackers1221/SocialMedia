@@ -44,7 +44,7 @@ const forgetPasswordLink = async(req,res) => {
 }
 
 const resetPassword = async(req,res) => {
-    const response = await otpService.resetPassword(req.body.email,req.body.password);
+    const response = await otpService.resetPassword(req.body.email,req.body.password,req.params.token);
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
             msg : "Unable to reset the password",

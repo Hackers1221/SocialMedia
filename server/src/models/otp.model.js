@@ -7,7 +7,7 @@ const optSchema = new Schema({
     },
     otp : {
         type : String
-    }
+    },
 })
 
 const otp = mongoose.model('otp',optSchema);

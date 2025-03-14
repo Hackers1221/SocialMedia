@@ -9,7 +9,7 @@ const userroutes = express.Router();
 
 userroutes.post('/sendotp',otpcontroller.sendOtp);
 userroutes.post('/forgetpass',otpcontroller.forgetPasswordLink);
-userroutes.post('/resetpass',otpcontroller.resetPassword);
+userroutes.post('/resetpass/:token',otpcontroller.resetPassword);
 userroutes.post('/verifyotp',otpcontroller.verifyotp);
 userroutes.post('/signup',checkUser,authcontroller.signup);
 userroutes.post('/signin',authcontroller.signin);
