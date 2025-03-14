@@ -5,6 +5,7 @@ const crypto = require('crypto');
 const otpModel = require('../models/otp.model.js');
 const usermodel = require('../models/user.model.js')
 const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken')
 
 
 
@@ -74,13 +75,22 @@ const forgetPasswordLink = async(email) => {
             response.error = "email not found";
             return response;
         }
-        const sent = await sendOtpmiddleware.forgetPasswordLink(email);
+        console.log(process.env.secret_key);
+        const token  = jwt.sign({email : email} , process.env.secret_key)
+        const sent = await sendOtpmiddleware.forgetPasswordLink(email,token);
         if(!sent){
             response.error = sent;
             msg = "Reset password link not sent";
             return response;
         }
-        response.user = userdata;
+        const updateUser = await usermodel.findOneAndUpdate(
+            {email},
+            {resetToken : token},
+            {resetTokenExpiry: new Date(Date.now() + 60 * 60 * 1000)},
+            { new: true },
+        )
+        console.log(updateUser);
+        response.user = updateUser;
         return response;
     } catch (error) {
         response.error = error.message;
@@ -88,14 +98,21 @@ const forgetPasswordLink = async(email) => {
     }
 }
 
-const resetPassword = async (email, newPassword) => {
+const resetPassword = async (email, newPassword,token) => {
     const response = {};
     try {
+        const user = await usermodel.findOne({
+            email
+        })
+        if(user.resetToken.trim()!=token.trim()){
+            response.error = "Authentication error";
+            return response;
+        } 
         const hashedPassword = await bcrypt.hash(newPassword, 11);
         const updatedUser = await usermodel.findOneAndUpdate(
             { email }, 
             { password: hashedPassword }, 
-            { new: true }
+            { new: true },
         );
         if (!updatedUser) {
             response.error = "Unable to reset the password";

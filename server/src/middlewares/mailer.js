@@ -97,7 +97,7 @@ const sendWelcomeEmail = async (email) => {
   }
 };
 
-const forgetPasswordLink = async (email) => {
+const forgetPasswordLink = async (email,token) => {
   try {
     const mailOptions = {
       from: `"DropChat" <${EMAIL}>`,
@@ -114,7 +114,7 @@ const forgetPasswordLink = async (email) => {
         </p>
 
         <div style="margin-top: 20px;">
-            <a href="${resetLink}" 
+            <a href="http://localhost:5173/resetpass?token=${token}" 
               style="display: inline-block; background-color: #023e8a; color: #fff; text-decoration: none; 
                       padding: 10px 20px; border-radius: 5px; font-weight: bold;">
                 Reset Password
@@ -166,7 +166,7 @@ The DropChat Team
 
         <p style="font-size: 14px; color: #777;">
             However, if you did not request this change, please 
-            <a href="${resetLink}" style="color: #023e8a; text-decoration: none; font-weight: bold;">reset your password</a> 
+            <a href="http://localhost:5173/forgetpass" style="color: #023e8a; text-decoration: none; font-weight: bold;">reset your password</a> 
             immediately or contact our support team.
         </p>
 
