@@ -271,7 +271,7 @@ function PostCard(post) {
         extractThumbnail(vid?.url);
       }
     });
-  }, [_id]);
+  }, [image]);
 
     useEffect (() => {
       setSaved (postState?.savedList?.find ((post) => post._id === _id));
