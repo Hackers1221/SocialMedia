@@ -19,13 +19,14 @@ function PostCard(post) {
 
     const dispatch = useDispatch();
 
-    const {_id, likes, comments, interests, createdAt, userId, caption} = post?.post;
+    const {_id, likes, comments, interests, createdAt, userId, caption, image, video} = post?.post;
     const imageData = post?.post.image;
     const videoData = post?.post.video;
 
     const [liked, setLiked] = useState(false);
     const [saved, setSaved] = useState(false);
     const [countLike,setcountLike] = useState(likes.length);
+    const [images, setImages] = useState ();
 
     // Delete related
     const [deleting, setDeleting] = useState(false);
@@ -158,8 +159,6 @@ function PostCard(post) {
       return `${diffInYears} year${diffInYears === 1 ? '' : 's'} ago`;
   }
   
-  
-
     const toggleLike = async () => {
       const response = await dispatch(likePost({
         _id, 
@@ -231,6 +230,49 @@ function PostCard(post) {
       setDeleting(false);
     }
 
+  const extractThumbnail = (videoURL) => {
+    const video = document.createElement("video");
+    video.src = videoURL;
+    video.crossOrigin = "anonymous"; // Prevents CORS issues
+    video.preload = "metadata"; // Load only metadata, not the full video
+    video.muted = true; // Prevents autoplay issues in some browsers
+  
+    video.addEventListener("loadedmetadata", () => {
+      video.currentTime = Math.min(5, video.duration / 2); // Seek to a valid frame
+    });
+  
+    video.addEventListener("seeked", () => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+  
+      // Use full resolution
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+  
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      const element = { url: canvas.toDataURL("image/png"), filename: "video" };
+      
+      setImages((prevImages) => [...prevImages, element]);
+
+    });
+  
+    video.load(); // Ensures metadata loads before seeking
+  };
+
+
+  useEffect(() => { 
+    if (image) {
+      setImages(image);
+    }
+    else setImages ([]);
+    video?.forEach((vid) => {
+      if (vid?.url) {
+        extractThumbnail(vid?.url);
+      }
+    });
+  }, [_id]);
+
     useEffect (() => {
       setSaved (postState?.savedList?.find ((post) => post._id === _id));
     }, [postState?.savedList])
@@ -291,7 +333,7 @@ function PostCard(post) {
               </ul>
             </div>
       </div>
-      <div className="px-4">
+      {/* <div className="px-4">
       {(videoData?.length > 0 || imageData?.length > 0) && (
         <div className="mt-5 h-[28rem] carousel rounded-[2rem] w-full bg-black" >
           {imageData?.map((photo, key) => (
@@ -328,6 +370,58 @@ function PostCard(post) {
               ))}
         </div>
       )}
+      </div> */}
+      <div className="flex gap-3 h-[25rem] my-4">
+            {/* Large First Image */}
+            {images?.length > 0 && <div className={`relative ${image.length > 3 ? `w-[35%]` : images?.length > 2 ? `w-[33%]` : images?.length > 1 ? `w-[50%]` : `w-full`} rounded-lg h-full flex justify-center bg-black/30 hover:cursor-pointer`} onClick={() => setDialogOpen(true)}>
+              <img 
+                  src={images[0]?.url} 
+                  alt="Main Image" 
+                  className="object-cover h-full rounded-lg"
+              />
+              {images[0].filename === "video" && <i className="fa-solid fa-video absolute top-4 left-4 text-white text-2xl"></i>}
+              {images[0].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-white text-2xl"></i>}
+            </div>}
+            {images?.length > 1 && <div className={`relative ${images?.length > 3 ? `w-[35%]` : images?.length > 2 ? `w-[33%]` : `w-[50%]`} rounded-lg h-full flex items-center flex justify-center bg-black/30 hover:cursor-pointer`} onClick={() => setDialogOpen(true)}>
+              <img 
+                  src={images[1]?.url} 
+                  alt="Image 2" 
+                  className= "object-cover h-full rounded-lg"
+              />
+              {images[1].filename === "video" && <i className="fa-solid fa-video absolute top-4 left-4 text-white text-2xl"></i>}
+              {images[1].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-white text-2xl"></i>}
+            </div>}
+
+            {/* Next Two image + Grid for Remaining */}
+            {images?.length > 2 && <div className={`flex flex-col gap-2 ${images?.length > 3 ? `w-[25%]` : `w-[33%]`}`}>
+              <div className={` relative ${images?.length == 3 ? `h-full` : `h-[50%]`} rounded-lg flex justify-center bg-black/30 hover:cursor-pointer`} onClick={() => setDialogOpen(true)}>
+                <img 
+                    src={images[2]?.url} 
+                    alt="Image 3" 
+                    className="object-cover h-full rounded-lg"
+                />
+                {images[2].filename === "video" && <i className="fa-solid fa-video absolute top-4 left-4 text-white text-2xl"></i>}
+                {images[2].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-white text-2xl"></i>}
+              </div>
+              {images?.length > 3 && <div className="relative h-[50%] hover:cursor-pointer" onClick={() => setDialogOpen(true)}>
+                  <div className="relative h-full w-full rounded-lg flex justify-center bg-black/30">
+                    <img 
+                        src={images[3]?.url} 
+                        alt="Image 4" 
+                        className="object-cover h-full rounded-lg"
+                    />
+                    {images[3].filename === "video" && <i className="fa-solid fa-video absolute top-4 left-4 text-white text-2xl"></i>}
+                    {images[3].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-white text-2xl"></i>}
+                  </div>
+                  {images?.length > 4 && (
+                      <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-lg">
+                          <span className="text-white text-xl font-bold">
+                              +{images?.length - 4}
+                          </span>
+                      </div>
+                  )}
+              </div>}
+            </div>}
       </div>
       <div className="mt-2 flex w-full justify-between px-2">
         <div className="flex gap-4">

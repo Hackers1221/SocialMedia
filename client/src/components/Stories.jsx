@@ -334,7 +334,7 @@ function Stories () {
                                   }}
                               >
                                   {loading || !thumbnails[index + page * storiesPerPage] ? (
-                                      <div className="w-[7rem] h-[10rem] bg-gray-700 animate-pulse rounded-lg"></div>
+                                      <div className="w-[7rem] h-[10rem] bg-gray-500 animate-pulse rounded-lg"></div>
                                   ) : (
                                       <img 
                                           className="w-[7rem] h-[10rem] rounded-lg object-cover" 

@@ -31,7 +31,6 @@ function MainRoutes() {
         <Route path="explore" element={<Explore />} />
         <Route path="messenger" element={<Messenger />} />
         <Route path="pulse" element={<Pulse />} />
-        <Route path="story" element={<DisplayStory />}/>
         <Route path="settings" element={<Settings />} />
       </Route>
     </Routes>

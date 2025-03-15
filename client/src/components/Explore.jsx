@@ -19,7 +19,7 @@ const Explore = () => {
     video.muted = true; // Prevents autoplay issues in some browsers
   
     video.addEventListener("loadedmetadata", () => {
-      video.currentTime = Math.min(15, video.duration / 2); // Seek to a valid frame
+      video.currentTime = Math.min(5, video.duration / 2); // Seek to a valid frame
     });
   
     video.addEventListener("seeked", () => {
@@ -45,7 +45,7 @@ const Explore = () => {
   useEffect (() => {
     postState?.downloadedPosts?.forEach((post, index) => {
       if (post?.video[0]?.url) {
-        extractThumbnail(post.video[0].url, index);
+        extractThumbnail(post.video[0]?.url, index);
       }
     });
   }, []);

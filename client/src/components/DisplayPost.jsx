@@ -33,7 +33,8 @@ const DisplayPost = ({ open, setOpen, post }) => {
   const [commentDescription , setDescription] = useState("");
   const [countLike,setcountLike] = useState(post?.likes.length);
   const [countComment,setCountComment] = useState(post?.comments?.length);
-
+  const [caption, setCaption] = useState (post?.caption || "");
+  const [interest, setInterest] = useState ("");
 
   async function postCommentHandler() {
     const data = {
@@ -131,22 +132,70 @@ const DisplayPost = ({ open, setOpen, post }) => {
         id : post?._id
       }))
 
-      console.log (response);
       if (!response?.payload) return;
       setSaved ((prev) => !prev);
       await dispatch (getSavedPost(authState.data?._id));
     }
+
+    function getTimeDifference(dateString) {
+      const now = new Date(); 
+      const targetDate = new Date(dateString);
+  
+      const nowUTC = Date.UTC(
+          now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),
+          now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()
+      );
+  
+      const targetDateUTC = Date.UTC(
+          targetDate.getUTCFullYear(), targetDate.getUTCMonth(), targetDate.getUTCDate(),
+          targetDate.getUTCHours(), targetDate.getUTCMinutes(), targetDate.getUTCSeconds()
+      );
+  
+      const diffInSeconds = Math.floor((nowUTC - targetDateUTC) / 1000);
+  
+      if (diffInSeconds < 60) {
+          return `${diffInSeconds} second${diffInSeconds === 1 ? '' : 's'} ago`;
+      }
+  
+      const diffInMinutes = Math.floor(diffInSeconds / 60);
+      if (diffInMinutes < 60) {
+          return `${diffInMinutes} minute${diffInMinutes === 1 ? '' : 's'} ago`;
+      }
+  
+      const diffInHours = Math.floor(diffInMinutes / 60);
+      if (diffInHours < 24) {
+          return `${diffInHours} hour${diffInHours === 1 ? '' : 's'} ago`;
+      }
+  
+      const diffInDays = Math.floor(diffInHours / 24);
+      if (diffInDays < 30) {
+          return `${diffInDays} day${diffInDays === 1 ? '' : 's'} ago`;
+      }
+  
+      const diffInMonths = Math.floor(diffInDays / 30);
+      if (diffInMonths < 12) {
+          return `${diffInMonths} month${diffInMonths === 1 ? '' : 's'} ago`;
+      }
+  
+      const diffInYears = Math.floor(diffInMonths / 12);
+      return `${diffInYears} year${diffInYears === 1 ? '' : 's'} ago`;
+  }
+
+  function updateCaption () {
+    let hashtags = post?.interests[0]?.split(" ");
+    hashtags = hashtags?.map((hashtag) => hashtag.trim());
+    hashtags = hashtags?.map((hashtag) => (hashtag.length > 0 ? "#" : "") + hashtag);
+    hashtags = hashtags?.join(" ");
+    setInterest (hashtags);
+    setCaption ((prev) => prev + " " + hashtags);
+  }
 
   // fetching data
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
   
-      try {
-        if (post?.createdAt) {
-          setDate(post.createdAt.split("T")[0].split("-").reverse().join("/"));
-        }
-  
+      try {  
         if (post?.userId) {
           const userResponse = await dispatch(getUserById(post.userId));
           setCreator(userResponse.payload?.data?.userdetails || {});
@@ -166,10 +215,12 @@ const DisplayPost = ({ open, setOpen, post }) => {
   }, []);
 
   useEffect (() => {
+    updateCaption ();
     if(post?.likes.includes(authState?.data?._id)){
       setLiked(true);
     }
     else setLiked(false);
+    setDate (getTimeDifference (post?.createdAt));
     setCountComment(post?.comments.length);
     setcountLike(post?.likes.length);
   }, [post]);
@@ -196,10 +247,10 @@ const DisplayPost = ({ open, setOpen, post }) => {
         {/* Left Half */}
         <div className="w-1/2 p-4 flex relative items-center">
           <div className="absolute top-0 left-0 flex items-center gap-3 mb-4 z-[100] bg-black bg-opacity-50 px-4 py-2">
-            <Avatar url={creator?.image?.url || defaultImage} />
+            <Avatar url={creator?.image?.url || defaultImage} size={"md"}/>
             <div>
-              <p className="text-white font-semibold">{creator.name}</p>
-              <p className="text-gray-400 text-sm">{date}</p>
+              <p className="text-white font-semibold text-sm">{creator?.username}</p>
+              <p className="text-gray-400 text-xs">{date}</p>
             </div>
           </div>
           <div className="flex justify-center items-center relative w-full">
@@ -230,11 +281,16 @@ const DisplayPost = ({ open, setOpen, post }) => {
               ))}
             </div>
           </div>
-          <p className="absolute bottom-2 left-0 text-white mt-2 z-[100] bg-black bg-opacity-50 p-2">{post.caption}</p>
         </div>
 
         {/* Right Half */}
         <div className="w-1/2 flex flex-col bg-gray-900 bg-opacity-50 p-4 rounded-lg">
+          {(post?.caption?.length > 0 || interest?.length > 0) && <div className="text-sm border-b pb-4">
+            {post?.caption}
+            {interest?.length > 0 && <h2 className="font-extralight mt-8 text-xs">
+              {interest}
+            </h2>}
+          </div>}
           <div className="flex-1 overflow-y-auto space-y-3 pt-2">
             {commentState.comments.map((comment, idx) => (
               <div key={idx}>

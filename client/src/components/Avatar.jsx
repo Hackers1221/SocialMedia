@@ -1,4 +1,4 @@
-function Avatar ({size, url}) {
+function Avatar ({size, url, border}) {
   let width = 'w-12';
   if (size === 'lg') {
     width = 'w-20 md:w-32';
@@ -9,9 +9,13 @@ function Avatar ({size, url}) {
   if (size === 'sm') {
     width = 'w-6';
   }
+  let bord = ''
+  if (border === "true") {
+    border = 'border-2 border-white';
+  }
   return (
     <div className={`${width}`}>
-      <div className="rounded-full overflow-hidden hover:cursor-pointer bg-black">
+      <div className={`rounded-full overflow-hidden hover:cursor-pointer bg-black ${bord}`}>
         <img src={url} alt="" className="object-cover"/>
       </div>
     </div>

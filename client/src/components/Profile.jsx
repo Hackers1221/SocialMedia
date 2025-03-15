@@ -5,7 +5,7 @@ import PostCard from './PostCard';
 import usePosts from '../hooks/usePosts';
 import { followUser, getUserByUsername } from '../redux/Slices/auth.slice';
 import toast from 'react-hot-toast';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import 'react-loading-skeleton/dist/skeleton.css'
 import SkeletonPostCard from './SkeletonPostCard';
 import ProfileInfo from './ProfileInfo';
@@ -66,21 +66,34 @@ const Profile = () => {
   return (
       <div className={`fixed top-[10rem] md:top-[1rem] md:left-[20rem] left-[1rem] w-[85%] md:w-[50%] h-[97vh] flex flex-col flex-grow overflow-y-auto`}>
         {isLoading && <ProfileInfo />}
-        {!isLoading && <div className={`mb-4 w-full bg-transparent px-4 pt-4`}>
-          <div className={`flex items-center gap-4 `}>
-            <Avatar url={creator?.image?.url || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} size={'lg'}/>
-            <div>
-              <h2 className={`font-bold text-xl text-[${_COLOR.lightest}]`}>{creator?.name}</h2>
-              <h2 className={`text-lg text-[${_COLOR.more_light}]`}>{creator?.email}</h2>
-              <div className={`flex gap-4`}>
-                <h2 className={`text-sm text-[${_COLOR.lightest}]`}>{countFollowers} Followers</h2>
-                <h2 className={`text-sm text-[${_COLOR.lightest}]`}>{countFollowing} Following</h2>
+        {!isLoading && <div className={`mb-4 w-full bg-black/20`}>
+          <div className={`flex flex-col items-center gap-4 w-full border-b pb-4`}>
+            <div className='w-full relative'>
+              <img src={creator?.image?.url || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} className='w-full h-[12rem] object-cover'/>
+                <div className='flex justify-between items-center w-full absolute bottom-[-4rem] px-4'>
+                <Avatar url={creator?.image?.url || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} size={'lg'} border={"true"}/>
+                <div className='flex gap-4'>
+                  {!check && (
+                    <button className={`mt-2 px-4 py-2 bg-[${_COLOR.buttons}] text-white rounded-full hover:bg-[${_COLOR.buttons}] hover:border-none font-bold`} onClick={toggleFollow}>
+                      {follow ? "Following" : "Follow"}
+                    </button>
+                  )}
+                  {check && (
+                    <Link to={"/settings"} className={`mt-2 px-4 py-2 bg-[${_COLOR.buttons}] text-white rounded-full font-bold`}>
+                      Edit profile
+                    </Link>
+                  )}
+                </div>
               </div>
-              {!check && (
-                <button className={`mt-2 px-4 py-1 bg-transparent border border-[${_COLOR.more_light}] text-white rounded hover:bg-[${_COLOR.dark}]`} onClick={toggleFollow}>
-                  {follow ? "Unfollow" : "Follow"}
-                </button>
-              )}
+            </div>
+            <div className='w-full mt-16 px-4'>
+              <h2 className={`font-bold text-xl text-[${_COLOR.lightest}]`}>{creator?.name}</h2>
+              <h2 className={`font-extralight text-md text-[${_COLOR.more_light}] mb-2`}>@{creator?.username}</h2>
+              {creator?.about && <h2 className={`font-extralight text-md text-[${_COLOR.lightest}] mb-2 cursive`}>{creator?.about}</h2>}
+              <div className={`flex gap-4`}>
+                <h2 className={`text-sm font-bold text-[${_COLOR.lightest}]`}>{countFollowers} <span className='font-extralight'>Followers</span></h2>
+                <h2 className={`text-sm font-bold text-[${_COLOR.lightest}]`}>{countFollowing} <span className='font-extralight'>Following</span></h2>
+              </div>
             </div>
           </div>
           <div className={`w-full flex justify-evenly mt-4 pb-4`}>
@@ -91,10 +104,6 @@ const Profile = () => {
             <div className={`flex gap-2 pb-4 px-4 items-center hover:cursor-pointer text-[${_COLOR.lightest}] ${selected === 'Pulse' ? 'border-b-[2px]' : ''}`} onClick={() => setSelected ('Pulse')}>
               <IoMdPulse className='mr-2'/>
               <h2>Pulse</h2>
-            </div>
-            <div className={`flex gap-2 pb-4 px-4 items-center hover:cursor-pointer text-[${_COLOR.lightest}] ${selected === 'About' ? 'border-b-[2px]' : ''}`} onClick={() => setSelected ('About')}>
-              <i className="fa-solid fa-circle-info"></i>
-              <h2>About</h2>
             </div>
           </div>
         </div>}

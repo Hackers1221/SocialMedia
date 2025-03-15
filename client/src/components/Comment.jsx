@@ -17,7 +17,7 @@ const Comment = ({ username, text, time, avatar }) => {
         {/* Comment Content */}
         <div className="flex-1">
           <p className="text-sm font-semibold">
-            {username} <span className="text-base text-gray-400 font-extralight">&nbsp; {text}</span>
+            {username} <span className="text-sm text-gray-400 font-extralight">&nbsp; {text}</span>
           </p>
           <p className="text-xs text-gray-400">{time} &nbsp; &nbsp; Reply</p>
         </div>
