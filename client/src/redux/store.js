@@ -3,6 +3,7 @@ import authSliceReducer from './Slices/auth.slice';
 import postSliceReducer from './Slices/post.slice'
 import pulseSliceReducer from './Slices/pulse.slice'
 import commentSliceReducer from './Slices/comment.slice'
+import verseSliceReducer from './Slices/verse.slice'
 
 const Store = configureStore({
     reducer: {
@@ -10,6 +11,7 @@ const Store = configureStore({
         post: postSliceReducer,
         pulse: pulseSliceReducer,
         comment: commentSliceReducer,
+        verse: verseSliceReducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false}),
     devTools: true

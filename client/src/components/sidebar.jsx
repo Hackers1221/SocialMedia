@@ -20,6 +20,7 @@ import { FiSearch } from "react-icons/fi";
 import { Search, X } from "lucide-react";
 import Avatar from "./Avatar";
 import { RxAvatar } from "react-icons/rx";
+import VerseForm from "./VerseForm";
 
 function Sidebar() {
 
@@ -28,18 +29,12 @@ function Sidebar() {
     const [isOpen, setIsOpen] = useState(false);
     const [isPostForm, setIsPostForm] = useState(false);
     const [isPulseForm, setIsPulseForm] = useState(false);
+    const [isVerseForm, setIsVerseForm] = useState (false);
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const [searchresult,setSearchresult] = useState([]);
     const [query,SetQuery] = useState("");
     const [search , setSearch] = useState(false); 
-
-    const recentSearches = [
-        { username: "code_master", realName: "Aryan Singh", followers: 890 },
-        { username: "hacker_99", realName: "Neha Sharma", followers: 1200 },
-        { username: "tech_guru", realName: "Ravi Patel", followers: 5000 }
-    ];
-
 
     const dispatch = useDispatch ();
     const navigate = useNavigate ();
@@ -117,9 +112,14 @@ function Sidebar() {
                     setDialogOpen(false); 
                     setIsPulseForm(true); 
                 }} 
+                onAddVerse={() => {
+                    setDialogOpen(false);
+                    setIsVerseForm (true);
+                }}
             />
             <PostForm open={isPostForm} setOpen={setIsPostForm}/>
             <PulseForm open={isPulseForm} setOpen={setIsPulseForm} />
+            <VerseForm open={isVerseForm} setOpen={setIsVerseForm} />
 
 
             
@@ -191,6 +191,12 @@ function Sidebar() {
                                 <Link to="/pulse" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
                                     <IoMdPulse className="ml-4"/>
                                     <span className="ml-2 text-sm tracking-wide truncate">Pulse</span>
+                                </Link>
+                            </li>
+                            <li onClick={() => setIsOpen(false)}>
+                                <Link to="/verse" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
+                                    <i className="fa-regular fa-comments ml-4 text-sm"/>
+                                    <span className="ml-2 text-sm tracking-wide truncate">Verse</span>
                                 </Link>
                             </li>
                             <li onClick={() => setIsOpen(false)}>

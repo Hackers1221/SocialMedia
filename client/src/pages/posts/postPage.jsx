@@ -82,9 +82,9 @@ function PostPage() {
                 {/* Scrollable Post List */}
                 {isLoading && <SkeletonPostCard />}
                 {!isLoading && <div className="pt-4 w-full h-screen">
-                    {postState?.postList?.map((post, key) => (
+                    {postState?.postList?.length > 0 ? postState?.postList?.map((post, key) => (
                         <PostCard post={post} key={key}/>
-                    ))}
+                    )) : <h2 className='w-full text-center font-extralight text-white'>No posts to show</h2>}
                 </div>}
             </div>
         </>
