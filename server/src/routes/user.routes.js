@@ -18,5 +18,6 @@ userroutes.patch('/',validators.isUserAuthenticated, uploadSingleImage, updatePr
 userroutes.patch('/follow/:id',validators.isUserAuthenticated,authcontroller.followUser);
 userroutes.get('/user/:name',validators.isUserAuthenticated,authcontroller.getUserByUserName);
 userroutes.delete('/:id',validators.isUserAuthenticated, authcontroller.deleteUser);
+userroutes.get('/search/:q',validators.isUserAuthenticated,authcontroller.searchUser)
 
 module.exports = userroutes

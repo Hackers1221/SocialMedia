@@ -34,6 +34,8 @@ const signin = async(req,res) => {
     })
 }
 
+
+
 const deleteUser = async(req, res) => {
     const { id } = req.params;
     console.log(id);
@@ -123,6 +125,20 @@ const getUserByUserName = async(req,res) => {
     })
 }
 
+const searchUser = async(req,res) => {
+    const response = await userService.searchUser(String(req.params.q));
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg:"Unable to fetch the searched user",
+            error : response.error
+        })
+    }
+    return res.status(StatusCodes.ACCEPTED).json({
+        msg : "Successfully fetched the searched users",
+        userdata : response.user,
+    })
+}
+
 
 module.exports = {
     signup,
@@ -131,5 +147,6 @@ module.exports = {
     updateUser,
     followUser,
     getUserByUserName,
-    deleteUser
+    deleteUser,
+    searchUser
 }

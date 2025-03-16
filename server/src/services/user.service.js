@@ -249,6 +249,25 @@ const deleteUser = async(id) => {
         return response;
     }
 }
+
+
+const searchUser = async(query) => {
+    const response = {};
+    try {
+        const users = await usermodel.find({
+            $or: [
+                { username: { $regex: query, $options: "i" } },
+                { name : { $regex: query, $options: "i" } }
+            ]
+        }).limit(5);
+        response.user = users;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response
+    }
+}
+
 module.exports = {
     CreateUser,
     ValidateUser,
@@ -256,6 +275,7 @@ module.exports = {
     updateUser,
     followUser,
     getUserByUserName,
-    deleteUser
+    deleteUser,
+    searchUser
 }
 

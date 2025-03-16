@@ -1,4 +1,4 @@
-import { FaHome } from "react-icons/fa";
+import { FaHome, FaUserCircle } from "react-icons/fa";
 import { MdExplore } from "react-icons/md";
 import { IoChatboxEllipsesSharp } from "react-icons/io5";
 import { FaBell, FaSearch } from "react-icons/fa";
@@ -14,9 +14,12 @@ import { Link, useNavigate } from "react-router-dom"
 import PostForm from "./PostForm";
 import PulseForm from "./PulseForm";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../redux/Slices/auth.slice";
+import { logout, searchUser } from "../redux/Slices/auth.slice";
 import { IoMdPulse } from "react-icons/io";
+import { FiSearch } from "react-icons/fi";
+import { Search, X } from "lucide-react";
 import Avatar from "./Avatar";
+import { RxAvatar } from "react-icons/rx";
 
 function Sidebar() {
 
@@ -27,6 +30,16 @@ function Sidebar() {
     const [isPulseForm, setIsPulseForm] = useState(false);
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+    const [searchresult,setSearchresult] = useState([]);
+    const [query,SetQuery] = useState("");
+    const [search , setSearch] = useState(false); 
+
+    const recentSearches = [
+        { username: "code_master", realName: "Aryan Singh", followers: 890 },
+        { username: "hacker_99", realName: "Neha Sharma", followers: 1200 },
+        { username: "tech_guru", realName: "Ravi Patel", followers: 5000 }
+    ];
+
 
     const dispatch = useDispatch ();
     const navigate = useNavigate ();
@@ -34,6 +47,10 @@ function Sidebar() {
     async function onLogout () {
         await dispatch (logout ());
         navigate ("/login"); return;
+    }
+
+    const searchHandler = () => {
+        setSearch(!search);
     }
 
     useEffect (() => {
@@ -44,6 +61,28 @@ function Sidebar() {
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, []);
+
+
+    function onChangeHandler(e){
+        SetQuery(e.target.value)
+    }
+
+    useEffect(() => {
+        if(query.trim()==""){
+            setSearchresult([]);
+            return;
+        }
+        // Set a timeout to wait before making the API call
+        const delayDebounceFn = setTimeout(async () => {
+            try {
+                const response = await dispatch(searchUser(query));
+                setSearchresult(response.payload?.data?.userdata);
+            } catch (error) {
+                console.error("Search failed:", error);
+            }
+        }, 300); // 300ms debounce delay
+        return () => clearTimeout(delayDebounceFn);
+    },[query])
 
     useEffect(() => {
         const handleOutsideClick = (e) => {
@@ -81,6 +120,9 @@ function Sidebar() {
             />
             <PostForm open={isPostForm} setOpen={setIsPostForm}/>
             <PulseForm open={isPulseForm} setOpen={setIsPulseForm} />
+
+
+            
             
 
             <div className="fixed top-0 left-0 z-50">
@@ -97,9 +139,10 @@ function Sidebar() {
                         />
                     )}
                 </div>
+                
 
                 {/* Sidebar */}
-                <div
+                {!search ?  (<div
                     id="sidebar"
                     className={`fixed top-0 left-0 flex flex-col w-[18em] bg-black bg-opacity-[40%] h-screen shadow-md transform ${
                         isOpen ? "translate-x-0" : "-translate-x-full"
@@ -130,6 +173,12 @@ function Sidebar() {
                             <li className="px-5">
                                 <div className="flex flex-row items-center h-8">
                                     <div className={`text-sm font-bold text-[${_COLOR.lightest}]`}>Menu</div>
+                                </div>
+                            </li>
+                            <li className="hover:cursor-pointer" onClick={() => setSearch(true)}>
+                                <div className="relative flex flex-row items-center h-11 hover:bg-gray-200 text-white hover:text-gray-800 border-l-4 border-transparent hover:border-gray-400 pr-6">
+                                    <FiSearch className="ml-4"/>
+                                    <span className="ml-2 text-sm tracking-wide truncate">Search</span>
                                 </div>
                             </li>
                             <li onClick={() => setIsOpen(false)}>
@@ -197,7 +246,48 @@ function Sidebar() {
                             </li>
                         </ul>
                     </div>
-                </div>
+                </div>) : 
+
+                /* Search button */
+
+                (<div className="fixed top-0 left-0 w-[18em] bg-black bg-opacity-[40%] h-screen flex flex-col p-4">
+                    <div className="flex items-center space-x-2">
+                        <input
+                            type="text"
+                            placeholder="Search..."
+                            className="w-full p-2 rounded-md bg-gray-700 text-white outline-none"
+                            onChange={onChangeHandler}
+                            name = "query"
+                            value = {query}
+                        />
+                        <button onClick={() => setSearch(false)} className="text-white text-2xl">
+                            <X />
+                        </button>
+                    </div>
+                    <div className="border-b border-gray-600 mt-2"></div>
+                    <div className="flex items-center space-x-2 text-white mt-2">
+                        Recent searches
+                    </div>
+                    <div className="mt-2">
+                        {searchresult.map((user, index) => (
+                            <div key={index} className="text-white p-2 flex items-center space-x-2">
+                                {user.image?.url ? 
+                                <Avatar url = {user.image?.url}/> : 
+                                <RxAvatar />
+                                 }
+                                <div>
+                                    <p className="font-semibold">{user.username}</p>
+                                    <div className="text-sm text-gray-300 flex gap-1">
+                                        <span>{user.name}</span> • <span>{user.followers?.length() ? user.followers?.length() : 0} followers</span>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>)    
+                
+            }                
+                
             </div>
         </>
     );

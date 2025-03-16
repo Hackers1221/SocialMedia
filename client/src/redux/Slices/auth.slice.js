@@ -34,6 +34,7 @@ export const verifyOtp = createAsyncThunk('/auth/verifyotp',async(data) => {
 export const login = createAsyncThunk('/auth/login', async (data) => {    
     try {
         const response = await axiosInstance.post("auth/signin", data);
+        console.log(response);
         if(!response) toast.error('Something went wrong, try again');
         return  response;
     } catch (error) {
@@ -148,6 +149,19 @@ export const deleteUser = createAsyncThunk('/user/delete', async (userId) => {
         toast.error(error.response?.data?.msg || 'An error occurred');
     }
 });
+
+export const searchUser = createAsyncThunk('search/user',async(query) => {
+    try {
+        const response = await axiosInstance.get(`auth/search/${query}` ,{
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+        return response;
+    } catch (error) {
+        toast.error(error.response?.data?.msg || 'An error occurred');
+    }
+})
 
 
 const authSlice = createSlice({
