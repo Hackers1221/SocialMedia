@@ -265,22 +265,22 @@ function Sidebar() {
                         </button>
                     </div>
                     <div className="border-b border-gray-600 mt-2"></div>
-                    <div className="flex items-center space-x-2 text-white mt-2">
+                    <div className="flex items-center space-x-2 text-white mt-2 text-sm">
                         Recent searches
                     </div>
                     <div className="mt-2">
                         {searchresult.map((user, index) => (
                             <div key={index} className="text-white p-2 flex items-center space-x-2">
                                 {user.image?.url ? 
-                                <Avatar url = {user.image?.url}/> : 
-                                <RxAvatar />
+                                    <Avatar url = {user.image?.url}/> : 
+                                    <RxAvatar />
                                  }
-                                <div>
-                                    <p className="font-semibold">{user.username}</p>
+                                <Link to={`/profile/${user?.username}`} onClick={() => setSearch(false)}>
+                                    <p className="font-semibold hover:underline">{user.username}</p>
                                     <div className="text-sm text-gray-300 flex gap-1">
                                         <span>{user.name}</span> • <span>{user.followers?.length() ? user.followers?.length() : 0} followers</span>
                                     </div>
-                                </div>
+                                </Link>
                             </div>
                         ))}
                     </div>

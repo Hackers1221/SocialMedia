@@ -79,7 +79,7 @@ function LogIn () {
                         <p className="text-[3rem] text-center text-white font-bold">Welcome Back!</p>
                         <div className="mt-4">
                             <label className="block text-white text-sm font-bold mb-2">
-                            Email Address
+                            Email Address / Username
                             </label>
                             <input
                             name="email"
@@ -88,7 +88,7 @@ function LogIn () {
                             className={`text-white rounded-xl py-[0.6rem] px-4 block w-full focus:outline-none bg-[${_COLOR.input}]`}
                             type="email"
                             autoComplete="off" autoCorrect="off" spellCheck="false"
-                            placeholder="Email address"
+                            placeholder="Email address / Username"
                             required
                             />
                         </div>

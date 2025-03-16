@@ -20,6 +20,7 @@ const Profile = () => {
   const [check,setCheck] = useState(false);
   const [isLoading,setIsLoading] = useState(true);
   const [selected, setSelected] = useState ('Posts');
+  const [joining, setJoining] = useState ("");
 
   const dispatch = useDispatch ();
   const { username } = useParams();
@@ -38,6 +39,11 @@ const Profile = () => {
           setCountFollowers(userData?.follower?.length || 0);
           setCountFollowing(userData?.following?.length || 0);
           setCheck(userData._id === authState.data._id);
+
+          const dateObj = new Date(userData?.createdAt);
+          const date = dateObj.getDate();
+          const monthName = dateObj.toLocaleString('default', { month: 'long' });
+          setJoining(`${date} ${monthName}`);
         }
       })
       .catch((error) => {
@@ -64,22 +70,22 @@ const Profile = () => {
   };
 
   return (
-      <div className={`fixed top-[10rem] md:top-[1rem] md:left-[20rem] left-[1rem] w-[85%] md:w-[50%] h-[97vh] flex flex-col flex-grow overflow-y-auto`}>
+      <div className={`fixed top-[1rem] md:left-[20rem] left-[4rem] w-[85%] md:w-[50%] h-[97vh] flex flex-col flex-grow overflow-y-auto`}>
         {isLoading && <ProfileInfo />}
         {!isLoading && <div className={`mb-4 w-full bg-black/20`}>
           <div className={`flex flex-col items-center gap-4 w-full border-b pb-4`}>
             <div className='w-full relative'>
               <img src={creator?.image?.url || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} className='w-full h-[12rem] object-cover'/>
-                <div className='flex justify-between items-center w-full absolute bottom-[-4rem] px-4'>
+                <div className='flex justify-between items-end w-full absolute bottom-[-4rem] px-4'>
                 <Avatar url={creator?.image?.url || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} size={'lg'} border={"true"}/>
                 <div className='flex gap-4'>
                   {!check && (
-                    <button className={`mt-2 px-4 py-2 bg-[${_COLOR.buttons}] text-white rounded-full hover:bg-[${_COLOR.buttons}] hover:border-none font-bold`} onClick={toggleFollow}>
+                    <button className={`mt-2 px-4 py-2 bg-transparent border text-white rounded-full hover:bg-[${_COLOR.lightest}] hover:text-black`} onClick={toggleFollow}>
                       {follow ? "Following" : "Follow"}
                     </button>
                   )}
                   {check && (
-                    <Link to={"/settings"} className={`mt-2 px-4 py-2 bg-[${_COLOR.buttons}] text-white rounded-full font-bold`}>
+                    <Link to={"/settings"} className={`mt-2 px-4 py-2 bg-transparent border hover:bg-[${_COLOR.lightest}] hover:text-black text-white rounded-full`}>
                       Edit profile
                     </Link>
                   )}
@@ -88,11 +94,17 @@ const Profile = () => {
             </div>
             <div className='w-full mt-16 px-4'>
               <h2 className={`font-bold text-xl text-[${_COLOR.lightest}]`}>{creator?.name}</h2>
-              <h2 className={`font-extralight text-md text-[${_COLOR.more_light}] mb-2`}>@{creator?.username}</h2>
-              {creator?.about && <h2 className={`font-extralight text-md text-[${_COLOR.lightest}] mb-2 cursive`}>{creator?.about}</h2>}
-              <div className={`flex gap-4`}>
-                <h2 className={`text-sm font-bold text-[${_COLOR.lightest}]`}>{countFollowers} <span className='font-extralight'>Followers</span></h2>
-                <h2 className={`text-sm font-bold text-[${_COLOR.lightest}]`}>{countFollowing} <span className='font-extralight'>Following</span></h2>
+              <h2 className={`font-extralight text-sm text-[${_COLOR.more_light}] mb-2`}>@{creator?.username}</h2>
+              {creator?.about && <h2 className={`font-extralight text-md text-[${_COLOR.lightest}] mb-4 cursive`}>{creator?.about}</h2>}
+              <div className={`flex justify-between gap-4`}>
+                <div className='flex gap-4'>
+                  <h2 className={`text-sm font-bold text-[${_COLOR.lightest}]`}>{countFollowers} <span className='font-extralight'>Followers</span></h2>
+                  <h2 className={`text-sm font-bold text-[${_COLOR.lightest}]`}>{countFollowing} <span className='font-extralight'>Following</span></h2>
+                </div>
+                <div className='flex gap-2 items-center'>
+                  <i className="fa-regular fa-calendar-days text-white"></i>
+                  <h2 className={`text-sm font-bold text-[${_COLOR.lightest}]`}><span className='font-extralight'>Joined</span> {joining}</h2>
+                </div>
               </div>
             </div>
           </div>

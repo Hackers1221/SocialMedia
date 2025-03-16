@@ -60,7 +60,11 @@ const userSchema = new Schema({
     resetTokenExpiry: {
         type: Date,
         default : Date.now()
-    }    
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 userSchema.pre('save', function(next) {
