@@ -1,6 +1,6 @@
 import { use, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updateUser, deleteUser } from "../redux/Slices/auth.slice";
+import { updateUser, deleteUser, logout } from "../redux/Slices/auth.slice";
 import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -60,6 +60,11 @@ function Settings() {
     if(Deleted.payload) navigate("/signup");
     setIsdeleteDialog(false); 
     setDeleting(false);
+  }
+
+  async function onLogout () {
+    await dispatch (logout ());
+    navigate ("/login"); return;
   }
 
   const updateuser = async () => {
@@ -268,6 +273,19 @@ function Settings() {
                 onClick={() => setIsdeleteDialog(true)}
                   className="px-6 py-3 font-bold bg-transparent border border-red-700 text-red-700 hover:text-white rounded-lg hover:bg-red-700 transition-all">
                   Delete Account
+                </button>
+              </div>
+            </div>
+            <div className={`mt-4 bg-transparent border p-6 rounded-lg shadow-sm`}>
+              <h3 className={`text-lg font-medium text-[${_COLOR.lightest}] mb-2`}>End Session</h3>
+              <p className={`text-sm text-[${_COLOR.lightest}] mb-4`}>
+                Logging out will end your current session. Make sure to save any unsaved changes before proceeding.
+              </p>
+              <div className="flex justify-between items-center">
+                <button 
+                onClick={onLogout}
+                  className="px-6 py-3 font-bold bg-transparent border text-white hover:text-white rounded-lg hover:bg-red-700 transition-all">
+                  Log Out
                 </button>
               </div>
             </div>
