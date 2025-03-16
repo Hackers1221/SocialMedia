@@ -19,7 +19,7 @@ const signup = async(req,res) =>  {
 };
 
 const signin = async(req,res) => {
-    const response = await userService.ValidateUser(req.body);
+    const response = await userService.ValidateUser(req.body.email,req.body.password);
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
             msg:"Login failed",

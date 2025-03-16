@@ -29,27 +29,34 @@ const CreateUser = async(data) => {
     }
 };
 
-const ValidateUser = async(data) => {
+const ValidateUser = async (data, password) => {
     const response = {};
     try {
-        const res = await usermodel.findOne({email : data.email});
-        if(!res){
-            response.error = "Invalid email";
+        let res = await usermodel.findOne({ email: data });
+
+        if (!res) {
+            res = await usermodel.findOne({ username: data });
+            if (!res) {
+                response.error = "Invalid username or email";
+                return response;
+            }
+        }
+
+        const result = bcrypt.compareSync(password, res.password);
+        if (!result) {
+            response.error = "Invalid password";
             return response;
         }
-        const result = bcrypt.compareSync(data.password, res.password);
-        if(!result){
-            response.error = "Invalid password";
-            return response
-        }
-        response.userdata = res; 
+
+        response.userdata = res;
         return response;
     } catch (error) {
-        console.log("Error" , error);
+        console.log("Error", error);
         response.error = error.message;
-        return response ; 
+        return response;
     }
-}
+};
+
 
 const getuserByid = async(id) => {
     const response = {};
