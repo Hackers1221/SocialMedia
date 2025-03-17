@@ -9,6 +9,7 @@ import DisplayPost from "./DisplayPost";
 import { CreateComment, getCommentByPostId } from "../redux/Slices/comment.slice";
 import usePosts from "../hooks/usePosts";
 import { getAllVerse, getVerseById, likeVerse, deleteVerse } from "../redux/Slices/verse.slice";
+import DisplayVerse from "./DisplayVerse";
 
 function VerseCard (verse) {
     const authState = useSelector((state) => state.auth);
@@ -26,6 +27,7 @@ function VerseCard (verse) {
 
     const [date, setDate] = useState("");
     const [check, setCheck] = useState(false);
+    const [isDialogOpen, setDialogOpen] = useState (false);
 
     const [commentDescription, setDescription] = useState("");
     const [countComment, setCountComment] = useState(comments?.length);
@@ -149,6 +151,7 @@ function VerseCard (verse) {
 
     return (
         <div className={`rounded-md mb-4 bg-black p-4 relative bg-opacity-[20%] box-shadow`} >
+            <DisplayVerse open={isDialogOpen} setOpen={setDialogOpen} verse={verse?.verse}/>
             <div className="flex justify-between">
                 <div className="flex gap-3">
                     <div className="flex items-center">
@@ -203,6 +206,7 @@ function VerseCard (verse) {
                     </button>
                     <button className={`flex gap-2 items-center text-[${_COLOR.more_light}]`} onClick={() => {
                         getComments;
+                        setDialogOpen (true);
                     }}>
                         <i className="text-white fa-regular fa-comment"></i>
                         {countComment}

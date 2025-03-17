@@ -284,7 +284,7 @@ function Settings() {
               <div className="flex justify-between items-center">
                 <button 
                 onClick={onLogout}
-                  className="px-6 py-3 font-bold bg-transparent border text-white hover:text-white rounded-lg hover:bg-red-700 transition-all">
+                  className="px-6 py-3 font-bold bg-transparent border text-white rounded-lg hover:bg-white hover:text-black transition-all">
                   Log Out
                 </button>
               </div>

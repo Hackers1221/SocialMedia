@@ -47,7 +47,7 @@ function VersePage() {
         <>
             <div className="fixed top-[9rem] md:top-[1rem]  md:left-[20rem] left-[1rem] w-[85%] md:w-[50%] h-[82vh] md:h-[97vh] flex flex-col flex-grow overflow-y-auto">                
                 {/* Input Box */}
-                <div className={`w-full my-4 rounded-md py-8 flex justify-center gap-2 bg-black/20 px-4`}>
+                <div className={`w-full mb-4 rounded-md py-8 flex justify-center gap-2 bg-black/20 px-4`}>
                     <Avatar url={authState.data?.image?.url} />
                     <div className="flex flex-col items-end w-full">
                         <input 
