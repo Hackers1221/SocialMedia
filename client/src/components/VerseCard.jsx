@@ -150,7 +150,7 @@ function VerseCard (verse) {
     }, [verse?.verse]);
 
     return (
-        <div className={`rounded-md mb-4 bg-black p-4 relative bg-opacity-[20%] box-shadow`} >
+        <div className={`rounded-md mb-4 bg-[${_COLOR.card}] p-4 relative box-shadow`} >
             <DisplayVerse open={isDialogOpen} setOpen={setDialogOpen} verse={verse?.verse}/>
             <div className="flex justify-between">
                 <div className="flex gap-3">
@@ -164,12 +164,12 @@ function VerseCard (verse) {
                     <div className="grow">
                         <div>
                             <Link to={`/profile/${creator?.username}`}>
-                                <span className={`mr-1 text-sm font-semibold cursor-pointer hover:underline text-white`}>
+                                <span className={`mr-1 text-sm font-semibold cursor-pointer hover:underline text-[${_COLOR.text}]`}>
                                     {creator?.username}
                                 </span>
                             </Link>
                         </div>
-                        <p className={`text-[${_COLOR.more_light}] text-xs font-extralight`}>
+                        <p className={`text-[${_COLOR.text}] text-xs font-extralight`}>
                             {date}
                         </p>
                     </div>
@@ -178,37 +178,37 @@ function VerseCard (verse) {
                     <div tabIndex={0} role="button" className="m-1">
                         <i className="text-white fa-solid fa-ellipsis"></i>
                     </div>
-                    <ul tabIndex={0} className={`dropdown-content menu bg-[${_COLOR.medium}] text-[${_COLOR.lightest}] rounded-box z-[1] w-52 p-4 gap-4 shadow-2xl shadow-[${_COLOR.medium}]`}>
+                    <ul tabIndex={0} className={`dropdown-content menu bg-[${_COLOR.dropdown}] text-[${_COLOR.text}] rounded-box z-[1] w-52 p-4 gap-4 shadow-2xl shadow-[${_COLOR.medium}]`}>
                         <li className="hover:cursor-pointer"><span>Not Intrested</span></li>
                         {(authState.data?._id === userId) && <li
-                            className="hover:cursor-pointer text-red-300 flex flex-row justify-between"
+                            className="hover:cursor-pointer text-red-400 flex flex-row justify-between"
                             onClick={onDelete}>
                             <span>Delete Verse </span>
                             {deleting && (
-                                <i className="fa-solid fa-spinner animate-spin text-lg text-white"></i>
+                                <i className={`fa-solid fa-spinner animate-spin text-lg text-[${_COLOR.text}]`}></i>
                             )}
                         </li>
                         }
                     </ul>
                 </div>
             </div>
-            <p className={`text-sm mt-2 ml-2 text-[${_COLOR.more_light}]`}>
+            <p className={`text-sm mt-2 ml-2 text-[${_COLOR.text}]`}>
                 {tempText} {text?.toString().length > 1000 && (
-                    <span onClick={() => setCheck(!check)} className={`text-blue-300 font-extralight hover:cursor-pointer`}>
+                    <span onClick={() => setCheck(!check)} className={`text-[${_COLOR.buttons}] font-bold hover:cursor-pointer`}>
                         {check ? ' Show Less' : '... Read More'}
                     </span>)}
             </p>
             <div className="mt-2 flex w-full justify-between px-2">
                 <div className="flex gap-4">
-                    <button className={`flex gap-2 items-center text-[${_COLOR.more_light}]`} onClick={toggleLike}>
-                        {liked ? (<i className="text-red-600 fa-solid fa-heart"></i>) : <i className="text-white fa-regular fa-heart"></i>}
+                    <button className={`flex gap-2 items-center text-[${_COLOR.text}]`} onClick={toggleLike}>
+                        {liked ? (<i className="text-red-600 fa-solid fa-heart"></i>) : <i className={`text-[${_COLOR.text}] fa-regular fa-heart`}></i>}
                         {countLike}
                     </button>
-                    <button className={`flex gap-2 items-center text-[${_COLOR.more_light}]`} onClick={() => {
+                    <button className={`flex gap-2 items-center text-[${_COLOR.text}]`} onClick={() => {
                         getComments;
                         setDialogOpen (true);
                     }}>
-                        <i className="text-white fa-regular fa-comment"></i>
+                        <i className={`fa-regular fa-comment text-[${_COLOR.text}]`}></i>
                         {countComment}
                     </button>
                 </div>

@@ -57,10 +57,10 @@ const SavedPost = () => {
       <DisplayPost open={isDialogOpen} setOpen={setDialogOpen} post={selectedPost}/>
     <div className="fixed top-[10rem] md:top-[1rem] md:left-[20rem] left-[1rem] w-[85%] md:w-[50%]">
       {/* Tabs for Images and Reels */}
-      <div className="flex justify-center space-x-4 border-b pb-2">
+      <div className={`flex justify-center space-x-4 border-b pb-2 bg-[${_COLOR.card}]`}>
         <button
           className={`px-4 py-2 font-semibold flex items-center space-x-2 ${
-            activeTab === "images" ? `text-[${_COLOR.lightest}] border-b-2 border-[${_COLOR.lightest}]` : "text-gray-500"
+            activeTab === "images" ? `text-[${_COLOR.buttons}]` : "text-gray-400"
           }`}
           onClick={() => setActiveTab("images")}
         >
@@ -69,7 +69,7 @@ const SavedPost = () => {
         </button>
         <button
           className={`px-4 py-2 font-semibold flex items-center space-x-2 ${
-            activeTab === "reels" ? `text-[${_COLOR.lightest}] border-b-2 border-[${_COLOR.lightest}]` : "text-gray-500"
+            activeTab === "reels" ? `text-[${_COLOR.buttons}]` : "text-gray-400"
           }`}
           onClick={() => setActiveTab("reels")}
         >

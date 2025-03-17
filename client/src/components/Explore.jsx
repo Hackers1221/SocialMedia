@@ -55,12 +55,12 @@ const Explore = () => {
     <DisplayPost open={isDialogOpen} setOpen={setDialogOpen} post={selectedPost}/>
     <div className="fixed top-[8rem] md:top-[1rem]  md:left-[20rem] left-[1rem] w-[85%] md:w-[49%] h-[97vh] flex flex-col flex-grow overflow-y-auto">
       <div className="max-w-5xl w-full">
-      <h2 className={`text-[${_COLOR.lightest}] heading text-[2rem] mb-4`}>Explore</h2>
+      <h2 className={`text-[${_COLOR.text}] heading text-[2rem] mb-4`}>Explore</h2>
         <div className="relative w-full mb-6">
           <input
             type="text"
             placeholder="Search for ideas..."
-            className={`w-full p-3 border border-[${_COLOR.buttons}] rounded-md shadow-md focus:outline-none text-[${_COLOR.lightest}]`}
+            className={`w-full p-3 border border-[${_COLOR.input}] bg-transparent rounded-md focus:shadow-md focus:outline-none text-[${_COLOR.text}]`}
           />
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">

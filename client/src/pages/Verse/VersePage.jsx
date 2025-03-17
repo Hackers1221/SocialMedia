@@ -47,23 +47,23 @@ function VersePage() {
         <>
             <div className="fixed top-[9rem] md:top-[1rem]  md:left-[20rem] left-[1rem] w-[85%] md:w-[50%] h-[82vh] md:h-[97vh] flex flex-col flex-grow overflow-y-auto">                
                 {/* Input Box */}
-                <div className={`w-full mb-4 rounded-md py-8 flex justify-center gap-2 bg-black/20 px-4`}>
+                <div className={`w-full mb-4 rounded-md py-8 flex justify-center gap-2 px-4 bg-[${_COLOR.card}]`}>
                     <Avatar url={authState.data?.image?.url} />
                     <div className="flex flex-col items-end w-full">
                         <input 
                             type="text" 
                             placeholder="What's happening?" 
                             value={text}
-                            className={`w-full p-2 bg-transparent border border-[${_COLOR.less_light}] rounded-md focus:outline-none text-white`} 
+                            className={`w-full p-2 bg-transparent border border-[${_COLOR.input}] rounded-md focus:outline-none text-[${_COLOR.text}] focus:shadow-md`} 
                             onChange={(e) => setText (e.target.value)}/>
                         <div className="flex gap-2">
-                            <button 
-                                className={`mt-2 px-6 py-2 bg-transparent border border-[${_COLOR.less_light}] hover:bg-[${_COLOR.lightest}] hover:text-black text-white rounded-full`}
+                            {text.length > 0 && <button 
+                                className={`mt-2 px-6 py-2 bg-transparent border border-[${_COLOR.buttons}] hover:bg-[${_COLOR.buttons}] hover:text-white text-[${_COLOR.buttons}] rounded-full font-bold`}
                                 onClick={() => setText ("")}>
                                     Clear
-                            </button>
+                            </button>}
                             <button 
-                                className={`mt-2 px-6 py-2 bg-transparent border border-[${_COLOR.less_light}] hover:bg-[${_COLOR.lightest}] hover:text-black text-white rounded-full`}
+                                className={`mt-2 px-6 py-2 bg-[${_COLOR.buttons}] hover:bg-[${_COLOR.buttonsHover}] text-white rounded-full`}
                                 onClick={() => setIsOpen (true)}>
                                     Post
                             </button>
@@ -74,12 +74,12 @@ function VersePage() {
                 <VerseForm open={isOpen} setOpen={setIsOpen} initialText={text}/>
 
                 <div className="flex justify-between items-center">
-                    <h2 className={`text-[${_COLOR.lightest}] font-bold text-[1.5rem]`}>Recent Verse</h2>
+                    <h2 className={`text-[${_COLOR.text}] font-bold text-[1.5rem]`}>Recent Verse</h2>
                     <div className="flex gap-4">
                         {options?.map ((option, index) => {
                            return (<h2 
                             key={index} 
-                            className={`${ selected === option ? `text-[${_COLOR.lightest}]` : `text-[${_COLOR.less_light}]` // Default color
+                            className={`${ selected === option ? `text-[${_COLOR.buttons}]` : `text-gray-400` // Default color
                             } font-bold text-[1rem] hover:cursor-pointer`} 
                             onClick={() => optionChange(option)}>{option}</h2>)
                         })}

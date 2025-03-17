@@ -22,7 +22,7 @@ function Layout () {
     }, []);
 
     return (
-        <div className={`min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-[${_COLOR.darkest}] text-gray-800`}>
+        <div className={`min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-[${_COLOR.background}] text-gray-800`}>
             {/* {!hideOthers && screenWidth >= 768 && <Navbar />} */}
             {!hideSidebar && <Sidebar />}
             {!hideOthers && screenWidth >= 1480 && !hideSidebar && <Messages />}

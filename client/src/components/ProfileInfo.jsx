@@ -3,7 +3,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 
 function ProfileInfo () {
     return (
-        <div className={`mb-4 w-full bg-[${_COLOR.less_light}] px-4 pt-4`}>
+        <div className={`mb-4 w-full bg-[${_COLOR.background}] px-4 pt-4`}>
           <div className={`flex items-center gap-4 `}>
             <Skeleton circle width={50} height={50}/>
             <div className="w-[50%]">

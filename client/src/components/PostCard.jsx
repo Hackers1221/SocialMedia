@@ -284,7 +284,7 @@ function PostCard(post) {
     }, [post?.post]);
 
     return (
-        <div className={`rounded-md mb-4 bg-black p-4 relative bg-opacity-[20%] box-shadow`} >
+        <div className={`mb-4 bg-[${_COLOR.card}] p-4 relative box-shadow border rounded-md`} >
             <DisplayPost open={isDialogOpen} setOpen={setDialogOpen} post={post?.post} />
             <div className="flex justify-between">
                 <div className="flex gap-3">
@@ -298,77 +298,77 @@ function PostCard(post) {
                     <div className="grow">
                         <div>
                             <Link to={`/profile/${creator?.username}`}>
-                                <span className={`mr-1 text-sm font-semibold cursor-pointer hover:underline text-white`}>
+                                <span className={`mr-1 text-sm font-semibold cursor-pointer hover:underline text-[${_COLOR.text}]`}>
                                     {creator?.username}
                                 </span>
                             </Link>
                         </div>
-                        <p className={`text-[${_COLOR.more_light}] text-xs font-extralight`}>
+                        <p className={`text-[${_COLOR.text}] text-xs font-extralight`}>
                             {date}
                         </p>
                     </div>
                 </div>
                 <div className="dropdown dropdown-end">
                     <div tabIndex={0} role="button" className="m-1">
-                        <i className="text-white fa-solid fa-ellipsis"></i>
+                        <i className={`text-[${_COLOR.text}] fa-solid fa-ellipsis`}></i>
                     </div>
-                    <ul tabIndex={0} className={`dropdown-content menu bg-[${_COLOR.medium}] text-[${_COLOR.lightest}] rounded-box z-[1] w-52 p-4 gap-4 shadow-2xl shadow-[${_COLOR.medium}]`}>
+                    <ul tabIndex={0} className={`dropdown-content menu bg-[${_COLOR.dropdown}] text-[${_COLOR.lightest}] rounded-md z-[1] w-52 p-4 gap-4 shadow-2xl shadow-[${_COLOR.medium}]`}>
                         <li onClick={() => setDialogOpen(true)} className="hover:cursor-pointer"><span>View Post</span></li>
                         <li className="hover:cursor-pointer"><span>Not Intrested</span></li>
                         {(authState._id === userId) && <li
-                            className="hover:cursor-pointer text-red-300 flex flex-row justify-between"
+                            className="hover:cursor-pointer text-red-400 flex flex-row justify-between"
                             onClick={Deletepost}>
                             <span>Delete Post </span>
                             {deleting && (
-                                <i className="fa-solid fa-spinner animate-spin text-lg text-white"></i>
+                                <i className={`fa-solid fa-spinner animate-spin text-lg text-[${_COLOR.text}]`}></i>
                             )}
                         </li>
                         }
                     </ul>
                 </div>
             </div>
-            <div className="flex gap-3 h-[25rem] my-4">
-                {images?.length > 0 && <div className={`relative ${images.length > 3 ? `w-[35%]` : images?.length > 2 ? `w-[33%]` : images?.length > 1 ? `w-[50%]` : `w-full`} rounded-lg h-full flex justify-center bg-black/30 hover:cursor-pointer`} onClick={() => setDialogOpen(true)}>
+            <div className="flex gap-3 h-[25rem] my-4 border-2">
+                {images?.length > 0 && <div className={`relative ${images.length > 3 ? `w-[35%]` : images?.length > 2 ? `w-[33%]` : images?.length > 1 ? `w-[50%]` : `w-full`} rounded-lg h-full flex justify-center hover:cursor-pointer`} onClick={() => setDialogOpen(true)}>
                     <img
                         src={images[0]?.url}
                         alt="Main Image"
-                        className="object-cover h-full rounded-lg"
+                        className="object-cover h-full"
                     />
-                    {images[0].filename === "video" && <i className="fa-solid fa-video absolute top-4 left-4 text-white text-2xl"></i>}
-                    {images[0].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-white text-2xl"></i>}
+                    {images[0].filename === "video" && <i className="fa-solid fa-video absolute top-4 left-4 text-black text-2xl"></i>}
+                    {images[0].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-black text-2xl"></i>}
                 </div>}
-                {images?.length > 1 && <div className={`relative ${images?.length > 3 ? `w-[35%]` : images?.length > 2 ? `w-[33%]` : `w-[50%]`} rounded-lg h-full flex items-center flex justify-center bg-black/30 hover:cursor-pointer`} onClick={() => setDialogOpen(true)}>
+                {images?.length > 1 && <div className={`relative ${images?.length > 3 ? `w-[35%]` : images?.length > 2 ? `w-[33%]` : `w-[50%]`} rounded-lg h-full flex items-center flex justify-center hover:cursor-pointer`} onClick={() => setDialogOpen(true)}>
                     <img
                         src={images[1]?.url}
                         alt="Image 2"
-                        className="object-cover h-full rounded-lg"
+                        className="object-cover h-full"
                     />
-                    {images[1].filename === "video" && <i className="fa-solid fa-video absolute top-4 left-4 text-white text-2xl"></i>}
-                    {images[1].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-white text-2xl"></i>}
+                    {images[1].filename === "video" && <i className="fa-solid fa-video absolute top-4 left-4 text-black text-2xl"></i>}
+                    {images[1].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-black text-2xl"></i>}
                 </div>}
 
                 {images?.length > 2 && <div className={`flex flex-col gap-2 ${images?.length > 3 ? `w-[25%]` : `w-[33%]`}`}>
-                    <div className={` relative ${images?.length == 3 ? `h-full` : `h-[50%]`} rounded-lg flex justify-center bg-black/30 hover:cursor-pointer`} onClick={() => setDialogOpen(true)}>
+                    <div className={` relative ${images?.length == 3 ? `h-full` : `h-[49%]`} rounded-lg flex justify-center hover:cursor-pointer`} onClick={() => setDialogOpen(true)}>
                         <img
                             src={images[2]?.url}
                             alt="Image 3"
-                            className="object-cover h-full rounded-lg"
+                            className="object-cover h-full"
                         />
-                        {images[2].filename === "video" && <i className="fa-solid fa-video absolute top-4 left-4 text-white text-2xl"></i>}
-                        {images[2].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-white text-2xl"></i>}
+                        {images[2].filename === "video" && <i className="fa-solid fa-video absolute top-4 left-4 text-black text-2xl"></i>}
+                        {images[2].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-black text-2xl"></i>}
                     </div>
-                    {images?.length > 3 && <div className="relative h-[50%] hover:cursor-pointer" onClick={() => setDialogOpen(true)}>
-                        <div className="relative h-full w-full rounded-lg flex justify-center bg-black/30">
+                    {images?.length > 3 && <div className="relative h-[49%] hover:cursor-pointer" onClick={() => setDialogOpen(true)}>
+                        <div className="relative h-full w-full flex justify-center">
                             <img
                                 src={images[3]?.url}
                                 alt="Image 4"
-                                className="object-cover h-full rounded-lg"
+                                className="object-cover h-full"
                             />
-                            {images[3].filename === "video" && <i className="fa-solid fa-video absolute top-4 left-4 text-white text-2xl"></i>}
-                            {images[3].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-white text-2xl"></i>}
+                            {images[3].filename === "video" && <i className="fa-solid fa-video absolute top-4 left-4 text-black text-2xl"></i>}
+                            {images[3].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-black text-2xl"></i>}
                         </div>
                         {images?.length > 4 && (
-                            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-lg">
+                            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                                 <span className="text-white text-xl font-bold">
                                     +{images?.length - 4}
                                 </span>
@@ -380,14 +380,14 @@ function PostCard(post) {
             <div className="mt-2 flex w-full justify-between px-2">
                 <div className="flex gap-4">
                     <button className={`flex gap-2 items-center text-[${_COLOR.more_light}]`} onClick={toggleLike}>
-                        {liked ? (<i className="text-red-600 fa-solid fa-heart"></i>) : <i className="text-white fa-regular fa-heart"></i>}
+                        {liked ? (<i className={`text-red-600 fa-solid fa-heart`}></i>) : <i className={`text-[${_COLOR.text}] fa-regular fa-heart`}></i>}
                         {countLike}
                     </button>
                     <button className={`flex gap-2 items-center text-[${_COLOR.more_light}]`} onClick={() => {
                         getComments;
                         setDialogOpen(true);
                     }}>
-                        <i className="text-white fa-regular fa-comment"></i>
+                        <i className={`text-[${_COLOR.text}] fa-regular fa-comment`}></i>
                         {countComment}
                     </button>
                 </div>

@@ -72,7 +72,7 @@ const Profile = () => {
   return (
       <div className={`fixed top-[1rem] md:left-[20rem] left-[4rem] w-[85%] md:w-[50%] h-[97vh] flex flex-col flex-grow overflow-y-auto`}>
         {isLoading && <ProfileInfo />}
-        {!isLoading && <div className={`mb-4 w-full bg-black/20`}>
+        {!isLoading && <div className={`mb-4 w-full bg-[${_COLOR.card}]`}>
           <div className={`flex flex-col items-center gap-4 w-full border-b pb-4`}>
             <div className='w-full relative'>
               <img src={creator?.image?.url || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} className='w-full h-[12rem] object-cover'/>
@@ -80,12 +80,12 @@ const Profile = () => {
                 <Avatar url={creator?.image?.url || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} size={'lg'} border={"true"}/>
                 <div className='flex gap-4'>
                   {!check && (
-                    <button className={`mt-2 px-4 py-2 bg-transparent border text-white rounded-full hover:bg-[${_COLOR.lightest}] hover:text-black`} onClick={toggleFollow}>
+                    <button className={`mt-2 px-4 py-2 border rounded-full bg-[${_COLOR.buttons}] text-[${_COLOR.card}]`} onClick={toggleFollow}>
                       {follow ? "Following" : "Follow"}
                     </button>
                   )}
                   {check && (
-                    <Link to={"/settings"} className={`mt-2 px-4 py-2 bg-transparent border hover:bg-[${_COLOR.lightest}] hover:text-black text-white rounded-full`}>
+                    <Link to={"/settings"} className={`mt-2 px-4 py-2 border bg-[${_COLOR.buttons}] text-[${_COLOR.card}] rounded-full`}>
                       Edit profile
                     </Link>
                   )}
@@ -93,28 +93,36 @@ const Profile = () => {
               </div>
             </div>
             <div className='w-full mt-16 px-4'>
-              <h2 className={`font-bold text-xl text-[${_COLOR.lightest}]`}>{creator?.name}</h2>
-              <h2 className={`font-extralight text-sm text-[${_COLOR.more_light}] mb-2`}>@{creator?.username}</h2>
-              {creator?.about && <h2 className={`font-extralight text-md text-[${_COLOR.lightest}] mb-4 cursive`}>{creator?.about}</h2>}
+              <h2 className={`font-bold text-xl text-[${_COLOR.text}]`}>{creator?.name}</h2>
+              <h2 className={`font-extralight text-sm text-[${_COLOR.text}] mb-2`}>@{creator?.username}</h2>
+              {creator?.about && <h2 className={`font-extralight text-md text-[${_COLOR.text}] mb-4 cursive`}>{creator?.about}</h2>}
               <div className={`flex justify-between gap-4`}>
                 <div className='flex gap-4'>
-                  <h2 className={`text-sm font-bold text-[${_COLOR.lightest}]`}>{countFollowers} <span className='font-extralight'>Followers</span></h2>
-                  <h2 className={`text-sm font-bold text-[${_COLOR.lightest}]`}>{countFollowing} <span className='font-extralight'>Following</span></h2>
+                  <h2 className={`text-sm font-bold text-[${_COLOR.text}]`}>{countFollowers} <span className='font-extralight'>Followers</span></h2>
+                  <h2 className={`text-sm font-bold text-[${_COLOR.text}]`}>{countFollowing} <span className='font-extralight'>Following</span></h2>
                 </div>
                 <div className='flex gap-2 items-center'>
                   <i className="fa-regular fa-calendar-days text-white"></i>
-                  <h2 className={`text-sm font-bold text-[${_COLOR.lightest}]`}><span className='font-extralight'>Joined</span> {joining}</h2>
+                  <h2 className={`text-sm font-bold text-[${_COLOR.text}]`}><span className='font-extralight'>Joined</span> {joining}</h2>
                 </div>
               </div>
             </div>
           </div>
           <div className={`w-full flex justify-evenly mt-4 pb-4`}>
-            <div className={`flex gap-2 pb-4 px-4 items-center hover:cursor-pointer text-[${_COLOR.lightest}] ${selected === 'Posts' ? 'border-b-[2px]' : ''}`} onClick={() => setSelected ('Posts')}>
+          <div
+              className={`flex gap-2 pb-4 px-4 items-center hover:cursor-pointer ${selected === 'Posts' ? `text-[${_COLOR.buttons}]` : `text-[${_COLOR.text}]`}`}
+              onClick={() => setSelected('Posts')}
+            >
               <i className="fa-solid fa-image"></i>
               <h2>Posts</h2>
             </div>
-            <div className={`flex gap-2 pb-4 px-4 items-center hover:cursor-pointer text-[${_COLOR.lightest}] ${selected === 'Pulse' ? 'border-b-[2px]' : ''}`} onClick={() => setSelected ('Pulse')}>
-              <IoMdPulse className='mr-2'/>
+
+            <div
+              className={`flex gap-2 pb-4 px-4 items-center hover:cursor-pointer 
+                          ${selected === 'Pulse' ? `text-[${_COLOR.buttons}]` : `text-[${_COLOR.text}]`}`}
+              onClick={() => setSelected('Pulse')}
+            >
+              <IoMdPulse className="mr-2" />
               <h2>Pulse</h2>
             </div>
           </div>
