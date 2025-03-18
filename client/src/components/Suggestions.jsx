@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { getUserByLimit, searchUser } from "../redux/Slices/auth.slice";
+import { followUser, getUserByLimit, searchUser } from "../redux/Slices/auth.slice";
 import { useEffect, useState } from "react";
 import Avatar from "./Avatar";
 import { Link } from "react-router-dom";
@@ -13,6 +13,7 @@ function Suggestions () {
     const [search, setSearch] = useState (false);
     const [query, setQuery] = useState ();
     const [searchResult, setSearchResult] = useState ([]);
+    const [follow, setFollow] = useState (false);
 
     function onChangeHandler(e){
         setQuery(e.target.value)
@@ -24,6 +25,29 @@ function Suggestions () {
             limit: 7
         }));
     }
+
+    function handleClickOutside (e) {
+        const btn = document.getElementById('closeSearch');
+        const area = document.getElementById('searchArea'); // Add an ID to your search area if it exists
+
+        if (btn && !area?.contains(e.target)) {
+            btn.click();
+        }
+    }
+
+    const toggleFollow = async (userId) => {
+        const response = await dispatch(followUser({
+          id1: authState?.data?._id,
+          id: userId,
+        }));
+        if (response.payload) {
+          setFollow((prev) => !prev);
+        }
+      };
+
+    useEffect (() => {
+        document.addEventListener('mousedown', handleClickOutside);
+    }, [search])
 
     useEffect(() => {
             if(query?.trim()==""){
@@ -44,10 +68,10 @@ function Suggestions () {
 
     useEffect (() => {
         getUser ();
-    }, [authState.data?.token])
+    }, [follow])
 
     return (
-        <section className={`fixed top-0 right-[1rem] flex-col md:flex-col overflow-auto w-full lg:max-w-sm rounded-md border-l border-[${_COLOR.text}] h-full pt-6`}>
+        <section className={`fixed top-0 right-[1rem] flex-col md:flex-col overflow-auto w-full lg:max-w-sm rounded-md border-l-2 h-full pt-6`}>
             {search && <div id="searchArea" className={`h-full flex flex-col gap-2 px-8`}>
                 <h2 className="text-xl font-bold">Search users</h2>
                 <div className={`flex items-center border border-[${_COLOR.input}] rounded-md px-2 focus:shadow-md`}>
@@ -77,7 +101,7 @@ function Suggestions () {
                             <Link to={`/profile/${user?.username}`} onClick={() => setSearch(false)}>
                                 <p className={`text-[${_COLOR.text}] font-semibold hover:underline`}>{user.username}</p>
                                 <div className={`text-sm text-[${_COLOR.text}] flex gap-1`}>
-                                    <span>{user.name}</span> • <span>{user.followers?.length() ? user.followers?.length() : 0} followers</span>
+                                    <span>{user.name}</span> • <span>{user.follower?.length ? user.follower?.length : 'No'} follower{user.follower?.length <= 1 ? '' : 's'}</span>
                                 </div>
                             </Link>
                         </div>
@@ -85,21 +109,26 @@ function Suggestions () {
                 </div>
             </div>}
 
-            <div className={`px-8 font-bold text-[${_COLOR.text}] text-xl ${search ? 'hidden' : 'block'}`}>
-                <div className={`flex justify-between items-center`}>
-                    <h2>Friend Suggestions</h2>
-                    <button className={`flex text-sm gap-2 items-center text-[${_COLOR.buttons}]`} onClick={() => setSearch (true)}>Search
-                        <i className="fa-solid fa-magnifying-glass"></i>
+            <div className={`px-8 text-[${_COLOR.text}] text-xl ${search ? 'hidden' : 'block'}`}>
+                <div className={`flex justify-between items-center border-b pb-2`}>
+                    <h2 className="font-bold">Friend Suggestions</h2>
+                    <button className={`flex text-sm gap-2 items-center text-[${_COLOR.text}] rounded-full border border-[${_COLOR.text}] px-2`} onClick={() => setSearch (true)}>Search
+                        <i className="fa-solid fa-magnifying-glass text-xs"></i>
                     </button>
                 </div>
                 {authState.userList?.map ((user, key) => (
-                    <Link to={`/profile/${user?.username}`} key={key} className={`flex mt-2 gap-2 p-2 items-center border-b border-[${_COLOR.border}] hover:cursor-pointer hover:shadow-md`}>
+                    <div key={key} className={`flex mt-2 gap-2 p-2 items-center border-b border-[${_COLOR.border}] hover:cursor-pointer hover:shadow-md`}>
                         <Avatar url={user.image?.url} size={"md"} />
-                        <div>
-                            <h2 className={`text-sm`}>{user.name}</h2>
-                            <h2 className="text-xs font-extralight">@{user.username}</h2>
+                        <div className="flex justify-between w-full">
+                            <Link to={`/profile/${user?.username}`} className="w-full">
+                                <h2 className={`text-sm`}>{user.name}</h2>
+                                <h2 className="text-xs font-extralight">@{user.username}</h2>
+                            </Link>
+                            <button className={`text-xs text-[${_COLOR.buttons}] rounded-full px-4`} onClick={() => toggleFollow (user._id)}>
+                                {authState.data?.folowing?.includes (user._id) ? 'Following' : 'Follow'}
+                            </button>
                         </div>
-                    </Link>
+                    </div>
                 ))}
             </div>
             

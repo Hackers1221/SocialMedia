@@ -208,7 +208,6 @@ const authSlice = createSlice({
         })
         .addCase(followUser.fulfilled , (state,action) => {
             if(!action.payload)return;
-            console.log(action.payload);
             state.data = action.payload.data?.userDetails;
             localStorage.setItem("data", JSON.stringify(action.payload.data?.userDetails));
         })

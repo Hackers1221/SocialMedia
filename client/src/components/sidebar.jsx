@@ -32,19 +32,10 @@ function Sidebar() {
     const [isVerseForm, setIsVerseForm] = useState (false);
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-    const [searchresult,setSearchresult] = useState([]);
-    const [query,SetQuery] = useState("");
     const [search , setSearch] = useState(false); 
     const [selected, setSelected] = useState ('Feed');
 
-    const dispatch = useDispatch ();
     const navigate = useNavigate ();
-
-    
-
-    const searchHandler = () => {
-        setSearch(!search);
-    }
 
     useEffect (() => {
         if (!authState?.isLoggedIn || !authState?.data?.email) {
@@ -54,41 +45,6 @@ function Sidebar() {
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, []);
-
-
-    function onChangeHandler(e){
-        SetQuery(e.target.value)
-    }
-
-    function handleClickOutside (e) {
-        const btn = document.getElementById('closeSearch');
-        const area = document.getElementById('searchArea'); // Add an ID to your search area if it exists
-
-        if (btn && !area?.contains(e.target)) {
-            btn.click();
-        }
-    }
-
-    useEffect (() => {
-        document.addEventListener('mousedown', handleClickOutside);
-    }, [search])
-
-    useEffect(() => {
-        if(query.trim()==""){
-            setSearchresult([]);
-            return;
-        }
-        // Set a timeout to wait before making the API call
-        const delayDebounceFn = setTimeout(async () => {
-            try {
-                const response = await dispatch(searchUser(query));
-                setSearchresult(response.payload?.data?.userdata);
-            } catch (error) {
-                console.error("Search failed:", error);
-            }
-        }, 300); // 300ms debounce delay
-        return () => clearTimeout(delayDebounceFn);
-    },[query])
 
     useEffect(() => {
         const handleOutsideClick = (e) => {
@@ -152,8 +108,7 @@ function Sidebar() {
                 </div>
                 
 
-                {/* Sidebar */}
-                {!search ?  (<div
+                <div
                     id="sidebar"
                     className={`fixed top-0 left-0 flex flex-col w-[18em] bg-[${_COLOR.card}] h-screen shadow-md transform ${
                         isOpen ? "translate-x-0" : "-translate-x-full"
@@ -184,12 +139,6 @@ function Sidebar() {
                             <li className="px-5">
                                 <div className="flex flex-row items-center h-8">
                                     <div className={`text-sm font-bold text-[${_COLOR.text}]`}>Menu</div>
-                                </div>
-                            </li>
-                            <li className="hover:cursor-pointer" onClick={() => setSearch(true)}>
-                                <div className={`relative flex flex-row items-center h-11 border-l-4 border-transparent hover:border-[${_COLOR.buttons}] hover:text-[${_COLOR.buttons}] hover:shadow-md font-semibold pr-6 text-[${_COLOR.text}]`}>
-                                    <FiSearch className="ml-4"/>
-                                    <span className="ml-2 text-sm tracking-wide truncate">Search</span>
                                 </div>
                             </li>
                             <li onClick={() => {setIsOpen(false); setSelected('Explore')}}>
@@ -249,48 +198,7 @@ function Sidebar() {
                             </li>
                         </ul>
                     </div>
-                </div>) : 
-
-                /* Search button */
-
-                (<div id="searchArea" className={`fixed top-0 left-0 w-[18em] bg-[${_COLOR.background}] h-screen flex flex-col p-4`}>
-                    <div className="flex items-center space-x-2">
-                        <input
-                            type="text"
-                            placeholder="Search..."
-                            className={`w-full p-2 rounded-md bg-transparent text-[${_COLOR.text}] border border-[${_COLOR.input}] focus:shadow-md focus:outline-none`}
-                            onChange={onChangeHandler}
-                            name = "query"
-                            value = {query}
-                        />
-                        <button id="closeSearch" onClick={() => setSearch(false)} className={`text-[${_COLOR.text}] text-2xl`}>
-                            <X />
-                        </button>
-                    </div>
-                    <div className="border-b border-gray-600 mt-2"></div>
-                    <div className={`flex items-center space-x-2 text-[${_COLOR.text}] mt-2 text-sm`}>
-                        Recent searches
-                    </div>
-                    <div className="mt-2">
-                        {searchresult.map((user, index) => (
-                            <div key={index} className={`text-[${_COLOR.text}] p-2 flex items-center space-x-2`}>
-                                {user.image?.url ? 
-                                    <Avatar url = {user.image?.url}/> : 
-                                    <RxAvatar />
-                                 }
-                                <Link to={`/profile/${user?.username}`} onClick={() => setSearch(false)}>
-                                    <p className="font-semibold hover:underline">{user.username}</p>
-                                    <div className="text-sm text-gray-300 flex gap-1">
-                                        <span>{user.name}</span> • <span>{user.follower?.length ? user.follower?.length : 0} followers</span>
-                                    </div>
-                                </Link>
-                            </div>
-                        ))}
-                    </div>
-                </div>)    
-                
-            }                
-                
+                </div>           
             </div>
         </>
     );
