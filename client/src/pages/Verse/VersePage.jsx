@@ -45,9 +45,9 @@ function VersePage() {
 
     return (
         <>
-            <div className="fixed top-[9rem] md:top-[1rem]  md:left-[20rem] left-[1rem] w-[85%] md:w-[50%] h-[82vh] md:h-[97vh] flex flex-col flex-grow overflow-y-auto">                
+            <div className={`fixed top-[9rem] md:top-[1rem]  md:left-[20rem] left-[1rem] w-[85%] md:w-[50%] h-[82vh] md:h-[97vh] flex flex-col flex-grow overflow-y-auto`}>                
                 {/* Input Box */}
-                <div className={`w-full mb-4 rounded-md py-8 flex justify-center gap-2 px-4 bg-[${_COLOR.card}]`}>
+                {/* <div className={`w-full mb-4 rounded-md py-8 flex justify-center gap-2 px-4 bg-[${_COLOR.card}] border border-[${_COLOR.border}]`}>
                     <Avatar url={authState.data?.image?.url} />
                     <div className="flex flex-col items-end w-full">
                         <input 
@@ -71,7 +71,7 @@ function VersePage() {
                     </div>
                 </div>
 
-                <VerseForm open={isOpen} setOpen={setIsOpen} initialText={text}/>
+                <VerseForm open={isOpen} setOpen={setIsOpen} initialText={text}/> */}
 
                 <div className="flex justify-between items-center">
                     <h2 className={`text-[${_COLOR.text}] font-bold text-[1.5rem]`}>Recent Verse</h2>
@@ -79,7 +79,7 @@ function VersePage() {
                         {options?.map ((option, index) => {
                            return (<h2 
                             key={index} 
-                            className={`${ selected === option ? `text-[${_COLOR.buttons}]` : `text-gray-400` // Default color
+                            className={`${ selected === option ? `text-[${_COLOR.text}]` : `text-gray-400` // Default color
                             } font-bold text-[1rem] hover:cursor-pointer`} 
                             onClick={() => optionChange(option)}>{option}</h2>)
                         })}
@@ -89,9 +89,12 @@ function VersePage() {
                 {/* Scrollable Post List */}
                 {isLoading && <SkeletonPostCard />}
                 {!isLoading && <div className="pt-4 w-full h-screen">
-                    {verseState?.verseList?.length > 0 ? verseState?.verseList?.map((verse, key) => (
-                        <VerseCard verse={verse} key={key}/>
-                    )) : <h2 className='w-full text-center font-extralight text-white'>No verses to show</h2>}
+                    {verseState?.verseList?.length > 0 ? verseState?.verseList?.map((verse, index) => (
+                        <div>
+                            <VerseCard verse={verse}/>
+                            {index != verseState.verseList?.length - 1 && <div className={`h-[1px] bg-[${_COLOR.text}]`}></div>}
+                        </div>
+                    )) : <h2 className={`w-full text-center font-extralight text-[${_COLOR.text}]`}>No verses to show</h2>}
                 </div>}
             </div>
         </>

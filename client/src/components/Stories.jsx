@@ -318,7 +318,7 @@ function Stories () {
                   <div className="flex items-center gap-2">
                       {page > 0 && (
                           <IoIosArrowBack 
-                              className="w-[1rem] h-[1rem] text-white rounded-md hover:cursor-pointer" 
+                              className={`w-[1rem] h-[1rem] text-[${_COLOR.text}] rounded-md hover:cursor-pointer`} 
                               onClick={() => setPage(page - 1)} 
                           />
                       )}
@@ -356,7 +356,7 @@ function Stories () {
       
                       {stories.length > (page + 1) * storiesPerPage && (
                           <IoIosArrowForward 
-                              className="w-[1rem] h-[1rem] text-white rounded-md hover:cursor-pointer"
+                              className={`w-[1rem] h-[1rem] text-[${_COLOR.text}] rounded-md hover:cursor-pointer`}
                               onClick={() => setPage(page + 1)} 
                           />
                       )}

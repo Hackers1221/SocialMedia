@@ -8,6 +8,7 @@ import Loader from "./Loader";
 import { CreateComment, getCommentByPostId } from "../redux/Slices/comment.slice";
 import { getAllPosts, getPostById, getSavedPost, likePost, updateSavedPost } from "../redux/Slices/post.slice";
 import usePosts from "../hooks/usePosts";
+import { Link } from "react-router-dom";
 
 
 const DisplayPost = ({ open, setOpen, post }) => {
@@ -240,34 +241,56 @@ const DisplayPost = ({ open, setOpen, post }) => {
     setSaved (postState.savedList?.find ((savedPost) => savedPost._id === post?._id));
     }, [postState.savedList]); 
 
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+  const totalItems = (post.image?.length || 0) + (post.video?.length || 0);
+
+  const goForward = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % totalItems);
+  };
+
+  const goBack = () => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + totalItems) % totalItems);
+  };
+
 
 
   return loading ? <Loader /> : (
     <dialog ref={dialogRef} className={`w-[60%] h-[90vh] bg-[${_COLOR.card}] rounded-lg shadow-xl p-4`}>
       <button onClick={closeDialog} className={`absolute top-5 right-6 text-[${_COLOR.text}] font-bold text-xl focus:outline-none`}>✕</button>
-      <div className="flex h-full">
+      <div className={`flex h-full border border-[${_COLOR.border}]`}>
         {/* Left Half */}
         <div className="w-1/2 p-4 flex relative items-center">
           <div className={`absolute top-0 left-0 flex items-center gap-3 mb-4 z-[100] bg-[${_COLOR.card}] px-4 py-2`}>
             <Avatar url={creator?.image?.url || defaultImage} size={"md"}/>
             <div>
-              <p className={`text-[${_COLOR.text}] font-semibold text-sm`}>{creator?.username}</p>
+              <Link to={`/profile/${creator?.username}`}>
+                  <span className={`mr-1 text-sm font-semibold cursor-pointer hover:underline hover:text-[${_COLOR.buttons}] text-[${_COLOR.text}]`}>
+                      {creator?.username}
+                  </span>
+              </Link>
               <p className={`text-[${_COLOR.text}] text-xs`}>{date}</p>
             </div>
           </div>
-          <div className="flex justify-center items-center relative w-full">
-            <div className="carousel w-full">
+          <div className="flex justify-center items-center relative w-full h-full">
+            <div className="carousel w-full h-full relative">
               {post.image?.map((img, idx) => (
-                <div key={idx} className="carousel-item w-full flex justify-center items-center relative ">
-                  <img src={img.url} className="w-full h-max" alt="Post" />
+                <div
+                  key={idx}
+                  className={`carousel-item w-full flex justify-center items-center relative ${idx === currentIndex ? 'block' : 'hidden'}`}
+                >
+                  <img src={img.url} className="w-full h-full object-contain" alt="Post" />
                 </div>
               ))}
               {post.video?.map((video, idx) => (
-                <div key={idx} className="carousel-item w-full flex justify-center relative" onClick={() => togglePlay (idx)}>
+                <div
+                  key={idx + (post.image?.length || 0)}
+                  className={`carousel-item w-full flex justify-center relative ${idx + (post.image?.length || 0) === currentIndex ? 'block' : 'hidden'}`}
+                  onClick={() => togglePlay(idx)}
+                >
                   <video ref={(el) => (videoRefs.current[idx] = el)} loop className="w-full max-h-[40rem]">
                     <source src={video.url} type="video/mp4" />
                   </video>
-                  {/* Play/Pause Button */}
                   {showButton[idx] && (
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="bg-black bg-opacity-30 rounded-full w-16 h-16 flex items-center justify-center">
@@ -283,10 +306,25 @@ const DisplayPost = ({ open, setOpen, post }) => {
               ))}
             </div>
           </div>
+          {currentIndex > 0 && (
+            <button
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 p-2 h-full w-[2rem] bg-transparent hover:bg-black/5"
+              onClick={goBack}
+            >
+            </button>
+          )}
+          {currentIndex < totalItems - 1 && (
+            <button
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 p-2 h-full w-[2rem] bg-transparent hover:bg-black/5"
+              onClick={goForward}
+            >
+            </button>
+          )}
+          {totalItems > 1 && <div className="absolute right-4 top-4 bg-black/70 text-white p-2 rounded-full text-xs">{currentIndex + 1} / {totalItems}</div>}
         </div>
 
         {/* Right Half */}
-        <div className="w-1/2 flex flex-col p-4 rounded-lg border">
+        <div className="w-1/2 flex flex-col p-4 border-l">
           {(post?.caption?.length > 0 || interest?.length > 0) && <div className={`text-[${_COLOR.text}] text-sm border-b pb-4`}>
             {post?.caption}
             {interest?.length > 0 && <h2 className={`text-[${_COLOR.text}] font-extralight mt-8 text-xs`}>
@@ -314,7 +352,7 @@ const DisplayPost = ({ open, setOpen, post }) => {
             </div>
             <div className="flex">
             <button className={`flex gap-2 items-center text-[${_COLOR.text}]`} onClick={toggleBookmark}>
-                {saved? <i className="text-white fa-solid fa-bookmark"></i> : <i className="text-white fa-regular fa-bookmark"></i>}
+                {saved? <i className={`text-[${_COLOR.text}] fa-solid fa-bookmark`}></i> : <i className={`text-[${_COLOR.text}] fa-regular fa-bookmark`}></i>}
               </button>
             </div>
           </div>

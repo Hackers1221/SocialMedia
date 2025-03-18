@@ -129,31 +129,31 @@ function PostCard(post) {
         const diffInSeconds = Math.floor((nowUTC - targetDateUTC) / 1000);
 
         if (diffInSeconds < 60) {
-            return `${diffInSeconds} second${diffInSeconds === 1 ? '' : 's'} ago`;
+            return `${diffInSeconds}s`;
         }
 
         const diffInMinutes = Math.floor(diffInSeconds / 60);
         if (diffInMinutes < 60) {
-            return `${diffInMinutes} minute${diffInMinutes === 1 ? '' : 's'} ago`;
+            return `${diffInMinutes}min`;
         }
 
         const diffInHours = Math.floor(diffInMinutes / 60);
         if (diffInHours < 24) {
-            return `${diffInHours} hour${diffInHours === 1 ? '' : 's'} ago`;
+            return `${diffInHours}h`;
         }
 
         const diffInDays = Math.floor(diffInHours / 24);
         if (diffInDays < 30) {
-            return `${diffInDays} day${diffInDays === 1 ? '' : 's'} ago`;
+            return `${diffInDays}d`;
         }
 
         const diffInMonths = Math.floor(diffInDays / 30);
         if (diffInMonths < 12) {
-            return `${diffInMonths} month${diffInMonths === 1 ? '' : 's'} ago`;
+            return `${diffInMonths}m`;
         }
 
         const diffInYears = Math.floor(diffInMonths / 12);
-        return `${diffInYears} year${diffInYears === 1 ? '' : 's'} ago`;
+        return `${diffInYears}y`;
     }
 
     const toggleLike = async () => {
@@ -284,27 +284,27 @@ function PostCard(post) {
     }, [post?.post]);
 
     return (
-        <div className={`mb-4 bg-[${_COLOR.card}] p-4 relative box-shadow border rounded-md`} >
+        <div className={`mb-4 bg-[${_COLOR.card}] p-4 relative shadow-lg`} >
             <DisplayPost open={isDialogOpen} setOpen={setDialogOpen} post={post?.post} />
             <div className="flex justify-between">
-                <div className="flex gap-3">
+                <div className="flex items-center gap-3">
                     <div className="flex items-center">
                         <Link to={`/profile/${creator?.username}`}>
                             <span className="cursor-pointer">
-                                <Avatar url={creator?.image?.url || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} size={'md'} />
+                                <Avatar url={creator?.image?.url || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} size={'sm'} />
                             </span>
                         </Link>
                     </div>
-                    <div className="grow">
+                    <div className="flex gap-2 items-center">
                         <div>
                             <Link to={`/profile/${creator?.username}`}>
-                                <span className={`mr-1 text-sm font-semibold cursor-pointer hover:underline text-[${_COLOR.text}]`}>
+                                <span className={`mr-1 text-sm font-semibold cursor-pointer hover:underline hover:text-[${_COLOR.buttons}] text-[${_COLOR.text}]`}>
                                     {creator?.username}
                                 </span>
                             </Link>
                         </div>
-                        <p className={`text-[${_COLOR.text}] text-xs font-extralight`}>
-                            {date}
+                        <p className={`flex text-[${_COLOR.text}] text-xs font-extralight gap-2`}>
+                            <span>•</span>{date}
                         </p>
                     </div>
                 </div>
@@ -327,7 +327,7 @@ function PostCard(post) {
                     </ul>
                 </div>
             </div>
-            <div className="flex gap-3 h-[25rem] my-4 border-2">
+            <div className="flex gap-3 h-[25rem] my-4">
                 {images?.length > 0 && <div className={`relative ${images.length > 3 ? `w-[35%]` : images?.length > 2 ? `w-[33%]` : images?.length > 1 ? `w-[50%]` : `w-full`} rounded-lg h-full flex justify-center hover:cursor-pointer`} onClick={() => setDialogOpen(true)}>
                     <img
                         src={images[0]?.url}

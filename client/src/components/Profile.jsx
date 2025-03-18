@@ -72,7 +72,7 @@ const Profile = () => {
   return (
       <div className={`fixed top-[1rem] md:left-[20rem] left-[4rem] w-[85%] md:w-[50%] h-[97vh] flex flex-col flex-grow overflow-y-auto`}>
         {isLoading && <ProfileInfo />}
-        {!isLoading && <div className={`mb-4 w-full bg-[${_COLOR.card}]`}>
+        {!isLoading && <div className={`mb-4 w-full bg-[${_COLOR.card}] border border-[${_COLOR.border}]`}>
           <div className={`flex flex-col items-center gap-4 w-full border-b pb-4`}>
             <div className='w-full relative'>
               <img src={creator?.image?.url || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} className='w-full h-[12rem] object-cover'/>
@@ -94,8 +94,8 @@ const Profile = () => {
             </div>
             <div className='w-full mt-16 px-4'>
               <h2 className={`font-bold text-xl text-[${_COLOR.text}]`}>{creator?.name}</h2>
-              <h2 className={`font-extralight text-sm text-[${_COLOR.text}] mb-2`}>@{creator?.username}</h2>
-              {creator?.about && <h2 className={`font-extralight text-md text-[${_COLOR.text}] mb-4 cursive`}>{creator?.about}</h2>}
+              <h2 className={`font-semibold text-sm text-[${_COLOR.buttons}] mb-2`}>@{creator?.username}</h2>
+              {creator?.about && <h2 className={`font-semibold text-md text-[${_COLOR.text}] mb-4 cursive`}>{creator?.about}</h2>}
               <div className={`flex justify-between gap-4`}>
                 <div className='flex gap-4'>
                   <h2 className={`text-sm font-bold text-[${_COLOR.text}]`}>{countFollowers} <span className='font-extralight'>Followers</span></h2>
@@ -114,7 +114,7 @@ const Profile = () => {
               onClick={() => setSelected('Posts')}
             >
               <i className="fa-solid fa-image"></i>
-              <h2>Posts</h2>
+              <h2 className='font-bold'>Posts</h2>
             </div>
 
             <div
@@ -123,7 +123,7 @@ const Profile = () => {
               onClick={() => setSelected('Pulse')}
             >
               <IoMdPulse className="mr-2" />
-              <h2>Pulse</h2>
+              <h2 className='font-bold'>Pulse</h2>
             </div>
           </div>
         </div>}

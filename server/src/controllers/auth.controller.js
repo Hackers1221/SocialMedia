@@ -139,6 +139,20 @@ const searchUser = async(req,res) => {
     })
 }
 
+const getUserByLimit = async(req, res) => {
+    const response = await userService.getUserByLimit(req.query.userId, req.query.limit);
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg : "Unable to Fetch users",
+            error : response.error
+        })
+    }
+    return res.status(StatusCodes.OK).send({
+        msg : "Successfully fetched users",
+        users : response.user
+    })
+}
+
 
 module.exports = {
     signup,
@@ -148,5 +162,6 @@ module.exports = {
     followUser,
     getUserByUserName,
     deleteUser,
-    searchUser
+    searchUser,
+    getUserByLimit
 }

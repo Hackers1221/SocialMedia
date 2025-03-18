@@ -1,5 +1,5 @@
 
-const usermodel = require('../models/user.model')
+const User = require('../models/user.model')
 const Pulse = require("../models/pulse.model");
 const Post = require("../models/posts.model");
 const Comment = require("../models/comment.model")
@@ -7,6 +7,7 @@ const Otp = require("../models/otp.model");
 const bcrypt = require('bcrypt');
 const mailer = require('../middlewares/mailer')
 const {deleteImages, deleteVideos} = require("../../cloudConfig.js");
+const { response } = require('express');
 
 const CreateUser = async(data) => { 
     const response  = {};
@@ -19,7 +20,7 @@ const CreateUser = async(data) => {
             password  : data.password,
             birth : data.birth
         }
-        response.user = await usermodel.create(userObject);
+        response.user = await User.create(userObject);
         await mailer.sendWelcomeEmail(data.email); 
         return response;
     } catch (error) {
@@ -32,10 +33,10 @@ const CreateUser = async(data) => {
 const ValidateUser = async (data, password) => {
     const response = {};
     try {
-        let res = await usermodel.findOne({ email: data });
+        let res = await User.findOne({ email: data });
 
         if (!res) {
-            res = await usermodel.findOne({ username: data });
+            res = await User.findOne({ username: data });
             if (!res) {
                 response.error = "Invalid username or email";
                 return response;
@@ -61,7 +62,7 @@ const ValidateUser = async (data, password) => {
 const getuserByid = async(id) => {
     const response = {};
     try {
-        const userdetails = await usermodel.findById(id);
+        const userdetails = await User.findById(id);
         if(!userdetails){
             response.error = "User not found";
         }else{
@@ -79,7 +80,7 @@ const getuserByid = async(id) => {
 const followUser = async(userId , followingId) => {
     const response = {};
     try {
-        const userData = await usermodel.findById(userId);
+        const userData = await User.findById(userId);
         if(!userData){
             response.error = error.message;
             return response;
@@ -89,7 +90,7 @@ const followUser = async(userId , followingId) => {
         }else{
             userData.following.push(followingId);
         }
-        const followingData = await usermodel.findById(followingId);
+        const followingData = await User.findById(followingId);
         if(!followingId){
             response.error = error.message;
             return response;
@@ -99,12 +100,12 @@ const followUser = async(userId , followingId) => {
         }else{
             followingData.follower.push(userId);
         }
-        const updatedUser = await usermodel.findByIdAndUpdate(
+        const updatedUser = await User.findByIdAndUpdate(
             userId, 
             {following : userData.following},
             { new: true, runValidators: true } 
         );
-        const updatefollower= await usermodel.findByIdAndUpdate(
+        const updatefollower= await User.findByIdAndUpdate(
             followingId, 
             {follower : followingData.follower},
             { new: true, runValidators: true } 
@@ -120,7 +121,7 @@ const followUser = async(userId , followingId) => {
 const getUserByUserName = async(name) => {
     const response = {};
     try {
-        const userData = await usermodel.findOne({username : name});
+        const userData = await User.findOne({username : name});
         if(!userData){
             response.error = "User not found";
             return response;
@@ -135,7 +136,7 @@ const getUserByUserName = async(name) => {
 const updateUser = async(newData) => {
     const response = {};
     try {
-        const userData = await usermodel.findById(newData.id);
+        const userData = await User.findById(newData.id);
         if (!userData) {
             response.error = "User not found";
             return response;
@@ -155,7 +156,7 @@ const updateUser = async(newData) => {
         const val = newData.id;
         delete newData.id;
         delete newData.curpassword;
-        const updateuser = await usermodel.findByIdAndUpdate(
+        const updateuser = await User.findByIdAndUpdate(
             val , 
             newData,
             {new : true}
@@ -170,15 +171,15 @@ const updateUser = async(newData) => {
 const deleteUser = async(id) => {
     const response = {};
     try {
-        const userData = await usermodel.findById(id);
+        const userData = await User.findById(id);
         if(!userData){
             response.error = "User not found";
             return response;
         }
 
         // Remove user from other users' following & follower lists
-        await usermodel.updateMany({ following: id }, { $pull: { following: id } });
-        await usermodel.updateMany({ follower: id }, { $pull: { follower: id } });
+        await User.updateMany({ following: id }, { $pull: { following: id } });
+        await User.updateMany({ follower: id }, { $pull: { follower: id } });
 
         // Remove user likes from posts, pulses and comments
         await Post.updateMany({ likes: id }, { $pull: { likes: id } });
@@ -238,7 +239,7 @@ const deleteUser = async(id) => {
         await Otp.deleteMany({ email: userData.email });
 
         // Finally, delete the user
-        await usermodel.findByIdAndDelete(id);
+        await User.findByIdAndDelete(id);
 
         response.success = true;
         response.message = "User deleted successfully along with related data";
@@ -254,12 +255,27 @@ const deleteUser = async(id) => {
 const searchUser = async(query) => {
     const response = {};
     try {
-        const users = await usermodel.find({
+        const users = await User.find({
             $or: [
                 { username: { $regex: query, $options: "i" } },
                 { name : { $regex: query, $options: "i" } }
             ]
         }).limit(5);
+        response.user = users;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response
+    }
+}
+
+const getUserByLimit = async (userId, limit) => {
+    const response = {};
+    try {
+        const users = await User.find({
+            _id: { $ne: userId },               // Exclude the user with the given userId
+            follower: { $nin: [userId] }       // Exclude users who have userId in their followers array
+        }).limit(limit);        
         response.user = users;
         return response;
     } catch (error) {
@@ -276,6 +292,7 @@ module.exports = {
     followUser,
     getUserByUserName,
     deleteUser,
-    searchUser
+    searchUser,
+    getUserByLimit
 }
 
