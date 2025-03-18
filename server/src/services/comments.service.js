@@ -1,6 +1,7 @@
 
 const commentsModel = require('../models/comment.model');
 const postsModel = require('../models/posts.model')
+const Verse = require ('../models/verse.model')
 
 const CreateComment = async(data) => {
     const response = {};
@@ -12,13 +13,24 @@ const CreateComment = async(data) => {
         }
         const result = await commentsModel.create(commentsData);
         if(result){
-            const postsData = await postsModel.findById(data.postId);
-            postsData.comments.push(data.userId);
-            const updatePost = await postsModel.findByIdAndUpdate(
-                data.postId,
-                {comments : postsData.comments },
-                {new : true}
-            )
+            if (data.type === "post") {
+                const postsData = await postsModel.findById(data.postId);
+                postsData.comments.push(data.userId);
+                await postsModel.findByIdAndUpdate(
+                    data.postId,
+                    {comments : postsData.comments },
+                    {new : true}
+                )
+            }
+            if (data.type === "verse") {
+                const verseData = await Verse.findById(data.postId);
+                verseData.comments.push(data.userId);
+                await Verse.findByIdAndUpdate(
+                    data.postId,
+                    {comments : verseData.comments },
+                    {new : true}
+                )
+            }
         }
         response.comments = result;
         return response;

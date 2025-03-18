@@ -58,6 +58,7 @@ const Explore = () => {
     const delayDebounceFn = setTimeout(async () => {
                 try {
                     const response = await dispatch(searchPost(query));
+                    console.log(response);
                     setpostState(response.payload?.data?.postDetails)
                 } catch (error) {
                     console.error("Search failed:", error);
@@ -86,13 +87,13 @@ useEffect(() => {
     <DisplayPost open={isDialogOpen} setOpen={setDialogOpen} post={selectedPost}/>
     <div className="fixed top-[8rem] md:top-[1rem]  md:left-[20rem] left-[1rem] w-[85%] md:w-[49%] h-[97vh] flex flex-col flex-grow overflow-y-auto">
       <div className="max-w-5xl w-full">
-      <h2 className={`text-[${_COLOR.lightest}] heading text-[2rem] mb-4`}>Explore</h2>
+      <h2 className={`text-[${_COLOR.text}] heading text-[2rem] mb-4`}>Explore</h2>
         <div className="relative w-full mb-6">
           <input
             type="text"
             placeholder="Search for ideas..."
-            value = {query}
             onChange={searchHandler}
+            value={query}
             className={`w-full p-3 border border-[${_COLOR.buttons}] rounded-md shadow-md focus:outline-none text-[${_COLOR.lightest}]`}
           />
         </div>

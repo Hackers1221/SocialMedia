@@ -162,7 +162,7 @@ export default function PostForm({ open, setOpen }) {
                   setOpen(false);
                   Createpost();
                 }}
-                className="h-12 w-[20%] bg-gray-500 text-white font-semibold rounded-3xl hover:bg-gray-700 transition"
+                className={`h-12 w-[20%] bg-[${_COLOR.buttons}] text-white font-semibold rounded-3xl hover:bg-[${_COLOR.buttonsHover}] transition`}
               >
                 Post
               </button>

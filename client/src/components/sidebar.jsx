@@ -20,6 +20,7 @@ import { FiSearch } from "react-icons/fi";
 import { Search, X } from "lucide-react";
 import Avatar from "./Avatar";
 import { RxAvatar } from "react-icons/rx";
+import VerseForm from "./VerseForm";
 
 function Sidebar() {
 
@@ -28,26 +29,17 @@ function Sidebar() {
     const [isOpen, setIsOpen] = useState(false);
     const [isPostForm, setIsPostForm] = useState(false);
     const [isPulseForm, setIsPulseForm] = useState(false);
+    const [isVerseForm, setIsVerseForm] = useState (false);
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const [searchresult,setSearchresult] = useState([]);
     const [query,SetQuery] = useState("");
     const [search , setSearch] = useState(false); 
 
-    const recentSearches = [
-        { username: "code_master", realName: "Aryan Singh", followers: 890 },
-        { username: "hacker_99", realName: "Neha Sharma", followers: 1200 },
-        { username: "tech_guru", realName: "Ravi Patel", followers: 5000 }
-    ];
-
-
     const dispatch = useDispatch ();
     const navigate = useNavigate ();
 
-    async function onLogout () {
-        await dispatch (logout ());
-        navigate ("/login"); return;
-    }
+    
 
     const searchHandler = () => {
         setSearch(!search);
@@ -66,6 +58,19 @@ function Sidebar() {
     function onChangeHandler(e){
         SetQuery(e.target.value)
     }
+
+    function handleClickOutside (e) {
+        const btn = document.getElementById('closeSearch');
+        const area = document.getElementById('searchArea'); // Add an ID to your search area if it exists
+
+        if (btn && !area?.contains(e.target)) {
+            btn.click();
+        }
+    }
+
+    useEffect (() => {
+        document.addEventListener('mousedown', handleClickOutside);
+    }, [search])
 
     useEffect(() => {
         if(query.trim()==""){
@@ -117,9 +122,14 @@ function Sidebar() {
                     setDialogOpen(false); 
                     setIsPulseForm(true); 
                 }} 
+                onAddVerse={() => {
+                    setDialogOpen(false);
+                    setIsVerseForm (true);
+                }}
             />
             <PostForm open={isPostForm} setOpen={setIsPostForm}/>
             <PulseForm open={isPulseForm} setOpen={setIsPulseForm} />
+            <VerseForm open={isVerseForm} setOpen={setIsVerseForm} />
 
 
             
@@ -144,105 +154,97 @@ function Sidebar() {
                 {/* Sidebar */}
                 {!search ?  (<div
                     id="sidebar"
-                    className={`fixed top-0 left-0 flex flex-col w-[18em] bg-black bg-opacity-[40%] h-screen shadow-md transform ${
+                    className={`fixed top-0 left-0 flex flex-col w-[18em] bg-[${_COLOR.card}] h-screen shadow-md transform ${
                         isOpen ? "translate-x-0" : "-translate-x-full"
                     } transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:shadow-none`}
                     onClick={(e) => e.stopPropagation()} // Prevents click inside from closing
                 >
                     <div className={`p-4 flex items-center`}>
-                        <div className={`text-xl text-white font-bold heading`}>Drop</div>
-                        <div className="text-xl text-white font-bold heading">Chat</div>
+                        <div className={`text-2xl font-bold heading text-[${_COLOR.buttons}]`}>Drop</div>
+                        <div className={`text-3xl font-bold heading text-[${_COLOR.buttons}]`}>Chat</div>
                     </div>
                     <div className="overflow-y-auto overflow-x-hidden flex-grow">
                         <ul className="flex flex-col py-4 space-y-1">
                             <li onClick={() => setIsOpen(false)}>
-                                <Link to="/" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
+                                <Link to="/" className={`relative border-l-4 border-transparent hover:border-gray-400 flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.text}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
                                     <FaHome className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Feed</span>
                                 </Link>
                             </li>
                             <li onClick={() => setIsOpen(false)}>
-                                <Link to={`/profile/${authState?.data?.username}`} className={`relative flex items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6 pl-4`}>
+                                <Link to={`/profile/${authState?.data?.username}`} className={`relative flex border-l-4 border-transparent hover:border-gray-400 items-center h-11 hover:bg-gray-200 text-[${_COLOR.text}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6 pl-4`}>
                                     <Avatar url={authState?.data?.image?.url} size={"sm"}/>
                                     <span className="ml-2 text-sm tracking-wide truncate">Profile</span>
                                 </Link>
                             </li>
                         </ul>
-                        <div className={`mx-4 h-[1px] bg-[${_COLOR.lightest}]`}></div>
+                        <div className={`mx-4 h-[0.5px] bg-[${_COLOR.text}]`}></div>
                         <ul className="flex flex-col py-4 space-y-1">
                             <li className="px-5">
                                 <div className="flex flex-row items-center h-8">
-                                    <div className={`text-sm font-bold text-[${_COLOR.lightest}]`}>Menu</div>
+                                    <div className={`text-sm font-bold text-[${_COLOR.text}]`}>Menu</div>
                                 </div>
                             </li>
                             <li className="hover:cursor-pointer" onClick={() => setSearch(true)}>
-                                <div className="relative flex flex-row items-center h-11 hover:bg-gray-200 text-white hover:text-gray-800 border-l-4 border-transparent hover:border-gray-400 pr-6">
+                                <div className={`relative flex flex-row items-center h-11 border-l-4 border-transparent hover:border-gray-400 hover:bg-gray-200 pr-6 text-[${_COLOR.text}]`}>
                                     <FiSearch className="ml-4"/>
                                     <span className="ml-2 text-sm tracking-wide truncate">Search</span>
                                 </div>
                             </li>
                             <li onClick={() => setIsOpen(false)}>
-                                <Link to="/explore" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
+                                <Link to="/explore" className={`relative flex flex-row border-l-4 border-transparent hover:border-gray-400 items-center h-11 hover:bg-gray-200 text-[${_COLOR.text}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
                                     <MdExplore className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Explore</span>
                                 </Link>
                             </li>
                             <li onClick={() => setIsOpen(false)}>
-                                <Link to="/pulse" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
+                                <Link to="/pulse" className={`relative flex flex-row border-l-4 border-transparent hover:border-gray-400 items-center h-11 hover:bg-gray-200 text-[${_COLOR.text}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
                                     <IoMdPulse className="ml-4"/>
                                     <span className="ml-2 text-sm tracking-wide truncate">Pulse</span>
                                 </Link>
                             </li>
                             <li onClick={() => setIsOpen(false)}>
-                                <Link to="/messenger" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
+                                <Link to="/verse" className={`relative flex flex-row border-l-4 border-transparent hover:border-gray-400 items-center h-11 hover:bg-gray-200 text-[${_COLOR.text}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
+                                    <i className="fa-regular fa-comments ml-4 text-sm"/>
+                                    <span className="ml-2 text-sm tracking-wide truncate">Verse</span>
+                                </Link>
+                            </li>
+                            <li onClick={() => setIsOpen(false)}>
+                                <Link to="/messenger" className={`relative flex flex-row border-l-4 border-transparent hover:border-gray-400 items-center h-11 hover:bg-gray-200 text-[${_COLOR.text}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
                                     <IoChatboxEllipsesSharp className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Messages</span>
                                 </Link>
                             </li>
-                            {screenWidth < 768 && (
-                                <li onClick={() => setIsOpen(false)}>
-                                    <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
-                                        <FaSearch className="ml-4" />
-                                        <span className="ml-2 text-sm tracking-wide truncate">Search</span>
-                                    </a>
-                                </li>
-                            )}
                             <li onClick={() => setIsOpen(false)}>
-                                <a href="#" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] pr-4 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}]pr-6`}>
+                                <a href="#" className={`relative flex flex-row border-l-4 border-transparent hover:border-gray-400 items-center h-11 hover:bg-gray-200 text-[${_COLOR.text}] pr-4 hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}]pr-6`}>
                                     <FaBell className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Notifications</span>
                                     <span className="px-2 py-0.5 ml-auto text-xs font-medium text-red-500 bg-red-50 rounded-full">1.2k</span>
                                 </a>
                             </li>
-                            <div className={`mx-4 h-[1px] bg-[${_COLOR.lightest}]`}></div>
+                            <div className={`mx-4 h-[1px] bg-[${_COLOR.text}]`}></div>
                             <li className="px-5">
                                 <div className="flex flex-row items-center h-8">
-                                    <div className={`text-sm font-bold text-[${_COLOR.lightest}]`}>Settings</div>
+                                    <div className={`text-sm font-bold text-[${_COLOR.text}]`}>Settings</div>
                                 </div>
                             </li>
                             <li onClick={() => setIsOpen(false)}>
-                                <div onClick={() => setDialogOpen(true)} className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6 hover:cursor-pointer`}>
+                                <div onClick={() => setDialogOpen(true)} className={`relative flex flex-row border-l-4 border-transparent hover:border-gray-400 items-center h-11 hover:bg-gray-200 text-[${_COLOR.text}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6 hover:cursor-pointer`}>
                                     <LuCircleFadingPlus className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Create Post</span>
                                 </div>
                             </li>
                             <li onClick={() => setIsOpen(false)}>
-                                <Link to="/saved" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
+                                <Link to="/saved" className={`relative flex flex-row border-l-4 border-transparent hover:border-gray-400 items-center h-11 hover:bg-gray-200 text-[${_COLOR.text}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
                                     <FaBookmark className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Saved Posts</span>
                                 </Link>
                             </li>
                             <li onClick={() => setIsOpen(false)}>
-                                <Link to="/settings" className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
+                                <Link to="/settings" className={`relative flex flex-row border-l-4 border-transparent hover:border-gray-400 items-center h-11 hover:bg-gray-200 text-[${_COLOR.text}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6`}>
                                     <IoIosSettings className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Settings</span>
                                 </Link>
-                            </li>
-                            <li onClick={onLogout}>
-                                <div className={`relative flex flex-row items-center h-11 hover:bg-gray-200 text-[${_COLOR.lightest}] hover:text-gray-800 border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6 hover:cursor-pointer`}>
-                                    <i className="fa-solid fa-power-off ml-4 text-[#ED4956]"></i>
-                                    <span className="ml-2 text-sm tracking-wide truncate text-[#ED4956]">Logout</span>
-                                </div>
                             </li>
                         </ul>
                     </div>
@@ -250,27 +252,27 @@ function Sidebar() {
 
                 /* Search button */
 
-                (<div className="fixed top-0 left-0 w-[18em] bg-black bg-opacity-[40%] h-screen flex flex-col p-4">
+                (<div id="searchArea" className={`fixed top-0 left-0 w-[18em] bg-[${_COLOR.background}] h-screen flex flex-col p-4`}>
                     <div className="flex items-center space-x-2">
                         <input
                             type="text"
                             placeholder="Search..."
-                            className="w-full p-2 rounded-md bg-gray-700 text-white outline-none"
+                            className={`w-full p-2 rounded-md bg-transparent text-[${_COLOR.text}] border border-[${_COLOR.input}] focus:shadow-md focus:outline-none`}
                             onChange={onChangeHandler}
                             name = "query"
                             value = {query}
                         />
-                        <button onClick={() => setSearch(false)} className="text-white text-2xl">
+                        <button id="closeSearch" onClick={() => setSearch(false)} className={`text-[${_COLOR.text}] text-2xl`}>
                             <X />
                         </button>
                     </div>
                     <div className="border-b border-gray-600 mt-2"></div>
-                    <div className="flex items-center space-x-2 text-white mt-2 text-sm">
+                    <div className={`flex items-center space-x-2 text-[${_COLOR.text}] mt-2 text-sm`}>
                         Recent searches
                     </div>
                     <div className="mt-2">
                         {searchresult.map((user, index) => (
-                            <div key={index} className="text-white p-2 flex items-center space-x-2">
+                            <div key={index} className={`text-[${_COLOR.text}] p-2 flex items-center space-x-2`}>
                                 {user.image?.url ? 
                                     <Avatar url = {user.image?.url}/> : 
                                     <RxAvatar />

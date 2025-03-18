@@ -14,6 +14,7 @@ import SendOtp from "../SignUp/sentotp";
 import VerifyOtp from "../SignUp/verifyotp";
 import ForgetPassword from "../Forgot/Forget";
 import ResetPassword from "../Forgot/reset";
+import VersePage from "../Verse/VersePage";
 
 function MainRoutes() {
   return (
@@ -32,6 +33,7 @@ function MainRoutes() {
         <Route path="messenger" element={<Messenger />} />
         <Route path="pulse" element={<Pulse />} />
         <Route path="settings" element={<Settings />} />
+        <Route path="verse" element={<VersePage />} />
       </Route>
     </Routes>
   );
