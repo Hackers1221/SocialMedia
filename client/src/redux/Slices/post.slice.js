@@ -148,6 +148,21 @@ export const DeletePost = createAsyncThunk('post/delete' , async(data) => {
     }
 })
 
+export const searchPost = createAsyncThunk('search.post',async(query) => {
+    try {
+        const response = await axiosInstance.get(`post/search/${query}`,{
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            },
+        })
+        if(response){
+            return response;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+})
+
 const PostSlice = createSlice({
     name: 'post',
     initialState,

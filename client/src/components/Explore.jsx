@@ -1,15 +1,20 @@
 import { useEffect, useRef, useState } from "react";
-import usePosts from '../hooks/usePosts';
 import DisplayPost from "./DisplayPost";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllPosts, searchPost } from "../redux/Slices/post.slice";
 
 const Explore = () => {
 
-  const [postState] = usePosts();
   const dispatch = useDispatch();
   const [selectedPost, setSelectedPost] = useState ();
   const [isDialogOpen, setDialogOpen] = useState (false);
   const [thumbnails, setThumbnails] = useState({});
+  const [query,setQuery] = useState("");
+  const posts = useSelector((state) => state.post.downloadedPosts);
+  const [postState,setpostState] = useState(posts);
+
+  console.log(posts);
+
 
   const extractThumbnail = (videoURL, index) => {
     const video = document.createElement("video");
@@ -41,14 +46,40 @@ const Explore = () => {
     video.load(); // Ensures metadata loads before seeking
   };
 
+  const searchHandler = (e) => {
+    setQuery(e.target.value);
+  }
 
-  useEffect (() => {
-    postState?.downloadedPosts?.forEach((post, index) => {
-      if (post?.video[0]?.url) {
-        extractThumbnail(post.video[0]?.url, index);
-      }
+  useEffect(() => {
+    if(query.trim()==""){
+      setpostState(posts)
+      return;
+    }
+    const delayDebounceFn = setTimeout(async () => {
+                try {
+                    const response = await dispatch(searchPost(query));
+                    setpostState(response.payload?.data?.postDetails)
+                } catch (error) {
+                    console.error("Search failed:", error);
+                }
+            }, 300); // 300ms debounce delay
+    return () => clearTimeout(delayDebounceFn);
+  },[query])
+
+
+  useEffect(() => {
+    dispatch(getAllPosts()); 
+}, [dispatch]);
+
+useEffect(() => {
+    setpostState(posts);
+    posts?.forEach((post, index) => {
+        if (post?.video?.[0]?.url) {
+            extractThumbnail(post.video[0]?.url, index);
+        }
     });
-  }, []);
+}, [posts]); 
+
 
   return (
     <>
@@ -60,11 +91,13 @@ const Explore = () => {
           <input
             type="text"
             placeholder="Search for ideas..."
+            value = {query}
+            onChange={searchHandler}
             className={`w-full p-3 border border-[${_COLOR.buttons}] rounded-md shadow-md focus:outline-none text-[${_COLOR.lightest}]`}
           />
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-          {postState?.downloadedPosts?.map((post, index) => (
+          {postState?.map((post, index) => (
             <div key={index} className="relative h-[10rem] group overflow-hidden rounded-lg shadow-lg hover:cursor-pointer" onClick={() => {setDialogOpen(true);
               setSelectedPost (post);
             }}>
