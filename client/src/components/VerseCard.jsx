@@ -11,7 +11,7 @@ import usePosts from "../hooks/usePosts";
 import { getAllVerse, getVerseById, likeVerse, deleteVerse } from "../redux/Slices/verse.slice";
 import DisplayVerse from "./DisplayVerse";
 
-function VerseCard (verse) {
+function VerseCard (verse, bottom) {
     const authState = useSelector((state) => state.auth);
 
     const dispatch = useDispatch();
@@ -81,31 +81,31 @@ function VerseCard (verse) {
         const diffInSeconds = Math.floor((nowUTC - targetDateUTC) / 1000);
 
         if (diffInSeconds < 60) {
-            return `${diffInSeconds} second${diffInSeconds === 1 ? '' : 's'} ago`;
+            return `${diffInSeconds}s`;
         }
 
         const diffInMinutes = Math.floor(diffInSeconds / 60);
         if (diffInMinutes < 60) {
-            return `${diffInMinutes} minute${diffInMinutes === 1 ? '' : 's'} ago`;
+            return `${diffInMinutes}min`;
         }
 
         const diffInHours = Math.floor(diffInMinutes / 60);
         if (diffInHours < 24) {
-            return `${diffInHours} hour${diffInHours === 1 ? '' : 's'} ago`;
+            return `${diffInHours}h`;
         }
 
         const diffInDays = Math.floor(diffInHours / 24);
         if (diffInDays < 30) {
-            return `${diffInDays} day${diffInDays === 1 ? '' : 's'} ago`;
+            return `${diffInDays}d`;
         }
 
         const diffInMonths = Math.floor(diffInDays / 30);
         if (diffInMonths < 12) {
-            return `${diffInMonths} month${diffInMonths === 1 ? '' : 's'} ago`;
+            return `${diffInMonths}m`;
         }
 
         const diffInYears = Math.floor(diffInMonths / 12);
-        return `${diffInYears} year${diffInYears === 1 ? '' : 's'} ago`;
+        return `${diffInYears}y`;
     }
 
     const toggleLike = async () => {
@@ -150,33 +150,33 @@ function VerseCard (verse) {
     }, [verse?.verse]);
 
     return (
-        <div className={`rounded-md mb-4 bg-[${_COLOR.card}] p-4 relative box-shadow`} >
+        <div className={`bg-transparent p-4 relative`} >
             <DisplayVerse open={isDialogOpen} setOpen={setDialogOpen} verse={verse?.verse}/>
             <div className="flex justify-between">
-                <div className="flex gap-3">
+            <div className="flex items-center gap-3">
                     <div className="flex items-center">
                         <Link to={`/profile/${creator?.username}`}>
                             <span className="cursor-pointer">
-                                <Avatar url={creator?.image?.url || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} size={'md'} />
+                                <Avatar url={creator?.image?.url || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} size={'sm'} />
                             </span>
                         </Link>
                     </div>
-                    <div className="grow">
+                    <div className="flex gap-2 items-center">
                         <div>
                             <Link to={`/profile/${creator?.username}`}>
-                                <span className={`mr-1 text-sm font-semibold cursor-pointer hover:underline text-[${_COLOR.text}]`}>
+                                <span className={`mr-1 text-sm font-semibold cursor-pointer hover:underline hover:text-[${_COLOR.buttons}] text-[${_COLOR.text}]`}>
                                     {creator?.username}
                                 </span>
                             </Link>
                         </div>
-                        <p className={`text-[${_COLOR.text}] text-xs font-extralight`}>
-                            {date}
+                        <p className={`flex text-[${_COLOR.text}] text-xs font-extralight gap-2`}>
+                            <span>•</span>{date}
                         </p>
                     </div>
                 </div>
                 <div className="dropdown dropdown-end">
                     <div tabIndex={0} role="button" className="m-1">
-                        <i className="text-white fa-solid fa-ellipsis"></i>
+                        <i className={`text-[${_COLOR.text}] fa-solid fa-ellipsis`}></i>
                     </div>
                     <ul tabIndex={0} className={`dropdown-content menu bg-[${_COLOR.dropdown}] text-[${_COLOR.text}] rounded-box z-[1] w-52 p-4 gap-4 shadow-2xl shadow-[${_COLOR.medium}]`}>
                         <li className="hover:cursor-pointer"><span>Not Intrested</span></li>
@@ -198,7 +198,7 @@ function VerseCard (verse) {
                         {check ? ' Show Less' : '... Read More'}
                     </span>)}
             </p>
-            <div className="mt-2 flex w-full justify-between px-2">
+            <div className={`mt-2 pt-2 flex w-full justify-between px-2`}>
                 <div className="flex gap-4">
                     <button className={`flex gap-2 items-center text-[${_COLOR.text}]`} onClick={toggleLike}>
                         {liked ? (<i className="text-red-600 fa-solid fa-heart"></i>) : <i className={`text-[${_COLOR.text}] fa-regular fa-heart`}></i>}

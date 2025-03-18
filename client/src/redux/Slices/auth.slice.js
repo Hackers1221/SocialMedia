@@ -6,6 +6,7 @@ const initialState = {
     data: JSON.parse(localStorage.getItem("data")) || undefined,
     token: localStorage.getItem("token") || "",
     isLoggedIn: localStorage.getItem("isLoggedIn") || false,
+    userList: []
 };
 
 
@@ -94,6 +95,25 @@ export const getUserByUsername = createAsyncThunk('/auth/user', async (username)
             }
         });
         if(!response) toast.error('Something went wrong, try again');
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+export const getUserByLimit = createAsyncThunk('/auth/userByLimit', async (data) => {     
+    try {
+        const response = await axiosInstance.get(`auth/usersByLimit`, {
+            params: {
+                userId: data.userId,
+                limit: data.limit
+            },
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        });
+
+        if (!response) toast.error('Something went wrong, try again');
         return response;
     } catch (error) {
         console.log(error);
@@ -203,6 +223,10 @@ const authSlice = createSlice({
             state.data = "";
             state.isLoggedIn = false;
             state.token = "";
+        })
+        .addCase (getUserByLimit.fulfilled, (state, action) => {
+            if (!action.payload) return;
+            state.userList = action.payload.data?.users;
         })
     }
 });

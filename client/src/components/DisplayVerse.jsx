@@ -189,19 +189,19 @@ const DisplayVerse = ({ open, setOpen, verse }) => {
   return loading ? <Loader /> : (
     <dialog ref={dialogRef} className={`w-[60%] h-[90vh] bg-[${_COLOR.card}] rounded-lg shadow-xl p-4`}>
       <button onClick={() => setOpen (false)} className={`absolute top-5 right-6 text-[${_COLOR.text}] font-bold text-xl focus:outline-none`}>✕</button>
-      <div className="flex h-full">
+      <div className={`flex h-full border border-[${_COLOR.border}]`}>
         {/* Left Half */}
-        <div className="w-1/2 p-4 flex flex-col h-full">
-        <div className={`absolute top-0 left-0 flex items-center gap-3 mb-4 z-[100] bg-[${_COLOR.card}] px-4 py-2`}>
+        <div className={`w-1/2 p-4 flex flex-col h-full`}>
+        <div className={`absolute top-6 left-6 flex items-center gap-3 mb-4 z-[100] bg-[${_COLOR.card}] px-4 py-2 w-max`}>
             <Avatar url={creator?.image?.url || defaultImage} size={"md"}/>
             <div>
             <p className={`text-[${_COLOR.text}] font-semibold text-sm`}>{creator?.username}</p>
             <p className={`text-[${_COLOR.text}] text-xs`}>{date}</p>
             </div>
           </div>
-          <div className="h-[85vh] overflow-y-auto">
+          <div className="h-[85vh] mt-12 overflow-y-auto">
             {(verse?.text?.length > 0 || interest?.length > 0) && (
-                <div className={`text-[${_COLOR.text}] text-sm pb-4 mt-4`}>
+                <div className={`text-[${_COLOR.text}] text-sm pb-4`}>
                 {verse?.text}
                 {interest?.length > 0 && (
                     <h2 className={`text-[${_COLOR.text}] font-extralight mt-8 text-xs`}>
@@ -236,7 +236,7 @@ const DisplayVerse = ({ open, setOpen, verse }) => {
             </div>
             <div className="flex">
             <button className={`flex gap-2 items-center text-[${_COLOR.text}]`} onClick={toggleBookmark}>
-                {saved? <i className="text-white fa-solid fa-bookmark"></i> : <i className="text-white fa-regular fa-bookmark"></i>}
+                {saved? <i className={`text-[${_COLOR.text}] fa-solid fa-bookmark`}></i> : <i className={`text-[${_COLOR.text}] fa-regular fa-bookmark`}></i>}
               </button>
             </div>
           </div>

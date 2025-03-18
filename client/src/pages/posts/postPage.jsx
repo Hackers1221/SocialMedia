@@ -72,7 +72,7 @@ function PostPage() {
                         {options?.map ((option, index) => {
                            return (<h2 
                             key={index} 
-                            className={`${ selected === option ? `text-[${_COLOR.buttons}]` : `text-gray-400` // Default color
+                            className={`${ selected === option ? `text-[${_COLOR.text}]` : `text-gray-400` // Default color
                             } font-bold text-[1rem] hover:cursor-pointer`} 
                             onClick={() => optionChange(option)}>{option}</h2>)
                         })}
@@ -82,9 +82,12 @@ function PostPage() {
                 {/* Scrollable Post List */}
                 {isLoading && <SkeletonPostCard />}
                 {!isLoading && <div className="pt-4 w-full h-screen">
-                    {postState?.postList?.length > 0 ? postState?.postList?.map((post, key) => (
-                        <PostCard post={post} key={key}/>
-                    )) : <h2 className='w-full text-center font-extralight text-white'>No posts to show</h2>}
+                    {postState?.postList?.length > 0 ? postState?.postList?.map((post, index) => (
+                        <div key={index}>
+                            <PostCard post={post}/>
+                            {/* {index != postState?.postList?.length - 1 && <div className={`h-[1px] bg-[${_COLOR.text}]`}></div>} */}
+                        </div>
+                    )) : <h2 className={`w-full text-center font-extralight text-[${_COLOR.text}]`}>No posts to show</h2>}
                 </div>}
             </div>
         </>

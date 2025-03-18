@@ -5,19 +5,20 @@ const {checkUser, updateProfileImage} = require('../middlewares/middlewares')
 const {uploadSingleImage} = require("../../cloudConfig.js")
 const validators = require('../validators/authenticate.user')
 
-const userroutes = express.Router();
+const userRoutes = express.Router();
 
-userroutes.post('/sendotp',otpcontroller.sendOtp);
-userroutes.post('/forgetpass',otpcontroller.forgetPasswordLink);
-userroutes.post('/resetpass/:token',otpcontroller.resetPassword);
-userroutes.post('/verifyotp',otpcontroller.verifyotp);
-userroutes.post('/signup',checkUser,authcontroller.signup);
-userroutes.post('/signin',authcontroller.signin);
-userroutes.get('/users/:id',validators.isUserAuthenticated,authcontroller.getuserByid);
-userroutes.patch('/',validators.isUserAuthenticated, uploadSingleImage, updateProfileImage, authcontroller.updateUser);
-userroutes.patch('/follow/:id',validators.isUserAuthenticated,authcontroller.followUser);
-userroutes.get('/user/:name',validators.isUserAuthenticated,authcontroller.getUserByUserName);
-userroutes.delete('/:id',validators.isUserAuthenticated, authcontroller.deleteUser);
-userroutes.get('/search/:q',validators.isUserAuthenticated,authcontroller.searchUser)
+userRoutes.post('/sendotp',otpcontroller.sendOtp);
+userRoutes.post('/forgetpass',otpcontroller.forgetPasswordLink);
+userRoutes.post('/resetpass/:token',otpcontroller.resetPassword);
+userRoutes.post('/verifyotp',otpcontroller.verifyotp);
+userRoutes.post('/signup',checkUser,authcontroller.signup);
+userRoutes.post('/signin',authcontroller.signin);
+userRoutes.get('/users/:id',validators.isUserAuthenticated,authcontroller.getuserByid);
+userRoutes.patch('/',validators.isUserAuthenticated, uploadSingleImage, updateProfileImage, authcontroller.updateUser);
+userRoutes.patch('/follow/:id',validators.isUserAuthenticated,authcontroller.followUser);
+userRoutes.get('/user/:name',validators.isUserAuthenticated,authcontroller.getUserByUserName);
+userRoutes.delete('/:id',validators.isUserAuthenticated, authcontroller.deleteUser);
+userRoutes.get('/search/:q',validators.isUserAuthenticated,authcontroller.searchUser)
+userRoutes.get('/usersByLimit', validators.isUserAuthenticated, authcontroller.getUserByLimit)
 
-module.exports = userroutes
+module.exports = userRoutes
