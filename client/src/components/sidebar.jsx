@@ -279,9 +279,9 @@ function Sidebar() {
                                     <RxAvatar />
                                  }
                                 <Link to={`/profile/${user?.username}`} onClick={() => setSearch(false)}>
-                                    <p className={`text-[${_COLOR.text}] font-semibold hover:underline`}>{user.username}</p>
-                                    <div className={`text-sm text-[${_COLOR.text}] flex gap-1`}>
-                                        <span>{user.name}</span> • <span>{user.followers?.length() ? user.followers?.length() : 0} followers</span>
+                                    <p className="font-semibold hover:underline">{user.username}</p>
+                                    <div className="text-sm text-gray-300 flex gap-1">
+                                        <span>{user.name}</span> • <span>{user.follower?.length ? user.follower?.length : 0} followers</span>
                                     </div>
                                 </Link>
                             </div>

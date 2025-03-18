@@ -212,6 +212,23 @@ const DeletePost = async(id,userId) => {
     }
 }
 
+const searchPost = async(query) => {
+    const response = {};
+    try {
+        const posts = await postsmodel.find({
+            $or: [
+                { caption: { $regex: query, $options: "i" } },
+                { interests : { $regex: query, $options: "i" } }
+            ]
+        });
+        response.post = posts;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response
+    }
+}
+
 module.exports = {
     CreatePost,
     getAllPosts,
@@ -221,5 +238,6 @@ module.exports = {
     getPostById,
     savePost,
     getAllSavedPost,
-    DeletePost
+    DeletePost,
+    searchPost
 };

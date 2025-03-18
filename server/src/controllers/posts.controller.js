@@ -147,6 +147,20 @@ const DeletePost = async(req,res) => {
     })
 }
 
+const searchPost = async(req,res) => {
+    const response = await postsService.searchPost(req.params.q);
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg : "Unable to fetch the search Posts",
+            error : response.error
+        })
+    }
+    return res.status(StatusCodes.OK).send({
+        msg : "Successfully fetched the search Posts",
+        postDetails : response.post
+    })
+}
+
 
 module.exports = {
     createPost,
@@ -157,5 +171,6 @@ module.exports = {
     getPostById,
     savePost,
     getAllSavedPost,
-    DeletePost
+    DeletePost,
+    searchPost
 }
