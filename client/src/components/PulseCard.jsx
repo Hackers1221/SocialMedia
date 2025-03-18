@@ -1,14 +1,19 @@
 import { useState, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { likePulse } from "../redux/Slices/pulse.slice";
 
 export default function PulseCard({ pulse }) {
   if (!pulse) return null;
   console.log(pulse);
   
   const [isPlaying, setIsPlaying] = useState(true);
-  const [isLiked, setIsLiked] = useState(false);
+  const authState = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const [liked, setLiked] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
   const [showButton, setShowButton] = useState(true);
   const [isFollowed, setIsFollowed] = useState(false);
+  const [countLike,setCountLike] = useState(pulse?.likes?.length);
   const videoRef = useRef(null);
   const timeoutRef = useRef(null);
 
@@ -35,6 +40,23 @@ export default function PulseCard({ pulse }) {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => setShowButton(false), 1000);
   };
+
+  const handleLike = async(event) => {
+    event.stopPropagation();
+      const response = await dispatch(likePulse({
+        _id : pulse._id,
+        id : authState.data?._id
+      }));
+      if(!response.payload){
+        return;
+      }
+      if(liked){
+        setCountLike(countLike - 1);
+      }else{
+        setCountLike(countLike + 1);
+      }
+      setLiked(!liked);
+  }
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -89,9 +111,21 @@ export default function PulseCard({ pulse }) {
 
       {/* Left Side Buttons */}
       <div className="absolute right-4 bottom-[1.5rem] flex flex-col gap-7">
-        <button className="text-white text-2xl">
-            {isLiked ? <i className="fa-solid fa-heart"></i> : <i className="fa-regular fa-heart"></i>}
-        </button>
+      <button
+          className="flex flex-col items-center justify-center gap-1 text-white p-3 w-10 h-10"
+          onClick = {handleLike}
+        >
+          {liked ? (
+            <i className="text-red-600 fa-solid fa-heart text-4xl"></i>
+          ) : (
+            <i className={`text-white fa-regular fa-heart text-4xl`}></i>
+          )}
+          <span className="text-base font-medium">{countLike}</span>
+      </button>
+
+
+
+
         <button className="text-white text-2xl">
             {isSaved ? <i className="fa-solid fa-comment"></i> : <i className="fa-regular fa-comment"></i>}
         </button>

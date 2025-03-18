@@ -35,7 +35,36 @@ const getAllPulse = async () => {
     return response;  
 };
 
+
+const likePulse = async(id,userId) => {
+    const response = {};
+    try {
+        const likesArray = await pulsemodel.findById(id);
+        if(!likesArray){
+            response.error = "Pulse not found";
+            return response;
+        }
+        if(likesArray.likes.includes(userId)){
+            likesArray.likes = likesArray.likes.filter((ids) => ids!=userId);
+        }else{
+            likesArray.likes.push(userId);
+        }
+        const updatedPulse = await pulsemodel.findByIdAndUpdate(
+            id,
+            { likes: likesArray.likes },
+            { new: true } 
+        );
+        response.pulse = updatedPulse;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response;
+    }
+}
+
+
 module.exports = {
     CreatePulse,
     getAllPulse,
+    likePulse
 };

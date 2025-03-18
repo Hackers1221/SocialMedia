@@ -8,5 +8,6 @@ const {uploadSingleVideo} = require("../../cloudConfig");
 
 pulseRoutes.post('/', validators.isUserAuthenticated, uploadSingleVideo, pulseController.createPulse);
 pulseRoutes.get('/',validators.isUserAuthenticated, pulseController.getAllPulse);
+pulseRoutes.patch('/like/:id',validators.isUserAuthenticated,pulseController.likePulse);
 
 module.exports = pulseRoutes

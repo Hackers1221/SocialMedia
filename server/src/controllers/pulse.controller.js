@@ -45,7 +45,22 @@ const getAllPulse = async(req,res) => {
     })
 }
 
+const likePulse = async(req,res) => {
+    const response = await pulseService.likePulse(req.params.id,req.body.id)
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg : "Unable to update the Pulse",
+            error : response.error
+        })
+    }
+    return res.status(StatusCodes.OK).send({
+        msg : "Successfully updated the Pulse",
+        postDetails : response.post
+    })
+}
+
 module.exports = {
     createPulse,
     getAllPulse,
+    likePulse
 }
