@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import DisplayPost from "./DisplayPost";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllPosts, searchPost } from "../redux/Slices/post.slice";
+import { X } from "lucide-react";
 
 const Explore = () => {
 
@@ -12,9 +13,6 @@ const Explore = () => {
   const [query,setQuery] = useState("");
   const posts = useSelector((state) => state.post.downloadedPosts);
   const [postState,setpostState] = useState(posts);
-
-  console.log(posts);
-
 
   const extractThumbnail = (videoURL, index) => {
     const video = document.createElement("video");
@@ -56,14 +54,13 @@ const Explore = () => {
       return;
     }
     const delayDebounceFn = setTimeout(async () => {
-                try {
-                    const response = await dispatch(searchPost(query));
-                    console.log(response);
-                    setpostState(response.payload?.data?.postDetails)
-                } catch (error) {
-                    console.error("Search failed:", error);
-                }
-            }, 300); // 300ms debounce delay
+        try {
+            const response = await dispatch(searchPost(query));
+            setpostState(response.payload?.data?.postDetails)
+        } catch (error) {
+            console.error("Search failed:", error);
+        }
+    }, 300); // 300ms debounce delay
     return () => clearTimeout(delayDebounceFn);
   },[query])
 
@@ -88,14 +85,17 @@ useEffect(() => {
     <div className="fixed top-[8rem] md:top-[1rem]  md:left-[20rem] left-[1rem] w-[85%] md:w-[49%] h-[97vh] flex flex-col flex-grow overflow-y-auto">
       <div className="max-w-5xl w-full">
       <h2 className={`text-[${_COLOR.text}] heading text-[2rem] mb-4`}>Explore</h2>
-        <div className="relative w-full mb-6">
+      <div className={`flex items-center border border-[${_COLOR.input}] rounded-md px-2 shadow-md w-full mb-6`}>
           <input
             type="text"
             placeholder="Search for ideas..."
             onChange={searchHandler}
             value={query}
-            className={`w-full p-3 border border-[${_COLOR.buttons}] rounded-md shadow-md focus:outline-none text-[${_COLOR.lightest}]`}
+            className={`w-full p-2 bg-transparent text-[${_COLOR.text}] focus:outline-none`}
           />
+          {query.length > 0 && <button onClick={() => setQuery("")} className={`text-[${_COLOR.text}] text-2xl h-full`}>
+              <X />
+          </button>}
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
           {postState?.map((post, index) => (

@@ -2,6 +2,7 @@ const userService = require('../services/user.service');
 const {StatusCodes} = require('http-status-codes');
 const jwt = require('jsonwebtoken')
 const authservice = require('../services/auth.service')
+const User = require ('../models/user.model')
 
 const signup = async(req,res) =>  {
         const response  = await userService.CreateUser(req.body);
@@ -26,7 +27,9 @@ const signin = async(req,res) => {
             error : response.error
         })
     }
-    const token  = jwt.sign({email : req.body.email} , process.env.secret_key)
+
+    const token = jwt.sign({email : req.body.email} , process.env.secret_key);; 
+
     return res.status(StatusCodes.ACCEPTED).json({
         msg : "Successfully Login",
         userdata : response.userdata,
@@ -38,7 +41,6 @@ const signin = async(req,res) => {
 
 const deleteUser = async(req, res) => {
     const { id } = req.params;
-    console.log(id);
 
     // Extract token from headers and decode it
     const token = req.headers['x-access-token']
@@ -52,7 +54,8 @@ const deleteUser = async(req, res) => {
         })
     }
     const user = UserResponse.user;
-    if (!user || user.email !== decoded.email) {
+
+    if (!user || (user.email !== decoded.email && user.username !== decoded.email)) {
         return res.status(StatusCodes.FORBIDDEN).send({ msg: "Forbidden: You can only delete your own account" });
     }
 

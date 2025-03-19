@@ -95,7 +95,7 @@ const Profile = () => {
             <div className='w-full mt-16 px-4'>
               <h2 className={`font-bold text-xl text-[${_COLOR.text}]`}>{creator?.name}</h2>
               <h2 className={`font-semibold text-sm text-[${_COLOR.buttons}] mb-2`}>@{creator?.username}</h2>
-              {creator?.about && <h2 className={`font-semibold text-md text-[${_COLOR.text}] mb-4 cursive`}>{creator?.about}</h2>}
+              {creator?.about && <h2 className={` text-md text-[${_COLOR.text}] mb-4 cursive`}>{creator?.about}</h2>}
               <div className={`flex justify-between gap-4`}>
                 <div className='flex gap-4'>
                   <h2 className={`text-sm font-bold text-[${_COLOR.text}]`}>{countFollowers} <span className='font-extralight'>Followers</span></h2>

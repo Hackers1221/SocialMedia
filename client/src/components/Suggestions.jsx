@@ -1,9 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
-import { followUser, getUserByLimit, searchUser } from "../redux/Slices/auth.slice";
+import { followUser, getUserById, getUserByLimit, searchUser } from "../redux/Slices/auth.slice";
 import { useEffect, useState } from "react";
 import Avatar from "./Avatar";
 import { Link } from "react-router-dom";
 import { X } from "lucide-react";
+import toast from "react-hot-toast";
 
 function Suggestions () {
     const authState = useSelector ((state) => state.auth);
@@ -14,9 +15,13 @@ function Suggestions () {
     const [query, setQuery] = useState ();
     const [searchResult, setSearchResult] = useState ([]);
     const [follow, setFollow] = useState (false);
+    const [followers, setFollowers] = useState ([]);
+    const [check, setCheck] = useState (0);
 
     function onChangeHandler(e){
-        setQuery(e.target.value)
+        const value = e.target.value;
+        setQuery(value)
+        setCheck (value.length);
     }
 
     async function getUser () {
@@ -26,31 +31,28 @@ function Suggestions () {
         }));
     }
 
-    function handleClickOutside (e) {
-        const btn = document.getElementById('closeSearch');
-        const area = document.getElementById('searchArea'); // Add an ID to your search area if it exists
-
-        if (btn && !area?.contains(e.target)) {
-            btn.click();
-        }
-    }
-
-    const toggleFollow = async (userId) => {
+    const toggleFollow = async (user) => {
         const response = await dispatch(followUser({
           id1: authState?.data?._id,
-          id: userId,
+          id: user._id,
         }));
         if (response.payload) {
           setFollow((prev) => !prev);
+          toast.success(`Followed ${user.name} successfully`);
         }
       };
 
-    useEffect (() => {
-        document.addEventListener('mousedown', handleClickOutside);
-    }, [search])
+    async function getFollowers () {
+        authState.data?.following?.map (async (userId) => {
+            const res = await dispatch (getUserById (userId));
+            console.log (res)
+            setFollowers((prev) => [...prev, res.payload?.data?.userdetails]);
+        })
+    }
 
     useEffect(() => {
-            if(query?.trim()==""){
+            if(query?.trim() == ""){
+                setCheck (0);
                 setSearchResult([]);
                 return;
             }
@@ -67,70 +69,90 @@ function Suggestions () {
         },[query])
 
     useEffect (() => {
+        setFollowers([]);
         getUser ();
-    }, [follow])
+        getFollowers ();
+    }, [])
 
     return (
-        <section className={`fixed top-0 right-[1rem] flex-col md:flex-col overflow-auto w-full lg:max-w-sm rounded-md border-l-2 h-full pt-6`}>
-            {search && <div id="searchArea" className={`h-full flex flex-col gap-2 px-8`}>
-                <h2 className="text-xl font-bold">Search users</h2>
-                <div className={`flex items-center border border-[${_COLOR.input}] rounded-md px-2 focus:shadow-md`}>
-                    <input
-                        type="text"
-                        placeholder="Search..."
-                        className={`w-full p-2 bg-transparent text-[${_COLOR.text}] focus:outline-none`}
-                        onChange={onChangeHandler}
-                        name = "query"
-                        value = {query}
-                    />
-                    <button id="closeSearch" onClick={() => {setSearch(false); setQuery("");}} className={`text-[${_COLOR.text}] text-2xl h-full`}>
-                        <X />
-                    </button>
-                </div>
-                <div className="border-b border-gray-600 mt-2"></div>
-                <div className={`flex items-center space-x-2 text-[${_COLOR.text}] mt-2 text-sm`}>
-                    Recent searches
-                </div>
-                <div className="mt-2">
-                    {searchResult.map((user, index) => (
-                        <div key={index} className={`text-[${_COLOR.text}] p-2 flex items-center space-x-2`}>
-                            {user.image?.url ? 
-                                <Avatar url = {user.image?.url}/> : 
-                                <RxAvatar />
-                                }
-                            <Link to={`/profile/${user?.username}`} onClick={() => setSearch(false)}>
-                                <p className={`text-[${_COLOR.text}] font-semibold hover:underline`}>{user.username}</p>
-                                <div className={`text-sm text-[${_COLOR.text}] flex gap-1`}>
-                                    <span>{user.name}</span> • <span>{user.follower?.length ? user.follower?.length : 'No'} follower{user.follower?.length <= 1 ? '' : 's'}</span>
+        <section className={`fixed top-0 right-[1rem] flex-col md:flex-col overflow-auto w-full lg:max-w-sm h-full pt-6`}>
+            <div className={`flex flex-col gap-2 ml-8`}>
+                <div className={`bg-transparent`}>
+                    <div className={`flex items-center rounded-md px-4 my-4 mx-2 shadow-md border border-[${_COLOR.text}]`}>
+                        <i className="fa-solid fa-magnifying-glass"></i>
+                        <input
+                            type="text"
+                            placeholder="Search users"
+                            className={`w-full p-2 bg-transparent text-[${_COLOR.text}] focus:outline-none`}
+                            onChange={onChangeHandler}
+                            name = "query"
+                            value = {query}
+                        />
+                        {query && <button onClick={() => setQuery ("")} className={`text-[${_COLOR.text}] text-2xl h-full`}>
+                            <X />
+                        </button>}
+                    </div>
+                    {/* {query?.length == 0 && <div className={`flex items-center space-x-2 text-[${_COLOR.text}] mt-2 mx-2 text-sm`}>
+                        Recent searches
+                    </div>} */}
+                    <div>
+                        {searchResult.map((user, index) => (
+                            <Link to={`/profile/${user?.username}`} key={index} className={`text-[${_COLOR.text}] mt-2 p-2 py-3 flex items-center space-x-2 hover:shadow-md hover:cursor-pointer bg-[${_COLOR.card}]`}>
+                                {user.image?.url ? 
+                                    <Avatar url = {user.image?.url} size={'md'}/> : 
+                                    <RxAvatar />
+                                    }
+                                <div>
+                                    <p className={`text-[${_COLOR.text}] font-semibold text-sm`}>{user.name}</p>
+                                    <div className={`text-xs text-[${_COLOR.text}] flex gap-1`}>
+                                        <span>{user.username}</span> • <span>{user.follower?.length ? user.follower?.length : 'No'} follower{user.follower?.length <= 1 ? '' : 's'}</span>
+                                    </div>
                                 </div>
                             </Link>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
-            </div>}
+            </div>
 
-            <div className={`px-8 text-[${_COLOR.text}] text-xl ${search ? 'hidden' : 'block'}`}>
-                <div className={`flex justify-between items-center border-b pb-2`}>
-                    <h2 className="font-bold">Friend Suggestions</h2>
-                    <button className={`flex text-sm gap-2 items-center text-[${_COLOR.text}] rounded-full border border-[${_COLOR.text}] px-2`} onClick={() => setSearch (true)}>Search
-                        <i className="fa-solid fa-magnifying-glass text-xs"></i>
-                    </button>
+            {check == 0 && <div className={`ml-8 text-[${_COLOR.text}] text-xl rounded-xl bg-[${_COLOR.card}] shadow-lg mt-8`}>
+                <div className={`flex justify-between items-center border-b bg-[#B9D9EB] rounded-t-xl p-2`}>
+                    <h2 className="font-bold text-sm">Friend Suggestions</h2>
                 </div>
                 {authState.userList?.map ((user, key) => (
-                    <div key={key} className={`flex mt-2 gap-2 p-2 items-center border-b border-[${_COLOR.border}] hover:cursor-pointer hover:shadow-md`}>
+                    <div key={key} className={`flex mt-2 gap-2 p-2 py-3 items-center border-b ${key === authState.userList?.length - 1 ? 'border-transparent' : 'border-[${_COLOR.border}]'} hover:cursor-pointer hover:shadow-md`}>
                         <Avatar url={user.image?.url} size={"md"} />
                         <div className="flex justify-between w-full">
                             <Link to={`/profile/${user?.username}`} className="w-full">
                                 <h2 className={`text-sm`}>{user.name}</h2>
                                 <h2 className="text-xs font-extralight">@{user.username}</h2>
                             </Link>
-                            <button className={`text-xs text-[${_COLOR.buttons}] rounded-full px-4`} onClick={() => toggleFollow (user._id)}>
-                                {authState.data?.folowing?.includes (user._id) ? 'Following' : 'Follow'}
+                            <button className={`text-xs text-[${_COLOR.buttons}] rounded-full px-4 hover:font-semibold`} onClick={() => toggleFollow (user)}>
+                                Follow
                             </button>
                         </div>
                     </div>
                 ))}
-            </div>
+            </div>}
+
+            {check == 0 && followers?.length > 0 && <div className={`ml-8 text-[${_COLOR.text}] text-xl rounded-xl bg-[${_COLOR.card}] mt-8 shadow-lg`}>
+                <div className={`flex justify-between items-center border-b bg-[#B9D9EB] rounded-t-xl p-2`}>
+                    <h2 className="font-bold text-sm">Your followers</h2>
+                </div>
+                {followers?.map ((user, key) => (
+                    <div key={key} className={`flex mt-2 gap-2 p-2 py-3 items-center border-b ${key === authState.userList?.length - 1 ? 'border-transparent' : 'border-[${_COLOR.border}]'} hover:cursor-pointer hover:shadow-md`}>
+                        <Avatar url={user?.image?.url} size={"md"} />
+                        <div className="flex justify-between w-full">
+                            <Link to={`/profile/${user?.username}`} className="w-full">
+                                <h2 className={`text-sm`}>{user?.name}</h2>
+                                <h2 className="text-xs font-extralight">@{user?.username}</h2>
+                            </Link>
+                            <button className={`text-xs text-[${_COLOR.buttons}] rounded-full px-4 hover:font-semibold`} onClick={() => toggleFollow (user)}>
+                                Follow
+                            </button>
+                        </div>
+                    </div>
+                ))}
+            </div>}
             
         </section>
     )

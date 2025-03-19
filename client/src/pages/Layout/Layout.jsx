@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
 import Navbar from "../../components/navbar";
 import Sidebar from "../../components/sidebar";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Suggestions from "../../components/Suggestions";
+import { useSelector } from "react-redux";
 
 function Layout () {
-    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+    const authState = useSelector ((state) => state.auth);
 
+    const navigate = useNavigate ();
+
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     
     // Hide Navbar and Sidebar on these pages
     const location = useLocation();
@@ -15,6 +19,10 @@ function Layout () {
     
     // Handle screen resizing
     useEffect(() => {
+        if (!authState?.isLoggedIn || !authState?.data?.email) {
+            navigate ("/login"); return;
+        }
+        
         const handleResize = () => setScreenWidth(window.innerWidth);
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);

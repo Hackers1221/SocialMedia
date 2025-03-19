@@ -332,27 +332,42 @@ const DisplayPost = ({ open, setOpen, post }) => {
             </h2>}
           </div>}
           <div className="flex-1 overflow-y-auto space-y-3 pt-2">
-            {commentState.comments.map((comment, idx) => (
-              <div key={idx}>
-                <Comment avatar={comment.user.image?.url} username={comment.user.username} text={comment.description} time={"10 h"} />
-              </div>
-            ))}
+            {commentState.comments.length > 0 ? (
+              commentState.comments.map((comment, idx) => (
+                <div key={idx}>
+                  <Comment avatar={comment.user.image?.url} username={comment.user.username} text={comment.description} time={"10 h"} />
+                </div>
+              ))
+            ) : (
+              <div className="text-center text-sm text-gray-500">No comments yet</div>
+            )}
           </div>
+
+          {(countLike - liked > 0 || countComment > 0) && <div className={`mt-2 flex gap-2 w-full px-2 text-xs text-[${_COLOR.text}]`}>
+                {countLike - liked > 0 && <h2>
+                    Liked by {countLike - liked} other{countLike - liked > 1 ? 's' : ''}
+                </h2>}
+                {countLike - liked > 0 &&countComment > 0 && <h2>•</h2>}
+                {countComment > 0 && <h2>
+                    {countComment} Comment{countComment > 1 ? 's' : ''}
+                </h2>}
+            </div>}
           <div className="mt-2 flex w-full justify-between p-2 border-t">
             <div className="flex gap-4">
               <button className={`flex gap-2 items-center text-[${_COLOR.text}]`} onClick={toggleLike}>
                 {liked ? (<i className="text-red-600 fa-solid fa-heart"></i>) : <i className={`text-[${_COLOR.text}] fa-regular fa-heart`}></i>}
-                {countLike}
+                {liked ? (<h2 className="text-sm text-red-600 font-semibold">Liked</h2>) : (<h2 className="text-sm font-semibold">Like</h2>)}
               </button>
               <button className={`flex gap-2 items-center text-[${_COLOR.text}]`}>
               {/* <i className="text-white fa-solid fa-comment"></i> */}
                 <i className={`text-[${_COLOR.text}] fa-regular fa-comment`}></i>
-                {countComment}
+                <h2 className="text-sm font-semibold">Comment</h2>
               </button>
             </div>
             <div className="flex">
             <button className={`flex gap-2 items-center text-[${_COLOR.text}]`} onClick={toggleBookmark}>
-                {saved? <i className={`text-[${_COLOR.text}] fa-solid fa-bookmark`}></i> : <i className={`text-[${_COLOR.text}] fa-regular fa-bookmark`}></i>}
+                {saved? <i className={`text-[${_COLOR.buttons}] fa-solid fa-bookmark`}></i> : <i className={`text-[${_COLOR.text}] fa-regular fa-bookmark`}></i>}
+                {saved ? (<h2 className={`text-sm text-[${_COLOR.buttons}] font-semibold`}>Saved</h2>) : (<h2 className="text-sm font-semibold">Save</h2>)}
               </button>
             </div>
           </div>

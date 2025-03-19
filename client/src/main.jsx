@@ -10,14 +10,14 @@ import { SkeletonTheme } from 'react-loading-skeleton';
 
 
 createRoot(document.getElementById('root')).render(
-  <SkeletonTheme baseColor="#2A2D34">
+    <SkeletonTheme baseColor={`${_COLOR.border}`}>
     <BrowserRouter>
       <Provider store={Store}>
         <App/>
         <Toaster
-          position='bottom-left'
+          position='top-right'
         />
       </Provider>
     </BrowserRouter>
-  </SkeletonTheme>,
+  </SkeletonTheme>
 )

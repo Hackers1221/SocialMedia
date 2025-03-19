@@ -4,12 +4,13 @@ import { updateUser, deleteUser, logout } from "../redux/Slices/auth.slice";
 import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import ModeButton from "./ModeButton";
 
 const menuItems = [
-  { name: "Profile", key: "profile" },
+  { name: "General", key: "general" },
   { name: "Account", key: "account" },
   { name: "Privacy", key: "privacy" },
-  { name: "Notifications", key: "notifications" },
+  { name: "Notifications", key: "notifications" }
 ];
 
 function Settings() {
@@ -24,7 +25,7 @@ function Settings() {
   const [deleting, setDeleting] = useState(false);
   const [isDeleteDialog, setIsdeleteDialog] = useState(false);
 
-  const [selectedOption, setSelectedOption] = useState("profile");
+  const [selectedOption, setSelectedOption] = useState("general");
   const [imageUrl, setImageUrl] = useState("");
   const [userDetails, setUserDetails] = useState({
     image: authState?.data?.image?.url || "",
@@ -115,7 +116,7 @@ function Settings() {
             <li
               key={item.key}
               onClick={() => setSelectedOption(item.key)}
-              className={`cursor-pointer p-3 border-l-4 border-transparent hover:border-gray-400 text-[${_COLOR.text}] hover:bg-gray-200`}
+              className={`cursor-pointer p-3 hover:shadow-md hover:bg-[#FAF9F6] text-[${_COLOR.text}] ${selectedOption === item.key ? 'bg-[#FAF9F6] shadow-md' : ''}`}
             >
               {item.name}
             </li>
@@ -125,9 +126,9 @@ function Settings() {
 
       {/* Settings Form */}
       <main className="flex-1 p-6 bg-transparent ml-[25%]">
-        {selectedOption === "profile" && (
+        {selectedOption === "general" && (
           <div className="max-w-4xl mx-auto p-8 bg-transparent shadow-xl rounded-lg">
-            <h2 className={`text-3xl font-semibold text-[${_COLOR.text}] mb-8`}>Profile Settings</h2>
+            <h2 className={`text-3xl font-semibold text-[${_COLOR.text}] mb-8`}>General Settings</h2>
 
             {/* Profile Information */}
             <div className="bg-transparent p-6 rounded-lg shadow-sm mb-6">
@@ -196,6 +197,14 @@ function Settings() {
                     onChange={handleChange}
                   />
                 </div>
+              </div>
+            </div>
+
+            <div className={`bg-transparent border p-6 rounded-lg shadow-sm mb-6`}>
+              <h3 className={`text-lg font-medium text-[${_COLOR.text}] mb-2`}>Preferences</h3>
+              <div className="flex justify-between w-full">
+                <h2>Mode</h2>
+                <ModeButton />
               </div>
             </div>
 

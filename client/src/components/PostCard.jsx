@@ -108,7 +108,12 @@ function PostCard(post) {
             id: _id
         }));
 
-        if (!response?.payload) return;
+        if (!response?.payload) {
+            toast.error('Post not added to saved posts');
+            return;
+        }
+
+        toast.success('Post added to saved posts');
         setSaved((prev) => !prev);
     }
 
@@ -284,9 +289,9 @@ function PostCard(post) {
     }, [post?.post]);
 
     return (
-        <div className={`mb-4 bg-[${_COLOR.card}] p-4 relative shadow-lg`} >
+        <div className={`mb-4 bg-[${_COLOR.card}] relative shadow-xl rounded-xl`} >
             <DisplayPost open={isDialogOpen} setOpen={setDialogOpen} post={post?.post} />
-            <div className="flex justify-between">
+            <div className="flex justify-between bg-[#B9D9EB] rounded-t-xl p-[0.3rem]">
                 <div className="flex items-center gap-3">
                     <div className="flex items-center">
                         <Link to={`/profile/${creator?.username}`}>
@@ -312,7 +317,7 @@ function PostCard(post) {
                     <div tabIndex={0} role="button" className="m-1">
                         <i className={`text-[${_COLOR.text}] fa-solid fa-ellipsis`}></i>
                     </div>
-                    <ul tabIndex={0} className={`dropdown-content menu bg-[${_COLOR.dropdown}] text-[${_COLOR.lightest}] rounded-md z-[1] w-52 p-4 gap-4 shadow-2xl shadow-[${_COLOR.medium}]`}>
+                    <ul tabIndex={0} className={`dropdown-content menu bg-[${_COLOR.dropdown}] text-[${_COLOR.lightest}] rounded-md z-[1] w-52 p-4 gap-4 shadow-sm shadow-[${_COLOR.text}]`}>
                         <li onClick={() => setDialogOpen(true)} className="hover:cursor-pointer"><span>View Post</span></li>
                         <li className="hover:cursor-pointer"><span>Not Intrested</span></li>
                         {(authState._id === userId) && <li
@@ -327,12 +332,18 @@ function PostCard(post) {
                     </ul>
                 </div>
             </div>
-            <div className="flex gap-3 h-[25rem] my-4">
+            {tempCaption?.length > 0 && <p className={`text-sm mt-4 text-[${_COLOR.text}] px-4`}>
+                {tempCaption} {caption?.toString().length > 1000 && (
+                    <span onClick={() => setCheck(!check)} className={`text-blue-300 font-extralight hover:cursor-pointer`}>
+                        {check ? ' Show Less' : '... Read More'}
+                    </span>)}
+            </p>}
+            <div className="flex gap-3 h-[25rem] my-4 px-4">
                 {images?.length > 0 && <div className={`relative ${images.length > 3 ? `w-[35%]` : images?.length > 2 ? `w-[33%]` : images?.length > 1 ? `w-[50%]` : `w-full`} rounded-lg h-full flex justify-center hover:cursor-pointer`} onClick={() => setDialogOpen(true)}>
                     <img
                         src={images[0]?.url}
                         alt="Main Image"
-                        className="object-cover h-full"
+                        className="object-cover h-full rounded-2xl"
                     />
                     {images[0].filename === "video" && <i className="fa-solid fa-video absolute top-4 left-4 text-black text-2xl"></i>}
                     {images[0].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-black text-2xl"></i>}
@@ -341,7 +352,7 @@ function PostCard(post) {
                     <img
                         src={images[1]?.url}
                         alt="Image 2"
-                        className="object-cover h-full"
+                        className="object-cover h-full rounded-2xl"
                     />
                     {images[1].filename === "video" && <i className="fa-solid fa-video absolute top-4 left-4 text-black text-2xl"></i>}
                     {images[1].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-black text-2xl"></i>}
@@ -352,7 +363,7 @@ function PostCard(post) {
                         <img
                             src={images[2]?.url}
                             alt="Image 3"
-                            className="object-cover h-full"
+                            className="object-cover h-full rounded-2xl"
                         />
                         {images[2].filename === "video" && <i className="fa-solid fa-video absolute top-4 left-4 text-black text-2xl"></i>}
                         {images[2].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-black text-2xl"></i>}
@@ -362,13 +373,13 @@ function PostCard(post) {
                             <img
                                 src={images[3]?.url}
                                 alt="Image 4"
-                                className="object-cover h-full"
+                                className="object-cover h-full rounded-2xl"
                             />
                             {images[3].filename === "video" && <i className="fa-solid fa-video absolute top-4 left-4 text-black text-2xl"></i>}
                             {images[3].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-black text-2xl"></i>}
                         </div>
                         {images?.length > 4 && (
-                            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-2xl">
                                 <span className="text-white text-xl font-bold">
                                     +{images?.length - 4}
                                 </span>
@@ -377,32 +388,37 @@ function PostCard(post) {
                     </div>}
                 </div>}
             </div>
-            <div className="mt-2 flex w-full justify-between px-2">
+            
+            {(countLike - liked > 0 || countComment > 0) && <div className="mt-2 flex gap-2 w-full px-4 text-xs">
+                {countLike - liked > 0 && <h2>
+                    Liked by {countLike - liked} other{countLike - liked > 1 ? 's' : ''}
+                </h2>}
+                {countLike - liked > 0 &&countComment > 0 && <h2>•</h2>}
+                {countComment > 0 && <h2>
+                    {countComment} Comment{countComment > 1 ? 's' : ''}
+                </h2>}
+            </div>}
+            <div className="mt-2 flex w-full justify-between p-4 border-t">
                 <div className="flex gap-4">
                     <button className={`flex gap-2 items-center text-[${_COLOR.more_light}]`} onClick={toggleLike}>
                         {liked ? (<i className={`text-red-600 fa-solid fa-heart`}></i>) : <i className={`text-[${_COLOR.text}] fa-regular fa-heart`}></i>}
-                        {countLike}
+                        {liked ? (<h2 className="text-sm text-red-600 font-semibold">Liked</h2>) : (<h2 className="text-sm font-semibold">Like</h2>)}
                     </button>
                     <button className={`flex gap-2 items-center text-[${_COLOR.more_light}]`} onClick={() => {
                         getComments;
                         setDialogOpen(true);
                     }}>
                         <i className={`text-[${_COLOR.text}] fa-regular fa-comment`}></i>
-                        {countComment}
+                        <h2 className="text-sm font-semibold">Comment</h2>
                     </button>
                 </div>
                 <div className="flex">
                     <button className={`flex gap-2 items-center text-[${_COLOR.more_light}]`} onClick={toggleBookmark}>
                         {saved ? <i className={`text-[${_COLOR.buttons}] fa-solid fa-bookmark`}></i> : <i className={`text-[${_COLOR.lightest}] fa-regular fa-bookmark`}></i>}
+                        {saved ? (<h2 className={`text-sm text-[${_COLOR.buttons}] font-semibold`}>Saved</h2>) : (<h2 className="text-sm font-semibold">Save</h2>)}
                     </button>
                 </div>
             </div>
-            <p className={`text-sm mt-2 ml-2 text-[${_COLOR.more_light}]`}>
-                {tempCaption} {caption?.toString().length > 1000 && (
-                    <span onClick={() => setCheck(!check)} className={`text-blue-300 font-extralight hover:cursor-pointer`}>
-                        {check ? ' Show Less' : '... Read More'}
-                    </span>)}
-            </p>
         </div>
     );
 }

@@ -90,10 +90,7 @@ function VersePage() {
                 {isLoading && <SkeletonPostCard />}
                 {!isLoading && <div className="pt-4 w-full h-screen">
                     {verseState?.verseList?.length > 0 ? verseState?.verseList?.map((verse, index) => (
-                        <div>
-                            <VerseCard verse={verse}/>
-                            {index != verseState.verseList?.length - 1 && <div className={`h-[1px] bg-[${_COLOR.text}]`}></div>}
-                        </div>
+                         <VerseCard verse={verse}/>
                     )) : <h2 className={`w-full text-center font-extralight text-[${_COLOR.text}]`}>No verses to show</h2>}
                 </div>}
             </div>
