@@ -217,7 +217,7 @@ function Settings() {
 
         {selectedOption === "account" && (
           <div className="max-w-4xl mx-auto p-8 bg-transparent shadow-xl rounded-lg">
-            <h2 className={`text-3xl font-semibold text-[var(--text)] mb-8`}>Account Settings</h2>
+            <h2 className={`text-3xl font-semibold text-[var(--heading)] mb-8`}>Account Settings</h2>
 
             {/* Security Settings */}
             <div className={`bg-transparent border border-[var(--input)] p-6 rounded-lg shadow-sm mb-6`}>
@@ -234,7 +234,7 @@ function Settings() {
                 value={userDetails.curpassword}
                 onChange={handleChange}
               />
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                 <div>
                   <label className={`text-sm font-medium text-[var(--text)]`}>New Password</label>
                   <input
@@ -245,9 +245,6 @@ function Settings() {
                     value={userDetails.password}
                     onChange={handleChange}
                   />
-                  <p className={`text-xs mt-1`}>
-                    Must be at least 8 characters long.
-                  </p>
                 </div>
                 <div>
                   <label className={`text-sm font-medium text-[var(--text)]`}>Confirm Password</label>
@@ -261,6 +258,9 @@ function Settings() {
                   />
                 </div>
               </div>
+              <p className={`text-xs mt-2 text-[var(--text)]`}>
+                    Must be at least 8 characters long with a mix of uppercase, lowercase, numbers, and special characters
+              </p>
             </div>
 
             <div className="flex justify-end">

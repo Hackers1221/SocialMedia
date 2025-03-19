@@ -31,7 +31,6 @@ function PostCard(post) {
     const [deleting, setDeleting] = useState(false);
 
     const photo = currUser.data?.image?.url || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png";
-    const hashtags = interests[0].split(" ");
 
     const [date, setDate] = useState("");
     const [check, setCheck] = useState(false);
@@ -46,8 +45,7 @@ function PostCard(post) {
         email: "",
         birth: ""
     });
-    const [isPlaying, setIsPlaying] = useState([false]);
-    const [showButton, setShowButton] = useState([true]);
+    const [hashtags, setHashtags] = useState ("");
 
     const tempCaption = check ? caption : caption?.toString().slice(0, 200);
 
@@ -96,11 +94,6 @@ function PostCard(post) {
             }));
         }, 500);
     };
-
-    function getDate() {
-        let date = createdAt?.toString()?.split('T')[0].split('-').reverse().join("/");
-        setDate(date);
-    }
 
     const toggleBookmark = async () => {
         const response = await dispatch(updateSavedPost({
@@ -188,24 +181,6 @@ function PostCard(post) {
         setCreator(response.payload?.data?.userdetails);
     }
 
-    function handleChange(e) {
-        const { name, value } = e.target;
-        setDescription(value);
-    }
-
-    const postComment = async () => {
-        const data = {
-            description: commentDescription,
-            userId: authState._id,
-            postId: _id
-        };
-        const response = await dispatch(CreateComment(data));
-        if (response.payload) {
-            setCountComment(countComment + 1);
-            setDescription("");
-        }
-    }
-
     const getComments = async () => {
         await dispatch(getCommentByPostId(_id));
     }
@@ -260,6 +235,14 @@ function PostCard(post) {
         video.load();
     };
 
+    function getHashtags () {
+        let temp = interests[0]?.split (" ");
+        temp = temp?.map((hashtag) => hashtag.trim());
+        temp = temp?.map((hashtag) => (hashtag.length > 0 ? "#" : "") + hashtag);
+        temp = temp?.join(" ");
+        setHashtags (temp);
+    }
+
     useEffect(() => {
         setImages([]);
 
@@ -272,6 +255,8 @@ function PostCard(post) {
                 }
             });
         }
+
+        getHashtags ();
     }, [_id]);
 
     useEffect(() => {
@@ -291,7 +276,7 @@ function PostCard(post) {
     return (
         <div className={`mb-4 bg-[var(--card)] relative shadow-xl rounded-xl`} >
             <DisplayPost open={isDialogOpen} setOpen={setDialogOpen} post={post?.post} />
-            <div className="flex justify-between bg-[var(--topic)] rounded-t-xl p-[0.3rem]">
+            <div className="flex justify-between bg-[var(--topic)] rounded-t-xl p-[0.3rem] px-4">
                 <div className="flex items-center gap-2">
                     <div className="flex items-center">
                         <Link to={`/profile/${creator?.username}`}>
@@ -338,6 +323,7 @@ function PostCard(post) {
                         {check ? ' Show Less' : '... Read More'}
                     </span>)}
             </p>}
+            <p className="text-[var(--buttons)] px-4 mt-4 text-sm">{hashtags}</p>
             <div className="flex gap-3 h-[25rem] my-4 px-4">
                 {images?.length > 0 && <div className={`relative ${images.length > 3 ? `w-[35%]` : images?.length > 2 ? `w-[33%]` : images?.length > 1 ? `w-[50%]` : `w-full`} rounded-lg h-full flex justify-center hover:cursor-pointer`} onClick={() => setDialogOpen(true)}>
                     <img
@@ -345,8 +331,8 @@ function PostCard(post) {
                         alt="Main Image"
                         className="object-cover h-full rounded-2xl"
                     />
-                    {images[0].filename === "video" && <i className="fa-solid fa-video absolute top-4 left-4 text-[var(--text)] text-2xl"></i>}
-                    {images[0].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-[var(--text)] text-2xl"></i>}
+                    {images[0].filename === "video" && <i className="fa-solid fa-video absolute top-4 left-4 text-[var(--heading)] text-2xl"></i>}
+                    {images[0].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-[var(--heading)] text-2xl"></i>}
                 </div>}
                 {images?.length > 1 && <div className={`relative ${images?.length > 3 ? `w-[35%]` : images?.length > 2 ? `w-[33%]` : `w-[50%]`} rounded-lg h-full flex items-center flex justify-center hover:cursor-pointer`} onClick={() => setDialogOpen(true)}>
                     <img
@@ -354,8 +340,8 @@ function PostCard(post) {
                         alt="Image 2"
                         className="object-cover h-full rounded-2xl"
                     />
-                    {images[1].filename === "video" && <i className="fa-solid fa-video absolute top-4 left-4 text-[var(--text)] text-2xl"></i>}
-                    {images[1].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-[var(--text)] text-2xl"></i>}
+                    {images[1].filename === "video" && <i className="fa-solid fa-video absolute top-4 left-4 text-[var(--heading)] text-2xl"></i>}
+                    {images[1].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-[var(--heading)] text-2xl"></i>}
                 </div>}
 
                 {images?.length > 2 && <div className={`flex flex-col gap-2 ${images?.length > 3 ? `w-[25%]` : `w-[33%]`}`}>
@@ -365,8 +351,8 @@ function PostCard(post) {
                             alt="Image 3"
                             className="object-cover h-full rounded-2xl"
                         />
-                        {images[2].filename === "video" && <i className="fa-solid fa-video absolute top-4 left-4 text-[var(--text)] text-2xl"></i>}
-                        {images[2].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-[var(--text)] text-2xl"></i>}
+                        {images[2].filename === "video" && <i className="fa-solid fa-video absolute top-4 left-4 text-[var(--heading)] text-2xl"></i>}
+                        {images[2].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-[var(--heading)] text-2xl"></i>}
                     </div>
                     {images?.length > 3 && <div className="relative h-[49%] hover:cursor-pointer" onClick={() => setDialogOpen(true)}>
                         <div className="relative h-full w-full flex justify-center">
@@ -375,8 +361,8 @@ function PostCard(post) {
                                 alt="Image 4"
                                 className="object-cover h-full rounded-2xl"
                             />
-                            {images[3].filename === "video" && <i className="fa-solid fa-video absolute top-4 left-4 text-[var(--text)] text-2xl"></i>}
-                            {images[3].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-[var(--text)] text-2xl"></i>}
+                            {images[3].filename === "video" && <i className="fa-solid fa-video absolute top-4 left-4 text-[var(--heading)] text-2xl"></i>}
+                            {images[3].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-[var(--heading)] text-2xl"></i>}
                         </div>
                         {images?.length > 4 && (
                             <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-2xl">

@@ -39,6 +39,18 @@ export default function PostForm({ open, setOpen }) {
     }
   };
 
+  function handleChange (e) {
+    const {name, value} = e.target;
+    if (name === 'caption') {
+      let val = value;
+      if (val && val[0] >= 'a' && val[0] <= 'z') {
+        val = val[0].toUpperCase() + val.slice(1);
+      }
+      setCaption (val);      
+    }
+    else setInterests (value);
+  }
+
 
 
   // Handle files
@@ -138,7 +150,8 @@ export default function PostForm({ open, setOpen }) {
               rows="2"
               placeholder="Write a caption..."
               value={caption}
-              onChange={(e) => setCaption(e.target.value)}
+              name="caption"
+              onChange={handleChange}
             ></textarea>
 
             {/* Post Button + interest */}
@@ -148,10 +161,11 @@ export default function PostForm({ open, setOpen }) {
                 <i className="fa-solid fa-hashtag text-gray-800 text-lg"></i>
                 <input 
                   type="text"
+                  name="interests"
                   value={interests}
                   className="bg-transparent outline-none text-gray-700 w-full focus:outline-none"
                   placeholder="Add hashtags Ex: games, sports"
-                  onChange={(e) => setInterests(e.target.value)}
+                  onChange={handleChange}
                 />
               </label>
 

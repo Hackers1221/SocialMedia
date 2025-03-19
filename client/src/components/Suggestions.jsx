@@ -62,7 +62,7 @@ function Suggestions () {
     }, [])
 
     return (
-        <section className={`fixed top-0 right-[1rem] flex-col md:flex-col overflow-auto w-full lg:max-w-sm h-full pt-6`}>
+        <section className={`fixed top-0 right-[1rem] flex-col md:flex-col overflow-auto w-full lg:max-w-sm h-full pt-2`}>
             <div className={`flex flex-col gap-2 ml-8`}>
                 <div className={`bg-transparent`}>
                     <div className={`flex items-center rounded-md px-4 my-4 mx-2 shadow-md border border-[var(--input)]`}>

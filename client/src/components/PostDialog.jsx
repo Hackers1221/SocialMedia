@@ -27,14 +27,14 @@ export default function PostDialog({ open, setOpen, onAddPost, onAddPulse, onAdd
               <button
                 type="button"
                 onClick={onAddPost}
-                className="flex items-center w-full md:w-1/2 justify-center rounded-md px-4 py-3 text-sm font-semibold text-[var(--text)] ring-1 ring-gray-300 shadow-xs hover:bg-gray-100"
+                className="flex items-center w-full md:w-1/2 justify-center rounded-md px-4 py-3 text-sm font-semibold text-[var(--text)] ring-1 ring-gray-300 hover:ring-2"
               >
                 <i className="fa-solid fa-pen-to-square text-[var(--buttons)] text-lg mr-2"></i> Add a post
               </button>
               <button
                 type="button"
                 onClick={onAddPulse}
-                className="flex items-center w-full md:w-1/2  justify-center rounded-md px-4 py-3 text-sm font-semibold text-[var(--text)] ring-1 ring-gray-300 shadow-xs hover:bg-gray-100"
+                className="flex items-center w-full md:w-1/2  justify-center rounded-md px-4 py-3 text-sm font-semibold text-[var(--text)] ring-1 ring-gray-300 hover:ring-2"
               >
                 <IoMdPulse className="text-[var(--buttons)] text-lg mr-2"/> Add a pulse
               </button>
@@ -43,7 +43,7 @@ export default function PostDialog({ open, setOpen, onAddPost, onAddPulse, onAdd
               <button
                   type="button"
                   onClick={onAddVerse}
-                  className="flex items-center w-full  justify-center rounded-md px-4 py-3 text-sm font-semibold text-[var(--text)] ring-1 ring-gray-300 shadow-xs hover:bg-gray-100"
+                  className="flex items-center w-full  justify-center rounded-md px-4 py-3 text-sm font-semibold text-[var(--text)] ring-1 ring-gray-300 hover:ring-2"
                 >
                   <i className="fa-regular fa-comments mr-2 text-[var(--buttons)]"/> Add a verse
               </button>

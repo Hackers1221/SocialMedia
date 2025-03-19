@@ -1,14 +1,12 @@
-import { useEffect, useRef, useState } from "react";
-import DisplayPost from "./DisplayPost";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllPosts, searchPost } from "../redux/Slices/post.slice";
 import { X } from "lucide-react";
+import ExploreCard from "./ExploreCard";
 
 const Explore = () => {
 
   const dispatch = useDispatch();
-  const [selectedPost, setSelectedPost] = useState ();
-  const [isDialogOpen, setDialogOpen] = useState (false);
   const [thumbnails, setThumbnails] = useState({});
   const [query,setQuery] = useState("");
   const posts = useSelector((state) => state.post.downloadedPosts);
@@ -45,8 +43,12 @@ const Explore = () => {
   };
 
   const searchHandler = (e) => {
-    setQuery(e.target.value);
-  }
+    let value = e.target.value;
+    if (value && value[0] >= 'a' && value[0] <= 'z') {
+      value = value[0].toUpperCase() + value.slice(1);
+    }
+    setQuery(value);
+  };  
 
   useEffect(() => {
     if(query.trim()==""){
@@ -81,7 +83,6 @@ useEffect(() => {
 
   return (
     <>
-    <DisplayPost open={isDialogOpen} setOpen={setDialogOpen} post={selectedPost}/>
     <div className={`fixed top-[8rem] md:top-[1rem]  md:left-[20rem] left-[1rem] w-[85%] md:w-[49%] h-[97vh] flex flex-col flex-grow overflow-y-auto`}>
       <div className="max-w-5xl w-full">
       <h2 className={`text-[var(--text)] heading text-[2rem] mb-4`}>Explore</h2>
@@ -97,20 +98,25 @@ useEffect(() => {
               <X />
           </button>}
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+        <div className="columns-2 sm:columns-3 md:columns-4 gap-3">
           {postState?.map((post, index) => (
-            <div key={index} className="relative h-[10rem] group overflow-hidden rounded-lg shadow-lg hover:cursor-pointer" onClick={() => {setDialogOpen(true);
-              setSelectedPost (post);
-            }}>
-              {<img
-                src={post?.image[0]?.url || thumbnails[index]}
-                alt="Explore"
-                className="w-full h-full object-cover rounded-lg transition-transform duration-300 group-hover:scale-110"
-              />}
-              <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-lg font-semibold">
-                View
-              </div>
-            </div>
+            // <div key={index} className="relative group overflow-hidden rounded-lg shadow-lg hover:cursor-pointer" onClick={() => {setDialogOpen(true);
+            //   setSelectedPost (post);
+            // }}>
+            //   {<img
+            //     src={post?.image[0]?.url || thumbnails[index]}
+            //     alt="Explore"
+            //     className="w-full h-max object-cover rounded-lg transition-transform duration-300 group-hover:scale-110"
+            //   />}
+            //   <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-lg font-semibold">
+            //     View
+            //   </div>
+            // </div>
+            <ExploreCard 
+              post={post} 
+              key={index} 
+              postThumbnail={post?.image[0]?.url || thumbnails[index]} 
+              video={post?.image[0]?.url ? false : true}/>
           ))}
         </div>
       </div>

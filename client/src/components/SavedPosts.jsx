@@ -3,14 +3,12 @@ import { useEffect, useState } from "react";
 import { BsCameraReels } from "react-icons/bs";
 import DisplayPost from "./DisplayPost";
 import usePosts from "../hooks/usePosts";
+import ExploreCard from "./ExploreCard";
 
 const SavedPost = () => {
   const savedArray = useSelector((state) => state.post.savedList);
-  const [postState] = usePosts();
 
   const [activeTab, setActiveTab] = useState("images");
-  const [isDialogOpen, setDialogOpen] = useState (false);
-  const [selectedPost, setSelectedPost] = useState ();
 
   const [thumbnails, setThumbnails] = useState({});
 
@@ -54,7 +52,6 @@ const SavedPost = () => {
 
   return (
     <>
-      <DisplayPost open={isDialogOpen} setOpen={setDialogOpen} post={selectedPost}/>
     <div className="fixed top-[10rem] md:top-[1rem] md:left-[20rem] left-[1rem] w-[85%] md:w-[50%]">
       {/* Tabs for Images and Reels */}
       <div className={`flex justify-center space-x-4 border-b pb-2 bg-[var(--card)] border border-[var(--border)]`}>
@@ -82,19 +79,24 @@ const SavedPost = () => {
       <div className="w-full mt-4">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
           {(activeTab === "images" ? savedArray : pulse)?.map((post, index) => (
-            <div key={index} className="relative h-[10rem] group hover:cursor-pointer overflow-hidden rounded-lg" onClick={() => {
-              setDialogOpen(true);
-              setSelectedPost (post);
-            }}>
-              {activeTab === "images" && <img
-                src={post?.image[0]?.url || thumbnails[index]}
-                alt="Explore"
-                className="w-full h-full object-cover rounded-lg transition-transform duration-300 group-hover:scale-110"
-              />}
-              <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-lg font-semibold">
-                View
-              </div>
-            </div>
+            // <div key={index} className="relative h-[10rem] group hover:cursor-pointer overflow-hidden rounded-lg" onClick={() => {
+            //   setDialogOpen(true);
+            //   setSelectedPost (post);
+            // }}>
+            //   {activeTab === "images" && <img
+            //     src={post?.image[0]?.url || thumbnails[index]}
+            //     alt="Explore"
+            //     className="w-full h-full object-cover rounded-lg transition-transform duration-300 group-hover:scale-110"
+            //   />}
+            //   <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-lg font-semibold">
+            //     View
+            //   </div>
+            // </div>
+            <ExploreCard
+              post={post} 
+              key={index} 
+              postThumbnail={post?.image[0]?.url || thumbnails[index]} 
+              video={post?.image[0]?.url ? false : true}/>
           ))}
         </div>
       </div>

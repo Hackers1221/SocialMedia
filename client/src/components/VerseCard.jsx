@@ -152,7 +152,7 @@ function VerseCard (verse, bottom) {
     return (
         <div className={`bg-[var(--card)] shadow-xl rounded-xl relative mt-4`} >
             <DisplayVerse open={isDialogOpen} setOpen={setDialogOpen} verse={verse?.verse}/>
-            <div className="flex justify-between bg-[var(--topic)] rounded-t-xl p-[0.3rem]">
+            <div className="flex justify-between bg-[var(--topic)] rounded-t-xl p-[0.3rem] px-4">
                 <div className="flex items-center gap-3">
                     <div className="flex items-center">
                         <Link to={`/profile/${creator?.username}`}>
