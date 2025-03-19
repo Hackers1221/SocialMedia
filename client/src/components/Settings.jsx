@@ -110,13 +110,13 @@ function Settings() {
     <div className="fixed top-[9rem] md:top-[1rem]  md:left-[20rem] left-[1rem] w-[75vw] h-[82vh] md:h-[97vh] flex flex-grow overflow-y-auto">
       {/* Sidebar Menu */}
       <aside className="w-[20%] fixed h-full bg-transparent p-6">
-        <h2 className={`text-[2rem] text-[${_COLOR.text}] heading font-semibold mb-4`}>Settings</h2>
+        <h2 className={`text-[2rem] text-[var(--text)] heading font-semibold mb-4`}>Settings</h2>
         <ul>
           {menuItems.map((item) => (
             <li
               key={item.key}
               onClick={() => setSelectedOption(item.key)}
-              className={`cursor-pointer p-3 hover:shadow-md hover:bg-[#FAF9F6] text-[${_COLOR.text}] ${selectedOption === item.key ? 'bg-[#FAF9F6] shadow-md' : ''}`}
+              className={`cursor-pointer p-3 hover:shadow-md text-[var(--text)] ${selectedOption === item.key ? 'text-[var(--heading)] shadow-md' : ''}`}
             >
               {item.name}
             </li>
@@ -128,12 +128,12 @@ function Settings() {
       <main className="flex-1 p-6 bg-transparent ml-[25%]">
         {selectedOption === "general" && (
           <div className="max-w-4xl mx-auto p-8 bg-transparent shadow-xl rounded-lg">
-            <h2 className={`text-3xl font-semibold text-[${_COLOR.text}] mb-8`}>General Settings</h2>
+            <h2 className={`text-3xl font-semibold text-[var(--heading)] mb-8`}>General Settings</h2>
 
             {/* Profile Information */}
             <div className="bg-transparent p-6 rounded-lg shadow-sm mb-6">
-              <h3 className={`text-lg font-medium text-[${_COLOR.text}] mb-2`}>Profile Information</h3>
-              <p className={`text-xs text-[${_COLOR.more_light}] mb-4`}>
+              <h3 className={`text-lg font-medium text-[var(--text)] mb-2`}>Profile Information</h3>
+              <p className={`text-xs mb-4 text-[var(--text)]`}>
                 Update your profile details to keep your account up to date.
               </p>
               <div className="flex items-center gap-6">
@@ -146,53 +146,53 @@ function Settings() {
                   <input
                     type="file"
                     accept="image/*"
-                    className={`px-4 py-2 border-[${_COLOR.text}] rounded-md text-sm text-[${_COLOR.text}] font-medium`}
+                    className={`px-4 py-2 border-[var(--border)] rounded-md text-sm text-[var(--text)] font-medium`}
                     onChange={handleImageChange}
                     encType= "multipart/form-data" 
                   />
-                  <p className={`text-xs text-[${_COLOR.text}] mt-1`}>JPG, PNG (Max 2MB)</p>
+                  <p className={`text-xs text-[var(--text)] mt-1`}>JPG, PNG (Max 2MB)</p>
                 </div>
               </div>
             </div>
 
             {/* Account Details */}
-            <div className={`bg-transparent border p-6 rounded-lg shadow-sm mb-6`}>
-              <h3 className={`text-lg font-medium text-[${_COLOR.text}] mb-2`}>Personal Details</h3>
-              <p className={`text-sm text-[${_COLOR.text}] mb-4`}>
+            <div className={`bg-transparent border border-[var(--input)] p-6 rounded-lg shadow-sm mb-6`}>
+              <h3 className={`text-lg font-medium text-[var(--text)] mb-2`}>Personal Details</h3>
+              <p className={`text-sm text-[var(--text)] mb-4`}>
                 Your account information is private and will not be shared.
               </p>
               <div className="flex flex-col gap-4">
                 <div>
-                  <label className={`text-sm font-medium text-[${_COLOR.text}]`}>Username</label>
+                  <label className={`text-sm font-medium text-[var(--text)]`}>Username</label>
                   <input
                     type="text"
                     name="username"
                     value={userDetails?.username}
-                    className={`w-full p-3 border-2 rounded-lg mt-1 text-[${_COLOR.text}] bg-transparent focus:outline-none`}
+                    className={`w-full p-3 border border-[var(--input)] rounded-lg mt-1 text-[var(--text)] bg-transparent focus:outline-none`}
                     placeholder="johndoe123"
                     onChange={handleChange}
                   />
                 </div>
 
                 <div>
-                  <label className={`text-sm font-medium text-[${_COLOR.text}]`}>Full Name</label>
+                  <label className={`text-sm font-medium text-[var(--text)]`}>Full Name</label>
                   <input
                     type="text"
                     name="name"
                     value={userDetails?.name}
-                    className={`w-full p-3 border-2 rounded-lg mt-1 text-[${_COLOR.text}] bg-transparent focus:outline-none`}
+                    className={`w-full p-3 border border-[var(--input)] rounded-lg mt-1 text-[var(--text)] bg-transparent focus:outline-none`}
                     placeholder="John Doe"
                     onChange={handleChange}
                   />
                 </div>
 
                 <div>
-                  <label className={`text-sm font-medium text-[${_COLOR.text}]`}>About</label>
+                  <label className={`text-sm font-medium text-[var(--text)]`}>About</label>
                   <textarea
                     type="email"
                     name="about"
                     value={userDetails?.about}
-                    className={`w-full p-3 border-2 rounded-lg mt-1 text-[${_COLOR.text}] bg-transparent focus:outline-none resize-none`}
+                    className={`w-full p-3 border border-[var(--input)] rounded-lg mt-1 text-[var(--text)] bg-transparent focus:outline-none resize-none`}
                     rows={5}
                     onChange={handleChange}
                   />
@@ -200,36 +200,35 @@ function Settings() {
               </div>
             </div>
 
-            <div className={`bg-transparent border p-6 rounded-lg shadow-sm mb-6`}>
-              <h3 className={`text-lg font-medium text-[${_COLOR.text}] mb-2`}>Preferences</h3>
-              <div className="flex justify-between w-full">
-                <h2>Mode</h2>
-                <ModeButton />
-              </div>
-            </div>
-
             <div className="flex justify-end">
-              <button className={`px-6 py-3 bg-transparent border border-[${_COLOR.buttons}] text-[${_COLOR.buttons}] font-bold rounded-full hover:bg-[${_COLOR.buttons}] hover:text-white transition-all`} onClick={updateuser}>
+              <button className={`px-6 py-3 bg-transparent border border-[var(--buttons)] text-[var(--buttons)] font-bold rounded-full hover:bg-[var(--buttons)] hover:text-white transition-all`} onClick={updateuser}>
                 Save Changes
               </button>
+            </div>
+            <div className={`bg-transparent border border-[var(--input)] p-6 rounded-lg shadow-sm my-6`}>
+              <h3 className={`text-lg font-medium text-[var(--text)] mb-2`}>Preferences</h3>
+              <div className="flex justify-between w-full">
+                <h2 className="text-[var(--text)]">Mode</h2>
+                <ModeButton />
+              </div>
             </div>
           </div>
         )}
 
         {selectedOption === "account" && (
           <div className="max-w-4xl mx-auto p-8 bg-transparent shadow-xl rounded-lg">
-            <h2 className={`text-3xl font-semibold text-[${_COLOR.text}] mb-8`}>Account Settings</h2>
+            <h2 className={`text-3xl font-semibold text-[var(--text)] mb-8`}>Account Settings</h2>
 
             {/* Security Settings */}
-            <div className={`bg-transparent border p-6 rounded-lg shadow-sm mb-6`}>
-              <h3 className={`text-lg font-medium text-[${_COLOR.text}] mb-2`}>Security Settings</h3>
-              <p className={`text-sm text-[${_COLOR.text}] mb-4`}>
+            <div className={`bg-transparent border border-[var(--input)] p-6 rounded-lg shadow-sm mb-6`}>
+              <h3 className={`text-lg font-medium text-[var(--text)] mb-2`}>Security Settings</h3>
+              <p className={`text-sm text-[var(--text)] mb-4`}>
                 Ensure your account security by updating your password regularly.
               </p>
-              <label className={`text-sm font-medium text-[${_COLOR.text}]`}>Current Password</label>
+              <label className={`text-sm font-medium text-[var(--text)]`}>Current Password</label>
               <input
                 type="password"
-                className={`w-full p-3 border-2 rounded-lg mt-1 text-[${_COLOR.text}] bg-transparent focus:outline-none`}
+                className={`w-full p-3 border border-[var(--input)] rounded-lg mt-1 text-[var(--text)] bg-transparent focus:outline-none`}
                 placeholder="********"
                 name="curpassword"
                 value={userDetails.curpassword}
@@ -237,24 +236,24 @@ function Settings() {
               />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className={`text-sm font-medium text-[${_COLOR.text}]`}>New Password</label>
+                  <label className={`text-sm font-medium text-[var(--text)]`}>New Password</label>
                   <input
                     type="password"
-                    className={`w-full p-3 border-2 rounded-lg mt-1 text-[${_COLOR.text}] bg-transparent focus:outline-none`}
+                    className={`w-full p-3 border border-[var(--input)] rounded-lg mt-1 text-[var(--text)] bg-transparent focus:outline-none`}
                     placeholder="********"
                     name="password"
                     value={userDetails.password}
                     onChange={handleChange}
                   />
-                  <p className={`text-xs text-[${_COLOR.medium}] mt-1`}>
+                  <p className={`text-xs mt-1`}>
                     Must be at least 8 characters long.
                   </p>
                 </div>
                 <div>
-                  <label className={`text-sm font-medium text-[${_COLOR.text}]`}>Confirm Password</label>
+                  <label className={`text-sm font-medium text-[var(--text)]`}>Confirm Password</label>
                   <input
                     type="password"
-                    className={`w-full p-3 border-2 rounded-lg mt-1 text-[${_COLOR.text}] bg-transparent focus:outline-none`}
+                    className={`w-full p-3 border border-[var(--input)] rounded-lg mt-1 text-[var(--text)] bg-transparent focus:outline-none`}
                     placeholder="********"
                     name="confirmPassword"
                     value={confirmPassword}
@@ -265,15 +264,15 @@ function Settings() {
             </div>
 
             <div className="flex justify-end">
-              <button className={`px-6 py-3 mb-4 bg-transparent border border-[${_COLOR.buttons}] text-[${_COLOR.buttons}] font-bold rounded-full hover:bg-[${_COLOR.buttons}] hover:text-white transition-all`} onClick={updateuser}>
+              <button className={`px-6 py-3 mb-4 bg-transparent border border-[var(--buttons)] text-[var(--buttons)] font-bold rounded-full hover:bg-[var(--buttons)] hover:text-[var(--buttonText)] transition-all`} onClick={updateuser}>
                 Save Changes
               </button>
             </div>
 
             {/* Account Actions (Delete Account) */}
             <div className={`bg-transparent border border-red-500 p-6 rounded-lg shadow-sm`}>
-              <h3 className={`text-lg font-medium text-[${_COLOR.text}] mb-2`}>Delete Account</h3>
-              <p className={`text-sm text-[${_COLOR.text}] mb-4`}>
+              <h3 className={`text-lg font-medium text-[var(--text)] mb-2`}>Delete Account</h3>
+              <p className={`text-sm text-[var(--text)] mb-4`}>
                 Deleting your account is irreversible. All your data will be permanently removed.
                 If you are part of any company, you must leave or transfer ownership before deletion.
               </p>
@@ -285,15 +284,15 @@ function Settings() {
                 </button>
               </div>
             </div>
-            <div className={`mt-4 bg-transparent border border-[${_COLOR.buttons}] p-6 rounded-lg shadow-sm`}>
-              <h3 className={`text-lg font-medium text-[${_COLOR.text}] mb-2`}>End Session</h3>
-              <p className={`text-sm text-[${_COLOR.text}] mb-4`}>
+            <div className={`mt-4 bg-transparent border border-[var(--buttons)] p-6 rounded-lg shadow-sm`}>
+              <h3 className={`text-lg font-medium text-[var(--text)] mb-2`}>End Session</h3>
+              <p className={`text-sm text-[var(--text)] mb-4`}>
                 Logging out will end your current session. Make sure to save any unsaved changes before proceeding.
               </p>
               <div className="flex justify-between items-center">
                 <button 
                 onClick={onLogout}
-                  className={`px-6 py-3 font-bold bg-transparent border border-[${_COLOR.buttons}] text-[${_COLOR.buttons}] rounded-full hover:bg-[${_COLOR.buttons}] hover:text-white transition-all`}>
+                  className={`px-6 py-3 font-bold bg-transparent border border-[var(--buttons)] text-[var(--buttons)] rounded-full hover:bg-[var(--buttons)] hover:text-[var(--buttonText)] transition-all`}>
                   Log Out
                 </button>
               </div>

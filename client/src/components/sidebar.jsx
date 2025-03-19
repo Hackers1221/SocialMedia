@@ -107,88 +107,88 @@ function Sidebar() {
 
                 <div
                     id="sidebar"
-                    className={`fixed top-0 left-0 flex flex-col w-[18em] bg-[${_COLOR.card}] h-screen shadow-md transform ${
+                    className={`fixed top-0 left-0 flex flex-col w-[18em] bg-[var(--card)] h-screen shadow-md transform ${
                         isOpen ? "translate-x-0" : "-translate-x-full"
-                    } transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:shadow-none border-r-2`}
+                    } transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:shadow-none border-r border-[var(--border)]`}
                     onClick={(e) => e.stopPropagation()} // Prevents click inside from closing
                 >
                     <div className={`p-4 flex items-center`}>
-                        <div className={`text-2xl font-bold heading text-[${_COLOR.buttons}]`}>Drop</div>
-                        <div className={`text-3xl font-bold heading text-[${_COLOR.buttons}]`}>Chat</div>
+                        <div className={`text-2xl font-bold heading text-[var(--buttons)]`}>Drop</div>
+                        <div className={`text-3xl font-bold heading text-[var(--buttons)]`}>Chat</div>
                     </div>
                     <div className="overflow-y-auto overflow-x-hidden flex-grow">
                         <ul className="flex flex-col py-4 space-y-1">
                             <li onClick={() => {setIsOpen(false); setSelected('Feed')}}>
-                                <Link to="/" className={`relative border-l-4 hover:border-[${_COLOR.buttons}] flex flex-row items-center h-11 hover:text-[${_COLOR.buttons}] hover:shadow-md font-semibold border-l-4 pr-6 ${selected === 'Feed' ? `border-[${_COLOR.buttons}] text-[${_COLOR.buttons}] shadow-md` : `border-transparent text-[${_COLOR.text}]`}`}>
+                                <Link to="/" className={`relative border-l-4 hover:border-[var(--buttons)] flex flex-row items-center h-11 hover:text-[var(--buttons)] hover:shadow-md font-semibold border-l-4 pr-6 ${selected === 'Feed' ? `border-[var(--buttons)] text-[var(--buttons)] shadow-md` : `border-transparent text-[var(--text)]`}`}>
                                     <FaHome className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Feed</span>
                                 </Link>
                             </li>
                             <li onClick={() => {setIsOpen(false); setSelected('Profile')}}>
-                                <Link to={`/profile/${authState?.data?.username}`} className={`relative border-l-4 hover:border-[${_COLOR.buttons}] flex flex-row items-center h-11 hover:text-[${_COLOR.buttons}] hover:shadow-md font-semibold border-l-4 pl-4 ${selected === 'Profile' ? `border-[${_COLOR.buttons}] text-[${_COLOR.buttons}] shadow-md` : `border-transparent text-[${_COLOR.text}]`}`}>
+                                <Link to={`/profile/${authState?.data?.username}`} className={`relative border-l-4 hover:border-[var(--buttons)] flex flex-row items-center h-11 hover:text-[var(--buttons)] hover:shadow-md font-semibold border-l-4 pl-4 ${selected === 'Profile' ? `border-[var(--buttons)] text-[var(--buttons)] shadow-md` : `border-transparent text-[var(--text)]`}`}>
                                     <Avatar url={authState?.data?.image?.url} size={"sm"}/>
                                     <span className="ml-2 text-sm tracking-wide truncate">{authState.data?.username}</span>
                                 </Link>
                             </li>
                         </ul>
-                        <div className={`mx-4 h-[0.5px] bg-[${_COLOR.text}]`}></div>
+                        <div className={`mx-4 h-[0.5px] bg-[var(--text)]`}></div>
                         <ul className="flex flex-col py-4 space-y-1">
                             <li className="px-5">
                                 <div className="flex flex-row items-center h-8">
-                                    <div className={`text-sm font-bold text-[${_COLOR.text}]`}>Menu</div>
+                                    <div className={`text-sm font-bold text-[var(--text)]`}>Menu</div>
                                 </div>
                             </li>
                             <li onClick={() => {setIsOpen(false); setSelected('Explore')}}>
-                            <Link to="/explore" className={`relative border-l-4 hover:border-[${_COLOR.buttons}] flex flex-row items-center h-11 hover:text-[${_COLOR.buttons}] hover:shadow-md font-semibold border-l-4 pr-6 ${selected === 'Explore' ? `border-[${_COLOR.buttons}] text-[${_COLOR.buttons}] shadow-md` : `border-transparent text-[${_COLOR.text}]`}`}>
+                            <Link to="/explore" className={`relative border-l-4 hover:border-[var(--buttons)] flex flex-row items-center h-11 hover:text-[var(--buttons)] hover:shadow-md font-semibold border-l-4 pr-6 ${selected === 'Explore' ? `border-[var(--buttons)] text-[var(--buttons)] shadow-md` : `border-transparent text-[var(--text)]`}`}>
                                     <MdExplore className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Explore</span>
                                 </Link>
                             </li>
                             <li onClick={() => {setIsOpen(false); setSelected('Pulse')}}>
-                            <Link to="/pulse" className={`relative border-l-4 hover:border-[${_COLOR.buttons}] flex flex-row items-center h-11 hover:text-[${_COLOR.buttons}] hover:shadow-md font-semibold border-l-4 pr-6 ${selected === 'Pulse' ? `border-[${_COLOR.buttons}] text-[${_COLOR.buttons}] shadow-md` : `border-transparent text-[${_COLOR.text}]`}`}>
+                            <Link to="/pulse" className={`relative border-l-4 hover:border-[var(--buttons)] flex flex-row items-center h-11 hover:text-[var(--buttons)] hover:shadow-md font-semibold border-l-4 pr-6 ${selected === 'Pulse' ? `border-[var(--buttons)] text-[var(--buttons)] shadow-md` : `border-transparent text-[var(--text)]`}`}>
                                     <IoMdPulse className="ml-4"/>
                                     <span className="ml-2 text-sm tracking-wide truncate">Pulse</span>
                                 </Link>
                             </li>
                             <li onClick={() => {setIsOpen(false); setSelected('Verse')}}>
-                            <Link to="/verse" className={`relative border-l-4 hover:border-[${_COLOR.buttons}] flex flex-row items-center h-11 hover:text-[${_COLOR.buttons}] hover:shadow-md font-semibold border-l-4 pr-6 ${selected === 'Verse' ? `border-[${_COLOR.buttons}] text-[${_COLOR.buttons}] shadow-md` : `border-transparent text-[${_COLOR.text}]`}`}>
+                            <Link to="/verse" className={`relative border-l-4 hover:border-[var(--buttons)] flex flex-row items-center h-11 hover:text-[var(--buttons)] hover:shadow-md font-semibold border-l-4 pr-6 ${selected === 'Verse' ? `border-[var(--buttons)] text-[var(--buttons)] shadow-md` : `border-transparent text-[var(--text)]`}`}>
                                     <i className="fa-regular fa-comments ml-4 text-sm"/>
                                     <span className="ml-2 text-sm tracking-wide truncate">Verse</span>
                                 </Link>
                             </li>
                             <li onClick={() => {setIsOpen(false); setSelected('Messages')}}>
-                                <Link to="/messenger" className={`relative border-l-4 hover:border-[${_COLOR.buttons}] flex flex-row items-center h-11 hover:text-[${_COLOR.buttons}] hover:shadow-md font-semibold border-l-4 pr-6 ${selected === 'Messages' ? `border-[${_COLOR.buttons}] text-[${_COLOR.buttons}] shadow-md` : `border-transparent text-[${_COLOR.text}]`}`}>
+                                <Link to="/messenger" className={`relative border-l-4 hover:border-[var(--buttons)] flex flex-row items-center h-11 hover:text-[var(--buttons)] hover:shadow-md font-semibold border-l-4 pr-6 ${selected === 'Messages' ? `border-[var(--buttons)] text-[var(--buttons)] shadow-md` : `border-transparent text-[var(--text)]`}`}>
                                     <IoChatboxEllipsesSharp className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Messages</span>
                                 </Link>
                             </li>
                             <li onClick={() => setIsOpen(false)}>
-                                <a href="#" className={`relative flex flex-row border-l-4 border-transparent hover:border-[${_COLOR.buttons}] items-center h-11 text-[${_COLOR.text}] hover:text-[${_COLOR.buttons}] hover:shadow-md font-semibold pr-4 border-l-4 border-transparent hover:border-[${_COLOR.more_light}]pr-6`}>
+                                <a href="#" className={`relative flex flex-row border-l-4 border-transparent hover:border-[var(--buttons)] items-center h-11 text-[var(--text)] hover:text-[var(--buttons)] hover:shadow-md font-semibold pr-4 border-l-4 border-transparent pr-6`}>
                                     <FaBell className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Notifications</span>
                                     <span className="px-2 py-0.5 ml-auto text-xs font-medium text-red-500 bg-red-50 rounded-full">1.2k</span>
                                 </a>
                             </li>
-                            <div className={`mx-4 h-[1px] bg-[${_COLOR.text}]`}></div>
+                            <div className={`mx-4 h-[1px] bg-[var(--text)]`}></div>
                             <li className="px-5">
                                 <div className="flex flex-row items-center h-8">
-                                    <div className={`text-sm font-bold text-[${_COLOR.text}]`}>Settings</div>
+                                    <div className={`text-sm font-bold text-[var(--text)]`}>Settings</div>
                                 </div>
                             </li>
                             <li onClick={() => setIsOpen(false)}>
-                                <div onClick={() => setDialogOpen(true)} className={`relative flex flex-row border-l-4 border-transparent hover:border-[${_COLOR.buttons}] items-center h-11 text-[${_COLOR.text}] hover:text-[${_COLOR.buttons}] hover:shadow-md font-semibold border-l-4 border-transparent hover:border-[${_COLOR.more_light}] pr-6 hover:cursor-pointer`}>
+                                <div onClick={() => setDialogOpen(true)} className={`relative flex flex-row border-l-4 border-transparent hover:border-[var(--buttons)] items-center h-11 text-[var(--text)] hover:text-[var(--buttons)] hover:shadow-md font-semibold border-l-4 border-transparent pr-6 hover:cursor-pointer`}>
                                     <LuCircleFadingPlus className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Create Post</span>
                                 </div>
                             </li>
                             <li onClick={() => {setIsOpen(false); setSelected('Saved')}}>
-                                <Link to="/saved" className={`relative border-l-4 hover:border-[${_COLOR.buttons}] flex flex-row items-center h-11 hover:text-[${_COLOR.buttons}] hover:shadow-md font-semibold border-l-4 pr-6 ${selected === 'Saved' ? `border-[${_COLOR.buttons}] text-[${_COLOR.buttons}] shadow-md` : `border-transparent text-[${_COLOR.text}]`}`}>
+                                <Link to="/saved" className={`relative border-l-4 hover:border-[var(--buttons)] flex flex-row items-center h-11 hover:text-[var(--buttons)] hover:shadow-md font-semibold border-l-4 pr-6 ${selected === 'Saved' ? `border-[var(--buttons)] text-[var(--buttons)] shadow-md` : `border-transparent text-[var(--text)]`}`}>
                                     <FaBookmark className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Saved Posts</span>
                                 </Link>
                             </li>
                             <li onClick={() => {setIsOpen(false); setSelected('Settings')}}>
-                                <Link to="/settings" className={`relative border-l-4 hover:border-[${_COLOR.buttons}] flex flex-row items-center h-11 hover:text-[${_COLOR.buttons}] hover:shadow-md font-semibold border-l-4 pr-6 ${selected === 'Settings' ? `border-[${_COLOR.buttons}] text-[${_COLOR.buttons}] shadow-md` : `border-transparent text-[${_COLOR.text}]`}`}>
+                                <Link to="/settings" className={`relative border-l-4 hover:border-[var(--buttons)] flex flex-row items-center h-11 hover:text-[var(--buttons)] hover:shadow-md font-semibold border-l-4 pr-6 ${selected === 'Settings' ? `border-[var(--buttons)] text-[var(--buttons)] shadow-md` : `border-transparent text-[var(--text)]`}`}>
                                     <IoIosSettings className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Settings</span>
                                 </Link>

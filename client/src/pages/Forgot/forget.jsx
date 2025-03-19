@@ -43,7 +43,7 @@ function ForgetPassword() {
                 <div className="flex justify-evenly w-[90%] h-[80%]">
                 <div className="flex flex-col justify-center text-[3rem] w-[40%] text-white font-bold leading-[1.2]">
                     <span>Moments become</span>
-                    <span className={`text-[${_COLOR.buttons}]`}>memories</span>
+                    <span className={`text-[var(--buttons)]`}>memories</span>
                     <span>— don't miss out!</span>
                 </div>
                 <div className="flex items-center overflow-hidden w-[40%] h-full">
@@ -57,7 +57,7 @@ function ForgetPassword() {
                                 name="email"
                                 value={email}
                                 onChange={handleChange}
-                                className={`text-white rounded-xl py-[0.6rem] px-4 block w-full focus:outline-none bg-[${_COLOR.input}]`}
+                                className={`text-white rounded-xl py-[0.6rem] px-4 block w-full focus:outline-none bg-[var(--input)]`}
                                 type="email"
                                 autoComplete="off"
                                 autoCorrect="off"
@@ -68,7 +68,7 @@ function ForgetPassword() {
                         </div>
                         <div className="mt-8">
                             <button
-                                className={`flex justify-center text-white font-bold py-[0.6rem] w-full rounded-2xl bg-[${_COLOR.buttons}]`}
+                                className={`flex justify-center text-white font-bold py-[0.6rem] w-full rounded-2xl bg-[var(--buttons)]`}
                                 onClick={forget}
                                 disabled={loading}
                             >
@@ -80,7 +80,7 @@ function ForgetPassword() {
                             </button>
                         </div>
                         <div
-                            className={`mt-4 text-center text-xs text-[${_COLOR.buttons}] capitalize hover:cursor-pointer hover:underline`}
+                            className={`mt-4 text-center text-xs text-[var(--buttons)] capitalize hover:cursor-pointer hover:underline`}
                             onClick={() => navigate("/login")}
                         >
                             Back to Login

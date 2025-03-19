@@ -99,7 +99,7 @@ export default function PulseForm({ open, setOpen }) {
                   setOpen(false);
                   Createpulse();
                 }}
-                className={`h-12 w-[20%] bg-[${_COLOR.buttons}] text-white font-semibold rounded-3xl hover:bg-[${_COLOR.buttonsHover}] transition`}
+                className={`h-12 w-[20%] bg-[var(--buttons)] text-[var(--buttonText)] font-semibold rounded-3xl hover:bg-[var(--buttonsHover)] hover:text-white transition border border-[var(--border)]`}
               >
                 Post
               </button>

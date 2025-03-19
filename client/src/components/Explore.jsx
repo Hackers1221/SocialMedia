@@ -82,18 +82,18 @@ useEffect(() => {
   return (
     <>
     <DisplayPost open={isDialogOpen} setOpen={setDialogOpen} post={selectedPost}/>
-    <div className="fixed top-[8rem] md:top-[1rem]  md:left-[20rem] left-[1rem] w-[85%] md:w-[49%] h-[97vh] flex flex-col flex-grow overflow-y-auto">
+    <div className={`fixed top-[8rem] md:top-[1rem]  md:left-[20rem] left-[1rem] w-[85%] md:w-[49%] h-[97vh] flex flex-col flex-grow overflow-y-auto`}>
       <div className="max-w-5xl w-full">
-      <h2 className={`text-[${_COLOR.text}] heading text-[2rem] mb-4`}>Explore</h2>
-      <div className={`flex items-center border border-[${_COLOR.input}] rounded-md px-2 shadow-md w-full mb-6`}>
+      <h2 className={`text-[var(--text)] heading text-[2rem] mb-4`}>Explore</h2>
+      <div className={`flex items-center border border-[var(--input)] rounded-md px-2 shadow-md w-full mb-6`}>
           <input
             type="text"
             placeholder="Search for ideas..."
             onChange={searchHandler}
             value={query}
-            className={`w-full p-2 bg-transparent text-[${_COLOR.text}] focus:outline-none`}
+            className={`w-full p-2 bg-transparent text-[var(--text)] focus:outline-none`}
           />
-          {query.length > 0 && <button onClick={() => setQuery("")} className={`text-[${_COLOR.text}] text-2xl h-full`}>
+          {query.length > 0 && <button onClick={() => setQuery("")} className={`text-[var(--text)] text-2xl h-full`}>
               <X />
           </button>}
         </div>

@@ -51,7 +51,7 @@ const Messenger = () => {
   return (
     <div className={`fixed top-[9rem] md:top-[1rem]  md:left-[20rem] left-[1rem] w-[85%] md:w-[70%] h-[82vh] md:h-[97vh] flex flex-col p-4 flex-grow overflow-y-auto`}>
       {/* Left Sidebar */}
-      <h2 className={`text-[${_COLOR.lightest}] heading text-[2rem]`}>Messenger</h2>
+      <h2 className={`heading text-[2rem]`}>Messenger</h2>
       <div className="flex h-full">
         <div className={`w-1/3 md:w-1/4 bg-transparent border-r-[1px] p-4`}>
             <h2 className={`text-xl text-white bg-trnsparent font-semibold mb-2`}>Recent Chats</h2>
@@ -60,7 +60,7 @@ const Messenger = () => {
                 <li
                 key={index}
                 className={`flex items-center p-2 gap-2 cursor-pointer transition ${
-                    selectedUser === index ? `text-black bg-blue-100` : `text-[${_COLOR.more_light}]`
+                    selectedUser === index ? `text-black bg-blue-100` : `text-black`
                 }`}
                 onClick={() => setSelectedUser(index)}
                 >
@@ -75,7 +75,7 @@ const Messenger = () => {
         <div className="w-2/3 md:w-3/4 flex flex-col bg-transparent shadow-lg">
             {selectedUser !== -1 ? (
             <>
-                <div className={`p-4 bg-[${_COLOR.less_light}] text-white text-lg font-semibold`}>
+                <div className={`p-4 text-white text-lg font-semibold`}>
                 {chats[selectedUser].name}
                 </div>
                 <div className="flex-1 p-4 overflow-y-auto space-y-2">
@@ -84,7 +84,7 @@ const Messenger = () => {
                     key={index}
                     className={`px-3 py-2 rounded-lg max-w-xs text-sm ${
                         index % 2 === 0
-                        ? `bg-[${_COLOR.less_light}] text-white self-end ml-auto`
+                        ? `text-white self-end ml-auto`
                         : "bg-gray-300 text-black self-start"
                     }`}
                     >

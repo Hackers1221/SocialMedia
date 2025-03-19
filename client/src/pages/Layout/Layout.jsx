@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Navbar from "../../components/navbar";
 import Sidebar from "../../components/sidebar";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Suggestions from "../../components/Suggestions";
@@ -29,7 +28,7 @@ function Layout () {
     }, []);
 
     return (
-        <div className={`min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-[${_COLOR.background}] text-gray-800`}>
+        <div className={`min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-[var(--background)] text-gray-800`}>
             {/* {!hideOthers && screenWidth >= 768 && <Navbar />} */}
             {!hideSidebar && <Sidebar />}
             {!hideOthers && screenWidth >= 1480 && !hideSidebar && <Suggestions />}

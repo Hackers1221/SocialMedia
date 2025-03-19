@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
+import { useTheme } from "../ThemeContext";
 
 export default function ModeButton () {
 
-    const [theme, setTheme] = useState ('light');
+    const {theme, toggleTheme} = useTheme ();
 
     return (
     <button
-        onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+        onClick={toggleTheme}
         className="w-16 h-8 rounded-full bg-white flex items-center transition duration-300 focus:outline-none shadow"
     >
         <div

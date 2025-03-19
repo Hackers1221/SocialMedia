@@ -256,20 +256,22 @@ const DisplayPost = ({ open, setOpen, post }) => {
 
 
   return loading ? <Loader /> : (
-    <dialog ref={dialogRef} className={`w-[60%] h-[90vh] bg-[${_COLOR.card}] rounded-lg shadow-xl p-4`}>
-      <button onClick={closeDialog} className={`absolute top-5 right-6 text-[${_COLOR.text}] font-bold text-xl focus:outline-none`}>✕</button>
-      <div className={`flex h-full border border-[${_COLOR.border}]`}>
+    <>
+    {open && <div className="fixed left-0 top-0 inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-80"></div>}
+    <dialog ref={dialogRef} className={`w-[60%] h-[90vh] bg-[var(--card)] rounded-lg shadow-xl p-2`}>
+      <button onClick={closeDialog} className={`absolute top-5 right-6 text-[var(--text)] font-bold text-xl focus:outline-none`}>✕</button>
+      <div className={`flex h-full border border-[var(--border)] bg-[var(--card)]`}>
         {/* Left Half */}
         <div className="w-1/2 p-4 flex relative items-center">
-          <div className={`absolute top-0 left-0 flex items-center gap-3 mb-4 z-[100] bg-[${_COLOR.card}] px-4 py-2`}>
+          <div className={`absolute top-0 left-0 flex items-center gap-3 mb-4 z-[100] bg-[var(--card)] px-4 py-2`}>
             <Avatar url={creator?.image?.url || defaultImage} size={"md"}/>
             <div>
               <Link to={`/profile/${creator?.username}`}>
-                  <span className={`mr-1 text-sm font-semibold cursor-pointer hover:underline hover:text-[${_COLOR.buttons}] text-[${_COLOR.text}]`}>
+                  <span className={`mr-1 text-sm font-semibold cursor-pointer hover:underline hover:text-[var(--buttons)] text-[var(--text)]`}>
                       {creator?.username}
                   </span>
               </Link>
-              <p className={`text-[${_COLOR.text}] text-xs`}>{date}</p>
+              <p className={`text-[var(--text)] text-xs`}>{date}</p>
             </div>
           </div>
           <div className="flex justify-center items-center relative w-full h-full">
@@ -324,10 +326,10 @@ const DisplayPost = ({ open, setOpen, post }) => {
         </div>
 
         {/* Right Half */}
-        <div className="w-1/2 flex flex-col p-4 border-l">
-          {(post?.caption?.length > 0 || interest?.length > 0) && <div className={`text-[${_COLOR.text}] text-sm border-b pb-4`}>
+        <div className="w-1/2 flex flex-col p-4 border-l border-[var(--border)] mt-4">
+          {(post?.caption?.length > 0 || interest?.length > 0) && <div className={`text-[var(--text)] text-sm border-b pb-4`}>
             {post?.caption}
-            {interest?.length > 0 && <h2 className={`text-[${_COLOR.text}] font-extralight mt-8 text-xs`}>
+            {interest?.length > 0 && <h2 className={`text-[var(--text)] font-extralight mt-8 text-xs`}>
               {interest}
             </h2>}
           </div>}
@@ -343,7 +345,7 @@ const DisplayPost = ({ open, setOpen, post }) => {
             )}
           </div>
 
-          {(countLike - liked > 0 || countComment > 0) && <div className={`mt-2 flex gap-2 w-full px-2 text-xs text-[${_COLOR.text}]`}>
+          {(countLike - liked > 0 || countComment > 0) && <div className={`mt-2 flex gap-2 w-full px-2 text-xs text-[var(--text)]`}>
                 {countLike - liked > 0 && <h2>
                     Liked by {countLike - liked} other{countLike - liked > 1 ? 's' : ''}
                 </h2>}
@@ -354,20 +356,20 @@ const DisplayPost = ({ open, setOpen, post }) => {
             </div>}
           <div className="mt-2 flex w-full justify-between p-2 border-t">
             <div className="flex gap-4">
-              <button className={`flex gap-2 items-center text-[${_COLOR.text}]`} onClick={toggleLike}>
-                {liked ? (<i className="text-red-600 fa-solid fa-heart"></i>) : <i className={`text-[${_COLOR.text}] fa-regular fa-heart`}></i>}
+              <button className={`flex gap-2 items-center text-[var(--text)]`} onClick={toggleLike}>
+                {liked ? (<i className="text-red-600 fa-solid fa-heart"></i>) : <i className={`text-[var(--text)] fa-regular fa-heart`}></i>}
                 {liked ? (<h2 className="text-sm text-red-600 font-semibold">Liked</h2>) : (<h2 className="text-sm font-semibold">Like</h2>)}
               </button>
-              <button className={`flex gap-2 items-center text-[${_COLOR.text}]`}>
+              <button className={`flex gap-2 items-center text-[var(--text)]`}>
               {/* <i className="text-white fa-solid fa-comment"></i> */}
-                <i className={`text-[${_COLOR.text}] fa-regular fa-comment`}></i>
+                <i className={`text-[var(--text)] fa-regular fa-comment`}></i>
                 <h2 className="text-sm font-semibold">Comment</h2>
               </button>
             </div>
             <div className="flex">
-            <button className={`flex gap-2 items-center text-[${_COLOR.text}]`} onClick={toggleBookmark}>
-                {saved? <i className={`text-[${_COLOR.buttons}] fa-solid fa-bookmark`}></i> : <i className={`text-[${_COLOR.text}] fa-regular fa-bookmark`}></i>}
-                {saved ? (<h2 className={`text-sm text-[${_COLOR.buttons}] font-semibold`}>Saved</h2>) : (<h2 className="text-sm font-semibold">Save</h2>)}
+            <button className={`flex gap-2 items-center text-[var(--text)]`} onClick={toggleBookmark}>
+                {saved? <i className={`text-[var(--buttons)] fa-solid fa-bookmark`}></i> : <i className={`text-[var(--text)] fa-regular fa-bookmark`}></i>}
+                {saved ? (<h2 className={`text-sm text-[var(--buttons)] font-semibold`}>Saved</h2>) : (<h2 className="text-sm font-semibold">Save</h2>)}
               </button>
             </div>
           </div>
@@ -377,16 +379,17 @@ const DisplayPost = ({ open, setOpen, post }) => {
               <input
                 type="text"
                 value={commentDescription}
-                className={`w-full p-2 px-4 pr-10 rounded-full text-[${_COLOR.text}] border-2 bg-transparent font-normal outline-none focus:shadow-md`}
+                className={`w-full p-2 px-4 pr-10 rounded-full text-[var(--text)] border-2 border-[var(--input)] bg-transparent font-normal outline-none focus:shadow-md`}
                 placeholder="Write a comment..."
                 onChange={handleChange}
               />
-              <FaPaperPlane onClick={postCommentHandler} className={`absolute right-3 top-1/2 transform -translate-y-1/2 text-[${_COLOR.text}] cursor-pointer`} />
+              <FaPaperPlane onClick={postCommentHandler} className={`absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--text)] cursor-pointer`} />
             </div>
           </div>
         </div>
       </div>
     </dialog>
+    </>
   );
 };
 
