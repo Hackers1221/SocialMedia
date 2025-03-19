@@ -17,7 +17,7 @@ const Comment = ({ username, text, time, avatar }) => {
         {/* Comment Content */}
         <div className="flex-1">
           <p className={`text-[${_COLOR.text}] text-sm font-semibold`}>
-            {username} <span className={`text-sm text-[${_COLOR.text}] font-extralight`}>&nbsp; {text}</span>
+            <span className={`hover:underline hover:text-[${_COLOR.buttons}] hover:cursor-pointer`}>{username}</span> <span className={`text-sm text-[${_COLOR.text}] font-extralight`}>&nbsp; {text}</span>
           </p>
           <p className="text-xs text-gray-400">{time} &nbsp; &nbsp; Reply</p>
         </div>

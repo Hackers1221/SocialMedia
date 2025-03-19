@@ -43,9 +43,9 @@ function Suggestions () {
       };
 
     async function getFollowers () {
-        authState.data?.following?.map (async (userId) => {
+        authState.data?.follower?.map (async (userId) => {
             const res = await dispatch (getUserById (userId));
-            console.log (res)
+
             setFollowers((prev) => [...prev, res.payload?.data?.userdetails]);
         })
     }

@@ -15,6 +15,10 @@ const CreateUser = async(data) => {
 
     try {
         const userObject = {
+            image: {
+                url: "https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-male-user-profile-vector-illustration-isolated-background-man-profile-sign-business-concept_157943-38764.jpg?semt=ais_hybrid",
+                filename :""  
+            },
             name :  data.name,
             username : data.username,
             email : data.email , 

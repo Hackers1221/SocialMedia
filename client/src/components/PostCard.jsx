@@ -49,7 +49,7 @@ function PostCard(post) {
     const [isPlaying, setIsPlaying] = useState([false]);
     const [showButton, setShowButton] = useState([true]);
 
-    const tempCaption = check ? caption : caption?.toString().slice(0, 100);
+    const tempCaption = check ? caption : caption?.toString().slice(0, 200);
 
     const togglePlay = (index) => {
         videoRefs.current.forEach((video, i) => {
@@ -292,7 +292,7 @@ function PostCard(post) {
         <div className={`mb-4 bg-[${_COLOR.card}] relative shadow-xl rounded-xl`} >
             <DisplayPost open={isDialogOpen} setOpen={setDialogOpen} post={post?.post} />
             <div className="flex justify-between bg-[#B9D9EB] rounded-t-xl p-[0.3rem]">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
                     <div className="flex items-center">
                         <Link to={`/profile/${creator?.username}`}>
                             <span className="cursor-pointer">
@@ -300,7 +300,7 @@ function PostCard(post) {
                             </span>
                         </Link>
                     </div>
-                    <div className="flex gap-2 items-center">
+                    <div className="flex gap-1 items-center">
                         <div>
                             <Link to={`/profile/${creator?.username}`}>
                                 <span className={`mr-1 text-sm font-semibold cursor-pointer hover:underline hover:text-[${_COLOR.buttons}] text-[${_COLOR.text}]`}>
@@ -308,7 +308,7 @@ function PostCard(post) {
                                 </span>
                             </Link>
                         </div>
-                        <p className={`flex text-[${_COLOR.text}] text-xs font-extralight gap-2`}>
+                        <p className={`flex text-[${_COLOR.text}] text-xs font-extralight gap-1`}>
                             <span>•</span>{date}
                         </p>
                     </div>
@@ -333,8 +333,8 @@ function PostCard(post) {
                 </div>
             </div>
             {tempCaption?.length > 0 && <p className={`text-sm mt-4 text-[${_COLOR.text}] px-4`}>
-                {tempCaption} {caption?.toString().length > 1000 && (
-                    <span onClick={() => setCheck(!check)} className={`text-blue-300 font-extralight hover:cursor-pointer`}>
+                {tempCaption} {caption?.toString().length > 200 && (
+                    <span onClick={() => setCheck(!check)} className={`text-[${_COLOR.buttons}] font-bold hover:cursor-pointer`}>
                         {check ? ' Show Less' : '... Read More'}
                     </span>)}
             </p>}
