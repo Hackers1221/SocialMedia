@@ -72,7 +72,7 @@ function SignUp() {
 
             if (signupRes.payload) {
                 const signIn = await dispatch (login (userDetails));
-                if (signIn.payload) navigate ('/'); 
+                if (signIn.payload) navigate('/', { replace: true });
             }
             else resetDetails();
 

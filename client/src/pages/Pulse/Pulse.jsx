@@ -16,11 +16,11 @@ function Pulse() {
   }, [])
 
   return (
-    <div className="fixed top-[9rem] md:top-[2rem] md:left-[20rem] left-[1rem] w-[85%] md:w-[50%] h-[75vh] md:h-[92vh]">
-      <div className={`heading flex justify-center text-[var(--text)] text-3xl`}>Pulse</div>
-      <div className="h-full overflow-y-auto snap-y snap-mandatory scrollbar-hide">
+    <div className="fixed top-[4rem] md:top-[1rem]  md:left-[20rem] left-[1rem] w-[93%] md:w-[50%] h-[90vh] md:h-[97vh]">
+      <div className={`heading hidden sm:flex justify-center text-[var(--text)] text-3xl`}>Pulse</div>
+      <div className="h-full overflow-y-auto snap-y snap-mandatory scrollbar-hide ">
         {pulseState?.downloadedPulse?.map((pulse, index) => (
-          <div key={index} className="snap-start h-full flex justify-center pt-[2.5rem]">
+          <div key={index} className="snap-start h-full flex justify-center sm:pt-[2.5rem]">
             <PulseCard pulse={pulse} />
           </div>
         ))}

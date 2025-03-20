@@ -1,14 +1,19 @@
 import { useState } from 'react';
 import ReactLinkify from 'react-linkify';
 
-function LinkDetector ({ title }) {
+function LinkDetector ({ title, type }) {
     const [check, setCheck] = useState(false);
+
+    let len = 200;
+    if (type === 'verse') len = 1000;
+    if (type === 'displayPost') len = 300;
+    if (type === 'pulse') len = 20;
 
     function toggleReadability() {
         setCheck(!check);
     }
 
-    const displayedCaption = check ? title : title?.toString().slice(0, 200);
+    const displayedCaption = check ? title : title?.toString().slice(0, len);
 
     return (
         <div className="text-sm text-[var(--text)] px-4 mt-4 whitespace-pre-line">
@@ -28,7 +33,7 @@ function LinkDetector ({ title }) {
                 {displayedCaption}
             </ReactLinkify>
 
-            {title?.toString().length > 200 && (
+            {title?.toString().length > len && (
                 <span
                     onClick={toggleReadability}
                     className="text-[var(--buttons)] font-bold hover:cursor-pointer"

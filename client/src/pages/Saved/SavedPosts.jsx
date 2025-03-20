@@ -55,7 +55,7 @@ const SavedPost = () => {
 
   return (
     <>
-    <div className="fixed top-[10rem] md:top-[1rem] md:left-[20rem] left-[1rem] w-[85%] md:w-[50%] overflow-y-auto">
+    <div className="fixed top-[4rem] md:top-[1rem]  md:left-[20rem] left-[1rem] w-[93%] md:w-[50%] h-[90vh] md:h-[97vh] overflow-y-auto">
       {/* Tabs for Images and Reels */}
       <div className={`flex justify-center space-x-4 border-b pb-2 bg-[var(--card)] border border-[var(--border)]`}>
         <button
@@ -80,7 +80,7 @@ const SavedPost = () => {
 
       {/* Main Content */}
       {activeTab == "images" && (savedArray?.length > 0 ? <div className="w-full mt-4">
-        <div className="columns-2 sm:columns-3 md:columns-4 gap-3">
+        <div className="columns-2 sm:columns-3 md:columns-4 gap-3 overflow-y-auto">
           {savedArray?.map((post, index) => (
             // <div key={index} className="relative h-[10rem] group hover:cursor-pointer overflow-hidden rounded-lg" onClick={() => {
             //   setDialogOpen(true);

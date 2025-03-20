@@ -40,7 +40,7 @@ function LogIn () {
             }
 
             const res = await dispatch (login (userDetails));
-            if (res.payload) navigate('/');
+            if (res.payload) navigate('/', { replace: true });
             else resetDetails();
 
         } catch (error) {

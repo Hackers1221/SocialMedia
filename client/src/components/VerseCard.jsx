@@ -10,6 +10,7 @@ import { CreateComment, getCommentByPostId } from "../redux/Slices/comment.slice
 import usePosts from "../hooks/usePosts";
 import { getAllVerse, getVerseById, likeVerse, deleteVerse } from "../redux/Slices/verse.slice";
 import DisplayVerse from "./DisplayVerse";
+import LinkDetector from "./LinkDetector";
 
 function VerseCard (verse, bottom) {
     const authState = useSelector((state) => state.auth);
@@ -192,12 +193,7 @@ function VerseCard (verse, bottom) {
                     </ul>
                 </div>
             </div>
-            <p className={`text-sm mt-4 text-[var(--text)] px-4`}>
-                {tempText} {text?.toString().length > 1000 && (
-                    <span onClick={() => setCheck(!check)} className={`text-[var(--buttons)] font-bold hover:cursor-pointer`}>
-                        {check ? ' Show Less' : '... Read More'}
-                    </span>)}
-            </p>
+            <LinkDetector title={text} type={'verse'}/>
             {(countLike - liked > 0 || countComment > 0) && <div className="mt-2 flex gap-2 w-full px-4 text-xs text-[var(--text)]">
                 {countLike - liked > 0 && <h2>
                     Liked by {countLike - liked} other{countLike - liked > 1 ? 's' : ''}

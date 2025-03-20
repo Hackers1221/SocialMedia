@@ -78,7 +78,7 @@ function VerifyOtp() {
       );
 
       if (response.payload) {
-        navigate("/register");
+        navigate("/register", { replace: true });
       } else {
         toast.error("Invalid OTP. Please try again.");
       }

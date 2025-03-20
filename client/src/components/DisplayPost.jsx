@@ -9,6 +9,7 @@ import { CreateComment, getCommentByPostId } from "../redux/Slices/comment.slice
 import { getAllPosts, getPostById, getSavedPost, likePost, updateSavedPost } from "../redux/Slices/post.slice";
 import usePosts from "../hooks/usePosts";
 import { Link } from "react-router-dom";
+import LinkDetector from '../components/LinkDetector'
 
 
 const DisplayPost = ({ open, setOpen, post }) => {
@@ -327,13 +328,11 @@ const DisplayPost = ({ open, setOpen, post }) => {
 
         {/* Right Half */}
         <div className="w-1/2 flex flex-col p-4 border-l border-[var(--border)]">
-          {(post?.caption?.length > 0 || interest?.length > 0) && <div className={`text-[var(--text)] text-sm border-b pb-4`}>
-            {post?.caption}
-            {interest?.length > 0 && <h2 className={`text-[var(--text)] font-extralight mt-8 text-xs`}>
+          {(post?.caption?.length > 0 || interest?.length > 0) && <LinkDetector title={post?.caption} type={'displayePost'}/>}
+            {interest?.length > 0 && <div className={`text-[var(--text)] font-extralight mt-8 text-xs px-4 pb-4`}>
               {interest}
-            </h2>}
-          </div>}
-          <div className="flex-1 overflow-y-auto space-y-3 pt-2">
+            </div>}
+          <div className="flex-1 overflow-y-auto space-y-3 pt-2 border-t border-[var(--border)]">
             {commentState.comments.length > 0 ? (
               commentState.comments.map((comment, idx) => (
                 <div key={idx}>

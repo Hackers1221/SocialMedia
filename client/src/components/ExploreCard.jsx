@@ -17,7 +17,7 @@ function ExploreCard ({ post, postThumbnail, video }) {
                 />
                 {post?.image?.length > 1 && <i className="fa-solid fa-images absolute top-2 right-2 text-white"></i>}
                 {video && <i className="fa-solid fa-video absolute top-2 right-2 text-white"></i>}
-                {tempCaption?.length > 0 && <p className={`text-sm mt-4 text-[var(--text)] px-4 pb-4`}>
+                {tempCaption?.length > 0 && <p className={`text-sm mt-4 text-[var(--text)] px-4 pb-4 w-full text-ellipsis break-words`}>
                     {tempCaption}
                 </p>}
                 <div className="w-full flex justify-end items-center text-xs px-4 py-2 gap-2 text-[var(--buttons)] border-t border-[var(--border)] font-semibold" onClick={() => setOpen(true)}>
