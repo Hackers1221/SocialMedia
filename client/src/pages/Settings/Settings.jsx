@@ -1,10 +1,11 @@
 import { use, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updateUser, deleteUser, logout } from "../redux/Slices/auth.slice";
-import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
+import { updateUser, deleteUser, logout } from "../../redux/Slices/auth.slice";
+import ConfirmDeleteDialog from "../../components/ConfirmDeleteDialog";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import ModeButton from "./ModeButton";
+import ModeButton from "../../components/ModeButton";
+import { useTheme } from "../../ThemeContext";
 
 const menuItems = [
   { name: "General", key: "general" },
@@ -14,6 +15,8 @@ const menuItems = [
 ];
 
 function Settings() {
+
+  const {theme, toggleTheme} = useTheme ();
 
   const defalutImage = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
   const authState = useSelector((state) => state.auth);
@@ -65,7 +68,9 @@ function Settings() {
 
   async function onLogout () {
     await dispatch (logout ());
-    navigate ("/login"); return;
+    navigate ("/login"); 
+    if (theme === 'dark') toggleTheme ();
+    return;
   }
 
   const updateuser = async () => {

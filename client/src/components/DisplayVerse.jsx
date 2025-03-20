@@ -7,6 +7,7 @@ import Comment from "./Comment";
 import Loader from "./Loader";
 import { CreateComment, getCommentByPostId } from "../redux/Slices/comment.slice";
 import { getAllVerse, getVerseById, likeVerse, updateVerse } from "../redux/Slices/verse.slice";
+import { Link } from "react-router-dom";
 
 
 const DisplayVerse = ({ open, setOpen, verse }) => {
@@ -83,7 +84,6 @@ const DisplayVerse = ({ open, setOpen, verse }) => {
     }
 
     function getTimeDifference(dateString) {
-        console.log (dateString);
       const now = new Date(); 
       const targetDate = new Date(dateString);
   
@@ -187,19 +187,25 @@ const DisplayVerse = ({ open, setOpen, verse }) => {
 
 
   return loading ? <Loader /> : (
-    <dialog ref={dialogRef} className={`w-[60%] h-[90vh] bg-[var(--card)] rounded-lg shadow-xl p-4`}>
-      <button onClick={() => setOpen (false)} className={`absolute top-5 right-6 text-[var(--text)] font-bold text-xl focus:outline-none`}>✕</button>
+    <>
+    {open && <div className="fixed left-0 top-0 inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-[90]"></div>}
+    <dialog ref={dialogRef} className={`w-[60%] h-[90vh] bg-[var(--card)] rounded-lg shadow-xl p-2`}>
+      <button onClick={() => setOpen (false)} className={`fixed top-5 right-6 text-[var(--text)] font-bold text-xl focus:outline-none`}>✕</button>
       <div className={`flex h-full border border-[var(--border)]`}>
         {/* Left Half */}
-        <div className={`w-1/2 p-4 flex flex-col h-full`}>
-        <div className={`absolute top-6 left-6 flex items-center gap-3 mb-4 z-[100] bg-[var(--card)] px-4 py-2 w-max`}>
+        <div className={`w-1/2 px-4 flex flex-col h-full bg-black relative`}>
+          <div className={`absolute top-0 left-0 flex items-center gap-3 mb-4 z-[100] bg-[var(--card)] px-4 py-2`}>
             <Avatar url={creator?.image?.url || defaultImage} size={"md"}/>
             <div>
-            <p className={`text-[var(--text)] font-semibold text-sm`}>{creator?.username}</p>
-            <p className={`text-[var(--text)] text-xs`}>{date}</p>
+              <Link to={`/profile/${creator?.username}`}>
+                  <span className={`mr-1 text-sm font-semibold cursor-pointer hover:underline hover:text-[var(--buttons)] text-[var(--text)]`}>
+                      {creator?.username}
+                  </span>
+              </Link>
+              <p className={`text-[var(--text)] text-xs`}>{date}</p>
             </div>
           </div>
-          <div className="h-[85vh] mt-12 overflow-y-auto">
+          <div className="h-full mt-12 p-4 overflow-y-auto">
             {(verse?.text?.length > 0 || interest?.length > 0) && (
                 <div className={`text-[var(--text)] text-sm pb-4`}>
                 {verse?.text}
@@ -214,8 +220,8 @@ const DisplayVerse = ({ open, setOpen, verse }) => {
         </div>
 
         {/* Right Half */}
-        <div className="w-1/2 flex flex-col p-4 rounded-lg border">
-        <div className="flex-1 overflow-y-auto space-y-3 pt-2">
+        <div className="w-1/2 flex flex-col p-4 rounded-lg border-l border-[var(--border)]">
+        <div className="flex-1 overflow-y-auto space-y-3">
             {commentState.comments.length > 0 ? (
               commentState.comments.map((comment, idx) => (
                 <div key={idx}>
@@ -260,7 +266,7 @@ const DisplayVerse = ({ open, setOpen, verse }) => {
               <input
                 type="text"
                 value={commentDescription}
-                className={`w-full p-2 px-4 pr-10 rounded-full text-[var(--text)] border-2 bg-transparent font-normal outline-none focus:shadow-md`}
+                className={`w-full p-2 px-4 pr-10 rounded-full text-[var(--text)] border-2 border-[var(--input)] bg-transparent font-normal outline-none focus:shadow-md`}
                 placeholder="Write a comment..."
                 onChange={handleChange}
               />
@@ -270,6 +276,7 @@ const DisplayVerse = ({ open, setOpen, verse }) => {
         </div>
       </div>
     </dialog>
+    </>
   );
 };
 

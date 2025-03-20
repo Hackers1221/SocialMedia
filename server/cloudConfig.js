@@ -92,7 +92,7 @@ const deleteImages = async (publicIds) => {
     await Promise.all(
       publicIds.map(id => cloudinary.uploader.destroy(id, { resource_type: "image" }))
     );
-    console.log(`Deleted: ${publicIds.join(', ')}`);
+
     return { success: true, message: 'Images deleted successfully' };
   } catch (error) {
     console.error('Cloudinary Delete Error:', error);
@@ -109,7 +109,7 @@ const deleteVideos = async (publicIds) => {
     await Promise.all(
       publicIds.map(id => cloudinary.uploader.destroy(id, { resource_type: "video" }))
     );
-    console.log(`Deleted: ${publicIds.join(', ')}`);
+
     return { success: true, message: 'Videos deleted successfully' };
   } catch (error) {
     console.error('Cloudinary Delete Error:', error);

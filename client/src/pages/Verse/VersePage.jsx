@@ -24,7 +24,6 @@ function VersePage() {
         setIsLoading(true);
         try {
             const res = await dispatch (getAllVerse ());
-            console.log (res);
         } catch {
             toast.error ("Something went wrong");
         } finally {

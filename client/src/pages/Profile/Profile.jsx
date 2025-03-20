@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Avatar from './Avatar';
-import PostCard from './PostCard';
-import usePosts from '../hooks/usePosts';
-import { followUser, getUserByUsername } from '../redux/Slices/auth.slice';
+import Avatar from '../../components/Avatar';
+import PostCard from '../../components/PostCard';
+import usePosts from '../../hooks/usePosts';
+import { followUser, getUserByUsername } from '../../redux/Slices/auth.slice';
 import toast from 'react-hot-toast';
 import { Link, useParams } from 'react-router-dom';
 import 'react-loading-skeleton/dist/skeleton.css'
-import SkeletonPostCard from './SkeletonPostCard';
-import ProfileInfo from './ProfileInfo';
+import SkeletonPostCard from '../../components/SkeletonPostCard';
+import ProfileInfo from '../../components/ProfileInfo';
 import { IoMdPulse } from "react-icons/io";
+import useVerse from '../../hooks/useVerse';
+import VerseCard from '../../components/VerseCard'
 
 const Profile = () => {
   const authState = useSelector ((state) => state.auth);
+  const [postState] = usePosts ();
+  const [verseState] = useVerse ();
+
   const [creator, setCreator] = useState (null);
   const [follow, setFollow] = useState(false);
   const [countFollowers, setCountFollowers] = useState(0);
@@ -24,7 +29,6 @@ const Profile = () => {
 
   const dispatch = useDispatch ();
   const { username } = useParams();
-  const [postState] = usePosts ();
 
   useEffect(() => {
     setIsLoading(true); 
@@ -108,9 +112,9 @@ const Profile = () => {
               </div>
             </div>
           </div>
-          <div className={`w-full flex justify-evenly mt-4 pb-4`}>
+          <div className={`w-full flex justify-evenly`}>
           <div
-              className={`flex gap-2 pb-4 px-4 items-center hover:cursor-pointer ${selected === 'Posts' ? `text-[var(--buttons)]` : `text-[var(--text)]`}`}
+              className={`flex gap-2 w-full justify-center py-4 px-4 items-center hover:cursor-pointer ${selected === 'Posts' ? `text-[var(--buttons)] bg-[var(--topic)]` : `text-[var(--text)]`}`}
               onClick={() => setSelected('Posts')}
             >
               <i className="fa-solid fa-image"></i>
@@ -118,17 +122,26 @@ const Profile = () => {
             </div>
 
             <div
-              className={`flex gap-2 pb-4 px-4 items-center hover:cursor-pointer 
-                          ${selected === 'Pulse' ? `text-[var(--buttons)]` : `text-[var(--text)]`}`}
+              className={`flex gap-2 w-full justify-center py-4 px-4 items-center hover:cursor-pointer 
+                          ${selected === 'Pulse' ? `text-[var(--buttons)] bg-[var(--topic)]` : `text-[var(--text)]`}`}
               onClick={() => setSelected('Pulse')}
             >
               <IoMdPulse className="mr-2" />
               <h2 className='font-bold'>Pulse</h2>
             </div>
+
+            <div
+              className={`flex gap-2 w-full justify-center py-4 px-4 items-center hover:cursor-pointer 
+                          ${selected === 'Verse' ? `text-[var(--buttons)] bg-[var(--topic)]` : `text-[var(--text)]`}`}
+              onClick={() => setSelected('Verse')}
+            >
+              <IoMdPulse className="mr-2" />
+              <h2 className='font-bold'>Verse</h2>
+            </div>
           </div>
         </div>}
 
-        {selected === 'Posts' && 
+        {selected === 'Posts' && (postState?.postList?.length > 0 ?
         <div>
           {isLoading && <SkeletonPostCard />}
           <div className="w-full h-screen">
@@ -137,7 +150,20 @@ const Profile = () => {
               ))}
           </div>
         )
-        </div>}
+        </div> :
+        <h2 className={`w-full text-center font-extralight text-[var(--text)]`}>No verse to show</h2>)}
+
+        {selected === 'Verse' && (verseState?.verseList?.length > 0 ? 
+        <div>
+          {isLoading && <SkeletonPostCard />}
+          <div className="w-full h-screen">
+            {!isLoading && verseState?.verseList?.map((verse, key) => (
+                <VerseCard verse={verse} key={key}/>
+              ))}
+          </div>
+        )
+        </div> : 
+        <h2 className={`w-full text-center font-extralight text-[var(--text)]`}>No verse to show</h2>)}
       </div>
   )
 };

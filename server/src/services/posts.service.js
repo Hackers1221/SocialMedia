@@ -152,7 +152,7 @@ const savePost = async(userId, id) => {
             response.error = "User not found";
             return response;
         }
-        console.log(userData);
+
         if(userData.saved.includes(id)){
             userData.saved = userData.saved.filter((ids) => ids!==id);
         }else{
@@ -180,7 +180,6 @@ const DeletePost = async(id,userId) => {
         // Cloudinary post data delete
         let imageFilenames = [];
         let videoFilenames = [];
-        console.log(PostDetails);
 
         if (PostDetails.image) {
             imageFilenames = imageFilenames.concat(PostDetails.image.map(img => img.filename));

@@ -1,20 +1,20 @@
 import { Route, Routes } from "react-router-dom";
-import SignUp from "../SignUp/signup";
-import LogIn from "../LogIn/login";
-import Home from "../home";
-import Layout from "../Layout/Layout";
-import SavedPost from "../../components/SavedPosts";
-import Profile from "../../components/Profile";
-import Explore from "../../components/Explore";
-import Messenger from "../../components/Messenger";
-import Pulse from "../Pulse/Pulse";
-import DisplayStory from "../../components/DisplayStory";
-import Settings from "../../components/Settings";
-import SendOtp from "../SignUp/sentotp";
-import VerifyOtp from "../SignUp/verifyotp";
-import ForgetPassword from "../Forgot/Forget";
-import ResetPassword from "../Forgot/reset";
-import VersePage from "../Verse/VersePage";
+import SignUp from "../pages/SignUp/signup";
+import LogIn from "../pages/LogIn/login";
+import Home from "../pages/home";
+import Layout from "../pages/Layout/Layout";
+import SavedPost from "../pages/Saved/SavedPosts";
+import Profile from "../pages/Profile/Profile";
+import Explore from "../pages/Explore/Explore";
+import Messenger from "../pages/Messenger/Messenger";
+import Pulse from "../pages/Pulse/Pulse";
+import DisplayStory from "../components/DisplayStory";
+import Settings from "../pages/Settings/Settings";
+import SendOtp from "../pages/SignUp/sentotp";
+import VerifyOtp from "../pages/SignUp/verifyotp";
+import ForgetPassword from "../pages/Forgot/Forget";
+import ResetPassword from "../pages/Forgot/reset";
+import VersePage from "../pages/Verse/VersePage";
 
 function MainRoutes() {
   return (

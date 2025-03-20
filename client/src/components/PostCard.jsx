@@ -8,6 +8,7 @@ import { DeletePost, getAllPosts, getPostById, likePost, updateSavedPost } from 
 import DisplayPost from "./DisplayPost";
 import { CreateComment, getCommentByPostId } from "../redux/Slices/comment.slice";
 import usePosts from "../hooks/usePosts";
+import LinkDetector from '../components/LinkDetector'
 
 function PostCard(post) {
     const authState = useSelector((state) => state.auth.data);
@@ -30,13 +31,11 @@ function PostCard(post) {
     // Delete related
     const [deleting, setDeleting] = useState(false);
 
-    const photo = currUser.data?.image?.url || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png";
-
     const [date, setDate] = useState("");
     const [check, setCheck] = useState(false);
     const [isDialogOpen, setDialogOpen] = useState(false);
-    const [commentDescription, setDescription] = useState("");
     const [countComment, setCountComment] = useState(comments?.length);
+    const [title, setTitle] = useState ();
     const [creator, setCreator] = useState({
         image: "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png",
         name: "",
@@ -46,8 +45,6 @@ function PostCard(post) {
         birth: ""
     });
     const [hashtags, setHashtags] = useState ("");
-
-    const tempCaption = check ? caption : caption?.toString().slice(0, 200);
 
     const togglePlay = (index) => {
         videoRefs.current.forEach((video, i) => {
@@ -244,6 +241,8 @@ function PostCard(post) {
     }
 
     useEffect(() => {
+        setTitle (caption);
+
         setImages([]);
 
         if (imageData) setImages(imageData);
@@ -317,12 +316,13 @@ function PostCard(post) {
                     </ul>
                 </div>
             </div>
-            {tempCaption?.length > 0 && <p className={`text-sm mt-4 text-[var(--text)] px-4`}>
-                {tempCaption} {caption?.toString().length > 200 && (
-                    <span onClick={() => setCheck(!check)} className={`text-[var(--buttons)] font-bold hover:cursor-pointer`}>
+            {/* {title?.length > 0 && <p className={`text-sm mt-4 text-[var(--text)] px-4`}>
+                {title} {caption?.toString().length > 200 && (
+                    <span onClick={toggleReadability} className={`text-[var(--buttons)] font-bold hover:cursor-pointer`}>
                         {check ? ' Show Less' : '... Read More'}
                     </span>)}
-            </p>}
+            </p>} */}
+            {title?.length > 0 && <LinkDetector title={title}></LinkDetector>}
             <p className="text-[var(--buttons)] px-4 mt-4 text-sm">{hashtags}</p>
             <div className="flex gap-3 h-[25rem] my-4 px-4">
                 {images?.length > 0 && <div className={`relative ${images.length > 3 ? `w-[35%]` : images?.length > 2 ? `w-[33%]` : images?.length > 1 ? `w-[50%]` : `w-full`} rounded-lg h-full flex justify-center hover:cursor-pointer`} onClick={() => setDialogOpen(true)}>
@@ -379,7 +379,7 @@ function PostCard(post) {
                 {countLike - liked > 0 && <h2>
                     Liked by {countLike - liked} other{countLike - liked > 1 ? 's' : ''}
                 </h2>}
-                {countLike - liked > 0 &&countComment > 0 && <h2>•</h2>}
+                {countLike - liked > 0 && countComment > 0 && <h2>•</h2>}
                 {countComment > 0 && <h2>
                     {countComment} Comment{countComment > 1 ? 's' : ''}
                 </h2>}

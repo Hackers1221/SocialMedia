@@ -39,6 +39,8 @@ export default function PostForm({ open, setOpen }) {
     }
   };
 
+  
+
   function handleChange (e) {
     const {name, value} = e.target;
     if (name === 'caption') {
@@ -51,7 +53,24 @@ export default function PostForm({ open, setOpen }) {
     else setInterests (value);
   }
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+        e.preventDefault(); // Prevent form submission or default behavior
 
+        const start = e.target.selectionStart;
+        const end = e.target.selectionEnd;
+
+        const updatedCaption =
+            caption.slice(0, start) + '\n' + caption.slice(end);
+
+        setCaption (updatedCaption);
+
+        // Move the cursor to the correct position after inserting `\n`
+        setTimeout(() => {
+            e.target.selectionStart = e.target.selectionEnd = start + 1;
+        }, 0);
+    }
+  };
 
   // Handle files
   const handleFileChange = (event, type) => {
@@ -150,6 +169,7 @@ export default function PostForm({ open, setOpen }) {
               rows="2"
               placeholder="Write a caption..."
               value={caption}
+              onKeyDown={handleKeyDown}
               name="caption"
               onChange={handleChange}
             ></textarea>

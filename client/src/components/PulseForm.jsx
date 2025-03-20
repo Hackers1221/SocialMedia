@@ -33,6 +33,25 @@ export default function PulseForm({ open, setOpen }) {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+        e.preventDefault(); // Prevent form submission or default behavior
+
+        const start = e.target.selectionStart;
+        const end = e.target.selectionEnd;
+
+        const updatedCaption =
+            caption.slice(0, start) + '\n' + caption.slice(end);
+
+        setCaption (updatedCaption);
+
+        // Move the cursor to the correct position after inserting `\n`
+        setTimeout(() => {
+            e.target.selectionStart = e.target.selectionEnd = start + 1;
+        }, 0);
+    }
+  };
+
   const handleFileChange = (event) => {
     const uploadedFile = event.target.files[0];
     setVideo(uploadedFile);
@@ -79,6 +98,7 @@ export default function PulseForm({ open, setOpen }) {
               rows="2"
               placeholder="Write a caption..."
               value={caption}
+              onKeyDown={handleKeyDown}
               onChange={(e) => setCaption(e.target.value)}
             ></textarea>
 

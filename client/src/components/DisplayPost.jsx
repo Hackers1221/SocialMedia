@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, use } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserById } from "../redux/Slices/auth.slice";
 import Avatar from "./Avatar";
@@ -257,12 +257,12 @@ const DisplayPost = ({ open, setOpen, post }) => {
 
   return loading ? <Loader /> : (
     <>
-    {open && <div className="fixed left-0 top-0 inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-80"></div>}
+    {open && <div className="fixed left-0 top-0 inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-[90]"></div>}
     <dialog ref={dialogRef} className={`w-[60%] h-[90vh] bg-[var(--card)] rounded-lg shadow-xl p-2`}>
-      <button onClick={closeDialog} className={`absolute top-5 right-6 text-[var(--text)] font-bold text-xl focus:outline-none`}>✕</button>
+    <button onClick={closeDialog} className={`fixed top-5 right-6 text-white font-bold text-xl focus:outline-none hover:cursor-pointer z-[500]`}>✕</button>
       <div className={`flex h-full border border-[var(--border)] bg-[var(--card)]`}>
         {/* Left Half */}
-        <div className="w-1/2 p-4 flex relative items-center">
+        <div className="w-1/2 px-4 flex relative items-center bg-black">
           <div className={`absolute top-0 left-0 flex items-center gap-3 mb-4 z-[100] bg-[var(--card)] px-4 py-2`}>
             <Avatar url={creator?.image?.url || defaultImage} size={"md"}/>
             <div>
@@ -274,7 +274,7 @@ const DisplayPost = ({ open, setOpen, post }) => {
               <p className={`text-[var(--text)] text-xs`}>{date}</p>
             </div>
           </div>
-          <div className="flex justify-center items-center relative w-full h-full">
+          <div className="flex justify-center items-center w-full h-full">
             <div className="carousel w-full h-full relative">
               {post.image?.map((img, idx) => (
                 <div
@@ -310,23 +310,23 @@ const DisplayPost = ({ open, setOpen, post }) => {
           </div>
           {currentIndex > 0 && (
             <button
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 p-2 h-full w-[2rem] bg-transparent hover:bg-black/5"
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 p-2 h-full w-[2rem] bg-transparent hover:bg-black/20"
               onClick={goBack}
             >
             </button>
           )}
           {currentIndex < totalItems - 1 && (
             <button
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 p-2 h-full w-[2rem] bg-transparent hover:bg-black/5"
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 p-2 h-full w-[2rem] bg-transparent hover:bg-black/20"
               onClick={goForward}
             >
             </button>
           )}
-          {totalItems > 1 && <div className="absolute right-4 top-4 bg-black/70 text-white p-2 rounded-full text-xs">{currentIndex + 1} / {totalItems}</div>}
+          {totalItems > 1 && <div className="absolute bottom-8 left-1/2 right-1/2 bg-black/70 text-white rounded-full text-xs w-max">{currentIndex + 1} / {totalItems}</div>}
         </div>
 
         {/* Right Half */}
-        <div className="w-1/2 flex flex-col p-4 border-l border-[var(--border)] mt-4">
+        <div className="w-1/2 flex flex-col p-4 border-l border-[var(--border)]">
           {(post?.caption?.length > 0 || interest?.length > 0) && <div className={`text-[var(--text)] text-sm border-b pb-4`}>
             {post?.caption}
             {interest?.length > 0 && <h2 className={`text-[var(--text)] font-extralight mt-8 text-xs`}>

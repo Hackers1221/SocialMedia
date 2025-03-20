@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllPosts, searchPost } from "../redux/Slices/post.slice";
+import { getAllPosts, searchPost } from "../../redux/Slices/post.slice";
 import { X } from "lucide-react";
-import ExploreCard from "./ExploreCard";
+import ExploreCard from "../../components/ExploreCard";
+import usePosts from "../../hooks/usePosts";
 
 const Explore = () => {
+
+  const [postState] = usePosts ();
 
   const dispatch = useDispatch();
   const [thumbnails, setThumbnails] = useState({});
   const [query,setQuery] = useState("");
-  const posts = useSelector((state) => state.post.downloadedPosts);
-  const [postState,setpostState] = useState(posts);
+
+  const [postList, setPostList] = useState(postState?.downloadedPosts);
 
   const extractThumbnail = (videoURL, index) => {
     const video = document.createElement("video");
@@ -52,13 +55,13 @@ const Explore = () => {
 
   useEffect(() => {
     if(query.trim()==""){
-      setpostState(posts)
+      setPostList(postState?.downloadedPosts)
       return;
     }
     const delayDebounceFn = setTimeout(async () => {
         try {
             const response = await dispatch(searchPost(query));
-            setpostState(response.payload?.data?.postDetails)
+            setPostList(response.payload?.data?.postDetails.reverse())
         } catch (error) {
             console.error("Search failed:", error);
         }
@@ -71,14 +74,18 @@ const Explore = () => {
     dispatch(getAllPosts()); 
 }, [dispatch]);
 
+useEffect (() => {
+  setPostList (postState?.downloadedPosts);
+}, [postState?.downloadedPosts])
+
 useEffect(() => {
-    setpostState(posts);
-    posts?.forEach((post, index) => {
+    postList.forEach((post, index) => {
         if (post?.video?.[0]?.url) {
             extractThumbnail(post.video[0]?.url, index);
         }
     });
-}, [posts]); 
+
+}, [postList]); 
 
 
   return (
@@ -99,7 +106,7 @@ useEffect(() => {
           </button>}
         </div>
         <div className="columns-2 sm:columns-3 md:columns-4 gap-3">
-          {postState?.map((post, index) => (
+          {postList?.map((post, index) => (
             // <div key={index} className="relative group overflow-hidden rounded-lg shadow-lg hover:cursor-pointer" onClick={() => {setDialogOpen(true);
             //   setSelectedPost (post);
             // }}>

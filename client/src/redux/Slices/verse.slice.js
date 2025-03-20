@@ -15,7 +15,6 @@ export const getAllVerse = createAsyncThunk('verse/getAllVerse', async () => {
                 'x-access-token': localStorage.getItem('token')
             }
         });
-        console.log (response);
         return response;
     } catch (error) {
         toast.error(error.message || "Failed to fetch posts");
@@ -24,7 +23,6 @@ export const getAllVerse = createAsyncThunk('verse/getAllVerse', async () => {
 
 export const createVerse = createAsyncThunk('verse/createVerse', async (verseData) => {
     try {
-        console.log(verseData)
         const response = await axiosInstance.post('verse/verse', verseData, {
             headers: {
                 'x-access-token': localStorage.getItem('token')
@@ -153,7 +151,7 @@ const VerseSlice = createSlice({
             })
             .addCase(getVerseByUserId.fulfilled , (state,action) => {
                 if(!action.payload?.data)return; 
-                state.verseList = action.payload?.data?.postDetails.reverse();
+                state.verseList = action.payload?.data?.verse.reverse();
             })
             .addCase (getVerseById.fulfilled, (state, action) => {
                 if (!action.payload?.data) return;

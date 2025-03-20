@@ -101,7 +101,7 @@ function Suggestions () {
                 </div>
             </div>
 
-            {check == 0 && <div className={`ml-8 text-[var(--text)] text-xl rounded-xl bg-[var(--card)] shadow-lg mt-8`}>
+            {check == 0 && authState.userList?.length > 0 && <div className={`ml-8 text-[var(--text)] text-xl rounded-xl bg-[var(--card)] shadow-lg mt-8`}>
                 <div className={`flex justify-between items-center border-b bg-[var(--topic)] rounded-t-xl p-2`}>
                     <h2 className="font-bold text-sm text-[var(--heading)]">Friend Suggestions</h2>
                 </div>

@@ -51,7 +51,7 @@ function VerseCard (verse, bottom) {
             }
         }
         const response = await dispatch(deleteVerse (resp));
-        console.log (response);
+
         if (response.payload) {
             await dispatch(getAllVerse());
             toast.success("Deleted successfully");
@@ -178,7 +178,7 @@ function VerseCard (verse, bottom) {
                     <div tabIndex={0} role="button" className="m-1">
                         <i className={`text-[var(--text)] fa-solid fa-ellipsis`}></i>
                     </div>
-                    <ul tabIndex={0} className={`dropdown-content menu bg-[var(--dropdown)] text-[var(--text)] rounded-md z-[1] w-52 p-4 gap-4 shadow-sm shadow-[var(--text)]`}>
+                    <ul tabIndex={0} className={`dropdown-content menu bg-[var(--dropdown)] rounded-md z-[1] w-52 p-4 gap-4 shadow-sm shadow-[var(--text)]`}>
                         <li className="hover:cursor-pointer"><span>Not Intrested</span></li>
                         {(authState.data?._id === userId) && <li
                             className="hover:cursor-pointer text-red-400 flex flex-row justify-between"
@@ -198,15 +198,16 @@ function VerseCard (verse, bottom) {
                         {check ? ' Show Less' : '... Read More'}
                     </span>)}
             </p>
-            {(countLike - liked > 0 || countComment > 0) && <div className="mt-2 flex gap-2 w-full px-4 text-xs">
+            {(countLike - liked > 0 || countComment > 0) && <div className="mt-2 flex gap-2 w-full px-4 text-xs text-[var(--text)]">
                 {countLike - liked > 0 && <h2>
-                    Liked by {countLike - liked} others
+                    Liked by {countLike - liked} other{countLike - liked > 1 ? 's' : ''}
                 </h2>}
+                {countLike - liked > 0 && countComment > 0 && <h2>•</h2>}
                 {countComment > 0 && <h2>
-                    {countComment} Comments
+                    {countComment} Comment{countComment > 1 ? 's' : ''}
                 </h2>}
             </div>}
-            <div className="mt-2 flex w-full justify-between p-4 border-t border-[var(--border)]">
+            <div className="mt-2 flex w-full justify-between p-4 border-t border-[var(--border)] text-[var(--text)]">
                 <div className="flex gap-4">
                     <button className={`flex gap-2 items-center`} onClick={toggleLike}>
                         {liked ? (<i className={`text-red-600 fa-solid fa-heart`}></i>) : <i className={`text-[var(--text)] fa-regular fa-heart`}></i>}

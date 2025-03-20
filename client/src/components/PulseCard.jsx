@@ -6,7 +6,6 @@ import Avatar from '../components/Avatar'
 
 export default function PulseCard({ pulse }) {
   if (!pulse) return null;
-  console.log(pulse)
 
   const authState = useSelector((state) => state.auth);
   const dispatch = useDispatch();

@@ -50,7 +50,7 @@ const getallPosts = async(req,res) => {
 
 const updatePost = async(req,res) => {
     const response = await postsService.updatePost(req.params.id,req.body);
-    console.log(req.params.id,req.body);
+
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
             msg : "Unable to update the Post",

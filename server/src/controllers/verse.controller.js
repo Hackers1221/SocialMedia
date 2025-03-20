@@ -88,9 +88,8 @@ const getVerseById = async(req, res) => {
 }
 
 const deleteVerse = async(req,res) => {
-    console.log (req.params.id, req.body.id);
     const response = await verseService.deleteVerse(req.params.id, req.body.id);
-    console.log (response);
+
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
             msg : "Unable to delete",

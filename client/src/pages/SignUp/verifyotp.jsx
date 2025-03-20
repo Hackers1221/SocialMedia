@@ -103,7 +103,7 @@ function VerifyOtp() {
     <div className={`flex items-center justify-center h-screen w-full px-5 sm:px-0 bg-[url("https://images.stockcake.com/public/2/9/c/29cc0acd-d266-46bf-b9b8-b5330cd2918b_large/greenery-on-wood-stockcake.jpg")]  bg-no-repeat bg-cover bg-center`}>
       <div className={`flex items-center justify-center bg-[#131842] bg-opacity-[40%] backdrop-blur-lg backdrop-saturate-300 w-full h-full`}>
                       <div className="flex justify-evenly w-[90%] h-[80%]">
-                      <div className="flex flex-col justify-center text-[3rem] w-[40%] text-white font-bold leading-[1.2]">
+                      <div className="hidden md:flex flex-col justify-center text-[3rem] w-[40%] text-white font-bold leading-[1.2]">
                           <span>Be part of</span>
                           <span className={`text-[var(--buttons)]`}>something bigger by</span>
                           <span>joining today</span>

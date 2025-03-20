@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { IoSend } from "react-icons/io5";
-import Avatar from "./Avatar";
+import Avatar from "../../components/Avatar";
 
 const Messenger = () => {
   const [selectedUser, setSelectedUser] = useState(-1);

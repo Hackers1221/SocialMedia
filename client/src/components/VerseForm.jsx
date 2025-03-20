@@ -26,6 +26,28 @@ export default function VerseForm ({ open, setOpen, initialText }) {
       })
     }
 
+    const handleKeyDown = (e) => {
+      if (e.key === 'Enter') {
+          e.preventDefault(); // Prevent form submission or default behavior
+  
+          const start = e.target.selectionStart;
+          const end = e.target.selectionEnd;
+  
+          const caption =
+              verseDetails.text?.slice(0, start) + '\n' + verseDetails.text.slice(end);
+  
+              setVerseDetails((prev) => ({
+                ...prev,
+                text: caption
+              }));
+  
+          // Move the cursor to the correct position after inserting `\n`
+          setTimeout(() => {
+              e.target.selectionStart = e.target.selectionEnd = start + 1;
+          }, 0);
+      }
+    };
+
   const Createpost = async () => {
     const response = await dispatch (createVerse (verseDetails));
     
@@ -61,6 +83,7 @@ export default function VerseForm ({ open, setOpen, initialText }) {
               placeholder="Write a verse..."
               value={verseDetails.text}
               onChange={handleChange}
+              onKeyDown={handleKeyDown}
             ></textarea>
 
             {/* Post Button + interest */}

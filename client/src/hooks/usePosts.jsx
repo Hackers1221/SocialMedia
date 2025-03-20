@@ -27,7 +27,7 @@ function usePosts () {
     }
     useEffect(() => {
         loadPosts ();
-    }, []);
+    }, [username]);
 
     return [postState];
 }
