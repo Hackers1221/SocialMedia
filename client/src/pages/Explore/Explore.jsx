@@ -121,9 +121,11 @@ useEffect(() => {
             // </div>
             <ExploreCard 
               post={post} 
-              key={index} 
+              key={index + 1} 
+              index={index + 1}
               postThumbnail={post?.image[0]?.url || thumbnails[index]} 
-              video={post?.image[0]?.url ? false : true}/>
+              video={post?.image[0]?.url ? false : true}
+              list={'postList'}/>
           ))}
         </div>
       </div>

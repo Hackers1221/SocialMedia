@@ -89,7 +89,7 @@ function Sidebar() {
             
             
 
-            <div className="fixed top-0 left-0 z-50">
+            <div className="fixed top-0 left-0 z-[10] md:z-0">
                 {/* Wrapper to avoid misclicks */}
                 <div className="relative z-10 md:hidden p-4">
                     {!isOpen && (

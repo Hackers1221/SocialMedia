@@ -95,11 +95,13 @@ const SavedPost = () => {
             //     View
             //   </div>
             // </div>
-            <ExploreCard
+              <ExploreCard 
               post={post} 
-              key={index} 
+              key={index + 1} 
+              index={index + 1}
               postThumbnail={post?.image[0]?.url || thumbnails[index]} 
-              video={post?.image[0]?.url ? false : true}/>
+              video={post?.image[0]?.url ? false : true}
+              list={'savedList'}/>
           ))}
         </div>
       </div> : <h2 className={`w-full text-center font-extralight text-[var(--text)] mt-4`}>Save a post to keep track of content that matters to you!</h2>)}

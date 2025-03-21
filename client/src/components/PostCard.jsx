@@ -10,7 +10,7 @@ import { CreateComment, getCommentByPostId } from "../redux/Slices/comment.slice
 import usePosts from "../hooks/usePosts";
 import LinkDetector from '../components/LinkDetector'
 
-function PostCard(post) {
+function PostCard({ post, index, list }) {
     const authState = useSelector((state) => state.auth.data);
     const currUser = useSelector((state) => state.auth);
     const [postState] = usePosts();
@@ -19,9 +19,9 @@ function PostCard(post) {
 
     const dispatch = useDispatch();
 
-    const { _id, likes, comments, interests, createdAt, userId, caption } = post?.post;
-    const imageData = post?.post.image;
-    const videoData = post?.post.video;
+    const { _id, likes, comments, interests, createdAt, userId, caption } = post;
+    const imageData = post.image;
+    const videoData = post.video;
 
     const [liked, setLiked] = useState(false);
     const [saved, setSaved] = useState(false);
@@ -270,11 +270,11 @@ function PostCard(post) {
         } else setLiked(false);
         setCountComment(comments.length);
         setCountLike(likes.length);
-    }, [post?.post]);
+    }, [post]);
 
     return (
         <div className={`mb-4 bg-[var(--card)] relative shadow-xl rounded-xl`} >
-            <DisplayPost open={isDialogOpen} setOpen={setDialogOpen} post={post?.post} />
+            <DisplayPost open={isDialogOpen} setOpen={setDialogOpen} index={index} list={list} />
             <div className="flex justify-between bg-[var(--topic)] rounded-t-xl p-[0.3rem] px-4">
                 <div className="flex items-center gap-2">
                     <div className="flex items-center">
@@ -301,13 +301,13 @@ function PostCard(post) {
                     <div tabIndex={0} role="button" className="m-1">
                         <i className={`text-[var(--text)] fa-solid fa-ellipsis`}></i>
                     </div>
-                    <ul tabIndex={0} className={`dropdown-content menu bg-[var(--dropdown)] rounded-md z-[1] w-52 p-4 gap-4 shadow-sm shadow-[var(--text)]`}>
+                    <ul tabIndex={0} className={`dropdown-content menu bg-[var(--card)] rounded-md z-[1] w-52 p-4 gap-4 shadow-sm shadow-[var(--text)] text-[var(--buttons)]`}>
                         <li onClick={() => setDialogOpen(true)} className="hover:cursor-pointer"><span>View Post</span></li>
                         <li className="hover:cursor-pointer"><span>Not Intrested</span></li>
                         {(authState._id === userId) && <li
                             className="hover:cursor-pointer text-red-400 flex flex-row justify-between"
                             onClick={Deletepost}>
-                            <span>Delete Post </span>
+                            <span>Delete</span>
                             {deleting && (
                                 <i className={`fa-solid fa-spinner animate-spin text-lg text-[var(--text)]`}></i>
                             )}

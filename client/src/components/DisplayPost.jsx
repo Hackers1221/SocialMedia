@@ -12,31 +12,51 @@ import { Link } from "react-router-dom";
 import LinkDetector from '../components/LinkDetector'
 
 
-const DisplayPost = ({ open, setOpen, post }) => {
-  if (!post || !open) return null;
+const DisplayPost = ({ open, setOpen, index, list }) => {
+  if (!index || !open) return null;
 
   const authState = useSelector((state) => state.auth);
   const commentState = useSelector((state) => state.comment);
   const [postState] = usePosts ();
 
+  let array;
+
+  if (list === 'downloadedPosts') array = postState?.downloadedPosts;
+  if (list === 'postList') array = postState?.postList;
+  if (list === 'savedList') array = postState?.savedList;
+
+  // let post = array[index - 1];
+
   const dispatch = useDispatch();
   const dialogRef = useRef(null);
   const videoRefs = useRef([]);
   const timeoutRef = useRef(null);
-  const defaultImage = "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png";
 
   const [date, setDate] = useState("");
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [post, setPost] = useState (array[index - 1]);
   const [creator, setCreator] = useState({ image: "", name: "Anonymous" });
   const [isPlaying, setIsPlaying] = useState([false]);
   const [showButton, setShowButton] = useState([true]);
   const [commentDescription , setDescription] = useState("");
+  const [postIndex, setPostIndex] = useState (index - 1);
   const [countLike,setcountLike] = useState(post?.likes.length);
   const [countComment,setCountComment] = useState(post?.comments?.length);
   const [caption, setCaption] = useState (post?.caption || "");
   const [interest, setInterest] = useState ("");
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const totalItems = (post.image?.length || 0) + (post.video?.length || 0);
+
+  function goForward () {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % totalItems);
+  };
+
+  function goBack () {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + totalItems) % totalItems);
+  };
 
   async function postCommentHandler() {
     const data = {
@@ -194,6 +214,33 @@ const DisplayPost = ({ open, setOpen, post }) => {
     setCaption ((prev) => prev + " " + hashtags);
   }
 
+  function postForward() {
+    setPostIndex((prev) => (prev + 1) % array.length);
+  }
+  
+  function postBackward() {
+    setPostIndex((prev) => (prev - 1 + array.length) % array.length);
+  }
+
+  useEffect(() => {
+    setPost (array[postIndex]);
+  }, [postIndex, array]);
+
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if (event.key === "ArrowRight") {
+        postForward();
+      } else if (event.key === "ArrowLeft") {
+        postBackward();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, []);
+
   // fetching data
   useEffect(() => {
     const fetchData = async () => {
@@ -242,30 +289,22 @@ const DisplayPost = ({ open, setOpen, post }) => {
     setSaved (postState.savedList?.find ((savedPost) => savedPost._id === post?._id));
     }, [postState.savedList]); 
 
-    const [currentIndex, setCurrentIndex] = useState(0);
-
-  const totalItems = (post.image?.length || 0) + (post.video?.length || 0);
-
-  const goForward = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % totalItems);
-  };
-
-  const goBack = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + totalItems) % totalItems);
-  };
-
-
-
   return loading ? <Loader /> : (
     <>
-    {open && <div className="fixed left-0 top-0 inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-[90]"></div>}
+    {open && <div className="fixed left-0 top-0 inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-[20]"></div>}
     <dialog ref={dialogRef} className={`w-[60%] h-[90vh] bg-[var(--card)] rounded-lg shadow-xl p-2`}>
-    <button onClick={closeDialog} className={`fixed top-5 right-6 text-white font-bold text-xl focus:outline-none hover:cursor-pointer z-[500]`}>✕</button>
+      <div className="fixed right-8 top-1/2 bottom-1/2 z-[9999999] w-max h-max" onClick={postForward} title="Next post">
+        <i className="fa-solid fa-circle-chevron-right text-[var(--buttons)] text-[2rem]"></i>
+      </div>
+      <div className="fixed left-8 top-1/2 bottom-1/2 z-[100]" onClick={postBackward} title="Previous post">
+        <i className="fa-solid fa-circle-chevron-left text-[var(--buttons)] text-[2rem]"></i>
+      </div>
+      <button onClick={closeDialog} className={`fixed top-5 right-6 w-max h-max text-white font-bold text-xl focus:outline-none hover:cursor-pointer z-[500]`}>✕</button>
       <div className={`flex h-full border border-[var(--border)] bg-[var(--card)]`}>
         {/* Left Half */}
         <div className="w-1/2 px-4 flex relative items-center bg-black">
           <div className={`absolute top-0 left-0 flex items-center gap-3 mb-4 z-[100] bg-[var(--card)] px-4 py-2`}>
-            <Avatar url={creator?.image?.url || defaultImage} size={"md"}/>
+            <Avatar url={creator?.image?.url} size={"md"}/>
             <div>
               <Link to={`/profile/${creator?.username}`}>
                   <span className={`mr-1 text-sm font-semibold cursor-pointer hover:underline hover:text-[var(--buttons)] text-[var(--text)]`}>
@@ -332,7 +371,7 @@ const DisplayPost = ({ open, setOpen, post }) => {
             {interest?.length > 0 && <div className={`text-[var(--text)] font-extralight mt-8 text-xs px-4 pb-4`}>
               {interest}
             </div>}
-          <div className="flex-1 overflow-y-auto space-y-3 pt-2 border-t border-[var(--border)]">
+          <div className={`flex-1 overflow-y-auto space-y-3 pt-2 ${(post?.caption?.length > 0 || interest?.length > 0) ? 'border-t' : ''} border-[var(--border)]`}>
             {commentState.comments.length > 0 ? (
               commentState.comments.map((comment, idx) => (
                 <div key={idx}>
@@ -373,7 +412,7 @@ const DisplayPost = ({ open, setOpen, post }) => {
             </div>
           </div>
           <div className="mt-auto flex items-center gap-3 p-2 relative">
-            <Avatar url={authState?.data?.image?.url || defaultImage} />
+            <Avatar url={authState?.data?.image?.url} />
             <div className="flex-1 relative">
               <input
                 type="text"

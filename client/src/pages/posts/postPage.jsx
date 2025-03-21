@@ -84,7 +84,7 @@ function PostPage() {
                 {!isLoading && <div className="pt-4 w-full h-screen">
                     {postState?.postList?.length > 0 ? postState?.postList?.map((post, index) => (
                         <div key={index}>
-                            <PostCard post={post}/>
+                            <PostCard post={post} index={index + 1} list={"postList"}/>
                             {/* {index != postState?.postList?.length - 1 && <div className={`h-[1px] bg-[var(--text)]`}></div>} */}
                         </div>
                     )) : <h2 className={`w-full text-center font-extralight text-[var(--text)]`}>No posts to show</h2>}

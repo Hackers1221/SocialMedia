@@ -106,15 +106,15 @@ function Suggestions () {
                     <h2 className="font-bold text-sm text-[var(--heading)]">Friend Suggestions</h2>
                 </div>
                 {authState.userList?.map ((user, key) => (
-                    <div key={key} className={`flex mt-2 gap-2 p-2 py-3 items-center border-b ${key === authState.userList?.length - 1 ? 'border-transparent' : 'border-[var(--border)]'} hover:cursor-pointer hover:shadow-md hover:text-[var(--heading)]`}>
+                    <Link to={`/profile/${user?.username}`} key={key} className={`flex mt-2 gap-2 p-2 py-3 items-center border-b ${key === authState.userList?.length - 1 ? 'border-transparent' : 'border-[var(--border)]'} hover:cursor-pointer hover:shadow-md hover:text-[var(--heading)]`}>
                         <Avatar url={user.image?.url} size={"md"} />
                         <div className="flex justify-between w-full">
-                            <Link to={`/profile/${user?.username}`} className="w-full">
+                            <div className="w-full">
                                 <h2 className={`text-sm`}>{user.name}</h2>
                                 <h2 className="text-xs font-extralight">@{user.username}</h2>
-                            </Link>
+                            </div>
                         </div>
-                    </div>
+                    </Link>
                 ))}
             </div>}
 

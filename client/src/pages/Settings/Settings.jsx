@@ -206,7 +206,7 @@ function Settings() {
             </div>
 
             <div className="flex justify-end">
-              <button className={`px-6 py-3 bg-transparent border border-[var(--buttons)] text-[var(--buttons)] font-bold rounded-full hover:bg-[var(--buttons)] hover:text-white transition-all`} onClick={updateuser}>
+              <button className={`px-6 py-3 bg-transparent border border-[var(--buttons)] text-[var(--buttons)] font-bold rounded-full hover:bg-[var(--buttons)] hover:text-[var(--buttonText)] transition-all`} onClick={updateuser}>
                 Save Changes
               </button>
             </div>
