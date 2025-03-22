@@ -293,11 +293,11 @@ const DisplayPost = ({ open, setOpen, index, list }) => {
     <>
     {open && <div className="fixed left-0 top-0 inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-[20]"></div>}
     <dialog ref={dialogRef} className={`w-[60%] h-[90vh] bg-[var(--card)] rounded-lg shadow-xl p-2`}>
-      <div className="fixed right-8 top-1/2 bottom-1/2 z-[9999999] w-max h-max" onClick={postForward} title="Next post">
-        <i className="fa-solid fa-circle-chevron-right text-[var(--buttons)] text-[2rem]"></i>
+      <div className="fixed right-8 top-1/2 bottom-1/2 z-[50] hover:cursor-pointer" onClick={postForward} title="Next post">
+        <i className="fa-solid fa-circle-chevron-right text-[var(--dropdown)] text-[2rem]"></i>
       </div>
-      <div className="fixed left-8 top-1/2 bottom-1/2 z-[100]" onClick={postBackward} title="Previous post">
-        <i className="fa-solid fa-circle-chevron-left text-[var(--buttons)] text-[2rem]"></i>
+      <div className="fixed left-8 top-1/2 bottom-1/2 z-[50] hover:cursor-pointer" onClick={postBackward} title="Previous post">
+        <i className="fa-solid fa-circle-chevron-left text-[var(--dropdown)] text-[2rem]"></i>
       </div>
       <button onClick={closeDialog} className={`fixed top-5 right-6 w-max h-max text-white font-bold text-xl focus:outline-none hover:cursor-pointer z-[500]`}>✕</button>
       <div className={`flex h-full border border-[var(--border)] bg-[var(--card)]`}>
@@ -417,7 +417,7 @@ const DisplayPost = ({ open, setOpen, index, list }) => {
               <input
                 type="text"
                 value={commentDescription}
-                className={`w-full p-2 px-4 pr-10 rounded-full text-[var(--text)] border-2 border-[var(--input)] bg-transparent font-normal outline-none focus:shadow-md`}
+                className={`w-full p-2 px-4 pr-10 rounded-full text-[var(--text)] border border-[var(--input)] bg-transparent font-normal outline-none focus:shadow-md`}
                 placeholder="Write a comment..."
                 onChange={handleChange}
               />

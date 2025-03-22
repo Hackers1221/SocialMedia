@@ -3,7 +3,6 @@ import { MdExplore } from "react-icons/md";
 import { IoChatboxEllipsesSharp } from "react-icons/io5";
 import { FaBell, FaSearch } from "react-icons/fa";
 import { IoPerson } from "react-icons/io5";
-import { IoIosSettings } from "react-icons/io";
 import { LuCircleFadingPlus } from "react-icons/lu";
 import { ImVideoCamera } from "react-icons/im";
 import { useEffect, useState } from "react";
@@ -21,6 +20,7 @@ import { Search, X } from "lucide-react";
 import Avatar from "./Avatar";
 import { RxAvatar } from "react-icons/rx";
 import VerseForm from "./VerseForm";
+import MoreOptions from "./MoreOptions";
 
 function Sidebar() {
 
@@ -34,6 +34,7 @@ function Sidebar() {
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const [search , setSearch] = useState(false); 
     const [selected, setSelected] = useState ('Feed');
+    const [menuOpen, setMenuOpen] = useState (false);
 
     const navigate = useNavigate ();
 
@@ -85,9 +86,7 @@ function Sidebar() {
             <PulseForm open={isPulseForm} setOpen={setIsPulseForm} />
             <VerseForm open={isVerseForm} setOpen={setIsVerseForm} />
 
-
-            
-            
+            <MoreOptions open={menuOpen} setOpen={setMenuOpen}/>
 
             <div className="fixed top-0 left-0 z-[10] md:z-0">
                 {/* Wrapper to avoid misclicks */}
@@ -116,47 +115,43 @@ function Sidebar() {
                         <div className={`text-2xl font-bold heading text-[var(--buttons)]`}>Drop</div>
                         <div className={`text-3xl font-bold heading text-[var(--buttons)]`}>Chat</div>
                     </div>
-                    <div className="overflow-y-auto overflow-x-hidden flex-grow">
+                    <div className="flex flex-col h-full justify-between overflow-y-auto overflow-x-hidden flex-grow">
                         <ul className="flex flex-col py-4 space-y-1">
-                            <li onClick={() => {setIsOpen(false); setSelected('Feed')}}>
+                            <li className="px-5 border-t">
+                                <div className="flex flex-row items-center h-8">
+                                    <div className={`text-sm font-bold text-[var(--text)]`}>Discover</div>
+                                </div>
+                            </li>
+                            <li onClick={() => {setIsOpen(false); setMenuOpen(false); setSelected('Feed')}}>
                                 <Link to="/" className={`relative border-l-4 hover:border-[var(--buttons)] flex flex-row items-center h-11 hover:text-[var(--buttons)] hover:shadow-md font-semibold border-l-4 pr-6 ${selected === 'Feed' ? `border-[var(--buttons)] text-[var(--buttons)] shadow-md` : `border-transparent text-[var(--text)]`}`}>
                                     <FaHome className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Feed</span>
                                 </Link>
                             </li>
-                            <li onClick={() => {setIsOpen(false); setSelected('Profile')}}>
-                                <Link to={`/profile/${authState?.data?.username}`} className={`relative border-l-4 hover:border-[var(--buttons)] flex flex-row items-center h-11 hover:text-[var(--buttons)] hover:shadow-md font-semibold border-l-4 pl-4 ${selected === 'Profile' ? `border-[var(--buttons)] text-[var(--buttons)] shadow-md` : `border-transparent text-[var(--text)]`}`}>
-                                    <Avatar url={authState?.data?.image?.url} size={"sm"}/>
-                                    <span className="ml-2 text-sm tracking-wide truncate">{authState.data?.username}</span>
-                                </Link>
-                            </li>
-                        </ul>
-                        <div className={`mx-4 h-[0.5px] bg-[var(--text)]`}></div>
-                        <ul className="flex flex-col py-4 space-y-1">
-                            <li className="px-5">
-                                <div className="flex flex-row items-center h-8">
-                                    <div className={`text-sm font-bold text-[var(--text)]`}>Menu</div>
-                                </div>
-                            </li>
-                            <li onClick={() => {setIsOpen(false); setSelected('Explore')}}>
+                            <li onClick={() => {setIsOpen(false); setMenuOpen(false); setSelected('Explore')}}>
                             <Link to="/explore" className={`relative border-l-4 hover:border-[var(--buttons)] flex flex-row items-center h-11 hover:text-[var(--buttons)] hover:shadow-md font-semibold border-l-4 pr-6 ${selected === 'Explore' ? `border-[var(--buttons)] text-[var(--buttons)] shadow-md` : `border-transparent text-[var(--text)]`}`}>
                                     <MdExplore className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Explore</span>
                                 </Link>
                             </li>
-                            <li onClick={() => {setIsOpen(false); setSelected('Pulse')}}>
+                            <li onClick={() => {setIsOpen(false); setMenuOpen(false); setSelected('Pulse')}}>
                             <Link to="/pulse" className={`relative border-l-4 hover:border-[var(--buttons)] flex flex-row items-center h-11 hover:text-[var(--buttons)] hover:shadow-md font-semibold border-l-4 pr-6 ${selected === 'Pulse' ? `border-[var(--buttons)] text-[var(--buttons)] shadow-md` : `border-transparent text-[var(--text)]`}`}>
                                     <IoMdPulse className="ml-4"/>
                                     <span className="ml-2 text-sm tracking-wide truncate">Pulse</span>
                                 </Link>
                             </li>
-                            <li onClick={() => {setIsOpen(false); setSelected('Verse')}}>
+                            <li onClick={() => {setIsOpen(false); setMenuOpen(false); setSelected('Verse')}}>
                             <Link to="/verse" className={`relative border-l-4 hover:border-[var(--buttons)] flex flex-row items-center h-11 hover:text-[var(--buttons)] hover:shadow-md font-semibold border-l-4 pr-6 ${selected === 'Verse' ? `border-[var(--buttons)] text-[var(--buttons)] shadow-md` : `border-transparent text-[var(--text)]`}`}>
                                     <i className="fa-regular fa-comments ml-4 text-sm"/>
                                     <span className="ml-2 text-sm tracking-wide truncate">Verse</span>
                                 </Link>
                             </li>
-                            <li onClick={() => {setIsOpen(false); setSelected('Messages')}}>
+                            <li className="px-5 border-t">
+                                <div className="flex flex-row items-center h-8">
+                                    <div className={`text-sm font-bold text-[var(--text)]`}>Interact</div>
+                                </div>
+                            </li>
+                            <li onClick={() => {setIsOpen(false); setMenuOpen(false); setSelected('Messages')}}>
                                 <Link to="/messenger" className={`relative border-l-4 hover:border-[var(--buttons)] flex flex-row items-center h-11 hover:text-[var(--buttons)] hover:shadow-md font-semibold border-l-4 pr-6 ${selected === 'Messages' ? `border-[var(--buttons)] text-[var(--buttons)] shadow-md` : `border-transparent text-[var(--text)]`}`}>
                                     <IoChatboxEllipsesSharp className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Messages</span>
@@ -169,10 +164,9 @@ function Sidebar() {
                                     <span className="px-2 py-0.5 ml-auto text-xs font-medium text-red-500 bg-red-50 rounded-full">1.2k</span>
                                 </a>
                             </li>
-                            <div className={`mx-4 h-[1px] bg-[var(--text)]`}></div>
-                            <li className="px-5">
+                            <li className="px-5 border-t">
                                 <div className="flex flex-row items-center h-8">
-                                    <div className={`text-sm font-bold text-[var(--text)]`}>Settings</div>
+                                    <div className={`text-sm font-bold text-[var(--text)]`}>Manage</div>
                                 </div>
                             </li>
                             <li onClick={() => setIsOpen(false)}>
@@ -181,17 +175,25 @@ function Sidebar() {
                                     <span className="ml-2 text-sm tracking-wide truncate">Create Post</span>
                                 </div>
                             </li>
-                            <li onClick={() => {setIsOpen(false); setSelected('Saved')}}>
+                            <li onClick={() => {setIsOpen(false); setMenuOpen(false); setSelected('Saved')}}>
                                 <Link to="/saved" className={`relative border-l-4 hover:border-[var(--buttons)] flex flex-row items-center h-11 hover:text-[var(--buttons)] hover:shadow-md font-semibold border-l-4 pr-6 ${selected === 'Saved' ? `border-[var(--buttons)] text-[var(--buttons)] shadow-md` : `border-transparent text-[var(--text)]`}`}>
                                     <FaBookmark className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Saved Posts</span>
                                 </Link>
                             </li>
-                            <li onClick={() => {setIsOpen(false); setSelected('Settings')}}>
-                                <Link to="/settings" className={`relative border-l-4 hover:border-[var(--buttons)] flex flex-row items-center h-11 hover:text-[var(--buttons)] hover:shadow-md font-semibold border-l-4 pr-6 ${selected === 'Settings' ? `border-[var(--buttons)] text-[var(--buttons)] shadow-md` : `border-transparent text-[var(--text)]`}`}>
-                                    <IoIosSettings className="ml-4" />
-                                    <span className="ml-2 text-sm tracking-wide truncate">Settings</span>
+                        </ul>
+                        <ul className="flex flex-col py-4 space-y-1">
+                            <li onClick={() => {setIsOpen(false); setMenuOpen(false); setSelected('Profile')}}>
+                                <Link to={`/profile/${authState?.data?.username}`} className={`relative border-l-4 hover:border-[var(--buttons)] flex flex-row items-center h-11 hover:text-[var(--buttons)] hover:shadow-md font-semibold border-l-4 pl-4 ${selected === 'Profile' ? `border-[var(--buttons)] text-[var(--buttons)] shadow-md` : `border-transparent text-[var(--text)]`}`}>
+                                    <Avatar url={authState?.data?.image?.url} size={"sm"}/>
+                                    <span className="ml-2 text-sm tracking-wide truncate">{authState.data?.username}</span>
                                 </Link>
+                            </li>
+                            <li onClick={() => {setMenuOpen (!menuOpen); setSelected('More')}}>
+                                <div className={`relative border-l-4 hover:border-[var(--buttons)] hover:cursor-pointer flex flex-row items-center h-11 hover:text-[var(--buttons)] hover:shadow-md font-semibold border-l-4 pl-4 ${selected === 'More' ? `border-[var(--buttons)] text-[var(--buttons)] shadow-md` : `border-transparent text-[var(--text)]`}`}>
+                                    <i className="fa-solid fa-bars text-[var(--buttons)]"></i>
+                                    <span className="ml-2 text-sm tracking-wide truncate">More</span>
+                                </div>
                             </li>
                         </ul>
                     </div>

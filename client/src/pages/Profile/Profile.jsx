@@ -151,7 +151,7 @@ const Profile = () => {
           </div>
         )
         </div> :
-        <h2 className={`w-full text-center font-extralight text-[var(--text)]`}>No verse to show</h2>)}
+        <h2 className={`w-full text-center font-extralight text-[var(--text)]`}>No posts to show</h2>)}
 
         {selected === 'Verse' && (verseState?.verseList?.length > 0 ? 
         <div>

@@ -210,13 +210,6 @@ function Settings() {
                 Save Changes
               </button>
             </div>
-            <div className={`bg-transparent border border-[var(--input)] p-6 rounded-lg shadow-sm my-6`}>
-              <h3 className={`text-lg font-medium text-[var(--text)] mb-2`}>Preferences</h3>
-              <div className="flex justify-between w-full">
-                <h2 className="text-[var(--text)]">Mode</h2>
-                <ModeButton />
-              </div>
-            </div>
           </div>
         )}
 
