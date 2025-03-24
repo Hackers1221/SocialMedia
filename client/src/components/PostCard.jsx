@@ -78,9 +78,8 @@ function PostCard(post) {
         setIsPlaying((prev) => ({
           ...prev,
           [index]: false,
-        }));
+        }));z
       }
-    
       setShowButton((prev) => ({
         ...prev,
         [index]: true,
