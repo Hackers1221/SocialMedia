@@ -324,6 +324,7 @@ function PostCard({ post, index, list }) {
             </p>} */}
             {title?.length > 0 && <LinkDetector title={title} type={'post'}></LinkDetector>}
             <p className="text-[var(--buttons)] px-4 mt-4 text-sm">{hashtags}</p>
+
             <div className="flex gap-3 h-[25rem] my-4 px-4">
                 {images?.length > 0 && <div className={`relative ${images.length > 3 ? `w-[35%]` : images?.length > 2 ? `w-[33%]` : images?.length > 1 ? `w-[50%]` : `w-full`} rounded-lg h-full flex justify-center hover:cursor-pointer`} onClick={() => setDialogOpen(true)}>
                     <img

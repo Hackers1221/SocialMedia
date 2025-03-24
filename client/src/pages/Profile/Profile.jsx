@@ -12,6 +12,7 @@ import ProfileInfo from '../../components/ProfileInfo';
 import { IoMdPulse } from "react-icons/io";
 import useVerse from '../../hooks/useVerse';
 import VerseCard from '../../components/VerseCard'
+import { filterPostsByUser } from '../../redux/Slices/post.slice';
 
 const Profile = () => {
   const authState = useSelector ((state) => state.auth);
@@ -30,6 +31,10 @@ const Profile = () => {
   const dispatch = useDispatch ();
   const { username } = useParams();
 
+  async function getPosts (userId) {
+    const res = await dispatch (filterPostsByUser ({id: userId}));
+  }
+
   useEffect(() => {
     setIsLoading(true); 
     dispatch(getUserByUsername(username))
@@ -38,6 +43,7 @@ const Profile = () => {
           toast.error("Something went wrong");
         } else {
           const userData = user.payload?.data?.userDetails;
+          getPosts (userData?._id);
           setCreator(userData);
           setFollow(authState?.data?.following?.includes(userData?._id));
           setCountFollowers(userData?.follower?.length || 0);
@@ -152,7 +158,7 @@ const Profile = () => {
                   <div className="w-full h-screen">
                     {!isLoading &&
                       postState?.postList?.map((post, key) => (
-                        <PostCard post={post} key={key} />
+                        <PostCard post={post} key={key} index={key + 1} list={"postList"} />
                       ))}
                   </div>
                 </div>
