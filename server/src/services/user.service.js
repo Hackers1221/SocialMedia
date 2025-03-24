@@ -139,6 +139,7 @@ const getUserByUserName = async(name) => {
     }
 }
 const updateUser = async(newData) => {
+    console.log (newData);
     const response = {};
     try {
         const userData = await User.findById(newData.id);

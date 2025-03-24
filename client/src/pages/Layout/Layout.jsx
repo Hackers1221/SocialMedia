@@ -17,11 +17,7 @@ function Layout () {
     const hideOthers = ["/messenger", "/settings"].includes(location.pathname);
     
     // Handle screen resizing
-    useEffect(() => {
-        if (!authState?.isLoggedIn || !authState?.data?.email) {
-            navigate ("/login"); return;
-        }
-        
+    useEffect(() => {        
         const handleResize = () => setScreenWidth(window.innerWidth);
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);

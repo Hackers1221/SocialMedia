@@ -85,7 +85,7 @@ const Profile = () => {
                 <div className='flex gap-4'>
                   {!check && (
                     <button className={`mt-2 px-4 py-2 border rounded-full bg-[var(--buttons)] text-[var(--card)]`} onClick={toggleFollow}>
-                      {follow ? "Following" : "Follow"}
+                      {follow ? "Following" : creator?.isPrivate && creator?._id !== authState.data?._id ? "Send follow request" : "Follow"}
                     </button>
                   )}
                   {check && (
@@ -105,10 +105,10 @@ const Profile = () => {
                   <h2 className={`text-sm font-bold text-[var(--text)]`}>{countFollowers} <span className='font-extralight'>Followers</span></h2>
                   <h2 className={`text-sm font-bold text-[var(--text)]`}>{countFollowing} <span className='font-extralight'>Following</span></h2>
                 </div>
-                <div className='flex gap-2 items-center'>
+                {(!creator?.isPrivate || creator?._id === authState.data?._id) && <div className='flex gap-2 items-center'>
                   <i className="fa-regular fa-calendar-days text-white"></i>
                   <h2 className={`text-sm font-bold text-[var(--text)]`}><span className='font-extralight'>Joined</span> {joining}</h2>
-                </div>
+                </div>}
               </div>
             </div>
           </div>
@@ -141,29 +141,46 @@ const Profile = () => {
           </div>
         </div>}
 
-        {selected === 'Posts' && (postState?.postList?.length > 0 ?
-        <div>
-          {isLoading && <SkeletonPostCard />}
-          <div className="w-full h-screen">
-            {!isLoading && postState?.postList?.map((post, key) => (
-                <PostCard post={post} key={key}/>
-              ))}
-          </div>
-        )
-        </div> :
-        <h2 className={`w-full text-center font-extralight text-[var(--text)]`}>No posts to show</h2>)}
+        {(creator?.isPrivate  && creator?._id !== authState.data?._id) && <h2 className='w-full text-center text-[var(--buttons)]'>This account is private</h2>}
 
-        {selected === 'Verse' && (verseState?.verseList?.length > 0 ? 
-        <div>
-          {isLoading && <SkeletonPostCard />}
-          <div className="w-full h-screen">
-            {!isLoading && verseState?.verseList?.map((verse, key) => (
-                <VerseCard verse={verse} key={key}/>
+        {(!creator?.isPrivate  || creator?._id === authState.data?._id) && (
+          <>
+            {selected === "Posts" &&
+              (postState?.postList?.length > 0 ? (
+                <div>
+                  {isLoading && <SkeletonPostCard />}
+                  <div className="w-full h-screen">
+                    {!isLoading &&
+                      postState?.postList?.map((post, key) => (
+                        <PostCard post={post} key={key} />
+                      ))}
+                  </div>
+                </div>
+              ) : (
+                <h2 className="w-full text-center font-extralight text-[var(--text)]">
+                  No posts to show
+                </h2>
               ))}
-          </div>
-        )
-        </div> : 
-        <h2 className={`w-full text-center font-extralight text-[var(--text)]`}>No verse to show</h2>)}
+
+            {selected === "Verse" &&
+              (verseState?.verseList?.length > 0 ? (
+                <div>
+                  {isLoading && <SkeletonPostCard />}
+                  <div className="w-full h-screen">
+                    {!isLoading &&
+                      verseState?.verseList?.map((verse, key) => (
+                        <VerseCard verse={verse} key={key} />
+                      ))}
+                  </div>
+                </div>
+              ) : (
+                <h2 className="w-full text-center font-extralight text-[var(--text)]">
+                  No verse to show
+                </h2>
+              ))}
+          </>
+        )}
+
       </div>
   )
 };

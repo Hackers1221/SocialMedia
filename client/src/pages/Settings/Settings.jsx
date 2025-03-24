@@ -1,11 +1,11 @@
-import { use, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser, deleteUser, logout } from "../../redux/Slices/auth.slice";
 import ConfirmDeleteDialog from "../../components/ConfirmDeleteDialog";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import ModeButton from "../../components/ModeButton";
 import { useTheme } from "../../ThemeContext";
+import PrivacyButton from "../../components/PrivacyButton";
 
 const menuItems = [
   { name: "General", key: "general" },
@@ -27,6 +27,7 @@ function Settings() {
   // Delete related
   const [deleting, setDeleting] = useState(false);
   const [isDeleteDialog, setIsdeleteDialog] = useState(false);
+  const [isPrivate, setPrivate] = useState (authState.data?.isPrivate);
 
   const [selectedOption, setSelectedOption] = useState("general");
   const [imageUrl, setImageUrl] = useState("");
@@ -100,6 +101,20 @@ function Settings() {
       toast.error("Something went wrong");
     }
   }
+
+  async function handleToggle() {
+    const response = await dispatch(updateUser({ 
+      id: authState.data?._id,
+      isPrivate: !isPrivate }));
+  
+    if (response.payload) {
+      toast.success(`Successfully set your account to ${isPrivate ? "public" : "private"}`);
+      setPrivate(!isPrivate); 
+    } else {
+      toast.error("Something went wrong");
+    }
+  }
+  
 
   return (
     <>
@@ -300,8 +315,15 @@ function Settings() {
 
         {selectedOption === "privacy" && (
           <div>
-            <h2 className="text-2xl font-semibold mb-4">Privacy Settings</h2>
-            <p>Adjust your privacy preferences here.</p>
+            <h2 className="text-2xl font-semibold mb-4 text-[var(--heading)]">Privacy Settings</h2>
+            <div className="w-full flex justify-between items-center p-4 border border-[var(--input)] rounded-2xl">
+              <h2 className="text-[var(--text)]">Private Account</h2>
+              <PrivacyButton isOn={isPrivate} onToggle={handleToggle}/>
+            </div>
+            <div className="flex flex-col gap-4 text-sm mt-4 p-4 text-[var(--text)]">
+              <p>When your account is public, your profile and posts can be seen by anyone, on or off DropChat, even if they don't have an DropChat account.</p>
+              <p>When your account is private, only the followers you approve can see what you share, including your photos or videos on hashtag and location pages, and your followers and following lists. Certain info on your profile, like your profile picture and username, is visible to everyone on and off DropChat.</p>
+            </div>
           </div>
         )}
 
