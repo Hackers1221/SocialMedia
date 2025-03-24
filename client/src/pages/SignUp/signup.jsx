@@ -72,7 +72,7 @@ function SignUp() {
 
             if (signupRes.payload) {
                 const signIn = await dispatch (login (userDetails));
-                if (signIn.payload) navigate ('/'); 
+                if (signIn.payload) navigate('/', { replace: true });
             }
             else resetDetails();
 
@@ -96,9 +96,9 @@ function SignUp() {
         <div className={`flex items-center justify-center h-screen w-full px-5 sm:px-0 bg-[url("https://images.stockcake.com/public/2/9/c/29cc0acd-d266-46bf-b9b8-b5330cd2918b_large/greenery-on-wood-stockcake.jpg")]  bg-no-repeat bg-cover bg-center`}>
       <div className={`flex items-center justify-center bg-[#131842] bg-opacity-[40%] backdrop-blur-lg backdrop-saturate-300 w-full h-full`}>
                       <div className="flex justify-evenly w-[90%] h-[90%]">
-                      <div className="flex flex-col justify-center text-[3rem] w-[40%] text-white font-bold leading-[1.2]">
+                      <div className="hidden md:flex flex-col justify-center text-[3rem] w-[40%] text-white font-bold leading-[1.2]">
                           <span>Be part of</span>
-                          <span className={`text-[${_COLOR.buttons}]`}>something bigger by</span>
+                          <span className={`text-[var(--buttons)]`}>something bigger by</span>
                           <span>joining today</span>
                       </div>
       
@@ -125,7 +125,7 @@ function SignUp() {
                                         name="name"
                                         value={userDetails.name}
                                         onChange={handleChange}
-                                        className={`text-white rounded-xl py-[0.6rem] px-4 block w-full focus:outline-none bg-[${_COLOR.input}]`}
+                                        className={`text-white rounded-xl py-[0.6rem] px-4 block w-full focus:outline-none bg-[var(--input)]`}
                                         type="text"
                                         autoComplete="off" autoCorrect="off" spellCheck="false"
                                         placeholder="Your name"
@@ -140,7 +140,7 @@ function SignUp() {
                                         name="username"
                                         value={userDetails.username}
                                         onChange={handleChange}
-                                        className={`text-white rounded-xl py-[0.6rem] px-4 block w-full focus:outline-none bg-[${_COLOR.input}]`}
+                                        className={`text-white rounded-xl py-[0.6rem] px-4 block w-full focus:outline-none bg-[var(--input)]`}
                                         type="text"
                                         autoComplete="false" autoCorrect="false" spellCheck="false"
                                         placeholder="Your username"
@@ -160,7 +160,7 @@ function SignUp() {
                                         name="password"
                                         value={userDetails.password}
                                         onChange={handleChange}
-                                        className={`text-white rounded-xl py-[0.6rem] px-4 block w-full focus:outline-none bg-[${_COLOR.input}]`}
+                                        className={`text-white rounded-xl py-[0.6rem] px-4 block w-full focus:outline-none bg-[var(--input)]`}
                                         type="password"
                                         autoComplete="new-password" autoCorrect="off" spellCheck="false"
                                         placeholder="********"
@@ -177,7 +177,7 @@ function SignUp() {
                                             name="confirmPassword"
                                             value={confirmPassword}
                                             onChange={handleChange}
-                                            className={`text-white rounded-l-xl py-[0.6rem] px-4 block w-full focus:outline-none bg-[${_COLOR.input}]`}
+                                            className={`text-white rounded-l-xl py-[0.6rem] px-4 block w-full focus:outline-none bg-[var(--input)]`}
                                             type={visible ? "text" : "password"}
                                             autoComplete="off" autoCorrect="off" spellCheck="false"
                                             placeholder="********"
@@ -185,7 +185,7 @@ function SignUp() {
                                         <button
                                             type="button"
                                             onClick={() => setVisible(!visible)}
-                                            className={`text-white rounded-r-xl py-[0.6rem] px-4 block focus:outline-none bg-[${_COLOR.input}]`}
+                                            className={`text-white rounded-r-xl py-[0.6rem] px-4 block focus:outline-none bg-[var(--input)]`}
                                         >
                                             {!visible ? <FaEye /> : <LuEyeClosed />}
                                         </button>
@@ -195,7 +195,7 @@ function SignUp() {
                                     <button
                                         onClick={onSubmit}
                                         id="submitButton"
-                                        className={`flex justify-center text-white rounded-xl py-[0.6rem] px-4 block w-full focus:outline-none bg-[${_COLOR.buttons}]`}
+                                        className={`flex justify-center text-white rounded-xl py-[0.6rem] px-4 block w-full focus:outline-none bg-[var(--buttons)]`}
                                         disabled={loading}
                                     >
                                         {loading ? (
@@ -210,7 +210,7 @@ function SignUp() {
                                   className="text-xs text-gray-500 text-center w-full "
                                   >
                                   Already have an account?
-                                  <Link to={'/login'} id="submitButton" className={`hover:underline text-[${_COLOR.buttons}]`}> Sign In</Link>
+                                  <Link to={'/login'} id="submitButton" className={`hover:underline text-[var(--buttons)]`}> Sign In</Link>
                                   </div>
                               </div>
                             </div>

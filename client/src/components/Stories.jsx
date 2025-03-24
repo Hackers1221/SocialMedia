@@ -114,7 +114,7 @@
 //                         setIdx(index); setShowStories(true)}}>
 //                          <img className="w-[7rem] h-[10rem] rounded-lg object-cover " src={thumbnails[index]} alt="image"/>
 //                          <div className="absolute bottom-1 left-2 flex items-center gap-[0.5rem]">
-//                             <img src={story.profile} className={` rounded-full w-4 h-4 border-2 border-[${_COLOR.buttons}]`} alt="user" />
+//                             <img src={story.profile} className={` rounded-full w-4 h-4 border-2 border-[var(--buttons)]`} alt="user" />
 //                             <h2 className="text-white text-xs">{story.username}</h2>
 //                          </div>
 //                     </li>
@@ -318,7 +318,7 @@ function Stories () {
                   <div className="flex items-center gap-2">
                       {page > 0 && (
                           <IoIosArrowBack 
-                              className="w-[1rem] h-[1rem] text-white rounded-md hover:cursor-pointer" 
+                              className={`w-[1rem] h-[1rem] text-[var(--text)] rounded-md hover:cursor-pointer`} 
                               onClick={() => setPage(page - 1)} 
                           />
                       )}
@@ -356,7 +356,7 @@ function Stories () {
       
                       {stories.length > (page + 1) * storiesPerPage && (
                           <IoIosArrowForward 
-                              className="w-[1rem] h-[1rem] text-white rounded-md hover:cursor-pointer"
+                              className={`w-[1rem] h-[1rem] text-[var(--text)] rounded-md hover:cursor-pointer`}
                               onClick={() => setPage(page + 1)} 
                           />
                       )}

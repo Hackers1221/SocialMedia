@@ -6,14 +6,15 @@ export default defineConfig({
   plugins: [react()],
   define: {
     _COLOR: JSON.stringify({
-        lightest: "#EAE7DC",
-        less_light: "#3D3D3D",
-        more_light: "#EAE7DC",
-        medium: "#4A5759",
-        dark: "#2A2D34",
-        darkest: "#1C1C1C",
-        buttons: "#2192FF",
-        input: "#474E68"
+        background: "#F2F0EF",
+        text: "#2b2b2b",
+        card: "#FFFFFF",
+        buttons: "#0077c0",
+        input: "#474E68",
+        dropdown: "#FFFFFF",
+        buttonsHover: "#2192FF",
+        border: "#d4cfcf"
       }),
     },
 })
+

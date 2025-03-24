@@ -78,7 +78,7 @@ function VerifyOtp() {
       );
 
       if (response.payload) {
-        navigate("/register");
+        navigate("/register", { replace: true });
       } else {
         toast.error("Invalid OTP. Please try again.");
       }
@@ -103,9 +103,9 @@ function VerifyOtp() {
     <div className={`flex items-center justify-center h-screen w-full px-5 sm:px-0 bg-[url("https://images.stockcake.com/public/2/9/c/29cc0acd-d266-46bf-b9b8-b5330cd2918b_large/greenery-on-wood-stockcake.jpg")]  bg-no-repeat bg-cover bg-center`}>
       <div className={`flex items-center justify-center bg-[#131842] bg-opacity-[40%] backdrop-blur-lg backdrop-saturate-300 w-full h-full`}>
                       <div className="flex justify-evenly w-[90%] h-[80%]">
-                      <div className="flex flex-col justify-center text-[3rem] w-[40%] text-white font-bold leading-[1.2]">
+                      <div className="hidden md:flex flex-col justify-center text-[3rem] w-[40%] text-white font-bold leading-[1.2]">
                           <span>Be part of</span>
-                          <span className={`text-[${_COLOR.buttons}]`}>something bigger by</span>
+                          <span className={`text-[var(--buttons)]`}>something bigger by</span>
                           <span>joining today</span>
                       </div>
       
@@ -142,7 +142,7 @@ function VerifyOtp() {
                                   value={digit}
                                   onChange={(e) => handleChange(index, e)}
                                   onKeyDown={(e) => handleKeyDown(index, e)}
-                                  className={`w-12 h-12 text-center text-xl font-bold border-2 border-[${_COLOR.buttons}] rounded-md focus:outline-none text-white bg-gray-800`}
+                                  className={`w-12 h-12 text-center text-xl font-bold border-2 border-[var(--buttons)] rounded-md focus:outline-none text-white bg-gray-800`}
                                   maxLength="1"
                                   inputMode="numeric"
                                   pattern="[0-9]*"
@@ -153,7 +153,7 @@ function VerifyOtp() {
 
                             {/* Verify Button */}
                             <button
-                              className={`mt-6 py-[0.6rem] w-full rounded-2xl text-white font-bold flex items-center justify-center bg-[${_COLOR.buttons}]`}
+                              className={`mt-6 py-[0.6rem] w-full rounded-2xl text-white font-bold flex items-center justify-center bg-[var(--buttons)]`}
                               onClick={submit}
                               disabled={loading || timer === 0}
                             >
@@ -166,7 +166,7 @@ function VerifyOtp() {
 
                             {/* Resend OTP Button */}
                             {canResend && (
-                              <button className={`mt-4 text-[${_COLOR.buttons}] hover:underline`} onClick={resendOtp}>
+                              <button className={`mt-4 text-[var(--buttons)] hover:underline`} onClick={resendOtp}>
                                 Resend OTP
                               </button>
                             )}

@@ -4,17 +4,42 @@
 
 @layer utilities {
     input:-webkit-autofill,
-input:-webkit-autofill:focus {
-    transition: background-color 600000s 0s, color 600000s 0s;
-}
-input[data-autocompleted] {
-    background-color: transparent !important;
-}
+    input:-webkit-autofill:focus {
+        transition: background-color 600000s 0s, color 600000s 0s;
+    }
+    input[data-autocompleted] {
+        background-color: transparent !important;
+    }
   }
   
-  *{
+*{
     scrollbar-width: none;
 }
-  
 
-  
+:root {
+    --background: #F2F0EF;
+    --topic: #B9D9EB;
+    --text: #2b2b2b;
+    --card: #FFFFFF;
+    --buttons: #0077c0;
+    --input: #474E68;
+    --dropdown: #FFFFFF;
+    --buttonsHover: #2192FF;
+    --border: #d4cfcf;
+    --buttonText: #FFFFFF;
+    --heading: #2b2b2b;
+}
+
+[data-theme="dark"] {
+    --background: #0d1b2a;
+    --topic: #415a77;
+    --text: #D3D3D3;
+    --card: #1b263b;
+    --buttons: #FFFFFF;
+    --input: #474E68;
+    --dropdown: #FFFFFF;
+    --buttonsHover: #415a77;
+    --border: #415a77;
+    --buttonText: #000000;
+    --heading: #FFFFFF;
+  }

@@ -14,7 +14,8 @@ postRoutes.get('/posts/:id',validators.isUserAuthenticated,postController.getPos
 postRoutes.patch('/save/:id',validators.isUserAuthenticated,postController.savePost);
 postRoutes.get('/save/:id',validators.isUserAuthenticated,postController.getAllSavedPost);
 postRoutes.delete('/:id',validators.isUserAuthenticated,postController.DeletePost);
-postRoutes.get('/:id',validators.isUserAuthenticated,postController.getPostById)
+postRoutes.get('/:id',validators.isUserAuthenticated,postController.getPostById);
+postRoutes.get('/search/:q',validators.isUserAuthenticated,postController.searchPost);
 
 
 module.exports = postRoutes

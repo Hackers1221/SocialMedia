@@ -1,5 +1,3 @@
-
-
 import { useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
@@ -19,6 +17,7 @@ function ResetPassword() {
         if (name === "password") setPassword(value);
         if (name === "confirmPassword") setConfirmPassword(value);
     }
+
     const resetPassword = async () => {
         if (!password || !confirmPassword) {
             toast.error("Both fields are required!");

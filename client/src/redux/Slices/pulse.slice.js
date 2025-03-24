@@ -33,23 +33,23 @@ export const createPulse = createAsyncThunk('post/createPulse', async (pulseData
     }
 });
 
-// export const likePulse = createAsyncThunk('pulse/likePulse', async(data) => {
-//     try {
-//         const resp = {
-//             id : data.id
-//         }
-//         const response = await axiosInstance.patch(`pulse/like/${data._id}`,resp , {
-//             headers: {
-//                 'x-access-token': localStorage.getItem('token')
-//             }
-//         })
-//         if(response){
-//             return response;
-//         }
-//     } catch (error) {
-//         toast.error(error.message || "Failed to like Pulse");
-//     }
-// })
+export const likePulse = createAsyncThunk('pulse/likePulse', async(data) => {
+    try {
+        const resp = {
+            id : data.id
+        }
+        const response = await axiosInstance.patch(`pulse/like/${data._id}`,resp , {
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+        if(response){
+            return response;
+        }
+    } catch (error) {
+        toast.error(error.message || "Failed to update post");
+    }
+})
 
 // export const getPostByUserId = createAsyncThunk('post/getpost' ,async(id) => {
 //     try {

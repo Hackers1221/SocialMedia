@@ -23,7 +23,6 @@ export const getAllPosts = createAsyncThunk('posts/getAllPosts', async () => {
 
 export const createPost = createAsyncThunk('post/createPost', async (postData) => {
     try {
-        console.log(postData)
         const response = await axiosInstance.post('post/posts', postData, {
             headers: {
                 'x-access-token': localStorage.getItem('token')
@@ -139,6 +138,21 @@ export const DeletePost = createAsyncThunk('post/delete' , async(data) => {
                 'x-access-token': localStorage.getItem('token')
             },
             data: data.userId
+        })
+        if(response){
+            return response;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+export const searchPost = createAsyncThunk('search.post',async(query) => {
+    try {
+        const response = await axiosInstance.get(`post/search/${query}`,{
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            },
         })
         if(response){
             return response;

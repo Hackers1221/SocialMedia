@@ -2,6 +2,7 @@ const userService = require('../services/user.service');
 const {StatusCodes} = require('http-status-codes');
 const jwt = require('jsonwebtoken')
 const authservice = require('../services/auth.service')
+const User = require ('../models/user.model')
 
 const signup = async(req,res) =>  {
         const response  = await userService.CreateUser(req.body);
@@ -19,14 +20,16 @@ const signup = async(req,res) =>  {
 };
 
 const signin = async(req,res) => {
-    const response = await userService.ValidateUser(req.body);
+    const response = await userService.ValidateUser(req.body.email,req.body.password);
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
             msg:"Login failed",
             error : response.error
         })
     }
-    const token  = jwt.sign({email : req.body.email} , process.env.secret_key)
+
+    const token = jwt.sign({email : req.body.email} , process.env.secret_key);; 
+
     return res.status(StatusCodes.ACCEPTED).json({
         msg : "Successfully Login",
         userdata : response.userdata,
@@ -34,9 +37,10 @@ const signin = async(req,res) => {
     })
 }
 
+
+
 const deleteUser = async(req, res) => {
     const { id } = req.params;
-    console.log(id);
 
     // Extract token from headers and decode it
     const token = req.headers['x-access-token']
@@ -50,7 +54,8 @@ const deleteUser = async(req, res) => {
         })
     }
     const user = UserResponse.user;
-    if (!user || user.email !== decoded.email) {
+
+    if (!user || (user.email !== decoded.email && user.username !== decoded.email)) {
         return res.status(StatusCodes.FORBIDDEN).send({ msg: "Forbidden: You can only delete your own account" });
     }
 
@@ -123,6 +128,34 @@ const getUserByUserName = async(req,res) => {
     })
 }
 
+const searchUser = async(req,res) => {
+    const response = await userService.searchUser(String(req.params.q));
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg:"Unable to fetch the searched user",
+            error : response.error
+        })
+    }
+    return res.status(StatusCodes.ACCEPTED).json({
+        msg : "Successfully fetched the searched users",
+        userdata : response.user,
+    })
+}
+
+const getUserByLimit = async(req, res) => {
+    const response = await userService.getUserByLimit(req.query.userId, req.query.limit);
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg : "Unable to Fetch users",
+            error : response.error
+        })
+    }
+    return res.status(StatusCodes.OK).send({
+        msg : "Successfully fetched users",
+        users : response.user
+    })
+}
+
 
 module.exports = {
     signup,
@@ -131,5 +164,7 @@ module.exports = {
     updateUser,
     followUser,
     getUserByUserName,
-    deleteUser
+    deleteUser,
+    searchUser,
+    getUserByLimit
 }

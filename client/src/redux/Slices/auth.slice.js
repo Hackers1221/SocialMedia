@@ -6,6 +6,7 @@ const initialState = {
     data: JSON.parse(localStorage.getItem("data")) || undefined,
     token: localStorage.getItem("token") || "",
     isLoggedIn: localStorage.getItem("isLoggedIn") || false,
+    userList: []
 };
 
 
@@ -22,7 +23,6 @@ export const sendOtp = createAsyncThunk('/auth/sendotp',async(data) => {
 
 export const verifyOtp = createAsyncThunk('/auth/verifyotp',async(data) => {
     try {
-        console.log(data);
         const response = await axiosInstance.post("auth/verifyotp",data);
         if(!response) toast.error('Something went wrong, try again');
         return  response;
@@ -99,6 +99,25 @@ export const getUserByUsername = createAsyncThunk('/auth/user', async (username)
     }
 });
 
+export const getUserByLimit = createAsyncThunk('/auth/userByLimit', async (data) => {     
+    try {
+        const response = await axiosInstance.get(`auth/usersByLimit`, {
+            params: {
+                userId: data.userId,
+                limit: data.limit
+            },
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        });
+
+        if (!response) toast.error('Something went wrong, try again');
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+});
+
 export const followUser = createAsyncThunk('/auth/follow' , async(data) => {
     try {
         const resp = {
@@ -139,15 +158,26 @@ export const deleteUser = createAsyncThunk('/user/delete', async (userId) => {
             }
         });
         if (!response) toast.error('Something went wrong, try again');
-        else toast.success(response.data.msg);
-        console.log(response);
-        
+        else toast.success(response.data.msg);       
         return response;
     } catch (error) {
         console.log(error.response);
         toast.error(error.response?.data?.msg || 'An error occurred');
     }
 });
+
+export const searchUser = createAsyncThunk('search/user',async(query) => {
+    try {
+        const response = await axiosInstance.get(`auth/search/${query}` ,{
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+        return response;
+    } catch (error) {
+        toast.error(error.response?.data?.msg || 'An error occurred');
+    }
+})
 
 
 const authSlice = createSlice({
@@ -174,7 +204,6 @@ const authSlice = createSlice({
         })
         .addCase(followUser.fulfilled , (state,action) => {
             if(!action.payload)return;
-            console.log(action.payload);
             state.data = action.payload.data?.userDetails;
             localStorage.setItem("data", JSON.stringify(action.payload.data?.userDetails));
         })
@@ -189,6 +218,10 @@ const authSlice = createSlice({
             state.data = "";
             state.isLoggedIn = false;
             state.token = "";
+        })
+        .addCase (getUserByLimit.fulfilled, (state, action) => {
+            if (!action.payload) return;
+            state.userList = action.payload.data?.users;
         })
     }
 });

@@ -39,7 +39,38 @@ export default function PostForm({ open, setOpen }) {
     }
   };
 
+  
 
+  function handleChange (e) {
+    const {name, value} = e.target;
+    if (name === 'caption') {
+      let val = value;
+      if (val && val[0] >= 'a' && val[0] <= 'z') {
+        val = val[0].toUpperCase() + val.slice(1);
+      }
+      setCaption (val);      
+    }
+    else setInterests (value);
+  }
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+        e.preventDefault(); // Prevent form submission or default behavior
+
+        const start = e.target.selectionStart;
+        const end = e.target.selectionEnd;
+
+        const updatedCaption =
+            caption.slice(0, start) + '\n' + caption.slice(end);
+
+        setCaption (updatedCaption);
+
+        // Move the cursor to the correct position after inserting `\n`
+        setTimeout(() => {
+            e.target.selectionStart = e.target.selectionEnd = start + 1;
+        }, 0);
+    }
+  };
 
   // Handle files
   const handleFileChange = (event, type) => {
@@ -138,7 +169,9 @@ export default function PostForm({ open, setOpen }) {
               rows="2"
               placeholder="Write a caption..."
               value={caption}
-              onChange={(e) => setCaption(e.target.value)}
+              onKeyDown={handleKeyDown}
+              name="caption"
+              onChange={handleChange}
             ></textarea>
 
             {/* Post Button + interest */}
@@ -148,10 +181,11 @@ export default function PostForm({ open, setOpen }) {
                 <i className="fa-solid fa-hashtag text-gray-800 text-lg"></i>
                 <input 
                   type="text"
+                  name="interests"
                   value={interests}
                   className="bg-transparent outline-none text-gray-700 w-full focus:outline-none"
                   placeholder="Add hashtags Ex: games, sports"
-                  onChange={(e) => setInterests(e.target.value)}
+                  onChange={handleChange}
                 />
               </label>
 
@@ -162,7 +196,7 @@ export default function PostForm({ open, setOpen }) {
                   setOpen(false);
                   Createpost();
                 }}
-                className="h-12 w-[20%] bg-gray-500 text-white font-semibold rounded-3xl hover:bg-gray-700 transition"
+                className={`h-12 w-[20%] bg-[var(--buttons)] text-[var(--buttonText)] font-semibold rounded-3xl hover:bg-[var(--buttonsHover)] hover:text-white transition border border-[var(--border)]`}
               >
                 Post
               </button>

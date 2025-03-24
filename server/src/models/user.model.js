@@ -15,10 +15,9 @@ const userSchema = new Schema({
         type: String,
         required: [true, 'Name cannot be empty'],
     },
-    type : {
-        type : String , 
-        enum : ["public","private"],
-        default : "public"
+    isPrivate : {
+        type : Boolean,
+        default : false
     },
     about : {
         type : String , 
@@ -60,7 +59,11 @@ const userSchema = new Schema({
     resetTokenExpiry: {
         type: Date,
         default : Date.now()
-    }    
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 userSchema.pre('save', function(next) {

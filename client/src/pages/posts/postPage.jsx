@@ -57,9 +57,9 @@ function PostPage() {
 
     return (
         <>
-            <div className="fixed top-[9rem] md:top-[1rem]  md:left-[20rem] left-[1rem] w-[85%] md:w-[50%] h-[82vh] md:h-[97vh] flex flex-col flex-grow overflow-y-auto">
+            <div className="fixed top-[4rem] md:top-[1rem]  md:left-[20rem] left-[1rem] w-[93%] md:w-[50%] h-[90vh] md:h-[97vh] flex flex-col flex-grow overflow-y-auto">
                 {/* Header */}
-                <h2 className={`text-[${_COLOR.lightest}] font-bold text-[1.5rem]`}>Moments</h2>
+                <h2 className={`text-[var(--heading)] font-bold text-[1.5rem]`}>Moments</h2>
                 
                 {/* Input Box */}
                 <div className={`w-full mb-4 rounded-md py-4`}>
@@ -67,12 +67,12 @@ function PostPage() {
                 </div>
 
                 <div className="flex justify-between items-center">
-                    <h2 className={`text-[${_COLOR.lightest}] font-bold text-[1.5rem]`}>Recent Post</h2>
+                    <h2 className={`text-[var(--heading)] font-bold text-[1.5rem]`}>Recent Post</h2>
                     <div className="flex gap-4">
                         {options?.map ((option, index) => {
                            return (<h2 
                             key={index} 
-                            className={`${ selected === option ? `text-[${_COLOR.lightest}]` : `text-[${_COLOR.less_light}]` // Default color
+                            className={`${ selected === option ? `text-[var(--heading)]` : `text-gray-400` // Default color
                             } font-bold text-[1rem] hover:cursor-pointer`} 
                             onClick={() => optionChange(option)}>{option}</h2>)
                         })}
@@ -82,9 +82,12 @@ function PostPage() {
                 {/* Scrollable Post List */}
                 {isLoading && <SkeletonPostCard />}
                 {!isLoading && <div className="pt-4 w-full h-screen">
-                    {postState?.postList?.map((post, key) => (
-                        <PostCard post={post} key={key}/>
-                    ))}
+                    {postState?.postList?.length > 0 ? postState?.postList?.map((post, index) => (
+                        <div key={index}>
+                            <PostCard post={post} index={index + 1} list={"postList"}/>
+                            {/* {index != postState?.postList?.length - 1 && <div className={`h-[1px] bg-[var(--text)]`}></div>} */}
+                        </div>
+                    )) : <h2 className={`w-full text-center font-extralight text-[var(--text)]`}>No posts to show</h2>}
                 </div>}
             </div>
         </>

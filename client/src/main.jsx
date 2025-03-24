@@ -7,17 +7,20 @@ import { Toaster } from 'react-hot-toast'
 import Store from './redux/store.js'
 
 import { SkeletonTheme } from 'react-loading-skeleton';
+import { ThemeProvider } from './ThemeContext.jsx'
 
 
 createRoot(document.getElementById('root')).render(
-  <SkeletonTheme baseColor="#2A2D34">
+    <SkeletonTheme baseColor={`${_COLOR.border}`}>
     <BrowserRouter>
       <Provider store={Store}>
-        <App/>
-        <Toaster
-          position='bottom-left'
-        />
+        <ThemeProvider>
+          <App/>
+          <Toaster
+            position='top-right'
+          />
+        </ThemeProvider>
       </Provider>
     </BrowserRouter>
-  </SkeletonTheme>,
+  </SkeletonTheme>
 )

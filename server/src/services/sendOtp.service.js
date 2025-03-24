@@ -75,7 +75,7 @@ const forgetPasswordLink = async(email) => {
             response.error = "email not found";
             return response;
         }
-        console.log(process.env.secret_key);
+
         const token  = jwt.sign({email : email} , process.env.secret_key)
         const sent = await sendOtpmiddleware.forgetPasswordLink(email,token);
         if(!sent){
@@ -89,7 +89,6 @@ const forgetPasswordLink = async(email) => {
             {resetTokenExpiry: new Date(Date.now() + 60 * 60 * 1000)},
             { new: true },
         )
-        console.log(updateUser);
         response.user = updateUser;
         return response;
     } catch (error) {

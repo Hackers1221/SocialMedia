@@ -152,7 +152,7 @@ const savePost = async(userId, id) => {
             response.error = "User not found";
             return response;
         }
-        console.log(userData);
+
         if(userData.saved.includes(id)){
             userData.saved = userData.saved.filter((ids) => ids!==id);
         }else{
@@ -180,7 +180,6 @@ const DeletePost = async(id,userId) => {
         // Cloudinary post data delete
         let imageFilenames = [];
         let videoFilenames = [];
-        console.log(PostDetails);
 
         if (PostDetails.image) {
             imageFilenames = imageFilenames.concat(PostDetails.image.map(img => img.filename));
@@ -212,6 +211,23 @@ const DeletePost = async(id,userId) => {
     }
 }
 
+const searchPost = async(query) => {
+    const response = {};
+    try {
+        const posts = await postsmodel.find({
+            $or: [
+                { caption: { $regex: query, $options: "i" } },
+                { interests : { $regex: query, $options: "i" } }
+            ]
+        });
+        response.post = posts;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response
+    }
+}
+
 module.exports = {
     CreatePost,
     getAllPosts,
@@ -221,5 +237,6 @@ module.exports = {
     getPostById,
     savePost,
     getAllSavedPost,
-    DeletePost
+    DeletePost,
+    searchPost
 };

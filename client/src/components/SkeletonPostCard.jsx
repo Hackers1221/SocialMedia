@@ -3,8 +3,8 @@ import 'react-loading-skeleton/dist/skeleton.css'
 
 function SkeletonPostCard () {
     return (
-        <div className={`rounded-md mb-4 p-4 border border-[${_COLOR.medium}]`} >
-            <div className="flex  gap-4">
+        <div className={`rounded-md mb-4 p-4 border border-[var(--text)]`} >
+            <div className="flex gap-4">
                 <div>
                     <Skeleton circle height={30} width={30} />
                 </div>

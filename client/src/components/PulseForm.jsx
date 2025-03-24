@@ -33,6 +33,25 @@ export default function PulseForm({ open, setOpen }) {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+        e.preventDefault(); // Prevent form submission or default behavior
+
+        const start = e.target.selectionStart;
+        const end = e.target.selectionEnd;
+
+        const updatedCaption =
+            caption.slice(0, start) + '\n' + caption.slice(end);
+
+        setCaption (updatedCaption);
+
+        // Move the cursor to the correct position after inserting `\n`
+        setTimeout(() => {
+            e.target.selectionStart = e.target.selectionEnd = start + 1;
+        }, 0);
+    }
+  };
+
   const handleFileChange = (event) => {
     const uploadedFile = event.target.files[0];
     setVideo(uploadedFile);
@@ -79,6 +98,7 @@ export default function PulseForm({ open, setOpen }) {
               rows="2"
               placeholder="Write a caption..."
               value={caption}
+              onKeyDown={handleKeyDown}
               onChange={(e) => setCaption(e.target.value)}
             ></textarea>
 
@@ -99,7 +119,7 @@ export default function PulseForm({ open, setOpen }) {
                   setOpen(false);
                   Createpulse();
                 }}
-                className="h-12 w-[20%] bg-red-500 text-white font-semibold rounded-3xl hover:bg-gray-800 transition"
+                className={`h-12 w-[20%] bg-[var(--buttons)] text-[var(--buttonText)] font-semibold rounded-3xl hover:bg-[var(--buttonsHover)] hover:text-white transition border border-[var(--border)]`}
               >
                 Post
               </button>
