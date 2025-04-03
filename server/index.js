@@ -10,6 +10,10 @@ const pulseRoutes = require("./src/routes/pulse.route");
 const commentRoutes = require('./src/routes/comments.routes');
 const verseRoutes = require ('./src/routes/verse.routes');
 
+// server instance
+const http = require("http");
+const server = http.createServer(app);
+
 app.use(function (req, res, next) {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Credentials", "true");
@@ -36,7 +40,7 @@ app.use((err,req,res,next) => {
         msg : message
     })
 })
-app.use(cors())
+app.use(cors());
 
 
 async function ConnectToDb(){
@@ -52,6 +56,9 @@ async function ConnectToDb(){
 }
 
 ConnectToDb();
+
+// Web Socket
+setupSocket(server);
 
 
 app.listen(8080, () => {
