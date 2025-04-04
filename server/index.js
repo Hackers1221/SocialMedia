@@ -62,7 +62,7 @@ ConnectToDb();
 setupSocket(server);
 
 
-app.listen(8080, () => {
+server.listen(8080, () => {
     console.log("listning to port 8080!");
 })
 

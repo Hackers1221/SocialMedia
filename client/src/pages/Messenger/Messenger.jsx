@@ -9,7 +9,7 @@ const Messenger = () => {
   const dispatch = useDispatch ();
 
   const [selectedUser, setSelectedUser] = useState(-1);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState([]);
   const [chats, setChats] = useState([
     {
       name: "John Doe",
@@ -43,27 +43,31 @@ const Messenger = () => {
     },
   ]);
 
-  useEffect (() => {
-    socket.connect();
+    const [input, setInput] = useState("");
+  
+    useEffect(() => {
+      socket.connect ();
 
-    socket.on("receiveMessage", (data) => {
-      // dispatch(addMessage(data));
-      console.log (`${data} Message rescived`)
-    });
-
-    return () => {
-      socket.disconnect();
+      socket.on("connect", () => {
+        console.log("Connected with socket ID:", socket.id);
+      });
+  
+      socket.on("message", (data) => {
+        console.log("Message from server:", data);
+        setMessages((prev) => [...prev, data]);
+      });
+  
+      return () => {
+        socket.disconnect(); // Clean up on unmount
+      };
+    }, []);
+  
+    const sendMessage = () => {
+      if (input.trim()) {
+        socket.emit("message", input);
+        setInput("");
+      }
     };
-  }, [dispatch]);
-
-  const sendMessage = () => {
-    if (message.trim() !== "") {
-      const msgData = { text: message, sender: "User", timestamp: new Date() };
-      socket.emit("message", msgData);
-      // dispatch(addMessage(msgData));
-      setMessage("");
-    }
-  };
 
   
 
@@ -95,10 +99,10 @@ const Messenger = () => {
                   <div className="flex-1 relative">
                     <input
                       type="text"
-                      value={message}
+                      value={input}
                       className={`w-full p-2 px-4 pr-10 rounded-full text-[var(--text)] border border-[var(--input)] bg-transparent font-normal outline-none focus:shadow-md`}
                       placeholder="Write a message..."
-                      onChange={(e) => setMessage(e.target.value)}
+                      onChange={(e) => setInput(e.target.value)}
                     />
                     <FaPaperPlane onClick={sendMessage} className={`absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--text)] cursor-pointer`} />
                   </div>
