@@ -5,17 +5,33 @@ const initialState = {
   users: [],
 };
 
+export const getMessages = createAsyncThunk ('getMessage', async (data) => {
+  try {
+    const response = await axiosInstance.get (`message`, {
+      params: {
+        sender: data.sender,
+        receiver: data.receiver,
+      }, 
+      headers: {
+        'x-access-token': localStorage.getItem('token')
+      }
+    })
+    return response;
+  } catch (error) {
+    console.log (error)
+  }
+})
+
 const ChatSlice = createSlice({
   name: "chat",
   initialState,
-  reducers: {
-    addMessage: (state, action) => {
-      state.messages.push(action.payload);
-    },
-    updateUsers: (state, action) => {
-      state.users = action.payload;
-    },
-  },
+  reducers: {},
+  extraReducers : (builder) => {
+      builder
+      .addCase(getMessages.fulfilled,(state, action)=>{
+          console.log (action.payload);
+      })
+  }
 });
 
 export const { addMessage, updateUsers } = ChatSlice.actions;

@@ -1,5 +1,5 @@
 const { Server } = require("socket.io");
-const { default: Message } = require("./src/models/message.model");
+const Message = require ('../server/src/models/message.model')
 
 const setupSocket = (server) => {
     const io = new Server(server, {
@@ -37,6 +37,8 @@ const setupSocket = (server) => {
         const messageData = await Message.findById(createdMessage._id)
           .populate("sender", "id email name username")
           .populate("recipient", "id email name username");
+
+          console.log (messageData);
     
         if (recipientSocketId) {
           io.to(recipientSocketId).emit("receiveMessage", messageData);
