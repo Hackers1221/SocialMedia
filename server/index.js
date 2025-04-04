@@ -12,6 +12,7 @@ const verseRoutes = require ('./src/routes/verse.routes');
 
 // server instance
 const http = require("http");
+const setupSocket = require("./socket");
 const server = http.createServer(app);
 
 app.use(function (req, res, next) {

@@ -83,7 +83,7 @@ function Suggestions () {
                         Recent searches
                     </div>} */}
                     <div>
-                        {searchResult.map((user, index) => (
+                        {searchResult?.map((user, index) => (
                             <Link to={`/profile/${user?.username}`} key={index} className={`text-[var(--text)] mt-2 p-2 py-3 flex items-center space-x-2 hover:shadow-md hover:cursor-pointer bg-[var(--card)] hover:text-[var(--heading)]`}>
                                 {user.image?.url ? 
                                     <Avatar url = {user.image?.url} size={'md'}/> : 

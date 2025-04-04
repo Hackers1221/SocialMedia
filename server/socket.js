@@ -1,7 +1,7 @@
-import { Server as SocketIOServer } from "socket.io";
+const { Server } = require("socket.io");
 
 const setupSocket = (server) => {
-    const io = new SocketIOServer(server);
+    const io = new Server (server);
     const userSocketMap = new Map();
 
     const disconnect = (socket) => {
@@ -32,3 +32,5 @@ const setupSocket = (server) => {
         socket.on("disconnect", () => disconnect(socket));
     });
 }
+
+module.exports = setupSocket;
