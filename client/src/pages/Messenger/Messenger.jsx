@@ -12,29 +12,7 @@ const Messenger = () => {
 
   const socket = useSocket ();
 
-  const dispatch = useDispatch ();
-
-  const [selectedUser, setSelectedUser] = useState();
   const [message, setMessage] = useState([]);
-
-  const messages = [
-    {
-      userId: "67d517f4ac6b48600f83b972",
-      message: "Dealer chotu"
-    }, 
-    {
-      userId: "67dbb7a367790a1f9a223144",
-      message: "Yes dealer is chotu"
-    }, 
-    {
-      userId: "67dbb7a367790a1f9a223144",
-      message: "Dealer Sai ka hai"
-    }, 
-    {
-      userId: "67d517f4ac6b48600f83b972",
-      message: "arey haa"
-    }, 
-  ]
   
     const sendMessage = () => {
       if (message.trim()) {
@@ -43,6 +21,8 @@ const Messenger = () => {
           recipient: '67e1a5918422526b1903af1b',
           content: message
         });
+
+        // socket.on ('recieve')
         setMessage("");
       }
     };  
@@ -68,8 +48,8 @@ const Messenger = () => {
           <div className="flex flex-col flex-auto h-full border-l">
             <div className="relative  flex flex-col flex-auto flex-shrink-0 text-[var(--heading)] bg-[var(--card)] h-full">
               <div className="flex gap-4 items-center w-full bg-[var(--topic)] p-2">
-                <Avatar url='https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp' size={'md'}/>
-                <h2>Rounak</h2>
+                <Avatar url={chatState.recipient?.image} size={'md'}/>
+                <h2>{chatState.recipient?.name}</h2>
               </div>
               <div className="p-4">
                 {chatState.messages?.length > 0 && chatState?.messages.map ((message, key) => (

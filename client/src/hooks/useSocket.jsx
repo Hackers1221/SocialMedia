@@ -1,10 +1,13 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { io } from "socket.io-client";
 import { useEffect, useState } from "react";
+import { updateMessages } from "../redux/Slices/chat.slice";
 
 const useSocket = () => {
     const authState = useSelector((state) => state.auth);
     const [socket, setSocket] = useState(null);
+
+    const dispatch = useDispatch ();
 
     useEffect(() => {
         if (!authState?.data?._id) return;  // Wait until user data is available
@@ -22,6 +25,10 @@ const useSocket = () => {
 
         newSocket.on("connect", () => console.log("Connected:", newSocket.id));
         newSocket.on("disconnect", () => console.log("Disconnected"));
+
+        newSocket.on("receiveMessage", async (data) => {
+            await dispatch (updateMessages ({ message: data }));
+        });
 
         return () => {
             newSocket.disconnect();
