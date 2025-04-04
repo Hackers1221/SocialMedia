@@ -9,6 +9,7 @@ const postRoutes = require("./src/routes/posts.routes");
 const pulseRoutes = require("./src/routes/pulse.route");
 const commentRoutes = require('./src/routes/comments.routes');
 const verseRoutes = require ('./src/routes/verse.routes');
+const messageRoutes = require('./src/routes/message.routes')
 
 // server instance
 const http = require("http");
@@ -32,6 +33,7 @@ app.use('/social/post',postRoutes);
 app.use('/social/pulse',pulseRoutes);
 app.use('/social/comment',commentRoutes);
 app.use('/social/verse',verseRoutes);
+app.use('/social/message',messageRoutes);
 
 
 // Error handling middleware
