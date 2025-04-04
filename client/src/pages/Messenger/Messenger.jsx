@@ -4,30 +4,18 @@ import Avatar from "../../components/Avatar";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../../components/Message";
 import useSocket from "../../hooks/useSocket";
+import User from '../../components/User'
 
 const Messenger = () => {
   const authState = useSelector ((state) => state.auth);
+  const chatState = useSelector ((state) => state.chat);
 
   const socket = useSocket ();
 
   const dispatch = useDispatch ();
 
-  const [selectedUser, setSelectedUser] = useState(-1);
+  const [selectedUser, setSelectedUser] = useState();
   const [message, setMessage] = useState([]);
-  const chats =[
-    {
-      name: "John Doe",
-      image: "https://robohash.org/11.png",
-    },
-    {
-      name: "Alice Smith",
-      image: "https://robohash.org/23.png",
-    },
-    {
-      name: "Bob Johnson",
-      image: "https://robohash.org/32.png",
-    }
-  ];
 
   const messages = [
     {
@@ -49,17 +37,15 @@ const Messenger = () => {
   ]
   
     const sendMessage = () => {
-      if (input.trim()) {
+      if (message.trim()) {
         socket.emit("sendMessage", {
           sender: authState.data?._id,
           recipient: '67e1a5918422526b1903af1b',
           content: message
         });
-        setInput("");
+        setMessage("");
       }
-    };
-
-  
+    };  
 
   return (
     <div className={`fixed top-[9rem] md:top-[1rem]  md:left-[20rem] left-[1rem] w-[85%] md:w-[70%] h-[82vh] md:h-[97vh] flex flex-col p-4 flex-grow overflow-y-auto`}>
@@ -73,11 +59,8 @@ const Messenger = () => {
                 <span className="font-bold">Active Conversations</span>
               </div>
               <div className="flex flex-col space-y-1 mt-4 -mx-2 h-full overflow-y-auto">
-                {chats?.length > 0 && chats?.map ((chat, index) => (
-                  <button className="flex flex-row items-center hover:shadow-md border-l border-transparent hover:border-white p-2" key={index}>
-                    <img src={chat?.image} className="flex items-center justify-center h-8 w-8 bg-indigo-200 rounded-full"/>
-                    <div className="ml-2 text-sm font-semibold">{chat?.name}</div>
-                  </button>
+                {authState.data?.following?.length > 0 && authState.data?.following?.map ((user, index) => (
+                  <User userId={user} key={index}/>
                 ))}
               </div>
             </div>
@@ -89,7 +72,7 @@ const Messenger = () => {
                 <h2>Rounak</h2>
               </div>
               <div className="p-4">
-                {messages?.length > 0 && messages.map ((message, key) => (
+                {chatState.messages?.length > 0 && chatState?.messages.map ((message, key) => (
                   <Message message={message} key={key}/>
                 ))}
               </div>
@@ -98,7 +81,7 @@ const Messenger = () => {
                   <div className="flex-1 relative">
                     <input
                       type="text"
-                      value={input}
+                      value={message}
                       className={`w-full p-2 px-4 pr-10 rounded-full text-[var(--text)] border border-[var(--input)] bg-transparent font-normal outline-none focus:shadow-md`}
                       placeholder="Write a message..."
                       onChange={(e) => setMessage(e.target.value)}

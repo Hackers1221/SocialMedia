@@ -1,8 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axiosInstance from "../../config/axiosInstance";
 
 const initialState = {
   messages: [],
   users: [],
+  reciver: {}
 };
 
 export const getMessages = createAsyncThunk ('getMessage', async (data) => {
@@ -10,7 +12,7 @@ export const getMessages = createAsyncThunk ('getMessage', async (data) => {
     const response = await axiosInstance.get (`message`, {
       params: {
         sender: data.sender,
-        receiver: data.receiver,
+        recipient: data.recipient,
       }, 
       headers: {
         'x-access-token': localStorage.getItem('token')
@@ -25,14 +27,20 @@ export const getMessages = createAsyncThunk ('getMessage', async (data) => {
 const ChatSlice = createSlice({
   name: "chat",
   initialState,
-  reducers: {},
+  reducers: {
+    setRecipient: (state, action) => {
+      const user = action.payload?.userDetails;
+      state.recipient = user;
+    },
+  },
   extraReducers : (builder) => {
       builder
       .addCase(getMessages.fulfilled,(state, action)=>{
-          console.log (action.payload);
+          if (!action.payload?.data) return;
+          state.messages = action.payload?.data?.messages;
       })
   }
 });
 
-export const { addMessage, updateUsers } = ChatSlice.actions;
+export const { setRecipient } = ChatSlice.actions;
 export default ChatSlice.reducer;
