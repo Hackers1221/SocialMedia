@@ -1,7 +1,13 @@
 const { Server } = require("socket.io");
 
 const setupSocket = (server) => {
-    const io = new Server (server);
+    const io = new Server(server, {
+        cors: {
+            origin: "http://localhost:5173",  // Change this to your frontend URL
+            methods: ["GET", "POST"]
+        }
+    });
+
     const userSocketMap = new Map();
 
     const disconnect = (socket) => {
@@ -30,6 +36,10 @@ const setupSocket = (server) => {
             socket.emit("message", data);
         })
         socket.on("disconnect", () => disconnect(socket));
+
+        socket.on("connect", () => {
+            console.log(socket.connected); // true
+          });
     });
 }
 

@@ -1,4 +1,3 @@
 import { io } from "socket.io-client";
-const SOCKET_URL = import.meta.env.VITE_BASE_UR
 
-export const socket = io( SOCKET_URL, { autoConnect: false });
+export const socket = io('http://localhost:8080', { autoConnect: false, transports: ["websocket"] });
