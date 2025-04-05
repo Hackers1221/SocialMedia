@@ -1,17 +1,44 @@
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 function Message ({ message }) {
     const authState = useSelector ((state) => state.auth);
+    const chatState = useSelector ((state) => state.chat);
+
+    const [time, setTime] = useState ();
+
+    function getTime () {
+        const date = new Date(message?.timestamp);
+        const hours = date.getHours().toString().padStart(2, "0");
+        const minutes = date.getMinutes().toString().padStart(2, "0");
+
+        setTime(`${hours}:${minutes}`);
+    }
+
+    useEffect (() => {
+        getTime ();
+    }, [message._id])
+
     return (
-        <div className={`flex ${message.sender !== authState.data?._id ? `justify-start` : `justify-end`} items-center gap-4 mt-4 w-full`}>
+        <div className={`flex ${message.sender !== authState.data?._id ? `justify-start` : `justify-end`} items-start gap-4 mt-4 w-full`}>
             {message.sender !== authState.data?._id &&
-                <div className="flex w-8 items-center">
-                    <img className="rounded-full" src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                <div className="flex w-8 items-start">
+                    <img className="rounded-full" src={chatState.recipient?.image} />
                 </div>}
-            <div className="bg-[var(--topic)] px-4 py-2 rounded-full">{message.content}</div>
+                <div className="bg-[var(--topic)] p-2 rounded-md inline-block max-w-[65%] w-fit">
+                    <div className="flex gap-4 w-full">
+                        <p className="text-sm break-words whitespace-pre-wrap overflow-wrap w-[90%]">
+                           {message.content}
+                        </p>
+                        <p className="text-[0.7rem] font-extralight text-right mt-1">
+                           {time}
+                        </p>
+                    </div>
+                </div>
+
             {message.sender === authState.data?._id &&
                 <div className="w-8">
-                    <img  className="rounded-full" src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                    <img  className="rounded-full" src={authState.data?.image?.url} />
                 </div>}
         </div>
     )
