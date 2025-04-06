@@ -2,7 +2,6 @@ const userService = require('../services/user.service');
 const {StatusCodes} = require('http-status-codes');
 const jwt = require('jsonwebtoken')
 const authservice = require('../services/auth.service')
-const User = require ('../models/user.model')
 
 const signup = async(req,res) =>  {
         const response  = await userService.CreateUser(req.body);

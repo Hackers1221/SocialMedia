@@ -125,7 +125,7 @@ const Messenger = () => {
                     >
                       <span>Contacts</span>
                     </button>
-                  </div>
+            </div>
             <div className="flex flex-col">
               <div className="flex flex-col space-y-1 mt-4 -mx-2 h-full overflow-y-auto">
                 {authState.data?.following?.length > 0 && authState.data?.following?.map ((user, index) => (
