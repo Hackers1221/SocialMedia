@@ -20,17 +20,17 @@ function Message ({ message }) {
     }, [message._id])
 
     return (
-        <div className={`flex ${message.sender !== authState.data?._id ? `justify-start` : `justify-end`} items-start gap-4 mt-4 w-full`}>
+        <div className={`flex ${message.sender !== authState.data?._id ? `justify-start` : `justify-end`} items-start gap-4 mt-2 w-full`}>
             {message.sender !== authState.data?._id &&
                 <div className="flex w-8 items-start">
-                    <img className="rounded-full" src={chatState.recipient?.image} />
+                    <img className="h-8 w-8 rounded-full" src={chatState.recipient?.image?.url} />
                 </div>}
-                <div className="bg-[var(--topic)] p-2 rounded-md inline-block max-w-[65%] w-fit">
-                    <div className="flex gap-4 w-full">
+                <div className={`${message.sender !== authState.data?._id ? `bg-[var(--background)]` : `bg-[var(--topic)]`} p-2 rounded-md inline-block max-w-[65%] w-fit`}>
+                    <div className="flex items-end gap-4 w-full">
                         <p className="text-sm break-words whitespace-pre-wrap overflow-wrap w-[90%]">
                            {message.content}
                         </p>
-                        <p className="text-[0.7rem] font-extralight text-right mt-1">
+                        <p className="text-[0.6rem] font-extralight text-right mt-1">
                            {time}
                         </p>
                     </div>
