@@ -3,9 +3,12 @@ import Sidebar from "../../components/sidebar";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Suggestions from "../../components/Suggestions";
 import { useSelector } from "react-redux";
+import useSocket from "../../hooks/useSocket";
 
 function Layout () {
     const authState = useSelector ((state) => state.auth);
+
+    const sockets = useSocket();
 
     const navigate = useNavigate ();
 
