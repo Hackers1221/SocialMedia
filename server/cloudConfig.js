@@ -19,26 +19,53 @@ const storage = new CloudinaryStorage({
       }
 
       const isImage = file.mimetype.startsWith('image');
-      const folder = isImage ? 'socialMedia/images' : 'socialMedia/videos';
-      const resource_type = isImage ? 'image' : 'video';
+      const isVideo = file.mimetype.startsWith('video');
+      let folder, resource_type;
 
-      // Normalize format (e.g., "jpeg" → "jpg")
+      if (isImage) {
+        folder = 'socialMedia/images';
+        resource_type = 'image';
+      } else if (isVideo) {
+        folder = 'socialMedia/videos';
+        resource_type = 'video';
+      } else {
+        folder = 'socialMedia/files';
+        resource_type = 'raw';
+      }
+
+      // Normalize format
       let format = file.mimetype.split('/')[1];
       if (format === 'jpeg') format = 'jpg';
+
+      // Sanitize filename
+      const sanitizedFilename = file.originalname.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9.\-_]/g, '');
+
+      // Add transformation only for images/videos
+      let transformation;
+      if (isImage || isVideo) {
+        transformation = [{ format }];
+      }
 
       return {
         folder,
         resource_type,
-        format,
-        public_id: `${Date.now()}-${file.originalname}`, // Ensures unique filename
-        transformation: [{ format }], // Correct way to apply format
+        public_id: `${Date.now()}-${sanitizedFilename}`,
+        ...(transformation && { transformation }),
       };
     } catch (error) {
       console.error('Error in Cloudinary params:', error);
-      throw error; // Ensures error is caught by multer
+      throw error;
     }
   },
 });
+
+
+const uploadFiles = multer({ 
+  storage,
+  limits: { fileSize: 20 * 1024 * 1024 }, // Limit file size (e.g., 20MB)
+}).fields([
+  { name: 'files', maxCount: 10 },
+]);
 
 
 // Upload multiple image and videos
@@ -133,7 +160,7 @@ const updateImage = async (oldPublicId) => {
 };
 
 
-module.exports = {upload, uploadSingleImage, uploadSingleVideo, updateImage, deleteImages, deleteVideos};
+module.exports = {upload, uploadFiles, uploadSingleImage, uploadSingleVideo, updateImage, deleteImages, deleteVideos};
 
 
 

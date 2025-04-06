@@ -11,24 +11,13 @@ const messageSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Users",
     },
-    // messageType: {
-    //     type: String,
-    //     enum: ["text", "file"],
-    //     required: true,
-    // },
     content: {
         type: String,
-        // required: function () {
-        //     return this.messageType === "text";
-        // },
-        required: true
     },
-    // fileUrl: {
-    //     type: String,
-    //     required: function () {
-    //     return this.messageType === "file";
-    //     },
-    // },
+    files: [{
+        url: { type: String, required: true },
+        filename: { type: String, required: true }
+    }],
     timestamp: {
         type: Date,
         default: Date.now,
