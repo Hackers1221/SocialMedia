@@ -18,7 +18,7 @@ const Messenger = () => {
       if (message.trim()) {
         socket.emit("sendMessage", {
           sender: authState.data?._id,
-          recipient: '67e1a5918422526b1903af1b',
+          recipient: chatState.recipient?._id,
           content: message
         });
 
