@@ -48,27 +48,6 @@ const Messenger = () => {
       });
     }
   };
-  
-    // const sendMessage = () => {
-    //   if (message.trim() || files.length) {
-    //     const formData = new FormData();
-    //     formData.append("sender", authState.data?._id);
-    //     formData.append("recipient", chatState.recipient?._id);
-    //     formData.append("content", message.trim());
-    //     files.forEach((file) => formData.append("files", file));
-        
-    //     // Console check for FormData
-    // console.log("FormData contents:");
-    // for (let pair of formData.entries()) {
-    //   console.log(pair[0], pair[1]);
-    // }
-
-    //     socket.emit("sendMessage", formData);
-    //     setMessage("");
-    //     setFiles([]);
-    //   }
-    // };  
-
     const handleFileChange = (e) => {
       const selectedFiles = Array.from(e.target.files);
       setFiles(selectedFiles);
