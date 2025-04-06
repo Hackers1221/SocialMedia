@@ -6,6 +6,8 @@ import Message from "../../components/Message";
 import useSocket from "../../hooks/useSocket";
 import User from '../../components/User'
 import { X } from "lucide-react";
+import { Link } from "react-router-dom";
+import ChatDropdown from "../../components/ChatDropdown";
 
 const Messenger = () => {
   const authState = useSelector ((state) => state.auth);
@@ -15,7 +17,8 @@ const Messenger = () => {
 
   const [message, setMessage] = useState([]);
   const chatContainerRef = useRef(null);
-  const[activeTab, setActiveTab] = useState ('recent');
+  const [activeTab, setActiveTab] = useState ('recent');
+  const [selected, setSelected] = useState ('none');
   
     const sendMessage = () => {
       if (message.trim()) {
@@ -35,11 +38,18 @@ const Messenger = () => {
     }, [chatState.messages]);
 
   return (
-    <div className={`fixed top-[9rem] md:top-0 md:left-[20rem] left-[1rem] w-[85%] md:w-[75%] h-[82vh] md:h-[100vh] flex flex-col p-4 flex-grow overflow-y-auto`}>
+    <div className={`fixed top-[4rem] md:top-0 md:left-[18rem] left-[1rem] w-[85%] h-[82vh] md:h-[100vh] flex flex-col flex-grow overflow-y-auto`}>
       {/* Left Sidebar */}
         <div className="flex flex-row h-full w-full overflow-x-hidden ">
-          <div className="flex flex-col pt-4 px-4 w-64 text-[var(--heading)] bg-[var(--card)] flex-shrink-0">
-            <h2 className={`heading text-[2rem] text-[var(--heading)]`}>Messenger</h2>
+          <div className="flex flex-col pt-4 px-4 w-[18rem] text-[var(--heading)] bg-[var(--card)] flex-shrink-0">
+            <div className="w-full flex justify-between items-center">
+                <h2 className={`heading text-[2rem] text-[var(--heading)]`}>Chat</h2>
+                <i className="fa-solid fa-pen-to-square hover:cursor-pointer"></i>
+                {/* <ChatDropdown
+                  selected={selected}
+                  setSelected={setSelected}
+                /> */}
+            </div>
             <div className={`flex items-center rounded-md px-2 my-4 shadow-md border border-[var(--input)]`}>
                 <i className="fa-solid fa-magnifying-glass text-[var(--heading)]"></i>
                 <input
@@ -80,11 +90,21 @@ const Messenger = () => {
               </div>
             </div>
           </div>
-          <div className="flex flex-col w-[75%] h-full border-l border-[var(--border)]">
+          <div className="flex flex-col w-[73%] h-full border-l border-[var(--border)]">
             {chatState.recipient?.name?.length > 0 ? <div className="relative flex flex-col text-[var(--heading)] bg-[var(--card)] h-full">
-              <div className="flex gap-4 items-center w-full bg-[var(--topic)] p-2">
-                <Avatar url={chatState.recipient?.image} size={'md'}/>
-                <h2>{chatState.recipient?.name}</h2>
+              <div className="flex gap-4 justify-between items-center w-full bg-[var(--topic)] p-2">
+                <div className="flex items-center gap-2">
+                  <Avatar url={chatState.recipient?.image?.url} size={'md'}/>
+                  <div className="flex flex-col">
+                    <Link to={`/profile/${chatState.recipient?.username}`} className="hover:underline">{chatState.recipient?.name}</Link>
+                    <h2 className="text-[0.7rem] font-extralight">Active Now</h2>
+                  </div>
+                </div>
+                <div className="flex items-center gap-8 mr-4">
+                  <i className="fa-solid fa-phone text-[var(--buttons)] hover:cursor-pointer"></i>
+                  <i className="fa-solid fa-video text-[var(--buttons)] hover:cursor-pointer"></i>
+                  <i className="fa-solid fa-ellipsis-vertical text-[var(--buttons)] hover:cursor-pointer"></i>
+                </div>
               </div>
               <div className="p-4 h-full overflow-y-auto w-full mb-16" ref={chatContainerRef}>
                 {chatState.messages?.length > 0 && chatState?.messages.map ((message, key) => (

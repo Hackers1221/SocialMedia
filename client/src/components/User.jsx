@@ -10,11 +10,13 @@ function User ({ userId }) {
 
     const [name, setName] = useState ('Anonymous');
     const [image, setImage] = useState ('https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp');
+    const [user, setUser] = useState ();
 
     async function getUser () {
         const res = await dispatch (getUserById (userId));
         setName (res.payload.data?.userdetails?.name);
         setImage (res.payload.data?.userdetails?.image?.url);
+        setUser (res.payload.data?.userdetails);
     }
 
     async function getChats () {
@@ -22,11 +24,7 @@ function User ({ userId }) {
             sender: authState.data?._id,
             recipient: userId
         }));
-        await dispatch (setRecipient ({ userDetails: {
-            _id: userId,
-            name: name,
-            image: image 
-        } }))
+        await dispatch (setRecipient ({ userDetails: user }))
     }
 
     useEffect (() => {

@@ -27,6 +27,7 @@ const useSocket = () => {
         newSocket.on("disconnect", () => console.log("Disconnected"));
 
         newSocket.on("receiveMessage", async (data) => {
+            console.log ('data');
             await dispatch (updateMessages ({ message: data }));
         });
 
