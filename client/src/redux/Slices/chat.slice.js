@@ -4,7 +4,8 @@ import axiosInstance from "../../config/axiosInstance";
 const initialState = {
   messages: [],
   users: [],
-  recipient: {}
+  recipient: {},
+  onlineUsers: []
 };
 
 export const getMessages = createAsyncThunk ('getMessage', async (data) => {
@@ -34,6 +35,10 @@ const ChatSlice = createSlice({
     },
     updateMessages: (state, action) => {
       state.messages = [...state.messages, action.payload.message];
+    },
+    setOnlineUsers: (state, action) => {
+      const users = action.payload?.onlineUsers;
+      state.onlineUsers = users;
     }
   },
   extraReducers : (builder) => {
@@ -46,5 +51,5 @@ const ChatSlice = createSlice({
   }
 });
 
-export const { setRecipient, updateMessages } = ChatSlice.actions;
+export const { setRecipient, updateMessages, setOnlineUsers } = ChatSlice.actions;
 export default ChatSlice.reducer;

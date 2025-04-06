@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { io } from "socket.io-client";
 import { useEffect, useState } from "react";
-import { updateMessages } from "../redux/Slices/chat.slice";
+import { setOnlineUsers, updateMessages } from "../redux/Slices/chat.slice";
 
 const useSocket = () => {
     const authState = useSelector((state) => state.auth);
@@ -31,8 +31,14 @@ const useSocket = () => {
             await dispatch (updateMessages ({ message: data }));
         });
 
+        newSocket.on ('online-users', async (data) => {
+            console.log ('Online Users Updates', data);
+            await dispatch (setOnlineUsers ({onlineUsers: data}));
+        })
+
         return () => {
             newSocket.disconnect();
+            newSocket.off('online-users');
         };
     }, [authState?.data?._id]);
 

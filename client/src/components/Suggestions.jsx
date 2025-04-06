@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 
 function Suggestions () {
     const authState = useSelector ((state) => state.auth);
+    const chatState = useSelector ((state) => state.chat);
 
     const dispatch = useDispatch ();
 
@@ -131,6 +132,7 @@ function Suggestions () {
                                 <h2 className="text-xs font-extralight">@{user?.username}</h2>
                             </Link>
                         </div>
+                        {chatState.onlineUsers?.includes(user?._id) && <div className="w-[0.7rem] h-[0.6rem] bg-green-400 rounded-full inline-block"></div>}
                     </div>
                 ))}
             </div>}
