@@ -19,17 +19,61 @@ const Messenger = () => {
   const chatContainerRef = useRef(null);
   const [activeTab, setActiveTab] = useState ('recent');
   const [selected, setSelected] = useState ('none');
+  const [files, setFiles] = useState([]);
+
+
+  const sendMessage = () => {
+    if (message.trim() || files.length) {  
+      const readerPromises = files.map(
+        (file) =>
+          new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve({ name: file.name, type: file.type, data: reader.result });
+            reader.onerror = reject;
+            reader.readAsDataURL(file); // base64 encode
+          })
+      );
   
-    const sendMessage = () => {
-      if (message.trim()) {
-        socket.emit("sendMessage", {
+      Promise.all(readerPromises).then((encodedFiles) => {
+        const payload = {
           sender: authState.data?._id,
           recipient: chatState.recipient?._id,
-          content: message
-        });
+          content: message.trim(),
+          files: encodedFiles, // array of base64 files
+        };
+  
+        socket.emit("sendMessage", payload);
         setMessage("");
-      }
-    };  
+        setFiles([]);
+      });
+    }
+  };
+  
+    // const sendMessage = () => {
+    //   if (message.trim() || files.length) {
+    //     const formData = new FormData();
+    //     formData.append("sender", authState.data?._id);
+    //     formData.append("recipient", chatState.recipient?._id);
+    //     formData.append("content", message.trim());
+    //     files.forEach((file) => formData.append("files", file));
+        
+    //     // Console check for FormData
+    // console.log("FormData contents:");
+    // for (let pair of formData.entries()) {
+    //   console.log(pair[0], pair[1]);
+    // }
+
+    //     socket.emit("sendMessage", formData);
+    //     setMessage("");
+    //     setFiles([]);
+    //   }
+    // };  
+
+    const handleFileChange = (e) => {
+      const selectedFiles = Array.from(e.target.files);
+      setFiles(selectedFiles);
+    };
+    
 
     useEffect(() => {
       if (chatContainerRef.current) {
@@ -113,20 +157,38 @@ const Messenger = () => {
               </div>
               <div className="absolute bottom-0 pb-4 flex flex-row items-center h-16 bg-[var(--card)] w-full px-4">
                 <div className="mt-auto flex items-center gap-3 p-2 relative w-full">
-                  <div className="flex-1 relative">
+                  <div className="flex items-center w-full p-2 px-4 rounded-full border border-[var(--input)] relative">
+                    {/* File Upload Button */}
+                    <label htmlFor="file-upload" className="cursor-pointer text-[var(--text)] mr-3">
+                      <i className="fa-solid fa-paperclip text-xl"></i>
+                    </label>
+                    <input
+                      id="file-upload"
+                      type="file"
+                      encType= "multipart/form-data"
+                      multiple
+                      onChange={handleFileChange}
+                      className="hidden"
+                    />
+                    {/* Message Input */}
                     <input
                       type="text"
                       value={message}
-                      className={`w-full p-2 px-4 pr-10 rounded-full text-[var(--text)] border border-[var(--input)] bg-transparent font-normal outline-none focus:shadow-md`}
+                      className="flex-1 bg-transparent text-[var(--text)] font-normal outline-none"
                       placeholder="Write a message..."
                       onChange={(e) => setMessage(e.target.value)}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') {
-                          sendMessage ();
+                          sendMessage();
                         }
                       }}
                     />
-                    <FaPaperPlane onClick={sendMessage} id="send" className={`absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--text)] cursor-pointer`} />
+                    {/* Send Button */}
+                    <FaPaperPlane
+                      onClick={sendMessage}
+                      id="send"
+                      className="text-[var(--text)] cursor-pointer ml-3"
+                    />
                   </div>
               </div>
               </div>
