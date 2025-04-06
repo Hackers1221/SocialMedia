@@ -10,6 +10,7 @@ cloudinary.config({
     api_secret: process.env.CLOUD_API_SECRET,
 });
 
+
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: async (req, file) => {
@@ -37,6 +38,8 @@ const storage = new CloudinaryStorage({
       let format = file.mimetype.split('/')[1];
       if (format === 'jpeg') format = 'jpg';
 
+      // public_id: ${Date.now()}-${file.originalname},
+
       // Sanitize filename
       const sanitizedFilename = file.originalname.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9.\-_]/g, '');
 
@@ -60,12 +63,14 @@ const storage = new CloudinaryStorage({
 });
 
 
-const uploadFiles = multer({ 
-  storage,
-  limits: { fileSize: 20 * 1024 * 1024 }, // Limit file size (e.g., 20MB)
-}).fields([
-  { name: 'files', maxCount: 10 },
-]);
+const uploadFile = async (file) => {
+  const uploadRes = await cloudinary.uploader.upload(file.data, {
+    resource_type: 'auto',
+    folder: 'socialMedia/files',
+    public_id: `${Date.now()}-${file.name}`,
+  });
+  return uploadRes;
+}
 
 
 // Upload multiple image and videos
@@ -160,7 +165,7 @@ const updateImage = async (oldPublicId) => {
 };
 
 
-module.exports = {upload, uploadFiles, uploadSingleImage, uploadSingleVideo, updateImage, deleteImages, deleteVideos};
+module.exports = {upload, uploadFile, uploadSingleImage, uploadSingleVideo, updateImage, deleteImages, deleteVideos};
 
 
 

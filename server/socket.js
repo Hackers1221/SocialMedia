@@ -1,12 +1,13 @@
 const { Server } = require("socket.io");
-const Message = require ('../server/src/models/message.model')
+const Message = require ('../server/src/models/message.model');
+const { uploadFile } = require("./cloudConfig");
 
 let onlineUsers = new Map ();
 
 const setupSocket = (server) => {
     const io = new Server(server, {
         cors: {
-            origin: "http://localhost:5173",  // Change this to your frontend URL
+            origin: "http://localhost:5173", 
             methods: ["GET", "POST"]
         }
     });
@@ -35,12 +36,28 @@ const setupSocket = (server) => {
         console.log(
           `Sending message to ${recipientSocketId} from ${senderSocketId}`
         );
-    
-        const createdMessage = await Message.create(message);
-    
-        const messageData = await Message.findById(createdMessage._id);
 
-          console.log (messageData);
+        const uploadedFiles = [];
+
+        // Upload files to Cloudinary
+        for (const file of message.files) {
+          try {
+            const uploadRes = await uploadFile(file);
+            uploadedFiles.push({
+              url: uploadRes.secure_url,
+              filename: file.type,
+            });
+          } catch (err) {
+            console.error("Cloudinary upload error:", err);
+          }
+        }
+    
+        const createdMessage = await Message.create({...message, files: uploadedFiles});
+    
+        const messageData = await Message.findById(createdMessage._id)
+        .populate("sender", "id name image")
+        .populate("recipient", "id name image");
+
     
         if (recipientSocketId) {
           io.to(recipientSocketId).emit("receiveMessage", messageData);
