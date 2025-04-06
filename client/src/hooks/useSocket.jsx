@@ -27,12 +27,10 @@ const useSocket = () => {
         newSocket.on("disconnect", () => console.log("Disconnected"));
 
         newSocket.on("receiveMessage", async (data) => {
-            console.log ('data');
             await dispatch (updateMessages ({ message: data }));
         });
 
         newSocket.on ('online-users', async (data) => {
-            console.log ('Online Users Updates', data);
             await dispatch (setOnlineUsers ({onlineUsers: data}));
         })
 

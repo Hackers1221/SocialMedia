@@ -8,10 +8,13 @@ import User from '../../components/User'
 import { X } from "lucide-react";
 import { Link } from "react-router-dom";
 import ChatDropdown from "../../components/ChatDropdown";
+import { getRecentMessages } from "../../redux/Slices/chat.slice";
 
 const Messenger = () => {
   const authState = useSelector ((state) => state.auth);
   const chatState = useSelector ((state) => state.chat);
+
+  const dispatch = useDispatch ();
 
   const socket = useSocket ();
 
@@ -52,6 +55,14 @@ const Messenger = () => {
       const selectedFiles = Array.from(e.target.files);
       setFiles(selectedFiles);
     };
+
+    async function getRecent () {
+      await dispatch (getRecentMessages (authState.data?._id));
+    }
+
+    useEffect (() => {
+      getRecent ();
+    }, [chatState.messages])
     
 
     useEffect(() => {
@@ -98,19 +109,24 @@ const Messenger = () => {
                     </button>
                     <button
                       className={`py-2 font-semibold flex items-center space-x-2 text-sm ${
-                        activeTab === "contacts" ? `text-[var(--buttons)]` : "text-gray-400"
+                        activeTab === "followers" ? `text-[var(--text)]` : "text-gray-400"
                       }`}
-                      onClick={() => setActiveTab("contacts")}
+                      onClick={() => setActiveTab("followers")}
                     >
-                      <span>Contacts</span>
+                      <span>Followers</span>
                     </button>
             </div>
             <div className="flex flex-col">
-              <div className="flex flex-col space-y-1 mt-4 -mx-2 h-full overflow-y-auto">
-                {authState.data?.following?.length > 0 && authState.data?.following?.map ((user, index) => (
-                  <User userId={user} key={index}/>
+              {activeTab === 'recent' && <div className="flex flex-col space-y-1 mt-4 h-full overflow-y-auto">
+                {chatState.recentMessages?.length > 0 && chatState.recentMessages?.map ((chat, index) => (
+                  <User chat={chat} key={index}/>
                 ))}
-              </div>
+              </div>}
+              {activeTab === 'followers' && <div className="flex flex-col space-y-1 mt-4 h-full overflow-y-auto">
+                {authState.data?.follower?.length > 0 && authState.data?.follower?.map ((user, index) => (
+                  <User chat={user} type={'follower'} key={index}/>
+                ))}
+              </div>}
             </div>
           </div>
           <div className="flex flex-col w-[73%] h-full border-l border-[var(--border)]">

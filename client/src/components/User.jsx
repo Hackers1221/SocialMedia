@@ -3,41 +3,44 @@ import { useDispatch, useSelector } from "react-redux"
 import { getUserById } from "../redux/Slices/auth.slice";
 import { getMessages, setRecipient } from "../redux/Slices/chat.slice";
 
-function User ({ userId }) {
+function User ({ chat, type }) {
     const authState = useSelector ((state) => state.auth);
+    const chatState = useSelector ((state) => state.chat);
 
     const dispatch = useDispatch ();
 
-    const [name, setName] = useState ('Anonymous');
-    const [image, setImage] = useState ('https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp');
-    const [user, setUser] = useState ();
+    const content = chat.content?.toString().slice(0, 20) + (chat.content?.length > 20 ? "..." : "")
 
-    async function getUser () {
-        const res = await dispatch (getUserById (userId));
-        setName (res.payload.data?.userdetails?.name);
-        setImage (res.payload.data?.userdetails?.image?.url);
-        setUser (res.payload.data?.userdetails);
-    }
+    const [user, setUser] = useState ();
 
     async function getChats () {
         await dispatch (getMessages ( {
             sender: authState.data?._id,
-            recipient: userId
+            recipient: chat?.user?._id || user?._id
         }));
-        await dispatch (setRecipient ({ userDetails: user }))
+        await dispatch (setRecipient ({ userDetails: chat?.user || user }))
+    }
+
+    async function getUser () {
+        const res = await dispatch (getUserById (chat));
+        setUser (res.payload.data?.userdetails);
     }
 
     useEffect (() => {
-        getUser ();
+        if (type === 'follower') getUser ();
     }, [])
 
     return (
         <div 
-            className="flex flex-row items-center hover:shadow-md hover:cursor-pointer rounded-md hover:bg-[var(--topic)] p-2"
+            className="flex flex-row items-center bg-transparent hover:shadow-md hover:cursor-pointer rounded-md hover:bg-[var(--topic)] p-2"
             onClick={getChats}
         >
-            <img src={image} className="flex items-center justify-center h-8 w-8 bg-indigo-200 rounded-full"/>
-            <div className="ml-2 text-sm font-semibold">{name}</div>
+            <img src={chat?.user?.image?.url || user?.image?.url} className="flex items-center justify-center h-8 w-8 rounded-full"/>
+            <div className="ml-2 w-full">
+                <h2 className="text-sm font-semibold">{chat?.user?.name || user?.name}</h2>
+                {type !== 'follower' && <h3 className="text-xs font-extralight">{content}</h3>}
+            </div>
+            {chatState.onlineUsers?.includes(chat?.user?._id || user?._id) && <div className="w-[0.7rem] h-[0.6rem] bg-green-400 rounded-full inline-block"></div>}
         </div>
     )
 }
