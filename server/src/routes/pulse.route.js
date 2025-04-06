@@ -10,4 +10,4 @@ pulseRoutes.post('/', validators.isUserAuthenticated, uploadSingleVideo, pulseCo
 pulseRoutes.get('/',validators.isUserAuthenticated, pulseController.getAllPulse);
 pulseRoutes.patch('/like/:id',validators.isUserAuthenticated,pulseController.likePulse);
 
-module.exports = pulseRoutes
+module.exports = pulseRoutes;

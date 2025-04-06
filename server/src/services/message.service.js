@@ -49,22 +49,20 @@ const getRecentMessage = async (sender) => {
           }
         }
       },
-      // Step 3: Sort messages by timestamp descending to get latest ones first
-      {
-        $sort: { timestamp: -1 }
-      },
-      // Step 4: Group by 'otherUser' and pick the first (most recent) message
+      // Step 3: Group by 'otherUser' and pick the first (most recent) message
       {
         $group: {
           _id: "$otherUser",
           latestMessage: { $first: "$$ROOT" }
         }
       },
-      // Step 5: Replace root document with the latest message object
+      // Step 4: Replace root document with the latest message object
       {
         $replaceRoot: { newRoot: "$latestMessage" }
       }
     ]);
+
+    //get userDetails of all recentChats
 
     const messagesWithUserDetails = await Promise.all(
       recentChats.map(async (chat) => {
