@@ -35,7 +35,7 @@ function User ({ userId }) {
 
     return (
         <div 
-            className="flex flex-row items-center hover:shadow-md hover:cursor-pointer border-l border-transparent hover:border-white p-2"
+            className="flex flex-row items-center hover:shadow-md hover:cursor-pointer rounded-md hover:bg-[var(--topic)] p-2"
             onClick={getChats}
         >
             <img src={image} className="flex items-center justify-center h-8 w-8 bg-indigo-200 rounded-full"/>

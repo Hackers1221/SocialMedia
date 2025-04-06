@@ -4,7 +4,7 @@ import axiosInstance from "../../config/axiosInstance";
 const initialState = {
   messages: [],
   users: [],
-  reciver: {}
+  recipient: {}
 };
 
 export const getMessages = createAsyncThunk ('getMessage', async (data) => {
@@ -41,6 +41,7 @@ const ChatSlice = createSlice({
       .addCase(getMessages.fulfilled,(state, action)=>{
           if (!action.payload?.data) return;
           state.messages = action.payload?.data?.messages;
+          state.messages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
       })
   }
 });
