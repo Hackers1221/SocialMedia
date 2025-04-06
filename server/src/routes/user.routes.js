@@ -18,7 +18,7 @@ userRoutes.patch('/',validators.isUserAuthenticated, uploadSingleImage, updatePr
 userRoutes.patch('/follow/:id',validators.isUserAuthenticated,authcontroller.followUser);
 userRoutes.get('/user/:name',validators.isUserAuthenticated,authcontroller.getUserByUserName);
 userRoutes.delete('/:id',validators.isUserAuthenticated, authcontroller.deleteUser);
-userRoutes.get('/search/:q',validators.isUserAuthenticated,authcontroller.searchUser)
-userRoutes.get('/usersByLimit', validators.isUserAuthenticated, authcontroller.getUserByLimit)
+userRoutes.get('/search/:q',validators.isUserAuthenticated,authcontroller.searchUser);
+userRoutes.get('/usersByLimit', validators.isUserAuthenticated, authcontroller.getUserByLimit);
 
 module.exports = userRoutes
