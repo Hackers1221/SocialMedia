@@ -1,6 +1,7 @@
 
 const MessageModel = require('../models/message.model');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const usermodel = require('../models/user.model')
 
 const getMessage = async(sender, recipient) => {
     const response = {};
@@ -65,8 +66,16 @@ const getRecentMessage = async (sender) => {
       }
     ]);
 
-    // Return the result
-    response.messages = recentChats;
+    const messagesWithUserDetails = await Promise.all(
+      recentChats.map(async (chat) => {
+        const user = await usermodel.findById(chat.otherUser).select("-password -saved -following -follower -birth -resetTokenExpiry -createdAt -isPrivate -resetToken -likedPosts -about -email");
+        return {
+          ...chat,
+          user,
+        };
+      })
+    );
+    response.messages = messagesWithUserDetails
     return response;
 
   } catch (error) {
