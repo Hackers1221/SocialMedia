@@ -14,7 +14,8 @@ const Store = configureStore({
         pulse: pulseSliceReducer,
         comment: commentSliceReducer,
         verse: verseSliceReducer,
-        chat: chatSliceReducer
+        chat: chatSliceReducer,
+        socket: socketReducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false}),
     devTools: true

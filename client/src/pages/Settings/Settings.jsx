@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../../ThemeContext";
 import PrivacyButton from "../../components/PrivacyButton";
+import { disconnectSocket } from "../../redux/Slices/socket.slice";
 
 const menuItems = [
   { name: "General", key: "general" },
@@ -69,6 +70,7 @@ function Settings() {
 
   async function onLogout () {
     await dispatch (logout ());
+    await dispatch (disconnectSocket ());
     navigate ("/login"); 
     if (theme === 'dark') toggleTheme ();
     return;
