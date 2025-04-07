@@ -18,6 +18,19 @@ export const createGroup = createAsyncThunk ('createGroup', async (data) => {
     }
 })
 
+export const getGroupByUserId = createAsyncThunk ('getGroupByUserId', async (id) => {
+    try {
+        const response = await axiosInstance.get (`/${id}`, {
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+        return response;
+    } catch (error) {
+        console.log (error);
+    }
+})
+
 
 const GroupSlice = createSlice({
   name: "group",
