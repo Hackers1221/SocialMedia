@@ -44,6 +44,7 @@ const setupSocket = (server) => {
           try {
             const uploadRes = await uploadFile(file);
             uploadedFiles.push({
+              name: file.name,
               url: uploadRes.secure_url,
               filename: file.type,
             });

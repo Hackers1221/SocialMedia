@@ -13,6 +13,7 @@ import { IoMdPulse } from "react-icons/io";
 import useVerse from '../../hooks/useVerse';
 import VerseCard from '../../components/VerseCard'
 import { filterPostsByUser } from '../../redux/Slices/post.slice';
+import ImagePreview from '../../components/ImagePreview';
 
 const Profile = () => {
   const authState = useSelector ((state) => state.auth);
@@ -27,6 +28,8 @@ const Profile = () => {
   const [isLoading,setIsLoading] = useState(true);
   const [selected, setSelected] = useState ('Posts');
   const [joining, setJoining] = useState ("");
+  const [isOpen, setOpen] = useState (false);
+  const [image, setImage] = useState ();
 
   const dispatch = useDispatch ();
   const { username } = useParams();
@@ -49,6 +52,7 @@ const Profile = () => {
           setCountFollowers(userData?.follower?.length || 0);
           setCountFollowing(userData?.following?.length || 0);
           setCheck(userData._id === authState.data._id);
+          setImage (userData?.image?.url);
 
           const dateObj = new Date(userData?.createdAt);
           const date = dateObj.getDate();
@@ -82,12 +86,15 @@ const Profile = () => {
   return (
       <div className={`fixed top-[1rem] md:left-[20rem] left-[4rem] w-[85%] md:w-[50%] h-[97vh] flex flex-col flex-grow overflow-y-auto`}>
         {isLoading && <ProfileInfo />}
+        <ImagePreview isOpen={isOpen} setOpen={setOpen} url={image}/>
         {!isLoading && <div className={`mb-4 w-full bg-[var(--card)] border border-[var(--border)]`}>
           <div className={`flex flex-col items-center gap-4 w-full border-b border-[var(--border)] pb-4`}>
             <div className='w-full relative'>
               <img src={creator?.image?.url || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} className='w-full h-[12rem] object-cover'/>
                 <div className='flex justify-between items-end w-full absolute bottom-[-4rem] px-4'>
-                <Avatar url={creator?.image?.url || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} size={'lg'} border={"true"}/>
+                <div onClick={() => setOpen (!isOpen)}>
+                  <Avatar url={creator?.image?.url || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} size={'lg'} border={"true"}/>
+                </div>
                 <div className='flex gap-4'>
                   {!check && (
                     <button className={`mt-2 px-4 py-2 border rounded-full bg-[var(--buttons)] text-[var(--card)]`} onClick={toggleFollow}>

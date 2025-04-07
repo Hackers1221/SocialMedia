@@ -18,7 +18,7 @@ const Messenger = () => {
 
   const socket = useSocket ();
 
-  const [message, setMessage] = useState([]);
+  const [message, setMessage] = useState("");
   const chatContainerRef = useRef(null);
   const [activeTab, setActiveTab] = useState ('recent');
   const [selected, setSelected] = useState ('none');
@@ -26,7 +26,7 @@ const Messenger = () => {
 
 
   const sendMessage = () => {
-    if (message.trim() || files.length) {  
+    if (message?.trim() || files?.length) {  
       const readerPromises = files.map(
         (file) =>
           new Promise((resolve, reject) => {
@@ -59,6 +59,10 @@ const Messenger = () => {
     async function getRecent () {
       await dispatch (getRecentMessages (authState.data?._id));
     }
+
+    function removeFile (index) {
+      setFiles((prev) => prev.filter((_, idx) => idx !== index));
+    } 
 
     useEffect (() => {
       getRecent ();
@@ -136,7 +140,11 @@ const Messenger = () => {
                   <Avatar url={chatState.recipient?.image?.url} size={'md'}/>
                   <div className="flex flex-col">
                     <Link to={`/profile/${chatState.recipient?.username}`} className="hover:underline">{chatState.recipient?.name}</Link>
-                    <h2 className="text-[0.7rem] font-extralight">Active Now</h2>
+                    {chatState.onlineUsers?.includes(chatState.recipient?._id) && 
+                        <div className="flex gap-2 items-center">
+                          <div className="w-[0.4rem] h-[0.4rem] bg-green-400 rounded-full inline-block"></div>
+                          <h2 className="text-[0.7rem] font-extralight">Active Now</h2>
+                        </div>}
                   </div>
                 </div>
                 <div className="flex items-center gap-8 mr-4">
@@ -151,11 +159,11 @@ const Messenger = () => {
                 ))}
               </div>
               <div className="absolute bottom-0 pb-4 flex flex-row items-center h-16 bg-[var(--card)] w-full px-4">
-                <div className="mt-auto flex items-center gap-3 p-2 relative w-full">
+                <div className="mt-auto flex flex-col items-center gap-3 p-2 relative w-full">
                   <div className="flex items-center w-full p-2 px-4 rounded-full border border-[var(--input)] relative">
                     {/* File Upload Button */}
-                    <label htmlFor="file-upload" className="cursor-pointer text-[var(--text)] mr-3">
-                      <i className="fa-solid fa-paperclip text-xl"></i>
+                    <label htmlFor="file-upload" className="cursor-pointer text-[var(--text)]">
+                      <i className="fa-solid fa-paperclip text-sm"></i>
                     </label>
                     <input
                       id="file-upload"
@@ -165,11 +173,19 @@ const Messenger = () => {
                       onChange={handleFileChange}
                       className="hidden"
                     />
+                    {files?.length > 0 && <div className="ml-3 flex gap-2">
+                        {files?.map ((file, index) => (
+                          <div className="flex gap-2 bg-[var(--topic)] px-2" key={index}>
+                            {file?.name}
+                            <h2 className="hover:cursor-pointer" onClick={() => removeFile (index)}>✕</h2>
+                          </div>
+                        ))}
+                      </div>}
                     {/* Message Input */}
                     <input
                       type="text"
                       value={message}
-                      className="flex-1 bg-transparent text-[var(--text)] font-normal outline-none"
+                      className="flex-1 bg-transparent text-[var(--text)] font-normal outline-none ml-4"
                       placeholder="Write a message..."
                       onChange={(e) => setMessage(e.target.value)}
                       onKeyDown={(e) => {
