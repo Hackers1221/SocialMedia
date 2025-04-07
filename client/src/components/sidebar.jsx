@@ -162,11 +162,11 @@ function Sidebar() {
                                 </Link>
                             </li>
                             <li onClick={() => setIsOpen(false)}>
-                                <a href="#" className={`relative flex flex-row border-l-4 border-transparent hover:border-[var(--buttons)] items-center h-11 text-[var(--text)] hover:text-[var(--buttons)] hover:shadow-md font-semibold pr-4 border-l-4 border-transparent pr-6`}>
+                                <Link to="/notification" className={`relative flex flex-row border-l-4 border-transparent hover:border-[var(--buttons)] items-center h-11 text-[var(--text)] hover:text-[var(--buttons)] hover:shadow-md font-semibold pr-4 border-l-4 border-transparent pr-6`}>
                                     <FaBell className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Notifications</span>
                                     <span className="px-2 py-0.5 ml-auto text-xs font-medium text-red-500 bg-red-50 rounded-full">1.2k</span>
-                                </a>
+                                </Link>
                             </li>
                             <li className="px-5 border-t">
                                 <div className="flex flex-row items-center h-8">

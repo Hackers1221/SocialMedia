@@ -3,7 +3,6 @@ import { FaPaperPlane } from "react-icons/fa";
 import Avatar from "../../components/Avatar";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../../components/Message";
-import useSocket from "../../hooks/useSocket";
 import User from '../../components/User'
 import { X } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -16,12 +15,11 @@ const Messenger = () => {
 
   const dispatch = useDispatch ();
 
-  const socket = useSocket ();
+  const socket = useSelector((state) => state.socket.socket);
 
   const [message, setMessage] = useState("");
   const chatContainerRef = useRef(null);
   const [activeTab, setActiveTab] = useState ('recent');
-  const [selected, setSelected] = useState ('none');
   const [files, setFiles] = useState([]);
   const [groupCreate, setGroupCreate] = useState (false);
 
@@ -46,7 +44,10 @@ const Messenger = () => {
           files: encodedFiles, // array of base64 files
         };
   
-        socket.emit("sendMessage", payload);
+        if (socket && socket.connected) {
+          socket.emit("sendMessage", payload);
+        }
+        
         setMessage("");
         setFiles([]);
       });
