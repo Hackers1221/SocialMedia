@@ -5,6 +5,7 @@ import pulseSliceReducer from './Slices/pulse.slice'
 import commentSliceReducer from './Slices/comment.slice'
 import verseSliceReducer from './Slices/verse.slice'
 import chatSliceReducer from './Slices/chat.slice'
+import socketReducer from "./Slices/socket.slice";
 
 const Store = configureStore({
     reducer: {
@@ -13,7 +14,8 @@ const Store = configureStore({
         pulse: pulseSliceReducer,
         comment: commentSliceReducer,
         verse: verseSliceReducer,
-        chat: chatSliceReducer
+        chat: chatSliceReducer,
+        socket: socketReducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false}),
     devTools: true

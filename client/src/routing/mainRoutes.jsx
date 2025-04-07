@@ -15,6 +15,7 @@ import VerifyOtp from "../pages/SignUp/verifyotp";
 import ForgetPassword from "../pages/Forgot/Forget";
 import ResetPassword from "../pages/Forgot/reset";
 import VersePage from "../pages/Verse/VersePage";
+import Notification from "../pages/Notification/Notification"
 
 function MainRoutes() {
   return (
@@ -31,6 +32,7 @@ function MainRoutes() {
         <Route path="profile/:username" element={<Profile />} />
         <Route path="explore" element={<Explore />} />
         <Route path="messenger" element={<Messenger />} />
+        <Route path="notification" element={<Notification />} />
         <Route path="pulse" element={<Pulse />} />
         <Route path="settings" element={<Settings />} />
         <Route path="verse" element={<VersePage />} />
