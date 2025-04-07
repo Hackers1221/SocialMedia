@@ -4,6 +4,8 @@ const groupController = require('../controllers/group.controller')
 const groupRouter = express.Router();
 
 groupRouter.post('/',validators.isUserAuthenticated,groupController.createGroup);
-groupRouter.get('/:id',validators.isUserAuthenticated,groupController.getGroupByUserId);
+groupRouter.get('/by-id/:id', validators.isUserAuthenticated, groupController.getGroupById);
+groupRouter.get('/by-user/:userId', validators.isUserAuthenticated, groupController.getGroupByUserId);
+
 
 module.exports = groupRouter

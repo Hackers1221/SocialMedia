@@ -16,7 +16,21 @@ const createGroup = async(req,res) => {
 }
 
 const getGroupByUserId = async(req,res) => {
-    const response = await groupService.getGroupByUserId(req.params.id);
+    const response = await groupService.getGroupByUserId(req.params.userId);
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg : "Unable to fetch the groupdetals",
+            error : response.error
+        })
+    }
+        return res.status(StatusCodes.CREATED).send({
+            msg : "Successfully fetched the group details",
+            userdata: response.groupDetails
+    })
+}
+
+const getGroupById = async(req,res) => {
+    const response = await groupService.getGroupById(req.params.id);
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
             msg : "Unable to fetch the groupdetals",
@@ -33,5 +47,6 @@ const getGroupByUserId = async(req,res) => {
 
 module.exports = {
     createGroup,
-    getGroupByUserId
+    getGroupByUserId,
+    getGroupById
 }

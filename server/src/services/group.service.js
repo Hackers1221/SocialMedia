@@ -12,12 +12,24 @@ const createGroup = async(data) => {
     }
 }
 
-const getGroupByUserId = async(id) => {
+const getGroupByUserId = async(userId) => {
     const response = {};
     try {
         const groupData = await groupModel.find({
-            members : id
+            members : userId
         })
+        response.groupDetails = groupData;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response;
+    }
+}
+
+const getGroupById = async(id) => {
+    const response = {};
+    try {
+        const groupData = await groupModel.findById(id);
         response.groupDetails = groupData;
         return response;
     } catch (error) {
@@ -28,5 +40,6 @@ const getGroupByUserId = async(id) => {
 
 module.exports = {
     createGroup,
-    getGroupByUserId
+    getGroupByUserId,
+    getGroupById
 }
