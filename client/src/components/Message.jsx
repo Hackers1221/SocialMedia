@@ -4,6 +4,7 @@ import ImagePreview from "./ImagePreview";
 
 function Message({ message }) {
     const authState = useSelector((state) => state.auth);
+    const chatState = useSelector ((state) => state.chat);
 
     const [time, setTime] = useState();
     const [selectedImage, setSelectedImage] = useState ('');
@@ -58,10 +59,7 @@ function Message({ message }) {
                 video.load();
             }
         });
-    }, [message?.files]);
-
-    console.log (videoThumbnails);
-    
+    }, [message?.files]);    
 
     useEffect(() => {
         getTime();
@@ -74,7 +72,7 @@ function Message({ message }) {
             <ImagePreview isOpen={isOpen} setOpen={setOpen} url={selectedImage}/>
             {!isOwnMessage && (
                 <div className="flex w-8 items-start">
-                    <img className="h-8 w-8 rounded-full" src={message?.recipient?.image?.url} />
+                    <img className="h-8 w-8 rounded-full" src={chatState?.recipient?.image?.url} />
                 </div>
             )}
 

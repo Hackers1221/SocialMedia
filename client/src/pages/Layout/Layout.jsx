@@ -2,22 +2,25 @@ import { useEffect, useState } from "react";
 import Sidebar from "../../components/sidebar";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Suggestions from "../../components/Suggestions";
-import { useSelector } from "react-redux";
-import useSocket from "../../hooks/useSocket";
+import { useDispatch, useSelector } from "react-redux";
+import { initSocket } from '../../redux/Slices/socket.slice';
 
 function Layout () {
     const authState = useSelector ((state) => state.auth);
-
-    const sockets = useSocket();
-
-    const navigate = useNavigate ();
-
+    const dispatch = useDispatch();
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     
     // Hide Navbar and Sidebar on these pages
     const location = useLocation();
     const hideSidebar = ["/login", "/signup","/verifyotp","/register","/forgetpass","/resetpass", "/sign"].includes(location.pathname);
     const hideOthers = ["/messenger", "/settings"].includes(location.pathname);
+
+    // Handle socket connection
+    useEffect(() => {
+        if (authState?.data?._id) {
+          dispatch(initSocket({ userId: authState.data._id, dispatch }));
+        }
+    }, [authState.data?._id, dispatch]);
     
     // Handle screen resizing
     useEffect(() => {        
