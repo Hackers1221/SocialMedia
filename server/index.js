@@ -10,10 +10,11 @@ const pulseRoutes = require("./src/routes/pulse.route");
 const commentRoutes = require('./src/routes/comments.routes');
 const verseRoutes = require ('./src/routes/verse.routes');
 const messageRoutes = require('./src/routes/message.routes')
-
+const groupRoutes = require('./src/routes/group.routes')
 // server instance
 const http = require("http");
 const setupSocket = require("./socket");
+const groupRouter = require("./src/routes/group.routes");
 const server = http.createServer(app);
 
 app.use(function (req, res, next) {
@@ -34,6 +35,7 @@ app.use('/social/pulse',pulseRoutes);
 app.use('/social/comment',commentRoutes);
 app.use('/social/verse',verseRoutes);
 app.use('/social/message',messageRoutes);
+app.use('/social/group',groupRoutes);
 
 
 // Error handling middleware
