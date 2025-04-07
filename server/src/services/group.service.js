@@ -12,6 +12,21 @@ const createGroup = async(data) => {
     }
 }
 
+const getGroupByUserId = async(id) => {
+    const response = {};
+    try {
+        const groupData = await groupModel.find({
+            members : id
+        })
+        response.groupDetails = groupData;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response;
+    }
+}
+
 module.exports = {
-    createGroup
+    createGroup,
+    getGroupByUserId
 }
