@@ -11,7 +11,7 @@ const createGroup = async(req,res) => {
             }
         return res.status(StatusCodes.CREATED).send({
             msg : "Successfully created the group",
-            userdata: response
+            groupData: response.groupDetails
     })
 }
 

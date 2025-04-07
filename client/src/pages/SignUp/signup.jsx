@@ -79,6 +79,9 @@ function SignUp() {
         } catch (error) {
             toast.error(error.message);
         }
+        finally {
+            setLoading (false);
+        }
     }
 
     const handleKeyPress = useCallback((e) => {

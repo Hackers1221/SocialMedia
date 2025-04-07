@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { FaPaperPlane, FaUserCircle } from "react-icons/fa";
+import React, { useEffect, useRef, useState } from "react";
+import { FaPaperPlane } from "react-icons/fa";
 import Avatar from "../../components/Avatar";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../../components/Message";
@@ -7,8 +7,8 @@ import useSocket from "../../hooks/useSocket";
 import User from '../../components/User'
 import { X } from "lucide-react";
 import { Link } from "react-router-dom";
-import ChatDropdown from "../../components/ChatDropdown";
 import { getRecentMessages } from "../../redux/Slices/chat.slice";
+import CreateGroup from "../../components/CreateGroup";
 
 const Messenger = () => {
   const authState = useSelector ((state) => state.auth);
@@ -23,6 +23,7 @@ const Messenger = () => {
   const [activeTab, setActiveTab] = useState ('recent');
   const [selected, setSelected] = useState ('none');
   const [files, setFiles] = useState([]);
+  const [groupCreate, setGroupCreate] = useState (false);
 
 
   const sendMessage = () => {
@@ -78,11 +79,14 @@ const Messenger = () => {
   return (
     <div className={`fixed top-[4rem] md:top-0 md:left-[18rem] left-[1rem] w-[85%] h-[82vh] md:h-[100vh] flex flex-col flex-grow overflow-y-auto`}>
       {/* Left Sidebar */}
+        <CreateGroup isOpen={groupCreate} setOpen={setGroupCreate}/>
         <div className="flex flex-row h-full w-full overflow-x-hidden ">
           <div className="flex flex-col pt-4 px-4 w-[18rem] text-[var(--heading)] bg-[var(--card)] flex-shrink-0">
             <div className="w-full flex justify-between items-center">
                 <h2 className={`heading text-[2rem] text-[var(--heading)]`}>Chat</h2>
-                <i className="fa-solid fa-pen-to-square hover:cursor-pointer"></i>
+                <div className="w-8 h-8 hover:bg-black/10 rounded-md flex items-center justify-center">
+                  <i className="fa-solid fa-user-group hover:cursor-pointer" onClick={() => setGroupCreate(true)}></i>
+                </div>
                 {/* <ChatDropdown
                   selected={selected}
                   setSelected={setSelected}
