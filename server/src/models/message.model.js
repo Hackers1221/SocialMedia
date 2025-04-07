@@ -23,6 +23,10 @@ const messageSchema = new Schema({
         type: Date,
         default: Date.now,
     },
+    groupChat : {
+        type : String,
+        default : ""
+    }
 });
 
 const Message = mongoose.model("Messages", messageSchema);

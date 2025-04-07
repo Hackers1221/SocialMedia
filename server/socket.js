@@ -86,6 +86,8 @@ const setupSocket = (server) => {
 
         socket.on("sendMessage",sendMessage);
     });
+
+    
 }
 
 module.exports = setupSocket;
