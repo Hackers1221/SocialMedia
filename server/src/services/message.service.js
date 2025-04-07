@@ -9,17 +9,11 @@ const getMessage = async(sender, recipient) => {
         const message1  = await MessageModel.find({
             sender : sender,
             recipient : recipient
-        })
-        .populate("sender", "id name image")
-        .populate("recipient", "id name image");
-
+        });
         const message2  = await MessageModel.find({
             sender : recipient,
             recipient : sender
-        })
-        .populate("sender", "id name image")
-        .populate("recipient", "id name image");
-        
+        });
         response.messages = [...message1, ...message2];
         return response;
     } catch (error) {
@@ -55,14 +49,18 @@ const getRecentMessage = async (sender) => {
           }
         }
       },
-      // Step 3: Group by 'otherUser' and pick the first (most recent) message
+      // Step 3: Sort messages by timestamp descending to get latest ones first
+      {
+        $sort: { timestamp: -1 }
+      },
+      // Step 4: Group by 'otherUser' and pick the first (most recent) message
       {
         $group: {
           _id: "$otherUser",
           latestMessage: { $first: "$$ROOT" }
         }
       },
-      // Step 4: Replace root document with the latest message object
+      // Step 5: Replace root document with the latest message object
       {
         $replaceRoot: { newRoot: "$latestMessage" }
       }
