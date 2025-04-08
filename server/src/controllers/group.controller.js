@@ -16,7 +16,7 @@ const createGroup = async(req,res) => {
 
     console.log (groupData);
 
-    const response = await groupService.createGroup(groupData);
+    const response = await groupService.createGroup(groupData,req.body.messageData);
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
             msg : "Unable to create the group",

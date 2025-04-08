@@ -26,6 +26,9 @@ const messageSchema = new Schema({
     groupId : {
         type : String,
         default : ""
+    },
+    messageType : {
+        type : Boolean,
     }
 });
 

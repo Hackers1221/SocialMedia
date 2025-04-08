@@ -7,7 +7,22 @@ const GroupSchema = new Schema({
         required : true
     },
     members : {
-        type : [String],
+        type : [
+            {
+                id : {
+                    type : String,
+                    required : true
+                },
+                joinedAt : {
+                    type: Date,
+                    default: Date.now()
+                },
+                addedBy :{
+                    type : Schema.Types.ObjectId,
+                    ref:"Users"
+                }
+            }
+        ],
         required : true
     },
     image: {
