@@ -60,7 +60,7 @@ const Messenger = () => {
   };
 
   const sendGroupMessage = () => {
-    if (message?.trim() || files?.length) {  
+    if (groupMessage?.trim() || files?.length) {  
       const readerPromises = files.map(
         (file) =>
           new Promise((resolve, reject) => {
@@ -76,12 +76,12 @@ const Messenger = () => {
           groupId: groupState.liveGroup?._id,
           sender: authState.data?._id,
           recipient: groupState.liveGroup?.members,
-          content: message.trim(),
+          content: groupMessage.trim(),
           files: encodedFiles, // array of base64 files
         };
   
         if (socket && socket.connected) {
-          socket.emit("sendMessage", payload);
+          socket.emit("sendGroupMessage", payload);
         }
         
         setGroupMessage("");

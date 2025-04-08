@@ -11,6 +11,7 @@ function CreateGroup ({ isOpen, setOpen }) {
     if (!isOpen) return null;
 
     const authState = useSelector ((state) => state.auth);
+    const socket = useSelector ((state) => state.socket.socket);
 
     const dialogRef = useRef (null);
     const dispatch = useDispatch ();
@@ -47,20 +48,40 @@ function CreateGroup ({ isOpen, setOpen }) {
         try {
             setLoading (true);
 
-            const formData = new FormData();
-            formData.append ("name", groupName);
-            members.forEach((member) => {
-                formData.append("members", member);
-            });  
-            formData.append("admin", authState.data?._id);
+            if (groupName?.trim() && image) {  
+                const reader = new FileReader();
 
-            formData.append ("image", image);
-
-            await dispatch (createGroup (formData));
+                reader.onload = () => {
+                    const encodedFile = {
+                        name: image.name,
+                        type: image.type,
+                        data: reader.result, // base64 encoded
+                    };
+                
+                    const payload = {
+                        admin: [authState.data?._id],
+                        members: members,
+                        name: groupName.trim(),
+                        image: encodedFile, // still an array, for consistency
+                    };
+                
+                    if (socket && socket.connected) {
+                        socket.emit("create-group", payload);
+                    }
+                };
+                
+                reader.onerror = (error) => {
+                    console.error("File reading error:", error);
+                };
+                
+                reader.readAsDataURL(image); // assuming `file` is a single File object
+                    
+                setGroupName("");
+                setImage();
+            };
         } catch (error) {
             toast.error ('Something went wrong');
         } finally {
-            setOpen (false);
             setLoading (false);
         }
     }
@@ -112,7 +133,7 @@ function CreateGroup ({ isOpen, setOpen }) {
                         <img
                         src={imageUrl || defaultImage}
                         alt="Profile"
-                        className="w-20 h-20 rounded-full border"
+                        className="w-20 h-20 rounded-full border object-cover"
                         />
                         <div className="flex justify-center items-center w-full">
                             <input

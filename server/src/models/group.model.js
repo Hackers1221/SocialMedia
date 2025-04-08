@@ -17,6 +17,10 @@ const GroupSchema = new Schema({
     admins : {
         type : [String],
     },
+    createdAt: {
+        type: Date,
+        default: Date.now()
+    }
 });
 
 

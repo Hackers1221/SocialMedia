@@ -1,5 +1,6 @@
 const { Server } = require("socket.io");
 const Message = require ('../server/src/models/message.model');
+const Group = require ('../server/src/models/group.model')
 const { uploadFile } = require("./cloudConfig");
 
 let onlineUsers = new Map ();
@@ -27,9 +28,7 @@ const setupSocket = (server) => {
     };
 
 
-    const sendMessage = async (message) => {
-        console.log(userSocketMap);
-    
+    const sendMessage = async (message) => {    
         const senderSocketId = userSocketMap.get(message.sender);
         const recipientSocketId = userSocketMap.get(message.recipient);
     
@@ -66,7 +65,30 @@ const setupSocket = (server) => {
         if (senderSocketId) {
           io.to(senderSocketId).emit("receiveMessage", messageData);
         }
+    };
+
+    const createGroup = async (data) => {
+      const uploadRes = await uploadFile(data.image);
+      const image = {
+        name: data.image.name,
+        url: uploadRes.secure_url,
+        filename: data.image.type,
       };
+
+      const groupData = await Group.create({
+        name: data.name,
+        admin: data.admin,
+        members: data.members,
+        image
+      });
+      
+      groupData.members.forEach(memberId => {
+        const socketId = userSocketMap.get(memberId);
+        if (socketId) {
+          io.to(socketId).emit('groupCreated', groupData);
+        }
+      });
+    }
 
     io.on("connection", (socket) => {
         console.log(`Socket ${socket.id} connected.`);
@@ -85,6 +107,7 @@ const setupSocket = (server) => {
         io.emit('online-users', Array.from(onlineUsers.values()));
 
         socket.on("sendMessage",sendMessage);
+        socket.on ("create-group", createGroup);
     });
 
     

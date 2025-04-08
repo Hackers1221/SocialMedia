@@ -49,7 +49,11 @@ export const getGroupById = createAsyncThunk ('getGroupById', async (id) => {
 const GroupSlice = createSlice({
   name: "group",
   initialState,
-  reducers: {},
+  reducers: {
+    addGroup : (state, action) => {
+        state.groups = [action.payload.groupData, ...state.groups];
+    }
+  },
   extraReducers : (builder) => {
       builder
       .addCase(createGroup.fulfilled,(state, action)=>{
@@ -67,5 +71,7 @@ const GroupSlice = createSlice({
     })
   }
 });
+
+export const { addGroup } = GroupSlice.actions;
 
 export default GroupSlice.reducer;
