@@ -5,9 +5,6 @@ const createGroup = async(data,messageData) => {
     const response = {};
     try {
         const groupData = await groupModel.create(data);
-        if(groupData){
-            const messageData = await MessageModel.create(messageData);
-        }
         response.groupDetails = groupData;
         return response;
     } catch (error) {

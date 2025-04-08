@@ -81,6 +81,20 @@ const setupSocket = (server) => {
         members: data.members,
         image
       });
+
+      const messageData = await Message.create({
+         recipient : data.members,
+         content : `${data.admin[0]} created the group `,
+         type : true
+      });
+
+      groupData.members.forEach(async(memberId) => {
+        const messageData = await Message.create({
+          recipient : data.members,
+          content : `${data.admin[0]} added ${memberId}`,
+          type : true
+       });
+      })
       
       groupData.members.forEach(memberId => {
         const socketId = userSocketMap.get(memberId);

@@ -5,12 +5,11 @@ const messageSchema = new Schema({
     sender: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Users",
-        required: true,
     },
-    recipient: {
+    recipient: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Users",
-    },
+    }],    
     content: {
         type: String,
     },
@@ -29,6 +28,7 @@ const messageSchema = new Schema({
     },
     messageType : {
         type : Boolean,
+        default : false
     }
 });
 
