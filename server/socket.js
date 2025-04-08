@@ -81,7 +81,7 @@ const setupSocket = (server) => {
         socket.on("disconnect", () => disconnect(socket));
 
         onlineUsers.set(socket.id, userId);
-        console.log ('onlineUsers', onlineUsers)
+        console.log ('onlineUsers', onlineUsers);
         io.emit('online-users', Array.from(onlineUsers.values()));
 
         socket.on("sendMessage",sendMessage);
