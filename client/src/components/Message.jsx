@@ -72,7 +72,7 @@ function Message({ message }) {
             <ImagePreview isOpen={isOpen} setOpen={setOpen} url={selectedImage}/>
             {!isOwnMessage && (
                 <div className="flex w-8 items-start">
-                    <img className="h-8 w-8 rounded-full" src={chatState?.recipient?.image?.url} />
+                    <img className="h-8 w-8 rounded-full object-cover" src={message?.sender?.image?.url} />
                 </div>
             )}
 
@@ -100,20 +100,19 @@ function Message({ message }) {
                                     />
                                 ) : isDocument 
                                 ? (
-                                    <a href={file.url} target='_blank' className="flex gap-4 items-center bg-[var(--card)] p-2">
+                                    <a key={index} href={file.url} target='_blank' className="flex gap-4 items-center bg-[var(--card)] p-2">
                                         <i className="fa-solid fa-file"></i>
                                         <h2 className="text-sm">{file.name.slice(0,30) + (file.name.length > 30 ? " ..." : "")}</h2>
                                     </a>
                                 ) 
                                 : (
-                                    <a href={file.url} target="_blank" className="relative">
+                                    <a key={index} href={file.url} target="_blank" className="relative">
                                         <i className="fa-solid fa-play absolute top-[50%] bottom-[50%] right-[50%] left-[50%]"></i>
                                         <img
-                                        key={index}
-                                        src={videoThumbnails[file.url]}
-                                        alt={file.name}
-                                        className="max-w-full max-h-48 rounded-md object-cover hover:cursor-pointer"
-                                    />
+                                            src={videoThumbnails[file.url]}
+                                            alt={file.name}
+                                            className="max-w-full max-h-48 rounded-md object-cover hover:cursor-pointer"
+                                        />
                                     </a>
                                 );
                             })}
@@ -136,7 +135,7 @@ function Message({ message }) {
 
             {isOwnMessage && (
                 <div className="w-8">
-                    <img className="rounded-full" src={message?.sender?.image?.url} />
+                    <img className="w-8 h-8 rounded-full object-cover" src={authState.data?.image?.url} />
                 </div>
             )}
         </div>

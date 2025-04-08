@@ -19,14 +19,21 @@ function CreateGroup ({ isOpen, setOpen }) {
     const [groupEdit, setGroupEdit] = useState (false);
     const [groupName, setGroupName] = useState ("");
     const [loading, setLoading] = useState(false);
+    const [image, setImage] = useState ();
+    const [imageUrl, setImageUrl] = useState ("");
 
 
-    const defaultImage = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
+    const defaultImage = "https://t3.ftcdn.net/jpg/12/81/12/20/240_F_1281122039_wYCRIlTBPzTUzyh8KrPd87umoo52njyw.jpg";
 
     function close () {
         setMembers([]);
         setOpen (!isOpen);
     }
+
+    const handleFileChange = (e) => {
+        setImageUrl (URL.createObjectURL(e.target.files[0]));
+        setImage (e.target.files[0]);
+    };
 
     function goNext () {
         if (members.length <= 2) {
@@ -40,12 +47,16 @@ function CreateGroup ({ isOpen, setOpen }) {
         try {
             setLoading (true);
 
-            await dispatch (createGroup ({
-                name: groupName,
-                members,
-                image: defaultImage,
-                admins: [authState.data?._id]
-            }))
+            const formData = new FormData();
+            formData.append ("name", groupName);
+            members.forEach((member) => {
+                formData.append("members", member);
+            });  
+            formData.append("admin", authState.data?._id);
+
+            formData.append ("image", image);
+
+            await dispatch (createGroup (formData));
         } catch (error) {
             toast.error ('Something went wrong');
         } finally {
@@ -71,6 +82,7 @@ function CreateGroup ({ isOpen, setOpen }) {
                 <button onClick={close} className={`fixed top-5 right-6 w-max h-max text-white font-bold text-xl focus:outline-none hover:cursor-pointer z-[500]`}>✕</button>
                 {!groupEdit && <div className="relative flex justify-center h-full w-full">
                     <div className="p-4 w-full">
+                        <h2 className="font-bold text-md">Create group</h2>
                         <div className={`flex items-center rounded-md px-2 my-4 shadow-md border border-[var(--input)]`}>
                             <i className="fa-solid fa-magnifying-glass text-[var(--heading)]"></i>
                             <input
@@ -91,14 +103,14 @@ function CreateGroup ({ isOpen, setOpen }) {
                             ))}
                         </div>
                     </div>
-                    <div className="absolute bottom-4 bg-[var(--buttons)] w-[80%] flex justify-center items-center rounded-md py-2 hover:cursor-pointer">
-                        <h2 className="text-black font-bold" onClick={goNext}>Next</h2>
+                    <div onClick={goNext} className="absolute bottom-4 bg-[var(--buttons)] w-[80%] flex justify-center items-center rounded-md py-2 hover:cursor-pointer">
+                        <h2 className="text-black font-bold text-[var(--card)]">Next</h2>
                     </div>
                 </div>}
                 {groupEdit && <div className="relative h-full w-full p-4">
                     <div className="flex flex-col items-center gap-6">
                         <img
-                        src={defaultImage}
+                        src={imageUrl || defaultImage}
                         alt="Profile"
                         className="w-20 h-20 rounded-full border"
                         />
@@ -107,8 +119,8 @@ function CreateGroup ({ isOpen, setOpen }) {
                                 type="file"
                                 accept="image/*"
                                 className={`px-4 py-2 border-[var(--border)] rounded-md text-sm text-[var(--text)] font-medium`}
-                                // onChange={handleImageChange}
-                                encType= "multipart/form-data" 
+                                onChange={handleFileChange}
+                                encType= "multipart/form-data"
                             />
                         </div>
                     </div>
@@ -133,12 +145,12 @@ function CreateGroup ({ isOpen, setOpen }) {
                             <User chat={user} type={'follower'} key={index}/>
                         ))}
                     </div>
-                    <div className="absolute bottom-4 bg-[var(--buttons)] w-[90%] flex justify-center items-center rounded-md py-2 hover:cursor-pointer">
-                        <h2 className="text-black font-bold" onClick={submit}>{loading ? (
-                                                                    <FaSpinner className="animate-spin mr-2" />
-                                                                ) : (
-                                                                    "Submit"
-                                                                )}</h2>
+                    <div onClick={submit} className="absolute bottom-4 bg-[var(--buttons)] w-[90%] flex justify-center items-center rounded-md py-2 hover:cursor-pointer">
+                        <h2 className="text-black font-bold text-[var(--card)]">{loading ? (
+                            <FaSpinner className="animate-spin mr-2" />
+                        ) : (
+                            "Submit"
+                        )}</h2>
                     </div>
                 </div>}
             </dialog>

@@ -2,16 +2,30 @@ const { StatusCodes } = require('http-status-codes');
 const groupService = require('../services/group.service')
 
 const createGroup = async(req,res) => {
-    const response = await groupService.createGroup(req.body);
+    const image = {
+        url: req.file.path,
+        filename: req.file.filename
+    }
+
+    const groupData = {
+        name: req.body.name,
+        admins: req.body.admin,
+        members: req.body.members,
+        image
+    }
+
+    console.log (groupData);
+
+    const response = await groupService.createGroup(groupData);
     if(response.error){
-                return res.status(StatusCodes.BAD_REQUEST).send({
-                    msg : "Unable to create the group",
-                    error : response.error
-                })
-            }
-        return res.status(StatusCodes.CREATED).send({
-            msg : "Successfully created the group",
-            userdata: response.groupDetails
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg : "Unable to create the group",
+            error : response.error
+        })
+    }
+    return res.status(StatusCodes.CREATED).send({
+        msg : "Successfully created the group",
+        groupData: response.groupDetails
     })
 }
 
@@ -23,9 +37,9 @@ const getGroupByUserId = async(req,res) => {
             error : response.error
         })
     }
-        return res.status(StatusCodes.CREATED).send({
-            msg : "Successfully fetched the group details",
-            userdata: response.groupDetails
+    return res.status(StatusCodes.CREATED).send({
+        msg : "Successfully fetched the group details",
+        groupData: response.groupDetails
     })
 }
 
@@ -39,7 +53,7 @@ const getGroupById = async(req,res) => {
     }
         return res.status(StatusCodes.CREATED).send({
             msg : "Successfully fetched the group details",
-            userdata: response.groupDetails
+            groupData: response.groupDetails
     })
 }
 

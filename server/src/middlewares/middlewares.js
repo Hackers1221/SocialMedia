@@ -33,7 +33,6 @@ const updateProfileImage = async (req, res, next) => {
     catch(error){
         return res.status(StatusCodes.BAD_REQUEST).send({
             msg : "Error in uploading image",
-            // error : response.error
         })
     }
 } 

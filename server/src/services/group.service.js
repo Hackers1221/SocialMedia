@@ -1,4 +1,5 @@
 const groupModel = require('../models/group.model')
+const MessageModel = require('../models/message.model');
 
 const createGroup = async(data) => {
     const response = {};
@@ -29,8 +30,16 @@ const getGroupByUserId = async(userId) => {
 const getGroupById = async(id) => {
     const response = {};
     try {
-        const groupData = await groupModel.findById(id);
-        response.groupDetails = groupData;
+        let groupData = await groupModel.findById(id);
+        const messages = await MessageModel.find ({ groupId: id}); 
+
+        response.groupDetails = {
+            ...groupData.toObject(),
+            messages: messages
+        };
+
+        console.log (response.groupDetails);
+
         return response;
     } catch (error) {
         response.error = error.message;

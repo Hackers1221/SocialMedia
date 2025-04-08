@@ -2,7 +2,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../config/axiosInstance";
 
 const initialState = {
-    groups: []
+    groups: [],
+    liveGroup: {}
 };
 
 export const createGroup = createAsyncThunk ('createGroup', async (data) => {
@@ -20,7 +21,20 @@ export const createGroup = createAsyncThunk ('createGroup', async (data) => {
 
 export const getGroupByUserId = createAsyncThunk ('getGroupByUserId', async (id) => {
     try {
-        const response = await axiosInstance.get (`/${id}`, {
+        const response = await axiosInstance.get (`/group/by-user/${id}`, {
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+        return response;
+    } catch (error) {
+        console.log (error);
+    }
+})
+
+export const getGroupById = createAsyncThunk ('getGroupById', async (id) => {
+    try {
+        const response = await axiosInstance.get (`/group/by-id/${id}`, {
             headers: {
                 'x-access-token': localStorage.getItem('token')
             }
@@ -42,6 +56,15 @@ const GroupSlice = createSlice({
           if (!action.payload.data?.groupData) return;
           state.groups = [...state.groups, action.payload.data?.groupData];
       })
+      .addCase(getGroupByUserId.fulfilled, (state, action) => {
+          if (!action.payload.data?.groupData) return;
+          state.groups = action.payload.data?.groupData;
+      })
+      .addCase(getGroupById.fulfilled, (state, action) => {
+        console.log (action.payload.data);
+        if (!action.payload.data?.groupData) return;
+        state.liveGroup = action.payload.data?.groupData;
+    })
   }
 });
 

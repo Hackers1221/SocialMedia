@@ -23,7 +23,7 @@ const messageSchema = new Schema({
         type: Date,
         default: Date.now,
     },
-    groupChat : {
+    groupId : {
         type : String,
         default : ""
     }
