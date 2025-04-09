@@ -11,9 +11,11 @@ function User ({ chat, type }) {
     const dispatch = useDispatch ();
 
     const content = chat.content?.toString().slice(0, 20) + (chat.content?.length > 20 ? "..." : "")
+
     const defaultImage = "https://t3.ftcdn.net/jpg/12/81/12/20/240_F_1281122039_wYCRIlTBPzTUzyh8KrPd87umoo52njyw.jpg";
 
     const [user, setUser] = useState ();
+    const [username, setUserName] = useState ("");
 
     async function getChats () {
         if (type !== 'groups') {
@@ -34,6 +36,12 @@ function User ({ chat, type }) {
     }
 
     useEffect (() => {
+        if (chat.user) setUserName (chat.user?.username?.toString().slice(0, 25) + (chat.user?.username?.toString().length > 25 ? "..." : ""))
+        if (user) setUserName (user?.username?.toString().slice(0, 25) + (user?.username?.toString().length > 25 ? "..." : ""))
+        if (chat.name) setUserName (chat.name?.toString().slice(0, 25) + (chat.name?.toString().length > 25 ? "..." : ""))
+    }, [user])
+
+    useEffect (() => {
         if (type === 'follower') getUser ();
     }, [])
 
@@ -44,7 +52,7 @@ function User ({ chat, type }) {
         >
             <img src={chat?.user?.image?.url || user?.image?.url || chat?.image?.url || defaultImage} className="flex items-center justify-center h-8 w-8 rounded-full object-cover"/>
             <div className="ml-2 w-full">
-                <h2 className="text-sm font-semibold">{chat?.user?.username || user?.name || chat?.name}</h2>
+                <h2 className="text-sm font-semibold">{username || user?.name || chat?.name}</h2>
                 {type !== 'follower' && <h3 className="text-xs font-extralight">{content}</h3>}
             </div>
             {chatState.onlineUsers?.includes(chat?.user?._id || user?._id) && <div className="w-[0.7rem] h-[0.6rem] bg-green-400 rounded-full inline-block"></div>}

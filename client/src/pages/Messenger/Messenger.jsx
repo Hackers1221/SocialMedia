@@ -60,8 +60,8 @@ const Messenger = () => {
   };
 
   const sendGroupMessage = () => {
-    if (groupMessage?.trim() || files?.length) {  
-      const readerPromises = files.map(
+    if (groupMessage?.trim() || groupFiles?.length) {  
+      const readerPromises = groupFiles.map(
         (file) =>
           new Promise((resolve, reject) => {
             const reader = new FileReader();

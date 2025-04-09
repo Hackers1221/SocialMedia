@@ -33,7 +33,6 @@ function Message({ message }) {
 
     async function getContent () {
         const msg = message.content.split (" ");
-        console.log (msg);
         if (msg[1] === "added") {
             const firstPerson = (authState.data?.username !== msg[0] ? msg[0] : "You");
             const secondPerson = (authState.data?.username !== msg[2] ? msg[2] : "you");
@@ -101,12 +100,13 @@ function Message({ message }) {
                 )}
 
                 <div className={`${message.sender._id !== authState.data?._id ? `bg-[var(--background)]` : `bg-[var(--topic)]`} p-2 rounded-md inline-block max-w-[65%] w-fit`}>
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-col">
+                    {(message.groupId.length > 0 && message.sender?._id !== authState.data?._id) && <h2 className="text-[10px] font-extralight">{message.sender?.username}</h2>}
                         {/* File previews */}
                         {message.files?.length > 0 && (
-                            <div className="flex flex-col gap-2 mt-1">
+                            <div className="flex flex-col gap-2 mt-1 mb-2">
                                 {message.files.map((file, index) => {
-                                    const imageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
+                                    const imageExtensions = ["jpg", "jpeg", "png", "gif", "webp", "avif"];
                                     const documentExtensions = ["pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "txt", "rtf", "odt", "ods", "odp", "csv", "tsv", "epub"];
 
                                     const extension = file.filename.split ('/').pop().toLowerCase ();
