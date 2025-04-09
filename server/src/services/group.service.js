@@ -48,8 +48,71 @@ const getGroupById = async(id) => {
     }
 }
 
+const getRecentMessage = async (userId) => {
+    const response = {};
+    try {
+      const currentUserId = new mongoose.Types.ObjectId(userId);
+  
+      const userGroups = await groupModel.find({
+          members: {
+            $elemMatch: {
+              userId: currentUserId
+            }
+          }
+        }).select("_id");      
+  
+      const groupIds =  userGroups.map((group) => group._id.toString());
+  
+      const recentChats = await MessageModel.aggregate([
+        {
+          $match: {
+              groupId: { $in: groupIds },
+          }
+        },
+        {
+          $sort: { timestamp: -1 }
+        },
+        {
+          $group: {
+            _id: "$groupId",
+            latestMessage: { $first: "$$ROOT" }
+          }
+        },
+        {
+          $replaceRoot: { newRoot: "$latestMessage" }
+        },
+        {
+            $project: {
+              content: 1,
+              groupId: 1
+            }
+          }
+      ])
+
+      const groupDetails = await groupModel.find({
+        _id: { $in: recentChats.map(msg => msg.groupId) }
+      }).select("name image");
+
+      const enrichedChats = recentChats.map(msg => {
+        const group = groupDetails.find(g => g._id.toString() === msg.groupId.toString());
+        return {
+          ...msg,
+          group
+        };
+      });
+  
+      response.messages = enrichedChats;
+      return response;
+  
+    } catch (error) {
+      response.error = error.message;
+      return response;
+    }
+};
+
 module.exports = {
     createGroup,
     getGroupByUserId,
-    getGroupById
+    getGroupById,
+    getRecentMessage
 }

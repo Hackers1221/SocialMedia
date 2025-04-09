@@ -8,7 +8,7 @@ import { X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { getRecentMessages } from "../../redux/Slices/chat.slice";
 import CreateGroup from "../../components/CreateGroup";
-import { getGroupByUserId } from "../../redux/Slices/group.slice";
+import { getGroupByUserId, getRecentMessage } from "../../redux/Slices/group.slice";
 import { MdOutlineGroupAdd } from "react-icons/md";
 
 const Messenger = () => {
@@ -107,18 +107,26 @@ const Messenger = () => {
       setFiles((prev) => prev.filter((_, idx) => idx !== index));
     } 
 
-    async function onGroupClick () {
-      setActiveTab ('groups');
-      await dispatch (getGroupByUserId (authState.data?._id));
+    async function onGroupClick() {
+      const response = await dispatch(getRecentMessage(authState.data?._id));
+      if (response.payload) {
+        setActiveTab('groups');
+      }
     }
 
-    useEffect (() => {
+    useEffect(() => {
+    }, [activeTab],[dispatch]);
+  
+    
+    
+
+    useEffect (() => { 
       getRecent ();
-    }, [chatState.messages])
+    }, [chatState.messages]);
+
     
 
     useEffect(() => {
-      console.log ('hello');
       if (chatContainerRef.current) {
         chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
       }
@@ -183,7 +191,7 @@ const Messenger = () => {
                 ))}
               </div>}
               {activeTab === 'groups' && <div className="flex flex-col space-y-1 mt-4 h-full overflow-y-auto">
-                {groupState.groups?.length > 0 && groupState.groups?.map ((chat, index) => (
+                {groupState.groupDetails?.length > 0 && groupState.groupDetails?.map ((chat, index) => (
                   <User chat={chat} type={'groups'} key={index}/>
                 ))}
               </div>}

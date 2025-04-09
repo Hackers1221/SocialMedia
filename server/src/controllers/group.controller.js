@@ -55,10 +55,25 @@ const getGroupById = async(req,res) => {
     })
 }
 
+const getRecentMessage = async(req,res) => {
+    const response = await groupService.getRecentMessage(req.params.userId);
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg : "Unable to fetch the recent group chats",
+            error : response.error
+        })
+    }
+        return res.status(StatusCodes.CREATED).send({
+            msg : "Successfully fetched the recent group chats",
+            recentChats: response.messages,
+    })
+}
+
 
 
 module.exports = {
     createGroup,
     getGroupByUserId,
-    getGroupById
+    getGroupById,
+    getRecentMessage
 }

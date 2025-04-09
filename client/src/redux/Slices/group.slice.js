@@ -2,8 +2,9 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../config/axiosInstance";
 
 const initialState = {
-    groups: [],
-    liveGroup: {}
+    groupDetails: [],
+    liveGroup: {},
+    recentChats : [],
 };
 
 export const createGroup = createAsyncThunk ('createGroup', async (data) => {
@@ -45,13 +46,26 @@ export const getGroupById = createAsyncThunk ('getGroupById', async (id) => {
     }
 })
 
+export const getRecentMessage = createAsyncThunk('getrecentGroupChats' , async(id) => {
+    try {
+        const response = await axiosInstance.get(`/group/recent/${id}` , {
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+        return response;
+    } catch (error) {
+        console.log (error);
+    }
+})
+
 
 const GroupSlice = createSlice({
   name: "group",
   initialState,
   reducers: {
     addGroup : (state, action) => {
-        state.groups = [action.payload.groupData, ...state.groups];
+        state.groupDetails = [action.payload.groupData, ...state.groups];
     },
     updateGroupMessages : (state, action) => {
         state.liveGroup.messages = [...state.liveGroup.messages, action.payload.message];
@@ -71,6 +85,9 @@ const GroupSlice = createSlice({
         console.log (action.payload.data);
         if (!action.payload.data?.groupData) return;
         state.liveGroup = action.payload.data?.groupData;
+    })
+    .addCase(getRecentMessage.fulfilled,(state,action) => {
+        state.groupDetails = action.payload?.data?.recentChats
     })
   }
 });
