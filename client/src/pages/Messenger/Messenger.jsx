@@ -118,7 +118,6 @@ const Messenger = () => {
     
 
     useEffect(() => {
-      console.log ('hello');
       if (chatContainerRef.current) {
         chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
       }

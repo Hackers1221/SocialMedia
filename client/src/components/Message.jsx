@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ImagePreview from "./ImagePreview";
-import { getUserById } from "../redux/Slices/auth.slice";
+import { Link } from "react-router-dom";
 
 function Message({ message }) {
     const authState = useSelector((state) => state.auth);
@@ -89,7 +89,7 @@ function Message({ message }) {
     return (
         <div className={`flex ${baseMessage ? `justify-center` : message.sender._id !== authState.data?._id ? `justify-start` : `justify-end`} items-start gap-4 mt-2 w-full`}>
             <ImagePreview isOpen={isOpen} setOpen={setOpen} url={selectedImage}/>
-            {baseMessage && <div className="flex items-center px-2 py-1 w-max bg-black rounded-md">
+            {baseMessage && <div className="flex items-center px-2 py-1 w-max bg-black/10 rounded-md">
                     <h2 className="text-xs font-extralight">{content}</h2>
                 </div>}
            {!baseMessage && <div className={`flex gap-2 w-[50%] ${message.sender._id !== authState.data?._id ? `justify-start` : `justify-end`}`}>
@@ -101,7 +101,7 @@ function Message({ message }) {
 
                 <div className={`${message.sender._id !== authState.data?._id ? `bg-[var(--background)]` : `bg-[var(--topic)]`} p-2 rounded-md inline-block max-w-[65%] w-fit`}>
                     <div className="flex flex-col">
-                    {(message.groupId.length > 0 && message.sender?._id !== authState.data?._id) && <h2 className="text-[10px] font-extralight">{message.sender?.username}</h2>}
+                    {(message.groupId.length > 0 && message.sender?._id !== authState.data?._id) && <Link to={`/profile/${message.sender?.username}`} className="text-[10px] font-extralight hover:underline">{message.sender?.username}</Link>}
                         {/* File previews */}
                         {message.files?.length > 0 && (
                             <div className="flex flex-col gap-2 mt-1 mb-2">
