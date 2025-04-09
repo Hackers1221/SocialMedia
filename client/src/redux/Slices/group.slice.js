@@ -82,7 +82,6 @@ const GroupSlice = createSlice({
           state.groups = action.payload.data?.groupData;
       })
       .addCase(getGroupById.fulfilled, (state, action) => {
-        console.log (action.payload.data);
         if (!action.payload.data?.groupData) return;
         state.liveGroup = action.payload.data?.groupData;
     })
