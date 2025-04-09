@@ -25,7 +25,7 @@ const Messenger = () => {
   const chatContainerRef = useRef(null);
   const [activeTab, setActiveTab] = useState ('recent');
   const [files, setFiles] = useState([]);
-  const [groupFiles, setgroupFiles] = useState([]);
+  const [groupFiles, setGroupFiles] = useState([]);
   const [groupCreate, setGroupCreate] = useState (false);
 
 
@@ -215,9 +215,10 @@ const Messenger = () => {
                 </div>
               </div>
               <div className="p-4 h-full overflow-y-auto w-full mb-16" ref={chatContainerRef}>
-                {chatState.messages?.length > 0 && chatState?.messages.map ((message, key) => (
-                  <Message message={message} key={key}/>
-                ))}
+                {chatState.messages?.length > 0 && chatState?.messages.map ((message, key) => {
+                  if (message.groupId) return null;
+                  return (<Message message={message} key={key}/>);
+                })}
               </div>
               <div className="absolute bottom-0 pb-4 flex flex-row items-center h-16 bg-[var(--card)] w-full px-4">
                 <div className="mt-auto flex flex-col items-center gap-3 p-2 relative w-full">

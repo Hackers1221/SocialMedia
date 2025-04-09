@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getUserById } from "../redux/Slices/auth.slice";
 import Avatar from '../components/Avatar'
 
 function AddUser ({ userId, members, setMembers }) {
     if (!userId) return null;
+
+    const authState = useSelector ((state) => state.auth);
 
     const dispatch = useDispatch ();
 
@@ -15,13 +17,24 @@ function AddUser ({ userId, members, setMembers }) {
         setUser (res.payload.data?.userdetails);
     }
 
-    function handleCheckboxChange () {
-        setMembers ((prev) =>
-          prev.includes(userId)
-            ? prev.filter((item) => item !== userId) // remove if already selected
-            : [...prev, userId] // add if not present
-        );
-      };
+    function handleCheckboxChange() {
+        setMembers((prev) => {
+          const alreadyAdded = prev.some((item) => item.id === userId);
+      
+          if (alreadyAdded) {
+            return prev.filter((item) => item.id !== userId);
+          } else {
+            return [
+              ...prev,
+              {
+                id: userId,
+                addedBy: authState.data?._id,
+              },
+            ]; 
+          }
+        });
+      }
+      
 
     useEffect (() => {
         getUser ();
@@ -32,7 +45,7 @@ function AddUser ({ userId, members, setMembers }) {
             <input 
                 type="checkbox"
                 onChange={handleCheckboxChange}
-                checked={members.includes(userId)}
+                checked={members.some(member => member.id === userId)}
             />
             <Avatar url={user?.image?.url} size={'md'}/>
             <h2>{user?.name}</h2>

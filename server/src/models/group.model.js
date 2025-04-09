@@ -9,8 +9,8 @@ const GroupSchema = new Schema({
     members : {
         type : [
             {
-                id : {
-                    type : String,
+                userId : {
+                    type : Schema.Types.ObjectId,
                     required : true
                 },
                 joinedAt : {
@@ -30,7 +30,7 @@ const GroupSchema = new Schema({
         filename: { type: String }
     },
     admins : {
-        type : [String],
+        type : [Schema.Types.ObjectId],
     },
     createdAt: {
         type: Date,

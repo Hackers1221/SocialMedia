@@ -52,6 +52,9 @@ const GroupSlice = createSlice({
   reducers: {
     addGroup : (state, action) => {
         state.groups = [action.payload.groupData, ...state.groups];
+    },
+    updateGroupMessages : (state, action) => {
+        state.liveGroup.messages = [...state.liveGroup.messages, action.payload.message];
     }
   },
   extraReducers : (builder) => {
@@ -72,6 +75,6 @@ const GroupSlice = createSlice({
   }
 });
 
-export const { addGroup } = GroupSlice.actions;
+export const { addGroup, updateGroupMessages } = GroupSlice.actions;
 
 export default GroupSlice.reducer;

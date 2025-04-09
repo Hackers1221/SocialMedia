@@ -14,8 +14,6 @@ const createGroup = async(req,res) => {
         image
     }
 
-    console.log (groupData);
-
     const response = await groupService.createGroup(groupData,req.body.messageData);
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({

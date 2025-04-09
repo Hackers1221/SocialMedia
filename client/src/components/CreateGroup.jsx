@@ -16,7 +16,10 @@ function CreateGroup ({ isOpen, setOpen }) {
     const dialogRef = useRef (null);
     const dispatch = useDispatch ();
 
-    const [members, setMembers] = useState ([authState.data?._id]);
+    const [members, setMembers] = useState ([{
+        id: authState.data?._id,
+        addedBy: authState.data?._id
+    }]);
     const [groupEdit, setGroupEdit] = useState (false);
     const [groupName, setGroupName] = useState ("");
     const [loading, setLoading] = useState(false);
@@ -42,6 +45,7 @@ function CreateGroup ({ isOpen, setOpen }) {
         }
 
         setGroupEdit (true);
+        console.log (members);
     }
 
     async function submit () {
@@ -62,8 +66,10 @@ function CreateGroup ({ isOpen, setOpen }) {
                         admin: [authState.data?._id],
                         members: members,
                         name: groupName.trim(),
-                        image: encodedFile, // still an array, for consistency
+                        image: encodedFile,
                     };
+
+                    console.log (members);
                 
                     if (socket && socket.connected) {
                         socket.emit("create-group", payload);
@@ -163,7 +169,7 @@ function CreateGroup ({ isOpen, setOpen }) {
                     <div className="mt-4">
                         <h2 className="font-semibold mb-2">Added Participants</h2>
                         {members.map ((user, index) => (
-                            <User chat={user} type={'follower'} key={index}/>
+                            <User chat={user.id} type={'follower'} key={index}/>
                         ))}
                     </div>
                     <div onClick={submit} className="absolute bottom-4 bg-[var(--buttons)] w-[90%] flex justify-center items-center rounded-md py-2 hover:cursor-pointer">

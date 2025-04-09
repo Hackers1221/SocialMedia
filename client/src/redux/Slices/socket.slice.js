@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { io } from "socket.io-client";
 import { updateMessages, setOnlineUsers } from "./chat.slice";
+import { updateGroupMessages } from "./group.slice";
 import { addGroup } from "./group.slice";
 
 
@@ -50,6 +51,11 @@ const socketSlice = createSlice({
           console.log ("Slice", data);
           dispatch(addGroup ({ groupData: data }));
         })
+
+        socketInstance.on("receiveGroupMessage", (data) => {
+          console.log (data);
+          dispatch(updateGroupMessages({ message: data }));
+        });
       }
 
       state.socket = socketInstance;
@@ -60,6 +66,7 @@ const socketSlice = createSlice({
         socketInstance.off("connect");
         socketInstance.off("disconnect");
         socketInstance.off("receiveMessage");
+        socketInstance.off("receiveGroupMessage");
         socketInstance.off("online-users");
         socketInstance.off("groupCreated");
 

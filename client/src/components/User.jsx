@@ -44,7 +44,7 @@ function User ({ chat, type }) {
         >
             <img src={chat?.user?.image?.url || user?.image?.url || chat?.image?.url || defaultImage} className="flex items-center justify-center h-8 w-8 rounded-full object-cover"/>
             <div className="ml-2 w-full">
-                <h2 className="text-sm font-semibold">{chat?.user?.name || user?.name || chat?.name}</h2>
+                <h2 className="text-sm font-semibold">{chat?.user?.username || user?.name || chat?.name}</h2>
                 {type !== 'follower' && <h3 className="text-xs font-extralight">{content}</h3>}
             </div>
             {chatState.onlineUsers?.includes(chat?.user?._id || user?._id) && <div className="w-[0.7rem] h-[0.6rem] bg-green-400 rounded-full inline-block"></div>}

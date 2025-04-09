@@ -2,6 +2,8 @@ const { Server } = require("socket.io");
 const Message = require ('../server/src/models/message.model');
 const Group = require ('../server/src/models/group.model')
 const { uploadFile } = require("./cloudConfig");
+const { default: mongoose } = require("mongoose");
+const User = require("../server/src/models/user.model");
 
 let onlineUsers = new Map ();
 
@@ -67,6 +69,44 @@ const setupSocket = (server) => {
         }
     };
 
+    const sendGroupMessage = async (message) => {    
+      const uploadedFiles = [];
+
+      // Upload files to Cloudinary
+      for (const file of message.files) {
+        try {
+          const uploadRes = await uploadFile(file);
+          uploadedFiles.push({
+            name: file.name,
+            url: uploadRes.secure_url,
+            filename: file.type,
+          });
+        } catch (err) {
+          console.error("Cloudinary upload error:", err);
+        }
+      }
+
+      const recipient = message.recipient.map(user => user.userId);
+
+      const createdMessage = await Message.create({
+        groupId: message.groupId,
+        sender: message.sender,
+        recipient,
+        content: message.content,
+        files: uploadedFiles
+      });
+  
+      const messageData = await Message.findById(createdMessage._id)
+      .populate("sender", "id name image");
+
+      for (const member of messageData.recipient) {
+        const socketId = userSocketMap.get(member._id.toString());
+        if (socketId) {
+          io.to(socketId).emit("receiveGroupMessage", messageData);
+        }
+      }
+  };
+
     const createGroup = async (data) => {
       const uploadRes = await uploadFile(data.image);
       const image = {
@@ -75,33 +115,58 @@ const setupSocket = (server) => {
         filename: data.image.type,
       };
 
-      const groupData = await Group.create({
-        name: data.name,
-        admin: data.admin,
-        members: data.members,
-        image
-      });
+      const members = [];
 
-      const messageData = await Message.create({
-         recipient : data.members,
-         content : `${data.admin[0]} created the group `,
-         type : true
-      });
-
-      groupData.members.forEach(async(memberId) => {
-        const messageData = await Message.create({
-          recipient : data.members,
-          content : `${data.admin[0]} added ${memberId}`,
-          type : true
-       });
-      })
-      
-      groupData.members.forEach(memberId => {
-        const socketId = userSocketMap.get(memberId);
-        if (socketId) {
-          io.to(socketId).emit('groupCreated', groupData);
+      data.members.forEach(member => {
+        try {
+          const userId = new mongoose.Types.ObjectId(member.id);
+          const addedBy = new mongoose.Types.ObjectId(member.addedBy);
+          members.push({ userId, addedBy });
+        } catch (err) {
+          console.warn('Invalid ObjectId:', member, err.message);
         }
       });
+
+      const admin = new mongoose.Types.ObjectId(data.admin[0]);
+      
+
+      try {
+        const groupData = await Group.create({
+          name: data.name,
+          admins: [admin],
+          members,
+          image
+        });
+
+        const adminDetails = await User.findById(data.admin[0]);
+  
+        const messageData = await Message.create({
+           content : `${adminDetails.username} created the group`,
+           messageType : true,
+           groupId: groupData._id
+        });
+  
+        for (const member of groupData.members) {
+          const userDetails = await User.findById(member.userId);
+          if (adminDetails.username !== userDetails.username) {
+            await Message.create({
+              content: `${adminDetails.username} added ${userDetails.username}`,
+              messageType: true,
+              groupId: groupData._id
+            });
+          }
+        }
+
+        groupData.members.forEach(memberId => {
+          const socketId = userSocketMap.get(memberId);
+          if (socketId) {
+            io.to(socketId).emit('groupCreated', groupData);
+          }
+        });
+
+      } catch (error) {
+        console.log (error);
+      }
     }
 
     io.on("connection", (socket) => {
@@ -122,6 +187,7 @@ const setupSocket = (server) => {
 
         socket.on("sendMessage",sendMessage);
         socket.on ("create-group", createGroup);
+        socket.on ("sendGroupMessage", sendGroupMessage);
     });
 
     

@@ -1,15 +1,21 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ImagePreview from "./ImagePreview";
+import { getUserById } from "../redux/Slices/auth.slice";
 
 function Message({ message }) {
     const authState = useSelector((state) => state.auth);
     const chatState = useSelector ((state) => state.chat);
 
+    const dispatch = useDispatch ();
+
     const [time, setTime] = useState();
     const [selectedImage, setSelectedImage] = useState ('');
     const [isOpen, setOpen] = useState (false);
     const [videoThumbnails, setVideoThumbnails] = useState({});
+    const baseMessage = message.messageType;
+
+    const [content, setContent] = useState ("");
 
 
     function getTime() {
@@ -23,6 +29,21 @@ function Message({ message }) {
     function openImage (url) {
         setSelectedImage (url);
         setOpen (true);
+    }
+
+    async function getContent () {
+        const msg = message.content.split (" ");
+        console.log (msg);
+        if (msg[1] === "added") {
+            const firstPerson = (authState.data?.username !== msg[0] ? msg[0] : "You");
+            const secondPerson = (authState.data?.username !== msg[2] ? msg[2] : "you");
+            setContent (firstPerson + " added " + secondPerson);
+        }
+        else {
+            const firstPerson = (authState.data?.username !== msg[0] ? msg[0] : "You");
+            setContent (firstPerson + " created the group");
+
+        }
     }
 
     useEffect(() => {
@@ -63,81 +84,85 @@ function Message({ message }) {
 
     useEffect(() => {
         getTime();
+        getContent ();
     }, []);
 
-    const isOwnMessage = message.sender._id == authState.data?._id;
-
     return (
-        <div className={`flex ${!isOwnMessage ? `justify-start` : `justify-end`} items-start gap-4 mt-2 w-full`}>
+        <div className={`flex ${baseMessage ? `justify-center` : message.sender._id !== authState.data?._id ? `justify-start` : `justify-end`} items-start gap-4 mt-2 w-full`}>
             <ImagePreview isOpen={isOpen} setOpen={setOpen} url={selectedImage}/>
-            {!isOwnMessage && (
-                <div className="flex w-8 items-start">
-                    <img className="h-8 w-8 rounded-full object-cover" src={message?.sender?.image?.url} />
-                </div>
-            )}
+            {baseMessage && <div className="flex items-center px-2 py-1 w-max bg-black rounded-md">
+                    <h2 className="text-xs font-extralight">{content}</h2>
+                </div>}
+           {!baseMessage && <div className={`flex gap-2 w-[50%] ${message.sender._id !== authState.data?._id ? `justify-start` : `justify-end`}`}>
+                {message.sender._id !== authState.data?._id && (
+                    <div className="flex w-8 items-start">
+                        <img className="h-8 w-8 rounded-full object-cover" src={message?.sender?.image?.url} />
+                    </div>
+                )}
 
-            <div className={`${!isOwnMessage ? `bg-[var(--background)]` : `bg-[var(--topic)]`} p-2 rounded-md inline-block max-w-[65%] w-fit`}>
-                <div className="flex flex-col gap-2">
-                    {/* File previews */}
-                    {message.files?.length > 0 && (
-                        <div className="flex flex-col gap-2 mt-1">
-                            {message.files.map((file, index) => {
-                                const imageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
-                                const documentExtensions = ["pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "txt", "rtf", "odt", "ods", "odp", "csv", "tsv", "epub"];
+                <div className={`${message.sender._id !== authState.data?._id ? `bg-[var(--background)]` : `bg-[var(--topic)]`} p-2 rounded-md inline-block max-w-[65%] w-fit`}>
+                    <div className="flex flex-col gap-2">
+                        {/* File previews */}
+                        {message.files?.length > 0 && (
+                            <div className="flex flex-col gap-2 mt-1">
+                                {message.files.map((file, index) => {
+                                    const imageExtensions = ["jpg", "jpeg", "png", "gif", "webp"];
+                                    const documentExtensions = ["pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "txt", "rtf", "odt", "ods", "odp", "csv", "tsv", "epub"];
 
-                                const extension = file.filename.split ('/').pop().toLowerCase ();
+                                    const extension = file.filename.split ('/').pop().toLowerCase ();
 
-                                const isImage = imageExtensions.includes (extension);
-                                const isDocument = documentExtensions.includes (extension);
+                                    const isImage = imageExtensions.includes (extension);
+                                    const isDocument = documentExtensions.includes (extension);
 
-                                return isImage ? (
-                                    <img
-                                        key={index}
-                                        src={file.url}
-                                        alt={file.filename}
-                                        className="max-w-full max-h-48 rounded-md object-cover hover:cursor-pointer"
-                                        onClick={() => openImage (file.url)}
-                                    />
-                                ) : isDocument 
-                                ? (
-                                    <a key={index} href={file.url} target='_blank' className="flex gap-4 items-center bg-[var(--card)] p-2">
-                                        <i className="fa-solid fa-file"></i>
-                                        <h2 className="text-sm">{file.name.slice(0,30) + (file.name.length > 30 ? " ..." : "")}</h2>
-                                    </a>
-                                ) 
-                                : (
-                                    <a key={index} href={file.url} target="_blank" className="relative">
-                                        <i className="fa-solid fa-play absolute top-[50%] bottom-[50%] right-[50%] left-[50%]"></i>
+                                    return isImage ? (
                                         <img
-                                            src={videoThumbnails[file.url]}
-                                            alt={file.name}
+                                            key={index}
+                                            src={file.url}
+                                            alt={file.filename}
                                             className="max-w-full max-h-48 rounded-md object-cover hover:cursor-pointer"
+                                            onClick={() => openImage (file.url)}
                                         />
-                                    </a>
-                                );
-                            })}
-                        </div>
-                    )}
+                                    ) : isDocument 
+                                    ? (
+                                        <a key={index} href={file.url} target='_blank' className="flex gap-4 items-center bg-[var(--card)] p-2">
+                                            <i className="fa-solid fa-file"></i>
+                                            <h2 className="text-sm">{file.name.slice(0,30) + (file.name.length > 30 ? " ..." : "")}</h2>
+                                        </a>
+                                    ) 
+                                    : (
+                                        <a key={index} href={file.url} target="_blank" className="relative">
+                                            <i className="fa-solid fa-play absolute top-[50%] bottom-[50%] right-[50%] left-[50%]"></i>
+                                            <img
+                                                src={videoThumbnails[file.url]}
+                                                alt={file.name}
+                                                className="max-w-full max-h-48 rounded-md object-cover hover:cursor-pointer"
+                                            />
+                                        </a>
+                                    );
+                                })}
+                            </div>
+                        )}
 
-                    {/* Text content */}
-                    {message.content && (
-                        <div className="flex items-end gap-4 w-full">
-                            <p className="text-sm break-words whitespace-pre-wrap overflow-wrap w-[90%]">
-                                {message.content}
-                            </p>
-                            <p className="text-[0.6rem] font-extralight text-right mt-1">
-                                {time}
-                            </p>
-                        </div>
-                    )}
+                        {/* Text content */}
+                        {message.content && (
+                            <div className="flex items-end gap-4 w-full">
+                                <p className="text-sm break-words whitespace-pre-wrap overflow-wrap w-[90%]">
+                                    {message.content}
+                                </p>
+                                <p className="text-[0.6rem] font-extralight text-right mt-1">
+                                    {time}
+                                </p>
+                            </div>
+                        )}
+                    </div>
                 </div>
-            </div>
 
-            {isOwnMessage && (
-                <div className="w-8">
-                    <img className="w-8 h-8 rounded-full object-cover" src={authState.data?.image?.url} />
-                </div>
-            )}
+                {message.sender._id === authState.data?._id && (
+                    <div className="w-8">
+                        <img className="w-8 h-8 rounded-full object-cover" src={authState.data?.image?.url} />
+                    </div>
+                )}
+            </div>}
         </div>
     );
 }
