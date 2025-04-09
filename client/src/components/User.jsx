@@ -25,6 +25,8 @@ function User ({ chat, type }) {
                 recipient: chat?.user?._id || user?._id
             }));
             await dispatch (setRecipient ({ userDetails: chat?.user || user }))
+        }else{
+            await dispatch(getGroupById(chat.groupId));
         }
     }
  
