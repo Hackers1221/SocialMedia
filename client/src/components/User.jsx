@@ -38,7 +38,7 @@ function User ({ chat, type }) {
     useEffect (() => {
         if (chat.user) setUserName (chat.user?.username?.toString().slice(0, 25) + (chat.user?.username?.toString().length > 25 ? "..." : ""))
         if (user) setUserName (user?.username?.toString().slice(0, 25) + (user?.username?.toString().length > 25 ? "..." : ""))
-        if (chat.name) setUserName (chat.name?.toString().slice(0, 25) + (chat.name?.toString().length > 25 ? "..." : ""))
+        if (chat.group?.name) setUserName (chat.group.name?.toString().slice(0, 25) + (chat.group.name?.toString().length > 25 ? "..." : ""))
     }, [user])
 
     useEffect (() => {

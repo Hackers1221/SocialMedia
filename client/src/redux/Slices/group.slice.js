@@ -68,6 +68,7 @@ const GroupSlice = createSlice({
         state.groupDetails = [action.payload.groupData, ...state.groups];
     },
     updateGroupMessages : (state, action) => {
+        console.log(action.payload);
         state.liveGroup.messages = [...state.liveGroup.messages, action.payload.message];
     }
   },
