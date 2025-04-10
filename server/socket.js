@@ -150,11 +150,13 @@ const setupSocket = (server) => {
            messageType : true,
            groupId: groupData._id
         });
-  
+
+        let msg = {};
+
         for (const member of groupData.members) {
           const userDetails = await User.findById(member.userId);
           if (adminDetails.username !== userDetails.username) {
-            await Message.create({
+            msg = await Message.create({
               content: `${adminDetails.username} added ${userDetails.username}`,
               messageType: true,
               groupId: groupData._id
@@ -162,10 +164,23 @@ const setupSocket = (server) => {
           }
         }
 
-        groupData.members.forEach(memberId => {
-          const socketId = userSocketMap.get(memberId);
+        const uploadData = {
+          _id: msg._id,
+          content: msg.content,
+          groupId: groupData._id,
+          messageType: true,
+          group: {
+            image: groupData.image,
+            _id: groupData._id,
+            name: groupData.name
+          }
+        }
+
+        groupData.members.forEach(member => {
+          console.log (member.userId.toString());
+          const socketId = userSocketMap.get(member.userId.toString());
           if (socketId) {
-            io.to(socketId).emit('groupCreated', groupData);
+            io.to(socketId).emit('groupCreated', uploadData);
           }
         });
 
@@ -183,7 +198,7 @@ const setupSocket = (server) => {
       image = previousGroupDetails?.image;
 
       if (data.image) {
-        deleteRes  =await deleteImages([previousGroupDetails.image?.filename]);
+        deleteRes = await deleteImages([previousGroupDetails.image?.filename]);
         uploadRes = await uploadFile(data.image);
         image = {
           name: data.image.name,
@@ -237,18 +252,25 @@ const setupSocket = (server) => {
 
         const adminDetails = await User.findById(data.admin);
 
+        let msg;
+
         if(data.name){
           const updatedNameMessage = await Message.create({
             content : `${adminDetails.username} changed the group name to ${data.name}`,
             groupId : data._id,
             messageType : true,
           });
-          groupData.members.forEach(memberId => {
-            const socketId = userSocketMap.get(memberId);
+          msg = updatedNameMessage;
+          groupData.members.forEach(member => {
+            const socketId = userSocketMap.get(member.userId);
             if (socketId) {
               io.to(socketId).emit('receiveGroupMessage', updatedNameMessage);
             }
           });
+          const adminSocketId = userSocketMap.get(data.admin);
+          if (adminSocketId) {
+            io.to(adminSocketId).emit('receiveGroupMessage', updatedNameMessage);
+          }
         }
 
         if(data.image){
@@ -257,34 +279,59 @@ const setupSocket = (server) => {
             groupId : data._id,
             messageType : true,
           });
-          groupData.members.forEach(memberId => {
-            const socketId = userSocketMap.get(memberId);
+          msg = updatedImageMessage;
+          groupData.members.forEach(member => {
+            const socketId = userSocketMap.get(member.userId.toString());
             if (socketId) {
               io.to(socketId).emit('receiveGroupMessage', updatedImageMessage);
             }
           });
+          const adminSocketId = userSocketMap.get(data.admin);
+          if (adminSocketId) {
+            io.to(adminSocketId).emit('receiveGroupMessage', updatedImageMessage);
+          }
 
         }
 
         if (data.members && data.members.length > 0) {
           for (const member of data.members) {
-            const userDetails = await User.findById(member);
+            const userDetails = await User.findById(member.id);
             const updatedMemberMessage = await Message.create({
               content: `${adminDetails.username} added ${userDetails.username}`,
               groupId: data._id,
               messageType: true,
             });
-            const socketId = userSocketMap.get(member);
+            msg = updatedMemberMessage;
+            const socketId = userSocketMap.get(member.id);
             if (socketId) {
               io.to(socketId).emit('receiveGroupMessage', updatedMemberMessage);
             }
+            const adminSocketId = userSocketMap.get(data.admin);
+            if (adminSocketId) {
+              io.to(adminSocketId).emit('receiveGroupMessage', updatedMemberMessage);
+            }
           }
         }
-        
-        groupData.members.forEach(memberId => {
-          const socketId = userSocketMap.get(memberId);
+
+        console.log (data);
+        console.log (msg);
+
+        const uploadData = {
+          _id: msg._id,
+          content: msg.content,
+          groupId: groupData._id,
+          messageType: true,
+          group: {
+            image: groupData.image,
+            _id: groupData._id,
+            name: groupData.name
+          }
+        }
+
+        groupData.members.forEach(member => {
+          const socketId = userSocketMap.get(member.userId.toString());
           if (socketId) {
-            io.to(socketId).emit('updatedGroup', groupData);
+            io.to(socketId).emit('updatedGroup', uploadData);
           }
         });
 

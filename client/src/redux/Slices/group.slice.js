@@ -3,8 +3,7 @@ import axiosInstance from "../../config/axiosInstance";
 
 const initialState = {
     groupDetails: [],
-    liveGroup: {},
-    recentChats : [],
+    liveGroup: {}
 };
 
 export const getGroupByUserId = createAsyncThunk ('getGroupByUserId', async (id) => {
@@ -51,8 +50,12 @@ const GroupSlice = createSlice({
   name: "group",
   initialState,
   reducers: {
-    addGroup : (state, action) => {
-        state.groupDetails = [action.payload.groupData, ...state.groups];
+    addGroup: (state, action) => {
+        if (state.groupDetails.length === 0) {
+            state.groupDetails = [action.payload.groupData];
+        } else {
+            state.groupDetails = [action.payload.groupData, ...state.groupDetails];
+        }
     },
     updateGroupMessages: (state, action) => {
         if (state.liveGroup.messages) state.liveGroup.messages = [...state.liveGroup.messages, action.payload.message];
@@ -68,10 +71,22 @@ const GroupSlice = createSlice({
                   }
                 : group
             )
-          ));
-                   
-      }
-      
+        ));    
+    },
+    updateGroupDetails: (state, action) => {
+        state.groupDetails = JSON.parse (JSON.stringify (
+            state.groupDetails.map(group =>
+                group.groupId === action.payload.groupData.groupId
+                  ? {
+                      ...group,
+                      _id: action.payload.groupData._id,
+                      content: action.payload.groupData.content,
+                      messageType: action.payload.groupData.messageType
+                    }
+                  : group
+              )
+        ))
+    }
   },
   extraReducers : (builder) => {
       builder
@@ -85,6 +100,6 @@ const GroupSlice = createSlice({
   }
 });
 
-export const { addGroup, updateGroupMessages } = GroupSlice.actions;
+export const { addGroup, updateGroupMessages, updateGroupDetails } = GroupSlice.actions;
 
 export default GroupSlice.reducer;
