@@ -4,6 +4,7 @@ const Group = require ('../server/src/models/group.model')
 const { uploadFile } = require("./cloudConfig");
 const { default: mongoose } = require("mongoose");
 const User = require("../server/src/models/user.model");
+const { date } = require("joi");
 
 let onlineUsers = new Map ();
 
@@ -188,6 +189,125 @@ const setupSocket = (server) => {
       }
     }
 
+    const updateGroupDetails = async (data) => {
+      let uploadRes, image;
+   
+
+      const previousGroupDetails = await Group.findById(data._id);
+
+      image = previousGroupDetails?.image;
+
+      if (data.image) {
+        deleteRes  =await deleteImages([previousGroupDetails.image?.filename]);
+        uploadRes = await uploadFile(data.image);
+        image = {
+          name: data.image.name,
+          url: uploadRes.secure_url,
+          filename: data.image.type,
+        };
+      }
+
+      const members = [];
+      const admins = [];
+
+      data.members?.forEach(member => {
+        try {
+          const userId = new mongoose.Types.ObjectId(member.id);
+          const addedBy = new mongoose.Types.ObjectId(member.addedBy);
+          members.push({ userId, addedBy });
+        } catch (err) {
+          console.warn('Invalid ObjectId:', member, err.message);
+        }
+      });
+      
+      data.admins?.forEach(admins => {
+        try {
+          const admin = new mongoose.Types.ObjectId(admins);
+          admins.push(admin);
+        } catch (err) {
+          console.warn('Invalid ObjectId:', admins, err.message);
+        }
+      });
+      
+
+      try {
+        const updateData = {
+          $push: {
+            members: { $each: members },
+            admins: { $each: admins }
+          }
+        };
+        if (data.name) {
+          updateData.name = data.name;
+        }
+        if (data.image) {
+          updateData.image = data.image;
+        }
+        
+        const groupData = await Group.findByIdAndUpdate(
+          data._id,
+          updateData,
+          { new: true }
+        );
+
+        const adminDetails = await User.findById(data.admin);
+
+        if(data.name){
+          const updatedNameMessage = await Message.create({
+            content : `${adminDetails.username} changed the group name to ${data.name}`,
+            groupId : data._id,
+            messageType : true,
+          });
+          groupData.members.forEach(memberId => {
+            const socketId = userSocketMap.get(memberId);
+            if (socketId) {
+              io.to(socketId).emit('receiveGroupMessage', updatedNameMessage);
+            }
+          });
+        }
+
+        if(data.image){
+          const updatedImageMessage = await Message.create({
+            content : `${adminDetails.username} updated the group icon`,
+            groupId : data._id,
+            messageType : true,
+          });
+          groupData.members.forEach(memberId => {
+            const socketId = userSocketMap.get(memberId);
+            if (socketId) {
+              io.to(socketId).emit('receiveGroupMessage', updatedImageMessage);
+            }
+          });
+
+        }
+
+        if (data.members && data.members.length > 0) {
+          for (const member of data.members) {
+            const userDetails = await User.findById(member);
+            const updatedMemberMessage = await Message.create({
+              content: `${adminDetails.username} added ${userDetails.username}`,
+              groupId: data._id,
+              messageType: true,
+            });
+            const socketId = userSocketMap.get(member);
+            if (socketId) {
+              io.to(socketId).emit('receiveGroupMessage', updatedMemberMessage);
+            }
+          }
+        }
+        
+        groupData.members.forEach(memberId => {
+          const socketId = userSocketMap.get(memberId);
+          if (socketId) {
+            io.to(socketId).emit('updatedGroup', groupData);
+          }
+        });
+
+      } catch (error) {
+        console.log (error);
+      }
+    }
+
     io.on("connection", (socket) => {
         console.log(`Socket ${socket.id} connected.`);
         const userId = socket.handshake.query.userId;
@@ -207,6 +327,7 @@ const setupSocket = (server) => {
         socket.on("sendMessage",sendMessage);
         socket.on ("create-group", createGroup);
         socket.on ("sendGroupMessage", sendGroupMessage);
+        socket.on ("update-group", updateGroupDetails);
     });
 
     
