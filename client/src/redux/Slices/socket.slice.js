@@ -54,7 +54,6 @@ const socketSlice = createSlice({
         })
 
         socketInstance.on("receiveGroupMessage", (data) => {
-          console.log (data);
           dispatch(updateGroupMessages({ message: data }));
         });
       }

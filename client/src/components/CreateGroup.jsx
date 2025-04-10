@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import AddUser from "./AddUser";
 import toast from "react-hot-toast";
 import User from '../components/User'
-import { createGroup } from "../redux/Slices/group.slice";
 import { FaSpinner } from "react-icons/fa";
 
 function CreateGroup ({ isOpen, setOpen }) {
@@ -52,43 +51,52 @@ function CreateGroup ({ isOpen, setOpen }) {
         try {
             setLoading (true);
 
-            if (groupName?.trim() && image) {  
-                const reader = new FileReader();
-
-                reader.onload = () => {
+            if (groupName?.trim()) {
+                const sendPayload = (encodedImage) => {
+                  const payload = {
+                    admin: [authState.data?._id],
+                    members: members,
+                    name: groupName.trim(),
+                    image: encodedImage, // can be undefined
+                  };
+              
+                  console.log(members);
+              
+                  if (socket && socket.connected) {
+                    socket.emit("create-group", payload);
+                  }
+              
+                  setGroupName("");
+                  setImage(undefined);
+                };
+              
+                if (image) {
+                  const reader = new FileReader();
+              
+                  reader.onload = () => {
                     const encodedFile = {
-                        name: image.name,
-                        type: image.type,
-                        data: reader.result, // base64 encoded
+                      name: image.name,
+                      type: image.type,
+                      data: reader.result,
                     };
-                
-                    const payload = {
-                        admin: [authState.data?._id],
-                        members: members,
-                        name: groupName.trim(),
-                        image: encodedFile,
-                    };
-
-                    console.log (members);
-                
-                    if (socket && socket.connected) {
-                        socket.emit("create-group", payload);
-                    }
-                };
-                
-                reader.onerror = (error) => {
+                    sendPayload(encodedFile);
+                  };
+              
+                  reader.onerror = (error) => {
                     console.error("File reading error:", error);
-                };
-                
-                reader.readAsDataURL(image); // assuming `file` is a single File object
-                    
-                setGroupName("");
-                setImage();
-            };
+                  };
+              
+                  reader.readAsDataURL(image);
+                } else {
+                  sendPayload();
+                }
+              }
+              
         } catch (error) {
             toast.error ('Something went wrong');
         } finally {
             setLoading (false);
+            close ();
         }
     }
 

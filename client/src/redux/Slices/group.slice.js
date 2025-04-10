@@ -7,19 +7,6 @@ const initialState = {
     recentChats : [],
 };
 
-export const createGroup = createAsyncThunk ('createGroup', async (data) => {
-    try {
-        const response = await axiosInstance.post (`group`, data, {
-            headers: {
-                'x-access-token': localStorage.getItem('token')
-            }
-        })
-        return response;
-    } catch (error) {
-        console.log (error);
-    }
-})
-
 export const getGroupByUserId = createAsyncThunk ('getGroupByUserId', async (id) => {
     try {
         const response = await axiosInstance.get (`/group/by-user/${id}`, {
@@ -67,21 +54,27 @@ const GroupSlice = createSlice({
     addGroup : (state, action) => {
         state.groupDetails = [action.payload.groupData, ...state.groups];
     },
-    updateGroupMessages : (state, action) => {
-        console.log(action.payload);
-        state.liveGroup.messages = [...state.liveGroup.messages, action.payload.message];
-    }
+    updateGroupMessages: (state, action) => {
+        if (state.liveGroup.messages) state.liveGroup.messages = [...state.liveGroup.messages, action.payload.message];
+
+        state.groupDetails = JSON.parse(JSON.stringify(
+            state.groupDetails.map(group =>
+              group.groupId === action.payload.message.groupId
+                ? {
+                    ...group,
+                    _id: action.payload.message._id,
+                    content: action.payload.message.content,
+                    messageType: action.payload.message.messageType
+                  }
+                : group
+            )
+          ));
+                   
+      }
+      
   },
   extraReducers : (builder) => {
       builder
-      .addCase(createGroup.fulfilled,(state, action)=>{
-          if (!action.payload.data?.groupData) return;
-          state.groups = [...state.groups, action.payload.data?.groupData];
-      })
-      .addCase(getGroupByUserId.fulfilled, (state, action) => {
-          if (!action.payload.data?.groupData) return;
-          state.groups = action.payload.data?.groupData;
-      })
       .addCase(getGroupById.fulfilled, (state, action) => {
         if (!action.payload.data?.groupData) return;
         state.liveGroup = action.payload.data?.groupData;

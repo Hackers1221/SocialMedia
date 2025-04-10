@@ -31,7 +31,7 @@ function Message({ message }) {
         setOpen (true);
     }
 
-    async function getContent () {
+    function getContent () {
         const msg = message.content.split (" ");
         if (msg[1] === "added") {
             const firstPerson = (authState.data?.username !== msg[0] ? msg[0] : "You");
@@ -92,7 +92,7 @@ function Message({ message }) {
             {baseMessage && <div className="flex items-center px-2 py-1 w-max bg-black/10 rounded-md">
                     <h2 className="text-xs font-extralight">{content}</h2>
                 </div>}
-           {!baseMessage && <div className={`flex gap-2 w-[50%] ${message.sender._id !== authState.data?._id ? `justify-start` : `justify-end`}`}>
+           {!baseMessage && <div className={`flex items-end gap-2 w-[50%] ${message.sender._id !== authState.data?._id ? `justify-start` : `justify-end`}`}>
                 {message.sender._id !== authState.data?._id && (
                     <div className="flex w-8 items-start">
                         <img className="h-8 w-8 rounded-full object-cover" src={message?.sender?.image?.url} />
