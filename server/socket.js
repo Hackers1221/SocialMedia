@@ -1,7 +1,7 @@
 const { Server } = require("socket.io");
 const Message = require ('../server/src/models/message.model');
 const Group = require ('../server/src/models/group.model')
-const { uploadFile } = require("./cloudConfig");
+const { uploadFile ,deleteImages } = require("./cloudConfig");
 const { default: mongoose } = require("mongoose");
 const User = require("../server/src/models/user.model");
 const { date } = require("joi");
@@ -293,6 +293,21 @@ const setupSocket = (server) => {
       }
     }
 
+    const leaveGroup = async(data) => {
+      const previousGroupDetails = await Group.findById(data._id);
+      const updatedUserDetails = await Group.findByIdAndUpdate(
+        data._id,
+        {
+          $pull: {
+            members: { userId: data.userId },
+            admins: data.userId,
+          }
+        },
+        { new: true }
+      )
+
+    }
+
     io.on("connection", (socket) => {
         console.log(`Socket ${socket.id} connected.`);
         const userId = socket.handshake.query.userId;
@@ -313,6 +328,7 @@ const setupSocket = (server) => {
         socket.on ("create-group", createGroup);
         socket.on ("sendGroupMessage", sendGroupMessage);
         socket.on ("update-group", updateGroupDetails);
+        socket.on ("leave-group", leaveGroup);
     });
 
     
