@@ -56,6 +56,15 @@ function UpdateGroup ({ isOpen, setOpen }) {
         setNonParticipants (arr);
     }
 
+    function onLeaveGroup () {
+        if (socket && socket.connected) {
+            socket.emit ("leave-group", {
+                _id: liveGroup._id,
+                userId: authState.data?._id
+            })
+        }
+    }
+
     function submitDetails () {
         try {
             // setLoading (true);
@@ -130,8 +139,6 @@ function UpdateGroup ({ isOpen, setOpen }) {
         if (image) submitDetails ();
     }, [image])
 
-    console.log (selectedUsers)
-
     return (
         <>
             {isOpen && <div className="fixed left-0 top-0 inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-[20]"></div>}
@@ -192,6 +199,10 @@ function UpdateGroup ({ isOpen, setOpen }) {
                     <h2 className="flex justify-center w-full text-sm font-extralight">
                         Created by {creator?.username} on {date}
                     </h2>
+
+                    <div className="w-full px-4" onClick={onLeaveGroup}>
+                        <button className="w-full text-sm border border-[var(--input)] hover:bg-[var(--card)] text-[var(--text)] rounded-md py-2 font-bold">Leave group</button>
+                    </div>
 
                     <div className="flex flex-col w-full px-4">
                         <div className={`flex items-center w-full rounded-md px-2 my-4 shadow-md border border-[var(--input)]`}>

@@ -14,9 +14,11 @@ function User ({ chat, type }) {
 
     const [user, setUser] = useState ();
     const [username, setUserName] = useState ("");
-    const [content, setContent] = useState ();
+    const [content, setContent] = useState ("");
+    const [name, setName] = useState ();
 
     function getContent () {
+        // console.log ()
         const msg = chat.content.split (" ");
         if (msg[1] === "added") {
             const firstPerson = (authState.data?.username !== msg[0] ? msg[0] : "You");
@@ -25,7 +27,7 @@ function User ({ chat, type }) {
         }
         else {
             const firstPerson = (authState.data?.username !== msg[0] ? msg[0] : "You");
-            setContent (firstPerson + " created the group");
+            setContent (firstPerson + " " + msg.slice(1).join(" "));
         }
     }
 
@@ -50,12 +52,12 @@ function User ({ chat, type }) {
         if (chat.user) setUserName (chat.user?.username?.toString().slice(0, 25) + (chat.user?.username?.toString().length > 25 ? "..." : ""))
         if (user) setUserName (user?.username?.toString().slice(0, 25) + (user?.username?.toString().length > 25 ? "..." : ""))
         if (chat.group?.name) setUserName (chat.group?.name?.toString().slice(0, 25) + (chat.group?.name?.toString().length > 25 ? "..." : ""))
-    }, [user])
+    }, [user, chat])
 
     useEffect (() => {
         setContent(chat.content);
-        if (type === 'follower') getUser ();
         if (chat.messageType) getContent ();
+        if (type === 'follower') getUser ();
     }, [chat])
 
     return (

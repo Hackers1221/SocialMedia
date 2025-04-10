@@ -49,17 +49,18 @@ const socketSlice = createSlice({
         });
 
         socketInstance.on("groupCreated", (data) => {
-          console.log ("Slice", data);
           dispatch(addGroup ({ groupData: data }));
         })
 
         socketInstance.on("receiveGroupMessage", (data) => {
-          console.log (data);
           dispatch(updateGroupMessages({ message: data }));
         });
 
         socketInstance.on("updatedGroup", (data) => {
-          console.log (data);
+          dispatch(updateGroupDetails ({ groupData: data }));
+        });
+
+        socketInstance.on("group-leave", (data) => {
           dispatch(updateGroupDetails ({ groupData: data }));
         });
       }
@@ -76,6 +77,7 @@ const socketSlice = createSlice({
         socketInstance.off("online-users");
         socketInstance.off("groupCreated");
         socketInstance.off("updatedGroup");
+        socketInstance.off("group-leave");
 
         socketInstance.disconnect();
         socketInstance = null;

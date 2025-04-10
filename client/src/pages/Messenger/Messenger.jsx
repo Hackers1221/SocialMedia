@@ -32,6 +32,7 @@ const Messenger = () => {
   const [recent, setRecent] = useState ([]);
 
   const defaultImage = "https://t3.ftcdn.net/jpg/12/81/12/20/240_F_1281122039_wYCRIlTBPzTUzyh8KrPd87umoo52njyw.jpg";
+  const members = groupState.liveGroup?.members?.map(member => member.userId);
 
   const sendMessage = () => {
     if (message?.trim() || files?.length) {  
@@ -190,7 +191,7 @@ const Messenger = () => {
                 ))}
               </div>}
               {activeTab === 'groups' && <div className="flex flex-col space-y-1 mt-4 h-full overflow-y-auto">
-                {groupState.groupDetails?.length > 0 && groupState.groupDetails?.map ((chat, index) => (
+                {groupState.groupDetails?.map ((chat, index) => (
                   <User chat={chat} type={'groups'} key={index}/>
                 ))}
               </div>}
@@ -299,7 +300,7 @@ const Messenger = () => {
               </div>
               <div className="absolute bottom-0 pb-4 flex flex-row items-center h-16 bg-[var(--card)] w-full px-4">
                 <div className="mt-auto flex flex-col items-center gap-3 p-2 relative w-full">
-                  <div className="flex items-center w-full p-2 px-4 rounded-full border border-[var(--input)] relative">
+                  {members.includes(authState.data?._id) ? <div className="flex items-center w-full p-2 px-4 rounded-full border border-[var(--input)] relative">
                     {/* File Upload Button */}
                     <label htmlFor="file-upload" className="cursor-pointer text-[var(--text)]">
                       <i className="fa-solid fa-paperclip text-sm"></i>
@@ -339,7 +340,8 @@ const Messenger = () => {
                       id="send"
                       className="text-[var(--text)] cursor-pointer ml-3"
                     />
-                  </div>
+                  </div> : 
+                  <h2>You are no longer a participant of this group</h2>}
               </div>
               </div>
             </div> : 

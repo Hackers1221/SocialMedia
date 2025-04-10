@@ -60,6 +60,10 @@ const GroupSlice = createSlice({
     updateGroupMessages: (state, action) => {
         if (state.liveGroup.messages) state.liveGroup.messages = [...state.liveGroup.messages, action.payload.message];
 
+        if (!state.groupDetails) {
+            state.groupDetails
+        }
+
         state.groupDetails = JSON.parse(JSON.stringify(
             state.groupDetails.map(group =>
               group.groupId === action.payload.message.groupId
@@ -74,18 +78,23 @@ const GroupSlice = createSlice({
         ));    
     },
     updateGroupDetails: (state, action) => {
-        state.groupDetails = JSON.parse (JSON.stringify (
+        if (state.liveGroup) {
+            state.liveGroup = JSON.parse(JSON.stringify({
+                ...state.liveGroup,
+                image: action.payload.groupData.group?.image || action.payload.groupData.image,
+                name: action.payload.groupData.group?.name || action.payload.groupData.name,
+                members: state.liveGroup.members || action.payload.groupData.members
+            }));
+        }
+        
+        state.groupDetails = JSON.parse(JSON.stringify(
             state.groupDetails.map(group =>
                 group.groupId === action.payload.groupData.groupId
-                  ? {
-                      ...group,
-                      _id: action.payload.groupData._id,
-                      content: action.payload.groupData.content,
-                      messageType: action.payload.groupData.messageType
-                    }
-                  : group
-              )
-        ))
+                    ? action.payload.groupData
+                    : group
+            )
+        ));
+        
     }
   },
   extraReducers : (builder) => {

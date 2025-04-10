@@ -241,7 +241,7 @@ const setupSocket = (server) => {
           updateData.name = data.name;
         }
         if (data.image) {
-          updateData.image = data.image;
+          updateData.image = image;
         }
         
         const groupData = await Group.findByIdAndUpdate(
@@ -254,7 +254,7 @@ const setupSocket = (server) => {
 
         let msg;
 
-        if(data.name){
+        if(data.name !== previousGroupDetails.name){
           const updatedNameMessage = await Message.create({
             content : `${adminDetails.username} changed the group name to ${data.name}`,
             groupId : data._id,
@@ -267,10 +267,6 @@ const setupSocket = (server) => {
               io.to(socketId).emit('receiveGroupMessage', updatedNameMessage);
             }
           });
-          const adminSocketId = userSocketMap.get(data.admin);
-          if (adminSocketId) {
-            io.to(adminSocketId).emit('receiveGroupMessage', updatedNameMessage);
-          }
         }
 
         if(data.image){
@@ -286,14 +282,10 @@ const setupSocket = (server) => {
               io.to(socketId).emit('receiveGroupMessage', updatedImageMessage);
             }
           });
-          const adminSocketId = userSocketMap.get(data.admin);
-          if (adminSocketId) {
-            io.to(adminSocketId).emit('receiveGroupMessage', updatedImageMessage);
-          }
-
         }
 
-        if (data.members && data.members.length > 0) {
+        if (data.members.length > 0) {
+          let message = [];
           for (const member of data.members) {
             const userDetails = await User.findById(member.id);
             const updatedMemberMessage = await Message.create({
@@ -302,19 +294,19 @@ const setupSocket = (server) => {
               messageType: true,
             });
             msg = updatedMemberMessage;
-            const socketId = userSocketMap.get(member.id);
-            if (socketId) {
-              io.to(socketId).emit('receiveGroupMessage', updatedMemberMessage);
-            }
-            const adminSocketId = userSocketMap.get(data.admin);
-            if (adminSocketId) {
-              io.to(adminSocketId).emit('receiveGroupMessage', updatedMemberMessage);
-            }
-          }
-        }
 
-        console.log (data);
-        console.log (msg);
+            message = [...message, updatedMemberMessage];
+          }
+
+          message.forEach ((msg) => {
+            groupData.members.forEach(member => {
+              const socketId = userSocketMap.get(member.userId.toString());
+              if (socketId) {
+                io.to(socketId).emit('receiveGroupMessage', msg);
+              }
+            });
+          })
+        }
 
         const uploadData = {
           _id: msg._id,
@@ -341,8 +333,9 @@ const setupSocket = (server) => {
     }
 
     const leaveGroup = async(data) => {
+      console.log (data);
       const previousGroupDetails = await Group.findById(data._id);
-      const updatedUserDetails = await Group.findByIdAndUpdate(
+      const updatedGroupDetails = await Group.findByIdAndUpdate(
         data._id,
         {
           $pull: {
@@ -352,6 +345,23 @@ const setupSocket = (server) => {
         },
         { new: true }
       )
+
+      const userDetails =  await User.findById(data.userId);
+      console.log (updatedGroupDetails)
+
+      const leaveGroupMessage = await Message.create({
+        content : `${userDetails.username} left the group`,
+        messageType : true,
+        groupId : data._id
+      })
+
+      previousGroupDetails.members.map(member => {
+        const socketId = userSocketMap.get(member.userId.toString());
+          if (socketId) {
+            io.to(socketId).emit('receiveGroupMessage', leaveGroupMessage);
+            io.to(socketId).emit('group-leave', updatedGroupDetails);
+          }
+      })
 
     }
 
