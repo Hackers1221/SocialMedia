@@ -108,12 +108,16 @@ const setupSocket = (server) => {
   };
 
     const createGroup = async (data) => {
-      const uploadRes = await uploadFile(data.image);
-      const image = {
-        name: data.image.name,
-        url: uploadRes.secure_url,
-        filename: data.image.type,
-      };
+      let uploadRes, image;
+
+      if (data.image) {
+        uploadRes = await uploadFile(data.image);
+        image = {
+          name: data.image.name,
+          url: uploadRes.secure_url,
+          filename: data.image.type,
+        };
+      }
 
       const members = [];
 

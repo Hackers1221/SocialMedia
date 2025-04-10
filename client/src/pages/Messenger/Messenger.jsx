@@ -27,7 +27,9 @@ const Messenger = () => {
   const [files, setFiles] = useState([]);
   const [groupFiles, setGroupFiles] = useState([]);
   const [groupCreate, setGroupCreate] = useState (false);
+  const [recent, setRecent] = useState ([]);
 
+  const defaultImage = "https://t3.ftcdn.net/jpg/12/81/12/20/240_F_1281122039_wYCRIlTBPzTUzyh8KrPd87umoo52njyw.jpg";
 
   const sendMessage = () => {
     if (message?.trim() || files?.length) {  
@@ -100,7 +102,8 @@ const Messenger = () => {
     };
 
     async function getRecent () {
-      await dispatch (getRecentMessages (authState.data?._id));
+      const res = await dispatch (getRecentMessages (authState.data?._id));
+      setRecent (res.payload.data.messages);
     }
 
     function removeFile (index) {
@@ -113,19 +116,12 @@ const Messenger = () => {
         setActiveTab('groups');
       }
     }
-
-    useEffect(() => {
-    }, [activeTab],[dispatch]);
   
-    
-    
-
     useEffect (() => { 
       getRecent ();
     }, [chatState.messages]);
 
-    
-
+  
     useEffect(() => {
       if (chatContainerRef.current) {
         chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
@@ -186,7 +182,7 @@ const Messenger = () => {
             </div>
             <div className="flex flex-col">
               {activeTab === 'recent' && <div className="flex flex-col space-y-1 mt-4 h-full overflow-y-auto">
-                {chatState.recentMessages?.length > 0 && chatState.recentMessages?.map ((chat, index) => (
+                {recent?.length > 0 && recent?.map ((chat, index) => (
                   <User chat={chat} key={index}/>
                 ))}
               </div>}
@@ -206,7 +202,7 @@ const Messenger = () => {
             {chatState.recipient?.name?.length > 0 ? <div className="relative flex flex-col text-[var(--heading)] bg-[var(--card)] h-full">
               <div className="flex gap-4 justify-between items-center w-full bg-[var(--topic)] p-2">
                 <div className="flex items-center gap-2">
-                  <Avatar url={chatState.recipient?.image?.url} size={'md'}/>
+                  <Avatar url={chatState.recipient?.image?.url || defaultImage} size={'md'}/>
                   <div className="flex flex-col">
                     {chatState.recipient?.name?.length > 0 && <Link to={`/profile/${chatState.recipient?.username}`} className="hover:underline">{chatState.recipient?.name}</Link>}
                       {chatState.recipient?.name?.length > 0 && chatState.onlineUsers?.includes(chatState.recipient?._id) && 
@@ -282,7 +278,7 @@ const Messenger = () => {
             {groupState.liveGroup?._id?.length > 0 ? <div className="relative flex flex-col text-[var(--heading)] bg-[var(--card)] h-full">
               <div className="flex gap-4 justify-between items-center w-full bg-[var(--topic)] p-2">
                 <div className="flex items-center gap-2">
-                  <Avatar url={groupState.liveGroup?.image?.url} size={'md'}/>
+                  <Avatar url={groupState.liveGroup?.image?.url || defaultImage} size={'md'}/>
                   <div className="flex flex-col">
                     <h2 className="hover:underline">{groupState.liveGroup?.name}</h2>
                   </div>
