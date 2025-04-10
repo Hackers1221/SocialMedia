@@ -40,8 +40,7 @@ function Message({ message }) {
         }
         else {
             const firstPerson = (authState.data?.username !== msg[0] ? msg[0] : "You");
-            setContent (firstPerson + " created the group");
-
+            setContent (firstPerson + " " + msg.slice(1).join(" "));
         }
     }
 

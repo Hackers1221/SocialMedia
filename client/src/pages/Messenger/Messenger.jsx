@@ -105,7 +105,7 @@ const Messenger = () => {
 
     async function getRecent () {
       const res = await dispatch (getRecentMessages (authState.data?._id));
-      setRecent (res.payload.data.messages);
+      setRecent (res.payload?.data.messages);
     }
 
     function removeFile (index) {

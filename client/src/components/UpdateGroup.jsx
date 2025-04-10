@@ -24,7 +24,8 @@ function UpdateGroup ({ isOpen, setOpen }) {
     const [nonParticipants, setNonParticipants] = useState ([]);
     const [selectedUsers, setSelectedUsers] = useState ([]);
     const [image, setImage] = useState ();
-    const [groupName, setGroupName] = useState ();
+    const [groupName, setGroupName] = useState (liveGroup?.name);
+    const [imageUrl, setImageUrl] = useState (liveGroup?.image?.url);
 
     const defaultImage = "https://t3.ftcdn.net/jpg/12/81/12/20/240_F_1281122039_wYCRIlTBPzTUzyh8KrPd87umoo52njyw.jpg";
 
@@ -55,7 +56,7 @@ function UpdateGroup ({ isOpen, setOpen }) {
         setNonParticipants (arr);
     }
 
-    function addGroupMembers () {
+    function submitDetails () {
         try {
             // setLoading (true);
 
@@ -65,14 +66,16 @@ function UpdateGroup ({ isOpen, setOpen }) {
                   members: selectedUsers,
                   admin: authState.data?._id,
                   image: encodedImage, // can be undefined
+                  name: groupName
                 };
             
                 if (socket && socket.connected) {
                   socket.emit ("update-group", payload)
                 }
             
-                setGroupName("");
-                setImage(undefined);
+                setSelectedUsers ([]);
+                setImage();
+                setEditName("");
             };
             
             if (image) {
@@ -94,15 +97,18 @@ function UpdateGroup ({ isOpen, setOpen }) {
                 reader.readAsDataURL(image);
             } else {
                 sendPayload();
-            }
-              
+            }              
         } catch (error) {
             toast.error ('Something went wrong');
         } finally {
-            // setLoading (false);
             close ();
         }
     }
+
+    const handleFileChange = (e) => {
+        setImageUrl (URL.createObjectURL(e.target.files[0]));
+        setImage (e.target.files[0]);
+    };
 
     useEffect (() => {
         if (isOpen && dialogRef.current) {
@@ -120,6 +126,10 @@ function UpdateGroup ({ isOpen, setOpen }) {
         getNonParticipants ();
     }, []);
 
+    useEffect (() => {
+        if (image) submitDetails ();
+    }, [image])
+
     console.log (selectedUsers)
 
     return (
@@ -130,7 +140,7 @@ function UpdateGroup ({ isOpen, setOpen }) {
                 {!addParticipants ? <div className="flex flex-col gap-2">
                     <div className="relative w-20 h-20 mx-auto">
                         <img
-                            src={defaultImage}
+                            src={imageUrl || defaultImage}
                             alt="Profile"
                             className="w-20 h-20 rounded-full border object-cover"
                         />
@@ -150,7 +160,7 @@ function UpdateGroup ({ isOpen, setOpen }) {
                             type="file"
                             accept="image/*"
                             className="hidden"
-                            // onChange={handleFileChange}
+                            onChange={handleFileChange}
                             encType="multipart/form-data"
                         />
                     </div>
@@ -160,17 +170,18 @@ function UpdateGroup ({ isOpen, setOpen }) {
                             <h2 className="text-lg">{liveGroup.name}</h2>
                             <i className="fa-solid fa-pencil text-[var(--heading)] text-sm hover:cursor-pointer" onClick={() => setEditName (true)}></i>
                         </div>}
-                        {editName && <div className="w-[60%] px-4">
+                        {editName && <div className="flex items-center px-2 gap-2 w-[75%] border rounded-xl">
                             <input
                                 name="name"
-                                // value={groupName}
-                                // onChange={(e) => setGroupName (e.target.value)}
-                                className={`text-white rounded-xl py-[0.6rem] px-4 block w-full focus:outline-none bg-transparent border`}
+                                value={groupName}
+                                onChange={(e) => setGroupName (e.target.value)}
+                                className={`text-white py-[0.6rem] block w-full focus:outline-none bg-transparent`}
                                 type="text"
                                 autoComplete="false" autoCorrect="false" spellCheck="false"
                                 placeholder="Group name"
                                 required
                             />
+                            {(groupName?.trim()?.length > 0 && groupName?.trim() !== liveGroup?.name) && <i className="fa-solid fa-check hover:text-green-400 hover:cursor-pointer" onClick={submitDetails}></i>}
                         </div>}
                     </div>
 
@@ -230,7 +241,7 @@ function UpdateGroup ({ isOpen, setOpen }) {
                         <AddUser userId={user} members={selectedUsers} setMembers={setSelectedUsers} key={key}/>
                     )) : <h2>No followers to add</h2>}
 
-                    <div onClick={addGroupMembers} className="absolute bottom-4 w-full flex justify-center items-center rounded-md py-2 hover:cursor-pointer">
+                    <div onClick={submitDetails} className="absolute bottom-4 w-full flex justify-center items-center rounded-md py-2 hover:cursor-pointer">
                         <h2 className="text-black font-bold text-[var(--buttonText)] bg-[var(--buttons)] p-2 rounded-md w-[60%] text-center">Add selected users</h2>
                     </div>
                 </div>}
