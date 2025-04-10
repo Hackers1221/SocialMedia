@@ -139,7 +139,7 @@ function CreateGroup ({ isOpen, setOpen }) {
                         </div>
                     </div>
                     <div onClick={goNext} className="absolute bottom-4 bg-[var(--buttons)] w-[80%] flex justify-center items-center rounded-md py-2 hover:cursor-pointer">
-                        <h2 className="text-black font-bold text-[var(--card)]">Next</h2>
+                        <h2 className="text-black font-bold text-[var(--buttonText)]">Next</h2>
                     </div>
                 </div>}
                 {groupEdit && <div className="relative h-full w-full p-4">
@@ -181,7 +181,7 @@ function CreateGroup ({ isOpen, setOpen }) {
                         ))}
                     </div>
                     <div onClick={submit} className="absolute bottom-4 bg-[var(--buttons)] w-[90%] flex justify-center items-center rounded-md py-2 hover:cursor-pointer">
-                        <h2 className="text-black font-bold text-[var(--card)]">{loading ? (
+                        <h2 className="text-black font-bold text-[var(--buttonText)]">{loading ? (
                             <FaSpinner className="animate-spin mr-2" />
                         ) : (
                             "Submit"

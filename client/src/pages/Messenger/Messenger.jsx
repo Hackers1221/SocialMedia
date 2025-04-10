@@ -10,6 +10,7 @@ import { getRecentMessages } from "../../redux/Slices/chat.slice";
 import CreateGroup from "../../components/CreateGroup";
 import { getGroupByUserId, getRecentMessage } from "../../redux/Slices/group.slice";
 import { MdOutlineGroupAdd } from "react-icons/md";
+import UpdateGroup from "../../components/UpdateGroup";
 
 const Messenger = () => {
   const authState = useSelector ((state) => state.auth);
@@ -27,6 +28,7 @@ const Messenger = () => {
   const [files, setFiles] = useState([]);
   const [groupFiles, setGroupFiles] = useState([]);
   const [groupCreate, setGroupCreate] = useState (false);
+  const [groupUpdate, setGroupUpdate] = useState (false);
   const [recent, setRecent] = useState ([]);
 
   const defaultImage = "https://t3.ftcdn.net/jpg/12/81/12/20/240_F_1281122039_wYCRIlTBPzTUzyh8KrPd87umoo52njyw.jpg";
@@ -132,6 +134,7 @@ const Messenger = () => {
     <div className={`fixed top-[4rem] md:top-0 md:left-[18rem] left-[1rem] w-[85%] h-[82vh] md:h-[100vh] flex flex-col flex-grow overflow-y-auto`}>
       {/* Left Sidebar */}
         <CreateGroup isOpen={groupCreate} setOpen={setGroupCreate}/>
+        <UpdateGroup isOpen={groupUpdate} setOpen={setGroupUpdate} />
         <div className="flex flex-row h-full w-full overflow-x-hidden ">
           <div className="flex flex-col pt-4 px-4 w-[18rem] text-[var(--heading)] bg-[var(--card)] flex-shrink-0">
             <div className="w-full flex justify-between items-center">
@@ -280,7 +283,7 @@ const Messenger = () => {
                 <div className="flex items-center gap-2">
                   <Avatar url={groupState.liveGroup?.image?.url || defaultImage} size={'md'}/>
                   <div className="flex flex-col">
-                    <h2 className="hover:underline">{groupState.liveGroup?.name}</h2>
+                    <h2 className="hover:cursor-pointer" onClick={() => setGroupUpdate(true)}>{groupState.liveGroup?.name}</h2>
                   </div>
                 </div>
                 <div className="flex items-center gap-8 mr-4">

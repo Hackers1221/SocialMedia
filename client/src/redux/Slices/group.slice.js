@@ -51,8 +51,12 @@ const GroupSlice = createSlice({
   name: "group",
   initialState,
   reducers: {
-    addGroup : (state, action) => {
-        state.groupDetails = [action.payload.groupData, ...state.groups];
+    addGroup: (state, action) => {
+        if (state.groupDetails.length === 0) {
+            state.groupDetails = [action.payload.groupData];
+        } else {
+            state.groupDetails = [action.payload.groupData, ...state.groupDetails];
+        }
     },
     updateGroupMessages: (state, action) => {
         if (state.liveGroup.messages) state.liveGroup.messages = [...state.liveGroup.messages, action.payload.message];

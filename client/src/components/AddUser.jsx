@@ -45,7 +45,7 @@ function AddUser ({ userId, members, setMembers }) {
             <input 
                 type="checkbox"
                 onChange={handleCheckboxChange}
-                checked={members.some(member => member.id === userId)}
+                checked={members?.some(member => member.id === userId)}
             />
             <Avatar url={user?.image?.url} size={'md'}/>
             <h2>{user?.name}</h2>

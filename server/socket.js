@@ -149,11 +149,13 @@ const setupSocket = (server) => {
            messageType : true,
            groupId: groupData._id
         });
-  
+
+        let msg = {};
+
         for (const member of groupData.members) {
           const userDetails = await User.findById(member.userId);
           if (adminDetails.username !== userDetails.username) {
-            await Message.create({
+            msg = await Message.create({
               content: `${adminDetails.username} added ${userDetails.username}`,
               messageType: true,
               groupId: groupData._id
@@ -161,10 +163,23 @@ const setupSocket = (server) => {
           }
         }
 
-        groupData.members.forEach(memberId => {
-          const socketId = userSocketMap.get(memberId);
+        const uploadData = {
+          _id: msg._id,
+          content: msg.content,
+          groupId: groupData._id,
+          messageType: true,
+          group: {
+            image: groupData.image,
+            _id: groupData._id,
+            name: groupData.name
+          }
+        }
+
+        groupData.members.forEach(member => {
+          console.log (member.userId.toString());
+          const socketId = userSocketMap.get(member.userId.toString());
           if (socketId) {
-            io.to(socketId).emit('groupCreated', groupData);
+            io.to(socketId).emit('groupCreated', uploadData);
           }
         });
 
