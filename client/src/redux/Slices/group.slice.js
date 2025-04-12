@@ -101,6 +101,7 @@ const GroupSlice = createSlice({
       builder
       .addCase(getGroupById.fulfilled, (state, action) => {
         if (!action.payload.data?.groupData) return;
+        console.log(action.payload);
         state.liveGroup = action.payload.data?.groupData;
     })
     .addCase(getRecentMessage.fulfilled,(state,action) => {

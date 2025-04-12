@@ -16,6 +16,7 @@ const Messenger = () => {
   const authState = useSelector ((state) => state.auth);
   const chatState = useSelector ((state) => state.chat);
   const groupState = useSelector ((state) => state.group);
+  const [query,setQuery] = useState("");
 
   const dispatch = useDispatch ();
 
@@ -30,6 +31,8 @@ const Messenger = () => {
   const [groupCreate, setGroupCreate] = useState (false);
   const [groupUpdate, setGroupUpdate] = useState (false);
   const [recent, setRecent] = useState ([]);
+  const [group,setGroup] = useState(groupState?.groupDetails);
+  const [follower,setFollower] = useState(authState.data?.follower);
 
   const defaultImage = "https://t3.ftcdn.net/jpg/12/81/12/20/240_F_1281122039_wYCRIlTBPzTUzyh8KrPd87umoo52njyw.jpg";
   const members = groupState.liveGroup?.members?.map(member => member.userId);
@@ -131,6 +134,36 @@ const Messenger = () => {
       }
     }, [chatState.messages]);
 
+    useEffect(() => {
+      const q = query.trim().toLowerCase();
+    
+      if(activeTab=="recent"){
+        if (q === "") {
+          setRecent(chatState.recentMessages);
+        } else {
+          const filteredMessages = chatState.recentMessages.filter((msg) =>
+            msg.user?.name?.toLowerCase().includes(q) ||
+            msg.content?.toLowerCase().includes(q)
+          );
+          setRecent(filteredMessages);
+        }
+      }else if(activeTab=="groups"){
+        if (q === "") {
+          setGroup(groupState.groupDetails);
+        } else {
+          const filteredGroup = groupState.groupDetails.filter((group) =>
+            group.group?.name?.toLowerCase().includes(q)
+          );
+          setGroup(filteredGroup);
+        }
+      }
+    }, [query]);
+    
+
+    const onSearchHandler = (e) => {
+      setQuery(e.target.value);
+    }
+
   return (
     <div className={`fixed top-[4rem] md:top-0 md:left-[18rem] left-[1rem] w-[85%] h-[82vh] md:h-[100vh] flex flex-col flex-grow overflow-y-auto`}>
       {/* Left Sidebar */}
@@ -150,9 +183,9 @@ const Messenger = () => {
                     type="text"
                     placeholder="Search people, groups and messages"
                     className={`w-full p-2 bg-transparent text-[var(--text)] focus:outline-none text-sm`}
-                    // onChange={onChangeHandler}
+                    onChange={onSearchHandler}
                     name = "query"
-                    // value = {query}
+                    value = {query}
                 />
                 <button className={`text-[var(--text)] text-2xl h-full`}>
                     <X />
@@ -191,7 +224,7 @@ const Messenger = () => {
                 ))}
               </div>}
               {activeTab === 'groups' && <div className="flex flex-col space-y-1 mt-4 h-full overflow-y-auto">
-                {groupState.groupDetails?.map ((chat, index) => (
+                {group?.map ((chat, index) => (
                   <User chat={chat} type={'groups'} key={index}/>
                 ))}
               </div>}

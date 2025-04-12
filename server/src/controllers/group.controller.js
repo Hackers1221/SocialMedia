@@ -42,7 +42,7 @@ const getGroupByUserId = async(req,res) => {
 }
 
 const getGroupById = async(req,res) => {
-    const response = await groupService.getGroupById(req.params.id);
+    const response = await groupService.getGroupById(req.params.id,req.body.userId);
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
             msg : "Unable to fetch the groupdetals",
