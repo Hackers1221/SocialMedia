@@ -33,9 +33,9 @@ const Messenger = () => {
   const [recent, setRecent] = useState ([]);
   const [group,setGroup] = useState(groupState?.groupDetails);
   const [follower,setFollower] = useState(authState.data?.follower);
-
   const defaultImage = "https://t3.ftcdn.net/jpg/12/81/12/20/240_F_1281122039_wYCRIlTBPzTUzyh8KrPd87umoo52njyw.jpg";
   const members = groupState.liveGroup?.members?.map(member => member.userId);
+
 
   const sendMessage = () => {
     if (message?.trim() || files?.length) {  
@@ -120,8 +120,13 @@ const Messenger = () => {
       const response = await dispatch(getRecentMessage(authState.data?._id));
       if (response.payload) {
         setActiveTab('groups');
+        setGroup(groupState.groupDetails);
       }
     }
+
+    useEffect(() => {
+      setGroup(groupState?.groupDetails);
+    },[activeTab]);
   
     useEffect (() => { 
       getRecent ();
