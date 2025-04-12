@@ -44,7 +44,10 @@ function CreateGroup ({ isOpen, setOpen }) {
         }
 
         setGroupEdit (true);
-        console.log (members);
+    }
+
+    function goBack () {
+        setGroupEdit (false);
     }
 
     async function submit () {
@@ -143,6 +146,9 @@ function CreateGroup ({ isOpen, setOpen }) {
                     </div>
                 </div>}
                 {groupEdit && <div className="relative h-full w-full p-4">
+                    <div className="w-full flex justify-start items-center">
+                        <i className="fa-solid fa-arrow-left hover:cursor-pointer" onClick={goBack}></i>
+                    </div>
                     <div className="flex flex-col items-center gap-6">
                         <img
                         src={imageUrl || defaultImage}

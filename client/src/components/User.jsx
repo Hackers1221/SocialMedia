@@ -70,7 +70,7 @@ function User ({ chat, type }) {
                 <h2 className="text-sm font-semibold">{username || user?.name || chat?.group?.name}</h2>
                 {type !== 'follower' && <h3 className="text-xs font-extralight">{content?.toString().slice(0, 20) + (content?.length > 20 ? "..." : "")}</h3>}
             </div>
-            {online?.includes(chat?.user?._id || user?._id) && <div className="w-[0.7rem] h-[0.6rem] bg-green-400 rounded-full inline-block"></div>}
+            {(online?.includes(chat?.user?._id || user?._id) && chat?.user?._id !== authState.data?._id && user?._id !== authState.data?._id) && <div className="w-[0.7rem] h-[0.6rem] bg-green-400 rounded-full inline-block"></div>}
         </div>
     )
 }

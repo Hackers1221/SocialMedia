@@ -70,7 +70,7 @@ const getRecentMessage = async (userId) => {
           }
         },
         {
-          $sort: { timestamp: -1 }
+          $sort: { createdAt: -1 }
         },
         {
           $group: {
@@ -85,7 +85,8 @@ const getRecentMessage = async (userId) => {
             $project: {
               content: 1,
               groupId: 1,
-              messageType: 1
+              messageType: 1,
+              createdAt: 1
             }
           }
       ])

@@ -69,7 +69,7 @@ const DisplayPost = ({ open, setOpen, index, list }) => {
 
       if(response.payload){
         setDescription("");
-        await dispatch (getAllPosts ());
+        // await dispatch (getAllPosts ());
         await dispatch(getCommentByPostId(post?._id));
       }
   }

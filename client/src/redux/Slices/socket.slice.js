@@ -40,7 +40,6 @@ const socketSlice = createSlice({
         });
 
         socketInstance.on("receiveMessage", (data) => {
-          console.log(data);
           dispatch(updateMessages({ message: data }));
         });
 

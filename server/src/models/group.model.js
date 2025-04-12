@@ -20,6 +20,9 @@ const GroupSchema = new Schema({
                 addedBy :{
                     type : Schema.Types.ObjectId,
                     ref:"Users"
+                },
+                isActive :{
+                    type : Boolean,
                 }
             }
         ],

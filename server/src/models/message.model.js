@@ -18,7 +18,7 @@ const messageSchema = new Schema({
         url: { type: String, required: true },
         filename: { type: String, required: true }
     }],
-    timestamp: {
+    createdAt: {
         type: Date,
         default: Date.now,
     },

@@ -126,7 +126,7 @@ const setupSocket = (server) => {
         try {
           const userId = new mongoose.Types.ObjectId(member.id);
           const addedBy = new mongoose.Types.ObjectId(member.addedBy);
-          members.push({ userId, addedBy });
+          members.push({ userId, addedBy, isActive: true });
         } catch (err) {
           console.warn('Invalid ObjectId:', member, err.message);
         }
@@ -214,7 +214,7 @@ const setupSocket = (server) => {
         try {
           const userId = new mongoose.Types.ObjectId(member.id);
           const addedBy = new mongoose.Types.ObjectId(member.addedBy);
-          members.push({ userId, addedBy });
+          members.push({ userId, addedBy, isActive: true });
         } catch (err) {
           console.warn('Invalid ObjectId:', member, err.message);
         }
@@ -231,12 +231,7 @@ const setupSocket = (server) => {
       
 
       try {
-        const updateData = {
-          $push: {
-            members: { $each: members },
-            admins: { $each: admins }
-          }
-        };
+        const updateData = {};
         if (data.name) {
           updateData.name = data.name;
         }
@@ -244,11 +239,45 @@ const setupSocket = (server) => {
           updateData.image = image;
         }
         
-        const groupData = await Group.findByIdAndUpdate(
+        let groupData = await Group.findByIdAndUpdate(
           data._id,
           updateData,
           { new: true }
         );
+
+        const existingMemberIds = groupData.members.map(m => m.userId);
+
+        const existingMembers = members.filter(m => existingMemberIds.includes(m.userId));
+        const newMembers = members.filter(m => !existingMemberIds.includes(m.userId));
+
+        // Step 2: Update isActive = true for already present members
+        if (existingMembers.length > 0) {
+          await Group.updateOne(
+            { _id: data._id },
+            {
+              $set: {
+                "members.$[member].isActive": true
+              }
+            },
+            {
+              arrayFilters: [
+                { "member.userId": { $in: existingMembers.map(m => m.userId) } }
+              ]
+            }
+          );
+        }
+
+        // Step 3: Push new members
+        if (newMembers.length > 0) {
+          await Group.updateOne(
+            { _id: data._id },
+            {
+              $push: {
+                members: { $each: newMembers }
+              }
+            }
+          );
+        }
 
         const adminDetails = await User.findById(data.admin);
 
@@ -333,21 +362,19 @@ const setupSocket = (server) => {
     }
 
     const leaveGroup = async(data) => {
-      console.log (data);
       const previousGroupDetails = await Group.findById(data._id);
-      const updatedGroupDetails = await Group.findByIdAndUpdate(
-        data._id,
+      const updatedGroupDetails = await Group.findOneAndUpdate(
+        { _id: data._id, "members.userId": data.userId },
         {
-          $pull: {
-            members: { userId: data.userId },
-            admins: data.userId,
+          $set: {
+            "members.$.isActive": false // or true, depending on your need
           }
         },
         { new: true }
-      )
+      );
+      
 
       const userDetails =  await User.findById(data.userId);
-      console.log (updatedGroupDetails)
 
       const leaveGroupMessage = await Message.create({
         content : `${userDetails.username} left the group`,

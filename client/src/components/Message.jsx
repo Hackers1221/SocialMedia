@@ -19,7 +19,7 @@ function Message({ message }) {
 
 
     function getTime() {
-        const date = new Date(message?.timestamp);
+        const date = new Date(message?.createdAt);
         const hours = date.getHours().toString().padStart(2, "0");
         const minutes = date.getMinutes().toString().padStart(2, "0");
 

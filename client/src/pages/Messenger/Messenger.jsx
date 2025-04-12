@@ -32,7 +32,6 @@ const Messenger = () => {
   const [recent, setRecent] = useState ([]);
 
   const defaultImage = "https://t3.ftcdn.net/jpg/12/81/12/20/240_F_1281122039_wYCRIlTBPzTUzyh8KrPd87umoo52njyw.jpg";
-  const members = groupState.liveGroup?.members?.map(member => member.userId);
 
   const sendMessage = () => {
     if (message?.trim() || files?.length) {  
@@ -131,6 +130,9 @@ const Messenger = () => {
       }
     }, [chatState.messages]);
 
+    // console.log (members);
+    // console.log (members.find((member) => member.userId === authState.data._id));
+
   return (
     <div className={`fixed top-[4rem] md:top-0 md:left-[18rem] left-[1rem] w-[85%] h-[82vh] md:h-[100vh] flex flex-col flex-grow overflow-y-auto`}>
       {/* Left Sidebar */}
@@ -208,7 +210,7 @@ const Messenger = () => {
                 <div className="flex items-center gap-2">
                   <Avatar url={chatState.recipient?.image?.url || defaultImage} size={'md'}/>
                   <div className="flex flex-col">
-                    {chatState.recipient?.name?.length > 0 && <Link to={`/profile/${chatState.recipient?.username}`} className="hover:underline">{chatState.recipient?.name}</Link>}
+                    {chatState.recipient?.name?.length > 0 && <Link to={`/profile/${chatState.recipient?.username}`} className="hover:underline">{chatState.recipient?.username}</Link>}
                       {chatState.recipient?.name?.length > 0 && chatState.onlineUsers?.includes(chatState.recipient?._id) && 
                         <div className="flex gap-2 items-center">
                           <div className="w-[0.4rem] h-[0.4rem] bg-green-400 rounded-full inline-block"></div>
@@ -300,7 +302,7 @@ const Messenger = () => {
               </div>
               <div className="absolute bottom-0 pb-4 flex flex-row items-center h-16 bg-[var(--card)] w-full px-4">
                 <div className="mt-auto flex flex-col items-center gap-3 p-2 relative w-full">
-                  {members.includes(authState.data?._id) ? <div className="flex items-center w-full p-2 px-4 rounded-full border border-[var(--input)] relative">
+                  {groupState.liveGroup?.members?.find((member) => member.userId === authState.data._id).isActive ? <div className="flex items-center w-full p-2 px-4 rounded-full border border-[var(--input)] relative">
                     {/* File Upload Button */}
                     <label htmlFor="file-upload" className="cursor-pointer text-[var(--text)]">
                       <i className="fa-solid fa-paperclip text-sm"></i>
@@ -341,7 +343,7 @@ const Messenger = () => {
                       className="text-[var(--text)] cursor-pointer ml-3"
                     />
                   </div> : 
-                  <h2>You are no longer a participant of this group</h2>}
+                  <h2 className="text-xs">You are no longer a participant of this group</h2>}
               </div>
               </div>
             </div> : 

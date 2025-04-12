@@ -51,7 +51,12 @@ function UpdateGroup ({ isOpen, setOpen }) {
 
     function getNonParticipants () {
         const memberIds = liveGroup.members?.map(member => member.userId);
-        const arr = authState.data?.follower?.filter(user => !memberIds.includes(user));
+        let arr = authState.data?.follower?.filter(user => !memberIds.includes(user));
+        const inactiveMembers = liveGroup.members
+            .filter(member => !member.isActive)
+            .map(member => member.userId);
+        
+        arr = [...arr, ...inactiveMembers];
 
         setNonParticipants (arr);
     }
@@ -227,9 +232,15 @@ function UpdateGroup ({ isOpen, setOpen }) {
                                 <i className="fa-solid fa-user-plus flex items-center justify-center rounded-full object-cover"></i>
                                 <div className="ml-2 w-full">Add particpiants</div>
                             </div>
-                            {liveGroup.members?.length > 0 ? liveGroup.members?.map ((user, index) => (
-                            <User chat={user.userId} type={'follower'} key={index}/>
-                            )) : <h2>No participants</h2>}
+                            {liveGroup.members?.some(m => m.isActive) ? (
+                            liveGroup.members
+                                .filter(member => member.isActive)
+                                .map((user, index) => (
+                                <User chat={user.userId} type="follower" key={index} />
+                                ))
+                            ) : (
+                            <h2>No participants</h2>
+                            )}
                         </div>
                     </div>
                 </div> :

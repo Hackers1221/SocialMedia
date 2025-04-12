@@ -58,11 +58,8 @@ const GroupSlice = createSlice({
         }
     },
     updateGroupMessages: (state, action) => {
-        if (state.liveGroup.messages) state.liveGroup.messages = [...state.liveGroup.messages, action.payload.message];
-
-        if (!state.groupDetails) {
-            state.groupDetails
-        }
+        console.log (state.liveGroup._id, action.payload.message);
+        if (state.liveGroup._id === action.payload.message.groupId) state.liveGroup.messages = [...state.liveGroup.messages, action.payload.message];
 
         state.groupDetails = JSON.parse(JSON.stringify(
             state.groupDetails.map(group =>
@@ -78,7 +75,7 @@ const GroupSlice = createSlice({
         ));    
     },
     updateGroupDetails: (state, action) => {
-        if (state.liveGroup) {
+        if (state.liveGroup._id === action.payload.groupData.group._id) {
             state.liveGroup = JSON.parse(JSON.stringify({
                 ...state.liveGroup,
                 image: action.payload.groupData.group?.image || action.payload.groupData.image,

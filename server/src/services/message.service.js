@@ -53,9 +53,9 @@ const getMessage = async(sender, recipient) => {
 //           }
 //         }
 //       },
-//       // Step 3: Sort messages by timestamp descending to get latest ones first
+//       // Step 3: Sort messages by createdAt descending to get latest ones first
 //       {
-//         $sort: { timestamp: -1 }
+//         $sort: { createdAt: -1 }
 //       },
 //       // Step 4: Group by 'otherUser' and pick the first (most recent) message
 //       {
@@ -139,7 +139,7 @@ const getRecentMessage = async (sender) => {
         }
       },
       {
-        $sort: { timestamp: -1 }
+        $sort: { createdAt: -1 }
       },
       {
         $group: {
