@@ -30,7 +30,7 @@ const getGroupByUserId = async(userId) => {
     }
 }
 
-const getGroupById = async(id) => {
+const getGroupById = async(id,userId) => {
     const response = {};
     try {
         let groupData = await groupModel.findById(id);
