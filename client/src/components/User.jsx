@@ -2,11 +2,13 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { getUserById } from "../redux/Slices/auth.slice";
 import { getMessages, setRecipient } from "../redux/Slices/chat.slice";
-import { getGroupById, getRecentMessage } from "../redux/Slices/group.slice";
+import { getGroupById } from "../redux/Slices/group.slice";
 
-function User ({ chat, type }) {
+function User ({ chat, type, isAdmin }) {
     const authState = useSelector ((state) => state.auth);
+    const liveGroup = useSelector ((state) => state.group.liveGroup)
     const online = useSelector ((state) => state.chat.onlineUsers);
+    const socket = useSelector ((state) => state.socket.socket);
 
     const dispatch = useDispatch ();
 
@@ -38,7 +40,7 @@ function User ({ chat, type }) {
                 recipient: chat?.user?._id || user?._id
             }));
             await dispatch (setRecipient ({ userDetails: chat?.user || user }))
-        }else{
+        } else{
             await dispatch(getGroupById(chat.groupId));
         }
     }
@@ -46,6 +48,16 @@ function User ({ chat, type }) {
     async function getUser () {
         const res = await dispatch (getUserById (chat));
         setUser (res.payload.data?.userdetails);
+    }
+
+    function makeAdmin () {
+        if (socket && socket.connected) {
+            socket.emit ("update-group", {
+                _id: liveGroup._id,
+                admin: authState.data._id,
+                newAdmin: chat
+            })
+          }
     }
 
     useEffect (() => {
@@ -57,20 +69,27 @@ function User ({ chat, type }) {
     useEffect (() => {
         setContent(chat.content);
         if (chat.messageType) getContent ();
-        if (type === 'follower') getUser ();
-    }, [chat])
+        if (type === 'group-info' || type === "follower") getUser ();
+    }, [chat._id])
 
     return (
-        <div 
-            className="flex flex-row items-center bg-transparent hover:shadow-md hover:cursor-pointer rounded-md hover:bg-[var(--topic)] p-2"
-            onClick={getChats}
-        >
-            <img src={chat?.user?.image?.url || user?.image?.url || chat?.group?.image?.url || defaultImage} className="flex items-center justify-center h-8 w-8 rounded-full object-cover"/>
-            <div className="ml-2 w-full">
-                <h2 className="text-sm font-semibold">{username || user?.name || chat?.group?.name}</h2>
-                {type !== 'follower' && <h3 className="text-xs font-extralight">{content?.toString().slice(0, 20) + (content?.length > 20 ? "..." : "")}</h3>}
+        <div className="flex justify-between items-center">
+            <div 
+                className="relative flex flex-row items-center bg-transparent hover:shadow-md hover:cursor-pointer rounded-md hover:bg-[var(--topic)] p-2 w-full"
+                onClick={getChats}
+            >
+                {isAdmin && <h2 className="absolute top-2 right-2 text-[0.6rem] bg-[var(--card)] font-semibold p-1 px-2 rounded-sm">Admin</h2>}
+                {(!isAdmin && type === "group-info") && <h2 className="absolute bottom-2 right-2 text-[0.6rem] border hover:bg-[var(--card)] font-semibold p-1 px-2 rounded-sm" onClick={makeAdmin}>Make admin</h2>}
+                <img src={chat?.user?.image?.url || user?.image?.url || chat?.group?.image?.url || defaultImage} className="flex items-center justify-center h-8 w-8 rounded-full object-cover"/>
+                <div className="ml-2 w-full">
+                    <h2 className="text-sm font-semibold">{(username === authState.data.username ? "You" : username) || (user?.name === authState.data.user?.name ? "You" : username) || chat?.group?.name}</h2>
+                    {(type !== 'group-info' && type !== 'follower') && <h3 className="text-xs font-extralight">{content?.toString().slice(0, 20) + (content?.length > 20 ? "..." : "")}</h3>}
+                </div>
+                {(online?.includes(chat?.user?._id || user?._id) && chat?.user?._id !== authState.data?._id && user?._id !== authState.data?._id) && <div className="w-[0.7rem] h-[0.6rem] bg-green-400 rounded-full inline-block"></div>}
             </div>
-            {(online?.includes(chat?.user?._id || user?._id) && chat?.user?._id !== authState.data?._id && user?._id !== authState.data?._id) && <div className="w-[0.7rem] h-[0.6rem] bg-green-400 rounded-full inline-block"></div>}
+            <div>
+                
+            </div>
         </div>
     )
 }

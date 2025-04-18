@@ -42,7 +42,7 @@ const setupSocket = (server) => {
         const uploadedFiles = [];
 
         // Upload files to Cloudinary
-        for (const file of message.files) {
+        for (const file of message?.files) {
           try {
             const uploadRes = await uploadFile(file);
             uploadedFiles.push({
@@ -74,7 +74,7 @@ const setupSocket = (server) => {
       const uploadedFiles = [];
 
       // Upload files to Cloudinary
-      for (const file of message.files) {
+      for (const file of message?.files) {
         try {
           const uploadRes = await uploadFile(file);
           uploadedFiles.push({
@@ -190,6 +190,7 @@ const setupSocket = (server) => {
     }
 
     const updateGroupDetails = async (data) => {
+      try {
       let uploadRes, image;
    
 
@@ -208,7 +209,6 @@ const setupSocket = (server) => {
       }
 
       const members = [];
-      const admins = [];
 
       data.members?.forEach(member => {
         try {
@@ -219,36 +219,36 @@ const setupSocket = (server) => {
           console.warn('Invalid ObjectId:', member, err.message);
         }
       });
-      
-      data.admins?.forEach(admins => {
-        try {
-          const admin = new mongoose.Types.ObjectId(admins);
-          admins.push(admin);
-        } catch (err) {
-          console.warn('Invalid ObjectId:', admins, err.message);
-        }
-      });
-      
 
-      try {
-        const updateData = {};
-        if (data.name) {
-          updateData.name = data.name;
-        }
-        if (data.image) {
-          updateData.image = image;
-        }
-        
-        let groupData = await Group.findByIdAndUpdate(
+      const updateData = {};
+      if (data.name) {
+        updateData.name = data.name;
+      }
+      if (data.image) {
+        updateData.image = image;
+      }
+      
+      const updateQuery = { ...updateData };
+      
+      // Assuming `newAdmins` is an array and to push all its elements to the `admins` array
+      if (data.admin) {
+        await Group.findByIdAndUpdate(
           data._id,
-          updateData,
+          { $push: { admins: data.newAdmin } },
           { new: true }
-        );
+        );     
+      }
+      
+      let groupData = await Group.findByIdAndUpdate(
+        data._id,
+        updateQuery,
+        { new: true }
+      );      
 
-        const existingMemberIds = groupData.members.map(m => m.userId);
+        const existingMemberIds = groupData?.members.map(m => m.userId.toString());
 
-        const existingMembers = members.filter(m => existingMemberIds.includes(m.userId));
-        const newMembers = members.filter(m => !existingMemberIds.includes(m.userId));
+        const existingMembers = members.filter(m => existingMemberIds.includes(m.userId.toString()));
+        const newMembers = members.filter(m => !existingMemberIds.includes(m.userId.toString()));
 
         // Step 2: Update isActive = true for already present members
         if (existingMembers.length > 0) {
@@ -283,15 +283,17 @@ const setupSocket = (server) => {
 
         let msg;
 
-        if(data.name !== previousGroupDetails.name){
+        if(data.name && data?.name !== previousGroupDetails?.name){
           const updatedNameMessage = await Message.create({
             content : `${adminDetails.username} changed the group name to ${data.name}`,
             groupId : data._id,
             messageType : true,
           });
+
           msg = updatedNameMessage;
+
           groupData.members.forEach(member => {
-            const socketId = userSocketMap.get(member.userId);
+            const socketId = userSocketMap.get(member.userId.toString());
             if (socketId) {
               io.to(socketId).emit('receiveGroupMessage', updatedNameMessage);
             }
@@ -313,7 +315,7 @@ const setupSocket = (server) => {
           });
         }
 
-        if (data.members.length > 0) {
+        if (data.members?.length > 0) {
           let message = [];
           for (const member of data.members) {
             const userDetails = await User.findById(member.id);
@@ -337,6 +339,23 @@ const setupSocket = (server) => {
           })
         }
 
+        if (data.newAdmin) {
+          const userDetails = await User.findById(data.newAdmin);
+            const updatedMemberMessage = await Message.create({
+              content: `${adminDetails.username} made ${userDetails.username} the group admin`,
+              groupId: data._id,
+              messageType: true,
+            });
+            msg = updatedMemberMessage;
+
+            groupData.members.forEach(member => {
+              const socketId = userSocketMap.get(member.userId.toString());
+              if (socketId) {
+                io.to(socketId).emit('receiveGroupMessage', msg);
+              }
+            });
+        }
+
         const uploadData = {
           _id: msg._id,
           content: msg.content,
@@ -349,10 +368,12 @@ const setupSocket = (server) => {
           }
         }
 
+        const groupDetails = await Group.findById (groupData._id);
+
         groupData.members.forEach(member => {
           const socketId = userSocketMap.get(member.userId.toString());
           if (socketId) {
-            io.to(socketId).emit('updatedGroup', uploadData);
+            io.to(socketId).emit('updatedGroup', {updated: uploadData, group: groupDetails});
           }
         });
 
@@ -382,11 +403,23 @@ const setupSocket = (server) => {
         groupId : data._id
       })
 
+      const uploadData = {
+        _id: leaveGroupMessage._id,
+        content: leaveGroupMessage.content,
+        groupId: updatedGroupDetails._id,
+        messageType: true,
+        group: {
+          image: updatedGroupDetails.image,
+          _id: updatedGroupDetails._id,
+          name: updatedGroupDetails.name
+        }
+      }
+
       previousGroupDetails.members.map(member => {
         const socketId = userSocketMap.get(member.userId.toString());
           if (socketId) {
             io.to(socketId).emit('receiveGroupMessage', leaveGroupMessage);
-            io.to(socketId).emit('group-leave', updatedGroupDetails);
+            io.to(socketId).emit('group-leave', {updated: uploadData, group: updatedGroupDetails});
           }
       })
 

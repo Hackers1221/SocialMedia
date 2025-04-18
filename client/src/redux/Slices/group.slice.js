@@ -58,7 +58,7 @@ const GroupSlice = createSlice({
         }
     },
     updateGroupMessages: (state, action) => {
-        console.log (state.liveGroup._id, action.payload.message);
+        console.log (state.liveGroup, action.payload.message);
         if (state.liveGroup._id === action.payload.message.groupId) state.liveGroup.messages = [...state.liveGroup.messages, action.payload.message];
 
         state.groupDetails = JSON.parse(JSON.stringify(
@@ -78,9 +78,10 @@ const GroupSlice = createSlice({
         if (state.liveGroup._id === action.payload.groupData.group._id) {
             state.liveGroup = JSON.parse(JSON.stringify({
                 ...state.liveGroup,
-                image: action.payload.groupData.group?.image || action.payload.groupData.image,
-                name: action.payload.groupData.group?.name || action.payload.groupData.name,
-                members: state.liveGroup.members || action.payload.groupData.members
+                image: action.payload.groupDetails.image,
+                name: action.payload.groupDetails.name,
+                members: action.payload.groupDetails.members,
+                admins: action.payload.groupDetails.admins
             }));
         }
         
@@ -98,7 +99,6 @@ const GroupSlice = createSlice({
       builder
       .addCase(getGroupById.fulfilled, (state, action) => {
         if (!action.payload.data?.groupData) return;
-        console.log(action.payload);
         state.liveGroup = action.payload.data?.groupData;
     })
     .addCase(getRecentMessage.fulfilled,(state,action) => {

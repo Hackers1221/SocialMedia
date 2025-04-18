@@ -138,7 +138,7 @@ function UpdateGroup ({ isOpen, setOpen }) {
         getDate ();
         getCreator ();
         getNonParticipants ();
-    }, []);
+    }, [liveGroup]);
 
     useEffect (() => {
         if (image) submitDetails ();
@@ -198,7 +198,7 @@ function UpdateGroup ({ isOpen, setOpen }) {
                     </div>
 
                     <h2 className="flex justify-center w-full text-sm font-extralight">
-                        {liveGroup.members?.length} members
+                        {liveGroup.members?.filter(member => member.isActive).length} members
                     </h2>
 
                     <h2 className="flex justify-center w-full text-sm font-extralight">
@@ -224,19 +224,19 @@ function UpdateGroup ({ isOpen, setOpen }) {
                                 <X />
                             </button>
                         </div>
-                        <div className="flex flex-col max-h-[20rem] overflow-y-auto pr-2">
-                            <div 
+                        <div className="flex flex-col max-h-[20rem] overflow-y-auto">
+                            {liveGroup.admins.includes(authState.data._id) && <div 
                                 className="flex items-center bg-transparent hover:shadow-md hover:cursor-pointer rounded-md hover:bg-[var(--topic)] p-2 px-4"
                                 onClick={() => setAddParticipants (true)}
                             >
                                 <i className="fa-solid fa-user-plus flex items-center justify-center rounded-full object-cover"></i>
                                 <div className="ml-2 w-full">Add particpiants</div>
-                            </div>
+                            </div>}
                             {liveGroup.members?.some(m => m.isActive) ? (
                             liveGroup.members
                                 .filter(member => member.isActive)
                                 .map((user, index) => (
-                                <User chat={user.userId} type="follower" key={index} />
+                                <User chat={user.userId} type="group-info" isAdmin={liveGroup.admins.includes(user.userId)} key={index} />
                                 ))
                             ) : (
                             <h2>No participants</h2>

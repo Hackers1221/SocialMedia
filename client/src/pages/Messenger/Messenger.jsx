@@ -11,12 +11,12 @@ import CreateGroup from "../../components/CreateGroup";
 import { getGroupByUserId, getRecentMessage } from "../../redux/Slices/group.slice";
 import { MdOutlineGroupAdd } from "react-icons/md";
 import UpdateGroup from "../../components/UpdateGroup";
+import ImagePreview from "../../components/ImagePreview";
 
 const Messenger = () => {
   const authState = useSelector ((state) => state.auth);
   const chatState = useSelector ((state) => state.chat);
   const groupState = useSelector ((state) => state.group);
-  const [query,setQuery] = useState("");
 
   const dispatch = useDispatch ();
 
@@ -31,14 +31,53 @@ const Messenger = () => {
   const [groupCreate, setGroupCreate] = useState (false);
   const [groupUpdate, setGroupUpdate] = useState (false);
   const [recent, setRecent] = useState ([]);
-  const [group,setGroup] = useState(groupState?.groupDetails);
-  const [follower,setFollower] = useState(authState.data?.follower);
+  const [group,setGroup] = useState();
+  const [isOpen, setOpen] = useState (false);
+  const [selectedImage, setSelectedImage] = useState ("");
+  const [query,setQuery] = useState("");
+
   const defaultImage = "https://t3.ftcdn.net/jpg/12/81/12/20/240_F_1281122039_wYCRIlTBPzTUzyh8KrPd87umoo52njyw.jpg";
-  const members = groupState.liveGroup?.members?.map(member => member.userId);
 
 
   const sendMessage = () => {
-    if (message?.trim() || files?.length) {  
+    if (message?.trim() || files?.length) { 
+      const lastMessage = chatState.messages
+        .slice()
+        .reverse()
+        .find(msg => !msg.groupId?.length);
+
+      if (lastMessage) {
+        const time = isDifferentDate (lastMessage?.createdAt);
+
+        if (time && socket && socket.connected) {
+          socket.emit("sendMessage", {
+            sender: authState.data?._id,
+            recipient: chatState.recipient?._id,
+            content: time,
+            files: [],
+            messageType: true
+          });
+        }
+      }
+      else {
+        const today = new Date();
+        const time = today.toLocaleDateString("en-GB", {
+          day: "numeric",
+          month: "long",
+          year: "numeric"
+        });
+
+        if (time && socket && socket.connected) {
+          socket.emit("sendMessage", {
+            sender: authState.data?._id,
+            recipient: chatState.recipient?._id,
+            content: time,
+            files: [],
+            messageType: true
+          });
+        }
+      }
+
       const readerPromises = files.map(
         (file) =>
           new Promise((resolve, reject) => {
@@ -67,8 +106,63 @@ const Messenger = () => {
     }
   };
 
+  const isDifferentDate = (dateString) => {
+    const inputDate = new Date(dateString);
+    const today = new Date();
+  
+    const isDifferent =
+      inputDate.getFullYear() !== today.getFullYear() ||
+      inputDate.getMonth() !== today.getMonth() ||
+      inputDate.getDate() !== today.getDate();
+  
+    if (isDifferent) {
+      const formattedToday = today.toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+      });
+
+      return formattedToday;
+    }
+  
+    return null;
+  };
+  
+
   const sendGroupMessage = () => {
     if (groupMessage?.trim() || groupFiles?.length) {  
+      if (groupState.liveGroup.messages?.length) {
+        const time = isDifferentDate(groupState.liveGroup.messages[groupState.liveGroup.messages?.length - 1].createdAt);
+        if (time && socket && socket.connected) {
+          socket.emit("sendGroupMessage", {
+            groupId: groupState.liveGroup?._id,
+            sender: authState.data?._id,
+            recipient: groupState.liveGroup?.members,
+            content: time,
+            files: [],
+            messageType: true
+          });
+        }
+      }
+      else {
+        const today = new Date();
+        const time = today.toLocaleDateString("en-GB", {
+          day: "numeric",
+          month: "long",
+          year: "numeric"
+        });
+        if (time && socket && socket.connected) {
+          socket.emit("sendGroupMessage", {
+            groupId: groupState.liveGroup?._id,
+            sender: authState.data?._id,
+            recipient: groupState.liveGroup?.members,
+            content: time,
+            files: [],
+            messageType: true
+          });
+        }
+      }
+
       const readerPromises = groupFiles.map(
         (file) =>
           new Promise((resolve, reject) => {
@@ -124,6 +218,10 @@ const Messenger = () => {
       }
     }
 
+    useEffect (() => {
+      setGroup (groupState.groupDetails);
+    }, [groupState.groupDetails])
+
     useEffect(() => {
       setGroup(groupState?.groupDetails);
     },[activeTab]);
@@ -174,6 +272,8 @@ const Messenger = () => {
       {/* Left Sidebar */}
         <CreateGroup isOpen={groupCreate} setOpen={setGroupCreate}/>
         <UpdateGroup isOpen={groupUpdate} setOpen={setGroupUpdate} />
+        <ImagePreview isOpen={isOpen} setOpen={setOpen} url={selectedImage}/>
+
         <div className="flex flex-row h-full w-full overflow-x-hidden ">
           <div className="flex flex-col pt-4 px-4 w-[18rem] text-[var(--heading)] bg-[var(--card)] flex-shrink-0">
             <div className="w-full flex justify-between items-center">
@@ -192,9 +292,9 @@ const Messenger = () => {
                     name = "query"
                     value = {query}
                 />
-                <button className={`text-[var(--text)] text-2xl h-full`}>
+                {query.length > 0 && <button className={`text-[var(--text)] text-2xl h-full`} onClick={() => setQuery ("")}>
                     <X />
-                </button>
+                </button>}
             </div>
             <div className={`flex justify-start gap-4 bg-[var(--card)] border-b border-[var(--border)]`}>
                     <button
@@ -244,7 +344,12 @@ const Messenger = () => {
             {chatState.recipient?.name?.length > 0 ? <div className="relative flex flex-col text-[var(--heading)] bg-[var(--card)] h-full">
               <div className="flex gap-4 justify-between items-center w-full bg-[var(--topic)] p-2">
                 <div className="flex items-center gap-2">
-                  <Avatar url={chatState.recipient?.image?.url || defaultImage} size={'md'}/>
+                  <div onClick={() => {
+                    setSelectedImage (chatState.recipient?.image?.url);
+                    setOpen (true);
+                  }}>
+                    <Avatar url={chatState.recipient?.image?.url || defaultImage} size={'md'}/>
+                  </div>
                   <div className="flex flex-col">
                     {chatState.recipient?.name?.length > 0 && <Link to={`/profile/${chatState.recipient?.username}`} className="hover:underline">{chatState.recipient?.username}</Link>}
                       {chatState.recipient?.name?.length > 0 && chatState.onlineUsers?.includes(chatState.recipient?._id) && 
@@ -320,7 +425,12 @@ const Messenger = () => {
             {groupState.liveGroup?._id?.length > 0 ? <div className="relative flex flex-col text-[var(--heading)] bg-[var(--card)] h-full">
               <div className="flex gap-4 justify-between items-center w-full bg-[var(--topic)] p-2">
                 <div className="flex items-center gap-2">
-                  <Avatar url={groupState.liveGroup?.image?.url || defaultImage} size={'md'}/>
+                  <div onClick={() => {
+                    setSelectedImage (groupState.liveGroup?.image?.url);
+                    setOpen (true);
+                  }}>
+                    <Avatar url={groupState.liveGroup?.image?.url || defaultImage} size={'md'}/>
+                  </div>
                   <div className="flex flex-col">
                     <h2 className="hover:cursor-pointer" onClick={() => setGroupUpdate(true)}>{groupState.liveGroup?.name}</h2>
                   </div>

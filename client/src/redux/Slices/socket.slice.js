@@ -56,11 +56,12 @@ const socketSlice = createSlice({
         });
 
         socketInstance.on("updatedGroup", (data) => {
-          dispatch(updateGroupDetails ({ groupData: data }));
+          console.log (data);
+          dispatch(updateGroupDetails ({ groupData: data.updated, groupDetails: data.group }));
         });
 
         socketInstance.on("group-leave", (data) => {
-          dispatch(updateGroupDetails ({ groupData: data }));
+          dispatch(updateGroupDetails ({ groupData: data.updated, groupDetails: data.group }));
         });
       }
 
