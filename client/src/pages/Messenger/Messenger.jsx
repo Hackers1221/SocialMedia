@@ -245,8 +245,7 @@ const Messenger = () => {
           setRecent(chatState.recentMessages);
         } else {
           const filteredMessages = chatState.recentMessages.filter((msg) =>
-            msg.user?.name?.toLowerCase().includes(q) ||
-            msg.content?.toLowerCase().includes(q)
+            msg.user?.username?.toLowerCase().includes(q)
           );
           setRecent(filteredMessages);
         }
