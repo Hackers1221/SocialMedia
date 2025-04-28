@@ -1,24 +1,18 @@
-import { FaHome, FaUserCircle } from "react-icons/fa";
+import { FaHome } from "react-icons/fa";
 import { MdExplore } from "react-icons/md";
 import { IoChatboxEllipsesSharp } from "react-icons/io5";
-import { FaBell, FaSearch } from "react-icons/fa";
-import { IoPerson } from "react-icons/io5";
+import { FaBell } from "react-icons/fa";
 import { LuCircleFadingPlus } from "react-icons/lu";
-import { ImVideoCamera } from "react-icons/im";
 import { useEffect, useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FaBookmark } from "react-icons/fa6";
 import PostDialog from "./PostDialog";
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import PostForm from "./PostForm";
 import PulseForm from "./PulseForm";
-import { useDispatch, useSelector } from "react-redux";
-import { logout, searchUser } from "../redux/Slices/auth.slice";
+import { useSelector } from "react-redux";
 import { IoMdPulse } from "react-icons/io";
-import { FiSearch } from "react-icons/fi";
-import { Search, X } from "lucide-react";
 import Avatar from "./Avatar";
-import { RxAvatar } from "react-icons/rx";
 import VerseForm from "./VerseForm";
 import MoreOptions from "./MoreOptions";
 
@@ -32,7 +26,6 @@ function Sidebar() {
     const [isVerseForm, setIsVerseForm] = useState (false);
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-    const [search , setSearch] = useState(false); 
     const [selected, setSelected] = useState ('Feed');
     const [menuOpen, setMenuOpen] = useState (false);
 

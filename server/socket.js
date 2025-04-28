@@ -94,7 +94,8 @@ const setupSocket = (server) => {
         sender: message.sender,
         recipient,
         content: message.content,
-        files: uploadedFiles
+        files: uploadedFiles,
+        messageType: message.messageType
       });
   
       const messageData = await Message.findById(createdMessage._id)
@@ -138,6 +139,7 @@ const setupSocket = (server) => {
       try {
         const groupData = await Group.create({
           name: data.name,
+          creator: data.creator,
           admins: [admin],
           members,
           image
@@ -279,6 +281,8 @@ const setupSocket = (server) => {
           );
         }
 
+        const groupDetails = await Group.findById (groupData._id);
+
         const adminDetails = await User.findById(data.admin);
 
         let msg;
@@ -292,7 +296,7 @@ const setupSocket = (server) => {
 
           msg = updatedNameMessage;
 
-          groupData.members.forEach(member => {
+          groupDetails.members.forEach(member => {
             const socketId = userSocketMap.get(member.userId.toString());
             if (socketId) {
               io.to(socketId).emit('receiveGroupMessage', updatedNameMessage);
@@ -307,7 +311,7 @@ const setupSocket = (server) => {
             messageType : true,
           });
           msg = updatedImageMessage;
-          groupData.members.forEach(member => {
+          groupDetails.members.forEach(member => {
             const socketId = userSocketMap.get(member.userId.toString());
             if (socketId) {
               io.to(socketId).emit('receiveGroupMessage', updatedImageMessage);
@@ -330,7 +334,7 @@ const setupSocket = (server) => {
           }
 
           message.forEach ((msg) => {
-            groupData.members.forEach(member => {
+            groupDetails.members.forEach(member => {
               const socketId = userSocketMap.get(member.userId.toString());
               if (socketId) {
                 io.to(socketId).emit('receiveGroupMessage', msg);
@@ -348,7 +352,7 @@ const setupSocket = (server) => {
             });
             msg = updatedMemberMessage;
 
-            groupData.members.forEach(member => {
+            groupDetails.members.forEach(member => {
               const socketId = userSocketMap.get(member.userId.toString());
               if (socketId) {
                 io.to(socketId).emit('receiveGroupMessage', msg);
@@ -359,19 +363,18 @@ const setupSocket = (server) => {
         const uploadData = {
           _id: msg._id,
           content: msg.content,
-          groupId: groupData._id,
+          groupId: groupDetails._id,
           messageType: true,
           group: {
-            image: groupData.image,
-            _id: groupData._id,
-            name: groupData.name
+            image: groupDetails.image,
+            _id: groupDetails._id,
+            name: groupDetails.name
           }
         }
 
-        const groupDetails = await Group.findById (groupData._id);
-
-        groupData.members.forEach(member => {
+        groupDetails.members.forEach(member => {
           const socketId = userSocketMap.get(member.userId.toString());
+          console.log (member.userId);
           if (socketId) {
             io.to(socketId).emit('updatedGroup', {updated: uploadData, group: groupDetails});
           }
@@ -382,16 +385,21 @@ const setupSocket = (server) => {
       }
     }
 
-    const leaveGroup = async(data) => {
+    const leaveGroup = async (data) => {
       const previousGroupDetails = await Group.findById(data._id);
       const updatedGroupDetails = await Group.findOneAndUpdate(
-        { _id: data._id, "members.userId": data.userId },
+        { _id: data._id, "members.userId": new mongoose.Types.ObjectId(data.userId) },
         {
           $set: {
             "members.$.isActive": false // or true, depending on your need
           }
         },
         { new: true }
+      );
+
+      const latestDetails = await Group.updateOne(
+        { _id: data._id },
+        { $pull: { admins: new mongoose.Types.ObjectId(data.userId) } }
       );
       
 
@@ -425,6 +433,47 @@ const setupSocket = (server) => {
 
     }
 
+    const deleteGroup = async(data) => {
+      const previousGroupDetails = await Group.findById(data._id);
+
+      const user = previousGroupDetails.members.find (member => member.userId.toString () === data.userId);
+
+      console.log (user, data);
+
+      if (user.isActive) {
+        const userDetails =  await User.findById(data.userId);
+
+        const leaveGroupMessage = await Message.create({
+          content : `${userDetails.username} left the group`,
+          messageType : true,
+          groupId : data._id
+        })
+
+        previousGroupDetails.members.map(member => {
+          const socketId = userSocketMap.get(member.userId.toString());
+            if (socketId) {
+              io.to(socketId).emit('receiveGroupMessage', leaveGroupMessage);
+            }
+        });
+
+        const latestDetails = await Group.updateOne(
+          { _id: data._id },
+          { $pull: { admins: { userId: new mongoose.Types.ObjectId(data.userId) } } }
+        );
+      }
+      
+      const latestDetails = await Group.updateOne(
+        { _id: data._id },
+        { $pull: { members: { userId: data.userId } } }
+      ); 
+
+      const groupDetails = await Group.findById (data._id);
+
+      const socketId = userSocketMap.get(data.userId);
+      io.to (socketId).emit ('group-delete', {group: groupDetails});
+
+    }
+
     io.on("connection", (socket) => {
         console.log(`Socket ${socket.id} connected.`);
         const userId = socket.handshake.query.userId;
@@ -441,11 +490,12 @@ const setupSocket = (server) => {
         console.log ('onlineUsers', onlineUsers);
         io.emit('online-users', Array.from(onlineUsers.values()));
 
-        socket.on("sendMessage",sendMessage);
+        socket.on("sendMessage", sendMessage);
         socket.on ("create-group", createGroup);
         socket.on ("sendGroupMessage", sendGroupMessage);
         socket.on ("update-group", updateGroupDetails);
         socket.on ("leave-group", leaveGroup);
+        socket.on ("delete-group", deleteGroup);
     });
 
     
