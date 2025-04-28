@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import AddUser from "./AddUser";
 import toast from "react-hot-toast";
 import User from '../components/User'
-import { FaSpinner } from "react-icons/fa";
 import { getUserById } from "../redux/Slices/auth.slice";
+import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
 
-function UpdateGroup ({ isOpen, setOpen }) {
+function UpdateGroup ({ isOpen, setOpen, isDelete, setDelete }) {
     if (!isOpen) return null;
 
     const authState = useSelector ((state) => state.auth);
@@ -19,23 +19,18 @@ function UpdateGroup ({ isOpen, setOpen }) {
 
     const [editName, setEditName] = useState (false);
     const [date, setDate] = useState ("");
-    const [creator, setCreator] = useState ();
     const [addParticipants, setAddParticipants] = useState (false);
     const [nonParticipants, setNonParticipants] = useState ([]);
     const [selectedUsers, setSelectedUsers] = useState ([]);
     const [image, setImage] = useState ();
     const [groupName, setGroupName] = useState (liveGroup?.name);
     const [imageUrl, setImageUrl] = useState (liveGroup?.image?.url);
+    const [isDialogOpen, setDialogOpen] = useState (false);
 
     const defaultImage = "https://t3.ftcdn.net/jpg/12/81/12/20/240_F_1281122039_wYCRIlTBPzTUzyh8KrPd87umoo52njyw.jpg";
 
     function close () {
         setOpen (!isOpen);
-    }
-
-    async function getCreator () {
-        const res = await dispatch (getUserById (liveGroup.admins[0]));
-        setCreator (res.payload.data?.userdetails);
     }
 
     function getDate () {
@@ -45,7 +40,7 @@ function UpdateGroup ({ isOpen, setOpen }) {
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const year = date.getFullYear();
 
-        const formattedDate = `${day}/${month}/${year}`;
+        const formattedDate = `${day}-${month}-${year}`;
         setDate (formattedDate);
     }
 
@@ -135,8 +130,10 @@ function UpdateGroup ({ isOpen, setOpen }) {
     }, [isOpen]);
 
     useEffect (() => {
+        if (!liveGroup.messages) {
+            setOpen (false); return null;
+        }
         getDate ();
-        getCreator ();
         getNonParticipants ();
     }, [liveGroup]);
 
@@ -146,9 +143,9 @@ function UpdateGroup ({ isOpen, setOpen }) {
 
     return (
         <>
-            {isOpen && <div className="fixed left-0 top-0 inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-[20]"></div>}
-            <dialog ref={dialogRef} className="w-[30%] h-[80%] bg-[var(--background)] py-4">
-                <button onClick={close} className={`fixed top-5 right-6 w-max h-max text-white font-bold text-xl focus:outline-none hover:cursor-pointer z-[500]`}>✕</button>
+            {isOpen && <div className="fixed left-0 top-0 inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-10"></div>}
+            <dialog ref={dialogRef} className="w-[30%] h-[80%] bg-[var(--background)] py-4 z-10">
+                <button onClick={close} className={`fixed top-5 right-6 w-max h-max text-white font-bold text-xl focus:outline-none hover:cursor-pointer z-[10]`}>✕</button>
                 {!addParticipants ? <div className="flex flex-col gap-2">
                     <div className="relative w-20 h-20 mx-auto">
                         <img
@@ -201,12 +198,14 @@ function UpdateGroup ({ isOpen, setOpen }) {
                         {liveGroup.members?.filter(member => member.isActive).length} members
                     </h2>
 
-                    <h2 className="flex justify-center w-full text-sm font-extralight">
-                        Created by {creator?.username} on {date}
+                    <h2 className="flex justify-center w-full text-sm font-extralight gap-2">
+                        Created by <span className="font-semibold">{liveGroup.creator}</span> on <span className="font-semibold">{date}</span>
                     </h2>
 
-                    <div className="w-full px-4" onClick={onLeaveGroup}>
-                        <button className="w-full text-sm border border-[var(--input)] hover:bg-[var(--card)] text-[var(--text)] rounded-md py-2 font-bold">Leave group</button>
+                    <div className="w-full flex justify-between gap-4 px-4">
+                        {liveGroup.members.find (member => member.userId === authState.data?._id).isActive && <button onClick={onLeaveGroup} className="w-full text-sm border border-[var(--input)] hover:bg-[var(--card)] text-[var(--text)] rounded-md py-2 font-bold">Leave group</button>}
+                        <button onClick={() => {
+                            setDelete (true); setOpen (false);}} className="w-full text-sm border border-red-400 hover:bg-[var(--card)] text-red-400 rounded-md py-2 font-bold">Delete group</button>
                     </div>
 
                     <div className="flex flex-col w-full px-4">
@@ -225,7 +224,7 @@ function UpdateGroup ({ isOpen, setOpen }) {
                             </button>
                         </div>
                         <div className="flex flex-col max-h-[20rem] overflow-y-auto">
-                            {liveGroup.admins.includes(authState.data._id) && <div 
+                            {liveGroup.admins?.includes(authState.data._id) && <div 
                                 className="flex items-center bg-transparent hover:shadow-md hover:cursor-pointer rounded-md hover:bg-[var(--topic)] p-2 px-4"
                                 onClick={() => setAddParticipants (true)}
                             >
@@ -236,7 +235,7 @@ function UpdateGroup ({ isOpen, setOpen }) {
                             liveGroup.members
                                 .filter(member => member.isActive)
                                 .map((user, index) => (
-                                <User chat={user.userId} type="group-info" isAdmin={liveGroup.admins.includes(user.userId)} key={index} />
+                                <User chat={user.userId} type="group-info" isAdmin={liveGroup.admins.includes(user.userId)} amAdmin={liveGroup.admins.includes(authState.data?._id)} key={index} />
                                 ))
                             ) : (
                             <h2>No participants</h2>

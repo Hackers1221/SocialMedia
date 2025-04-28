@@ -63,6 +63,9 @@ const socketSlice = createSlice({
         socketInstance.on("group-leave", (data) => {
           dispatch(updateGroupDetails ({ groupData: data.updated, groupDetails: data.group }));
         });
+        socketInstance.on("group-delete", (data) => {
+          dispatch(updateGroupDetails ({ groupDetails: data.group }));
+        });
       }
 
       state.socket = socketInstance;
@@ -78,6 +81,7 @@ const socketSlice = createSlice({
         socketInstance.off("groupCreated");
         socketInstance.off("updatedGroup");
         socketInstance.off("group-leave");
+        socketInstance.off("group-delete");
 
         socketInstance.disconnect();
         socketInstance = null;

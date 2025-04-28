@@ -58,12 +58,11 @@ function CreateGroup ({ isOpen, setOpen }) {
                 const sendPayload = (encodedImage) => {
                   const payload = {
                     admin: [authState.data?._id],
+                    creator: authState.data.username,
                     members: members,
                     name: groupName.trim(),
                     image: encodedImage, // can be undefined
                   };
-              
-                  console.log(members);
               
                   if (socket && socket.connected) {
                     socket.emit("create-group", payload);

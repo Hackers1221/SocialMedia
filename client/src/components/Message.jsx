@@ -5,9 +5,6 @@ import { Link } from "react-router-dom";
 
 function Message({ message }) {
     const authState = useSelector((state) => state.auth);
-    const chatState = useSelector ((state) => state.chat);
-
-    const dispatch = useDispatch ();
 
     const [time, setTime] = useState();
     const [selectedImage, setSelectedImage] = useState ('');

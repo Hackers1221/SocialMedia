@@ -75,7 +75,9 @@ const GroupSlice = createSlice({
         ));    
     },
     updateGroupDetails: (state, action) => {
-        if (state.liveGroup._id === action.payload.groupData.group._id) {
+        console.log (action.payload);
+        if (!action.payload.groupData) state.liveGroup = {};
+        else if (state.liveGroup._id === action.payload.groupData.group._id) {
             state.liveGroup = JSON.parse(JSON.stringify({
                 ...state.liveGroup,
                 image: action.payload.groupDetails.image,
@@ -85,13 +87,31 @@ const GroupSlice = createSlice({
             }));
         }
         
-        state.groupDetails = JSON.parse(JSON.stringify(
-            state.groupDetails.map(group =>
-                group.groupId === action.payload.groupData.groupId
-                    ? action.payload.groupData
-                    : group
-            )
-        ));
+        if (action.payload.groupData) {
+            let flag = 0;
+            state.groupDetails.forEach ((group) => {
+                if (group.groupId === action.payload.groupData.groupId) flag = 1;
+            })
+
+            state.groupDetails = JSON.parse(JSON.stringify(
+                state.groupDetails.map(group =>
+                    group.groupId === action.payload.groupData.groupId
+                        ? action.payload.groupData
+                        : group
+                )
+            ));
+
+            console.log (flag);
+
+            if (!flag) {
+                state.groupDetails = [action.payload.groupData, ...state.groupDetails];
+            }
+        }
+        else {
+            state.groupDetails = state.groupDetails.filter(
+                group => group.groupId !== action.payload.groupDetails._id
+            );
+        }
         
     }
   },

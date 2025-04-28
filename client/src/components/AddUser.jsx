@@ -41,7 +41,7 @@ function AddUser ({ userId, members, setMembers }) {
     }, [userId])
 
     return (
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 hover:cursor-pointer" onClick={handleCheckboxChange}>
             <input 
                 type="checkbox"
                 onChange={handleCheckboxChange}

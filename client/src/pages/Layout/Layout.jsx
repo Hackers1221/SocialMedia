@@ -31,7 +31,6 @@ function Layout () {
 
     return (
         <div className={`min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-[var(--background)] text-gray-800`}>
-            {/* {!hideOthers && screenWidth >= 768 && <Navbar />} */}
             {!hideSidebar && <Sidebar />}
             {!hideOthers && screenWidth >= 1480 && !hideSidebar && <Suggestions />}
             <Outlet />

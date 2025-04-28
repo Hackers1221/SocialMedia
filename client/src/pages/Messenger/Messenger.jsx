@@ -8,15 +8,20 @@ import { X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { getRecentMessages } from "../../redux/Slices/chat.slice";
 import CreateGroup from "../../components/CreateGroup";
-import { getGroupByUserId, getRecentMessage } from "../../redux/Slices/group.slice";
+import { getRecentMessage } from "../../redux/Slices/group.slice";
 import { MdOutlineGroupAdd } from "react-icons/md";
 import UpdateGroup from "../../components/UpdateGroup";
 import ImagePreview from "../../components/ImagePreview";
+import EmojiPicker from "emoji-picker-react";
+import ConfirmDeleteDialog from "../../components/ConfirmDeleteDialog";
+
 
 const Messenger = () => {
   const authState = useSelector ((state) => state.auth);
   const chatState = useSelector ((state) => state.chat);
   const groupState = useSelector ((state) => state.group);
+
+  const emojiPickerRef = useRef (null);
 
   const dispatch = useDispatch ();
 
@@ -35,6 +40,11 @@ const Messenger = () => {
   const [isOpen, setOpen] = useState (false);
   const [selectedImage, setSelectedImage] = useState ("");
   const [query,setQuery] = useState("");
+  const [isSelected, setSelected] = useState (false);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [showPicker, setShowPicker] = useState(false);
+  const [isDialogOpen, setDialogOpen] = useState (false);
+
 
   const defaultImage = "https://t3.ftcdn.net/jpg/12/81/12/20/240_F_1281122039_wYCRIlTBPzTUzyh8KrPd87umoo52njyw.jpg";
 
@@ -191,6 +201,7 @@ const Messenger = () => {
       });
     }
   };
+
     const handleFileChange = (e) => {
       const selectedFiles = Array.from(e.target.files);
       setFiles(selectedFiles);
@@ -218,6 +229,17 @@ const Messenger = () => {
       }
     }
 
+    const handleEmojiClick = (emojiData) => {
+      if (activeTab !== 'groups') setMessage ((prev) => prev + emojiData.emoji);
+      else setGroupMessage ((prev) => prev + emojiData.emoji);
+    };
+
+    // useEffect (() => {
+    //     if (activeTab === 'groups') {
+    //         if (!groupState.liveGroup)
+    //     }
+    // }, [groupState.liveGroup])
+
     useEffect (() => {
       setGroup (groupState.groupDetails);
     }, [groupState.groupDetails])
@@ -230,12 +252,25 @@ const Messenger = () => {
       getRecent ();
     }, [chatState.messages]);
 
+    useEffect (() => {
+      if (activeTab !== 'groups') setSelected (chatState.recipient._id?.length > 0);
+      else setSelected (groupState.liveGroup.messages?.length > 0);
+    }, [activeTab, screenWidth, chatState.recipient, groupState.liveGroup._id, isSelected]);
+
+    useEffect(() => {        
+      const handleResize = () => setScreenWidth(window.innerWidth);
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
   
     useEffect(() => {
       if (chatContainerRef.current) {
-        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+        setTimeout(() => {
+          chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+        }, 100); // give time for messages to render
       }
-    }, [chatState.messages]);
+    }, [chatState.messages, groupState.liveGroup?.messages]);
 
     useEffect(() => {
       const q = query.trim().toLowerCase();
@@ -261,6 +296,16 @@ const Messenger = () => {
         }
       }
     }, [query]);
+
+    useEffect(() => {
+      const handleClickOutside = (e) => {
+        if (emojiPickerRef.current && !emojiPickerRef.current.contains(e.target)) {
+          setShowPicker(false);
+        }
+      };
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
     
 
     const onSearchHandler = (e) => {
@@ -271,15 +316,21 @@ const Messenger = () => {
     <div className={`fixed top-[4rem] md:top-0 md:left-[18rem] left-[1rem] w-[85%] h-[82vh] md:h-[100vh] flex flex-col flex-grow overflow-y-auto`}>
       {/* Left Sidebar */}
         <CreateGroup isOpen={groupCreate} setOpen={setGroupCreate}/>
-        <UpdateGroup isOpen={groupUpdate} setOpen={setGroupUpdate} />
+        <UpdateGroup isOpen={groupUpdate} setOpen={setGroupUpdate} isDelete={isDialogOpen} setDelete={setDialogOpen}/>
         <ImagePreview isOpen={isOpen} setOpen={setOpen} url={selectedImage}/>
 
+        <ConfirmDeleteDialog
+            open={isDialogOpen}
+            setOpen={setDialogOpen}
+            type={"groupDelete"}
+        />
+
         <div className="flex flex-row h-full w-full overflow-x-hidden ">
-          <div className="flex flex-col pt-4 px-4 w-[18rem] text-[var(--heading)] bg-[var(--card)] flex-shrink-0">
+          {(screenWidth < 768 ? !isSelected : true) && <div className={`flex flex-col pt-4 px-4 ${screenWidth < 768 ? `w-full` : `w-[18rem]`} text-[var(--heading)] bg-[var(--card)] flex-shrink-0`}>
             <div className="w-full flex justify-between items-center">
                 <h2 className={`heading text-[2rem] text-[var(--heading)]`}>Chat</h2>
                 <div className="w-8 h-8 hover:bg-black/10 rounded-md flex items-center justify-center">
-                  <MdOutlineGroupAdd className="hover:cursor-pointer text-2xl" onClick={() => setGroupCreate(true)}/>
+                  <MdOutlineGroupAdd className="hover:cursor-pointer text-2xl" title="Create group" onClick={() => setGroupCreate(true)}/>
                 </div>
             </div>
             <div className={`flex items-center rounded-md px-2 my-4 shadow-md border border-[var(--input)]`}>
@@ -339,11 +390,12 @@ const Messenger = () => {
                 ))}
               </div>}
             </div>
-          </div>
-          {activeTab !== 'groups' && <div className="flex flex-col w-[73%] h-full border-l border-[var(--border)]">
+          </div>}
+          {(activeTab !== 'groups' && (screenWidth < 768 ? isSelected : true)) && <div className={`flex flex-col ${screenWidth < 768 ? `w-full` : `w-[73%]`} h-full border-l border-[var(--border)]`}>
             {chatState.recipient?.name?.length > 0 ? <div className="relative flex flex-col text-[var(--heading)] bg-[var(--card)] h-full">
               <div className="flex gap-4 justify-between items-center w-full bg-[var(--topic)] p-2">
                 <div className="flex items-center gap-2">
+                  {screenWidth < 768 && <i className="fa-solid fa-arrow-left" onClick={() => setSelected (false)}></i>}
                   <div onClick={() => {
                     setSelectedImage (chatState.recipient?.image?.url);
                     setOpen (true);
@@ -378,6 +430,15 @@ const Messenger = () => {
                     <label htmlFor="file-upload" className="cursor-pointer text-[var(--text)]">
                       <i className="fa-solid fa-paperclip text-sm"></i>
                     </label>
+
+                    <i onClick={() => setShowPicker((prev) => !prev)} className="ml-4 fa-regular fa-face-smile hover:cursor-pointer"></i>
+
+                    {showPicker && (
+                      <div ref={emojiPickerRef} className="absolute bottom-14 left-0 z-10">
+                        <EmojiPicker onEmojiClick={handleEmojiClick} />
+                      </div>
+                    )}
+
                     <input
                       id="file-upload"
                       type="file"
@@ -421,10 +482,11 @@ const Messenger = () => {
               <h2>Select a user to start messaging</h2>
             </div>}
           </div>}
-          {activeTab === 'groups' && <div className="flex flex-col w-[73%] h-full border-l border-[var(--border)]">
+          {(activeTab === 'groups' && (screenWidth < 768 ? isSelected : true)) && <div className={`flex flex-col ${screenWidth < 768 ? `w-full` : `w-[73%]`} h-full border-l border-[var(--border)]`}>
             {groupState.liveGroup?._id?.length > 0 ? <div className="relative flex flex-col text-[var(--heading)] bg-[var(--card)] h-full">
               <div className="flex gap-4 justify-between items-center w-full bg-[var(--topic)] p-2">
                 <div className="flex items-center gap-2">
+                {screenWidth < 768 && <i className="fa-solid fa-arrow-left" onClick={() => setSelected (false)}></i>}
                   <div onClick={() => {
                     setSelectedImage (groupState.liveGroup?.image?.url);
                     setOpen (true);
@@ -453,6 +515,16 @@ const Messenger = () => {
                     <label htmlFor="file-upload" className="cursor-pointer text-[var(--text)]">
                       <i className="fa-solid fa-paperclip text-sm"></i>
                     </label>
+
+                    <i onClick={() => setShowPicker((prev) => !prev)} className="ml-4 fa-regular fa-face-smile hover:cursor-pointer"></i>
+
+                    {showPicker && (
+                      <div ref={emojiPickerRef} className="absolute bottom-14 left-0 z-10">
+                        <EmojiPicker onEmojiClick={handleEmojiClick} />
+                      </div>
+                    )}
+
+
                     <input
                       id="file-upload"
                       type="file"
