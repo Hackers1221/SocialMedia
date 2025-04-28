@@ -5,6 +5,7 @@ import AddUser from "./AddUser";
 import toast from "react-hot-toast";
 import User from '../components/User'
 import { FaSpinner } from "react-icons/fa";
+import { getFollowerDetails, searchFollower } from "../redux/Slices/auth.slice";
 
 function CreateGroup ({ isOpen, setOpen }) {
     if (!isOpen) return null;
@@ -24,6 +25,9 @@ function CreateGroup ({ isOpen, setOpen }) {
     const [loading, setLoading] = useState(false);
     const [image, setImage] = useState ();
     const [imageUrl, setImageUrl] = useState ("");
+    const [query , setQuery] = useState("");
+    const [followers,setFollowers] = useState();
+    const [queriedFollowers,setQueriedFollowers] = useState();
 
 
     const defaultImage = "https://t3.ftcdn.net/jpg/12/81/12/20/240_F_1281122039_wYCRIlTBPzTUzyh8KrPd87umoo52njyw.jpg";
@@ -112,6 +116,42 @@ function CreateGroup ({ isOpen, setOpen }) {
 
     }, [isOpen]);
 
+    const onChangeHandler = (e) => {
+        const value = e.target.value;
+        setQuery(value);
+    }
+
+    const getDetails = async() => {
+        const response = await dispatch(getFollowerDetails(authState.data._id));
+        setFollowers(response.payload?.data?.userdata);
+        setQueriedFollowers(response.payload?.data?.userdata);
+    }
+
+    useEffect(() => {
+    },[queriedFollowers])
+
+    useEffect(() => {
+        getDetails();
+    },[])
+
+    useEffect(() => {
+        if(query.trim()==""){
+          setQueriedFollowers(followers);
+        }
+        const delayDebounceFn = setTimeout(async () => {
+            try {
+                const response = await dispatch(searchFollower({
+                    userId : authState.data._id,
+                    q : query
+                }));
+                setQueriedFollowers(response.payload?.data?.userdata);
+            } catch (error) {
+                console.error("Search failed:", error);
+            }
+        }, 300);
+        return () => clearTimeout(delayDebounceFn);
+      },[query])
+
     return (
         <>
             {isOpen && <div className="fixed left-0 top-0 inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-[20]"></div>}
@@ -126,17 +166,17 @@ function CreateGroup ({ isOpen, setOpen }) {
                                 type="text"
                                 placeholder="Search people, groups and messages"
                                 className={`w-full p-2 bg-transparent text-[var(--text)] focus:outline-none text-sm`}
-                                // onChange={onChangeHandler}
+                                onChange={onChangeHandler}
                                 name = "query"
-                                // value = {query}
+                                value = {query}
                             />
                             <button className={`text-[var(--text)] text-2xl h-full`}>
                                 <X />
                             </button>
                         </div>
                         <div className="flex flex-col gap-4">
-                            {authState.data?.follower?.map ((user, key) => (
-                                <AddUser userId={user} members={members} setMembers={setMembers} key={key}/>
+                            {queriedFollowers?.map ((user, key) => (
+                                <AddUser userId={user._id} username={user.username} image = {user.image} members={members} setMembers={setMembers} key={key}/>
                             ))}
                         </div>
                     </div>
