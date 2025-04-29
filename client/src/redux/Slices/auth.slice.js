@@ -251,12 +251,21 @@ const authSlice = createSlice({
             localStorage.setItem("notifications", JSON.stringify(state.notifications));
         },
         addNotification: (state, action) => {
-            state.isRead = false;
-            state.notifications.unshift(action.payload);
-            localStorage.setItem("notifications", JSON.stringify(state.notifications));
+            const exists = state.notifications.some(
+                (notif) => notif.id === action.payload.id
+            );
+            if (!exists) {
+                state.isRead = false;
+                state.notifications.unshift(action.payload);
+                localStorage.setItem("notifications", JSON.stringify(state.notifications));
+            }
         },
         updateFollowingList: (state, action) => {
             state.data.following.push(action.payload);
+            localStorage.setItem("data", JSON.stringify(state.data));
+        },
+        updateFollowerList: (state, action) => {
+            state.data.follower.push(action.payload);
             localStorage.setItem("data", JSON.stringify(state.data));
         }
     }, 
@@ -300,5 +309,5 @@ const authSlice = createSlice({
     }
 });
 
-export const { logout, markAsRead, deleteFR, addNotification, updateFollowingList } = authSlice.actions;
+export const { logout, markAsRead, deleteFR, addNotification, updateFollowingList, updateFollowerList } = authSlice.actions;
 export default authSlice.reducer;
