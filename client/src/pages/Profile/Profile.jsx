@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Avatar from '../../components/Avatar';
 import PostCard from '../../components/PostCard';
 import usePosts from '../../hooks/usePosts';
-import { followUser, getUserByUsername } from '../../redux/Slices/auth.slice';
+import { followRequest, followUser, getUserByUsername } from '../../redux/Slices/auth.slice';
 import toast from 'react-hot-toast';
 import { Link, useParams } from 'react-router-dom';
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -21,6 +21,7 @@ const Profile = () => {
   const [verseState] = useVerse ();
 
   const [creator, setCreator] = useState (null);
+  const [pending, setPending] = useState(false);
   const [follow, setFollow] = useState(false);
   const [countFollowers, setCountFollowers] = useState(0);
   const [countFollowing, setCountFollowing] = useState(0);
@@ -48,7 +49,6 @@ const Profile = () => {
           const userData = user.payload?.data?.userDetails;
           getPosts (userData?._id);
           setCreator(userData);
-          setFollow(authState?.data?.following?.includes(userData?._id));
           setCountFollowers(userData?.follower?.length || 0);
           setCountFollowing(userData?.following?.length || 0);
           setCheck(userData._id === authState.data._id);
@@ -68,7 +68,14 @@ const Profile = () => {
         setIsLoading(false);
       });
   }, [username]);
-  
+
+  useEffect(() => {
+    console.log("hello");
+    if (creator && authState?.data?.following) {
+      setFollow(authState.data.following.includes(creator._id));
+      setPending(creator?.requests?.includes(authState?.data?._id));
+    }
+  }, [authState.data.following]);
 
 
   const toggleFollow = async () => {
@@ -78,8 +85,18 @@ const Profile = () => {
       id: creator._id,
     }));
     if (response.payload) {
-      setFollow((prev) => !prev);
       setCountFollowers((prev) => (follow ? prev - 1 : prev + 1));
+    }
+  };
+
+  const toggleFollowRequest = async () => {
+    if (!creator) return;
+    const response = await dispatch(followRequest({
+      id1: authState?.data?._id,
+      id: creator._id,
+    }));
+    if (response.payload) {
+      setPending((prev) => !prev);
     }
   };
 
@@ -95,18 +112,42 @@ const Profile = () => {
                 <div onClick={() => setOpen (!isOpen)}>
                   <Avatar url={creator?.image?.url || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} size={'lg'} border={"true"}/>
                 </div>
-                <div className='flex gap-4'>
-                  {!check && (
-                    <button className={`mt-2 px-4 py-2 border rounded-full bg-[var(--buttons)] text-[var(--card)]`} onClick={toggleFollow}>
-                      {follow ? "Following" : creator?.isPrivate && creator?._id !== authState.data?._id ? "Send follow request" : "Follow"}
-                    </button>
-                  )}
-                  {check && (
-                    <Link to={"/settings"} className={`mt-2 px-4 py-2 border bg-[var(--buttons)] text-[var(--card)] rounded-full`}>
+
+                {/* Follow Button */}
+                <div className="flex gap-4">
+                  {!check ? (
+                    follow ? (
+                      <button
+                        className="mt-2 px-4 py-2 border rounded-full bg-[var(--buttons)] text-[var(--card)]"
+                        onClick={toggleFollow}
+                      >
+                        Following
+                      </button>
+                    ) : creator?.isPrivate ? (
+                      <button
+                        className={`mt-2 px-4 py-2 border rounded-full bg-[var(--buttons)] text-[var(--card)] ${pending ? "text-blue-500" : ""}`}
+                        onClick={toggleFollowRequest}
+                      >
+                        {pending ? "Requested" : "Follow"}
+                      </button>
+                    ) : (
+                      <button
+                        className="mt-2 px-4 py-2 border rounded-full bg-[var(--buttons)] text-red-400"
+                        onClick={toggleFollow}
+                      >
+                        Follow
+                      </button>
+                    )
+                  ) : (
+                    <Link
+                      to="/settings"
+                      className="mt-2 px-4 py-2 border bg-[var(--buttons)] text-[var(--card)] rounded-full"
+                    >
                       Edit profile
                     </Link>
                   )}
                 </div>
+
               </div>
             </div>
             <div className='w-full mt-16 px-4'>

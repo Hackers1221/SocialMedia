@@ -32,7 +32,8 @@ const signin = async(req,res) => {
     return res.status(StatusCodes.ACCEPTED).json({
         msg : "Successfully Login",
         userdata : response.userdata,
-        token : token
+        token : token,
+        notifications: response.notifications,
     })
 }
 
@@ -99,6 +100,19 @@ const updateUser = async(req,res) => {
     })
 }
 
+const followRequest = async(req, res) => {
+    const response = await userService.followRequest(req.params.id, req.body.id);
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg : "Unable to request the user",
+            error : response.error
+        })
+    }
+    return res.status(StatusCodes.OK).send({
+        msg : "Successfully requested to  user",
+        userDetails : response.user
+    })
+}
 const followUser = async(req,res) => {
     const response = await userService.followUser(req.params.id,req.body.id);
     if(response.error){
@@ -193,6 +207,7 @@ module.exports = {
     deleteUser,
     searchUser,
     getUserByLimit,
+    followRequest,
     searchFollower,
     getFollowerDetails
 }

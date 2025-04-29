@@ -5,7 +5,8 @@ import pulseSliceReducer from './Slices/pulse.slice'
 import commentSliceReducer from './Slices/comment.slice'
 import verseSliceReducer from './Slices/verse.slice'
 import chatSliceReducer from './Slices/chat.slice'
-import socketReducer from "./Slices/socket.slice";
+import socketSliceReducer from "./Slices/socket.slice";
+import notificationSliceReducer from "./Slices/notification.slice"
 import groupSliceReducer from "./Slices/group.slice"
 
 const Store = configureStore({
@@ -16,7 +17,8 @@ const Store = configureStore({
         comment: commentSliceReducer,
         verse: verseSliceReducer,
         chat: chatSliceReducer,
-        socket: socketReducer,
+        socket: socketSliceReducer,
+        notification: notificationSliceReducer,
         group: groupSliceReducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false}),

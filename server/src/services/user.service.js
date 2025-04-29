@@ -1,5 +1,6 @@
 
 const User = require('../models/user.model')
+const Notification = require('../models/notification.model.js')
 const Pulse = require("../models/pulse.model");
 const Post = require("../models/posts.model");
 const Verse = require ('../models/verse.model.js')
@@ -9,7 +10,8 @@ const bcrypt = require('bcrypt');
 const mailer = require('../middlewares/mailer')
 const {deleteImages, deleteVideos} = require("../../cloudConfig.js");
 const { response } = require('express');
-const { default: mongoose } = require('mongoose');
+const { userSocketMap, getIO } = require('../../socket/socketInstance.js');
+const mongoose = require("mongoose");
 
 const CreateUser = async(data) => { 
     const response  = {};
@@ -26,7 +28,9 @@ const CreateUser = async(data) => {
             password  : data.password,
             birth : data.birth
         }
-        response.user = await User.create(userObject);
+        let res = await User.create(userObject);
+        response.user = res;
+
         await mailer.sendWelcomeEmail(data.email); 
         return response;
     } catch (error) {
@@ -40,7 +44,6 @@ const ValidateUser = async (data, password) => {
     const response = {};
     try {
         let res = await User.findOne({ email: data });
-
         if (!res) {
             res = await User.findOne({ username: data });
             if (!res) {
@@ -48,6 +51,10 @@ const ValidateUser = async (data, password) => {
                 return response;
             }
         }
+        let notif = await Notification.find({ recipient: res._id })
+            .populate("sender", "id username avatarUrl")
+            .populate("post", "caption")       
+            .populate("pulse", "caption");
 
         const result = bcrypt.compareSync(password, res.password);
         if (!result) {
@@ -56,6 +63,8 @@ const ValidateUser = async (data, password) => {
         }
 
         response.userdata = res;
+        response.notifications = notif;
+
         return response;
     } catch (error) {
         console.log("Error", error);
@@ -83,39 +92,114 @@ const getuserByid = async(id) => {
     }
 }
 
+const followRequest = async(userId , followingId) => {
+    const response = {};
+    try {
+        const userData = await User.findById(userId);
+        const followingData = await User.findById(followingId);
+        if(!userData || !followingId){
+            response.error = error.message;
+            return response;
+        }
+    
+        if(followingData.requests.includes(userId)){
+            followingData.requests = followingData.requests.filter ((ids) => ids != userId);
+            await Notification.deleteMany({
+                recipient: followingId,
+                sender: userId,
+                type: "follow-request",
+            });
+        }else{
+            followingData.requests.push(userId);
+                // Check if a notification already exists
+            const existingNotification = await Notification.findOne({
+                recipient: followingId,
+                sender: userId,
+                type: "follow-request",
+            });
+
+            if (!existingNotification) {
+                // Create a new follow request notification
+                const notification = await Notification.create({
+                    recipient: followingId,
+                    sender: userId,
+                    type: "follow-request",
+                });
+                // Immediately fetch the populated version
+                const populatedNotification = await Notification.findById(notification._id)
+                .populate("sender", "id username avatarUrl")
+                .populate("post", "caption")
+                .populate("pulse", "caption");
+
+                const recipientSocketId = userSocketMap.get(followingId.toString());
+                if (recipientSocketId) {
+                    getIO().to(recipientSocketId).emit("notification", populatedNotification);
+                }
+            }
+        }
+
+        const updatefollower = await User.findByIdAndUpdate(
+            followingId, 
+            {requests: followingData.requests},
+            { new: true, runValidators: true } 
+        );
+
+        response.user = updatefollower;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response;
+    }
+}
 const followUser = async(userId , followingId) => {
     const response = {};
     try {
         const userData = await User.findById(userId);
-        if(!userData){
-            response.error = error.message;
-            return response;
-        }
-        if(userData.following.includes(followingId)){
-            userData.following = userData.following.filter ((ids) => ids!=followingId);
-        }else{
-            userData.following.push(followingId);
-        }
         const followingData = await User.findById(followingId);
-        if(!followingId){
+        if(!userData || !followingId){
             response.error = error.message;
             return response;
         }
-        if(followingData.follower.includes(userId)){
-            followingData.follower = followingData.follower.filter((ids) => ids!=userId);
+
+        if(userData.following.includes(followingId)){
+            userData.following = userData.following.filter ((ids) => ids != followingId);
         }else{
-            followingData.follower.push(userId);
+            if(!followingData.isPrivate || followingData.requests.includes(userId)) 
+                userData.following.push(followingId);
         }
+
+        if(followingData.follower.includes(userId)){
+            followingData.follower = followingData.follower.filter((ids) => ids != userId);
+        }
+        else{
+            if(!followingData.isPrivate || followingData.requests.includes(userId)) {
+                followingData.follower.push(userId);
+                if(followingData.isPrivate) {
+                    await Notification.deleteMany({
+                        recipient: followingId,
+                        sender: userId,
+                        type: "follow-request",
+                    });
+                    followingData.requests = followingData.requests.filter ((ids) => ids != userId);
+                }
+            }
+        }
+
         const updatedUser = await User.findByIdAndUpdate(
             userId, 
             {following : userData.following},
             { new: true, runValidators: true } 
         );
-        const updatefollower= await User.findByIdAndUpdate(
-            followingId, 
-            {follower : followingData.follower},
-            { new: true, runValidators: true } 
+        const updateFollowing = await User.findByIdAndUpdate(
+            followingId,
+            {
+                follower: followingData.follower,
+                requests: followingData.requests
+            },
+            { new: true, runValidators: true }
         );
+        
+
         response.user = updatedUser;
         return response;
     } catch (error) {
@@ -342,6 +426,7 @@ module.exports = {
     deleteUser,
     searchUser,
     getUserByLimit,
+    followRequest,
     searchFollower,
     getFollowerDetails
 }

@@ -15,6 +15,7 @@ userRoutes.post('/signup',checkUser,authcontroller.signup);
 userRoutes.post('/signin',authcontroller.signin);
 userRoutes.get('/users/:id',validators.isUserAuthenticated,authcontroller.getuserByid);
 userRoutes.patch('/',validators.isUserAuthenticated, uploadSingleImage, updateProfileImage, authcontroller.updateUser);
+userRoutes.patch('/follow-request/:id',validators.isUserAuthenticated,authcontroller.followRequest);
 userRoutes.patch('/follow/:id',validators.isUserAuthenticated,authcontroller.followUser);
 userRoutes.get('/user/:name',validators.isUserAuthenticated,authcontroller.getUserByUserName);
 userRoutes.delete('/:id',validators.isUserAuthenticated, authcontroller.deleteUser);

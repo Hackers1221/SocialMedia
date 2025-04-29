@@ -1,35 +1,35 @@
 const { Server } = require("socket.io");
-const Message = require ('../server/src/models/message.model');
-const Group = require ('../server/src/models/group.model')
-const { uploadFile ,deleteImages } = require("./cloudConfig");
-const { default: mongoose } = require("mongoose");
-const User = require("../server/src/models/user.model");
+const Message = require('../src/models/message.model');
+const Group = require('../src/models/group.model');
+const User = require("../src/models/user.model");
+const { uploadFile, deleteImages } = require("../cloudConfig");
+const mongoose = require("mongoose");
 const { date } = require("joi");
 
-let onlineUsers = new Map ();
+const { setIO, userSocketMap, onlineUsers } = require("./socketInstance"); // To set io globally
 
 const setupSocket = (server) => {
-    const io = new Server(server, {
-        cors: {
-            origin: "http://localhost:5173", 
-            methods: ["GET", "POST"]
-        }
-    });
+  const io = new Server(server, {
+    cors: {
+      origin: "http://localhost:5173",
+      methods: ["GET", "POST", "DELETE", "PUT"],
+    },
+  });
 
-    const userSocketMap = new Map();
+  setIO(io); // Make io globally accessible
 
-    const disconnect = (socket) => {
-        console.log(`Client disconnected: ${socket.id}`);
-        for (const [userId, socketId] of userSocketMap.entries()) {
-          if (socketId === socket.id) {
-              userSocketMap.delete(userId);
-              break;
-          }
-        }
-        onlineUsers.delete(socket.id);
-        io.emit('online-users', Array.from(onlineUsers.values()));
-    };
-
+  // Handle disconnection
+  const disconnect = (socket) => {
+    console.log(`Client disconnected: ${socket.id}`);
+    for (const [userId, socketId] of userSocketMap.entries()) {
+      if (socketId === socket.id) {
+        userSocketMap.delete(userId);
+        break;
+      }
+    }
+    onlineUsers.delete(socket.id);
+    io.emit("online-users", Array.from(onlineUsers.values()));
+  };
 
     const sendMessage = async (message) => {    
         const senderSocketId = userSocketMap.get(message.sender);
@@ -474,6 +474,19 @@ const setupSocket = (server) => {
 
     }
 
+    // follow accepted
+    const followAccepted = ({ sender, recipient }) => {
+      console.log(`Follow accepted. Sender: ${sender}, Recipient: ${recipient}`);
+
+      const senderSocketId = userSocketMap.get(sender.toString());;
+      console.log(userSocketMap);
+      console.log(senderSocketId);
+      if (senderSocketId) {
+          io.to(senderSocketId).emit('follow-accepted',  recipient);
+          console.log(`follow request from ${sender} to ${recipient} is approved`);
+      }
+    };
+
     io.on("connection", (socket) => {
         console.log(`Socket ${socket.id} connected.`);
         const userId = socket.handshake.query.userId;
@@ -496,9 +509,8 @@ const setupSocket = (server) => {
         socket.on ("update-group", updateGroupDetails);
         socket.on ("leave-group", leaveGroup);
         socket.on ("delete-group", deleteGroup);
+        socket.on('follow-accepted', followAccepted);
     });
-
-    
 }
 
 module.exports = setupSocket;
