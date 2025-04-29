@@ -33,8 +33,8 @@ function AddUser ({userId,image,username, members, setMembers }) {
                 onChange={handleCheckboxChange}
                 checked={members?.some(member => member.id === userId)}
             />
-            <Avatar url={user?.image?.url} size={'md'}/>
-            <h2 onClick={handleCheckboxChange}>{user?.name}</h2>
+            <Avatar url={image?.url} size={'md'}/>
+            <h2 onClick={handleCheckboxChange}>{username}</h2>
         </div>
     )
 }
