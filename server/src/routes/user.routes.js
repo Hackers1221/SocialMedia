@@ -19,6 +19,8 @@ userRoutes.patch('/follow/:id',validators.isUserAuthenticated,authcontroller.fol
 userRoutes.get('/user/:name',validators.isUserAuthenticated,authcontroller.getUserByUserName);
 userRoutes.delete('/:id',validators.isUserAuthenticated, authcontroller.deleteUser);
 userRoutes.get('/search/:q',validators.isUserAuthenticated,authcontroller.searchUser);
+userRoutes.get('/searchFollower',validators.isUserAuthenticated,authcontroller.searchFollower);
+userRoutes.get('/follower/:id',validators.isUserAuthenticated,authcontroller.getFollowerDetails);
 userRoutes.get('/usersByLimit', validators.isUserAuthenticated, authcontroller.getUserByLimit);
 
 module.exports = userRoutes

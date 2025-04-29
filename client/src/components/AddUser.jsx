@@ -3,19 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserById } from "../redux/Slices/auth.slice";
 import Avatar from '../components/Avatar'
 
-function AddUser ({ userId, members, setMembers }) {
+function AddUser ({userId,image,username, members, setMembers }) {
     if (!userId) return null;
 
     const authState = useSelector ((state) => state.auth);
-
-    const dispatch = useDispatch ();
-
-    const [user, setUser] = useState ();
-
-    async function getUser () {
-        const res = await dispatch (getUserById (userId));
-        setUser (res.payload.data?.userdetails);
-    }
 
     function handleCheckboxChange() {
         setMembers((prev) => {
@@ -34,11 +25,6 @@ function AddUser ({ userId, members, setMembers }) {
           }
         });
       }
-      
-
-    useEffect (() => {
-        getUser ();
-    }, [userId])
 
     return (
         <div className="flex items-center gap-4 hover:cursor-pointer">

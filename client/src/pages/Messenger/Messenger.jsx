@@ -14,6 +14,7 @@ import UpdateGroup from "../../components/UpdateGroup";
 import ImagePreview from "../../components/ImagePreview";
 import EmojiPicker from "emoji-picker-react";
 import ConfirmDeleteDialog from "../../components/ConfirmDeleteDialog";
+import { getFollowerDetails } from "../../redux/Slices/auth.slice";
 
 
 const Messenger = () => {
@@ -44,6 +45,7 @@ const Messenger = () => {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [showPicker, setShowPicker] = useState(false);
   const [isDialogOpen, setDialogOpen] = useState (false);
+  const [followers,setFollowers] = useState();
 
 
   const defaultImage = "https://t3.ftcdn.net/jpg/12/81/12/20/240_F_1281122039_wYCRIlTBPzTUzyh8KrPd87umoo52njyw.jpg";
@@ -234,18 +236,22 @@ const Messenger = () => {
       else setGroupMessage ((prev) => prev + emojiData.emoji);
     };
 
-    // useEffect (() => {
-    //     if (activeTab === 'groups') {
-    //         if (!groupState.liveGroup)
-    //     }
-    // }, [groupState.liveGroup])
+     const getDetails = async() => {
+          const response = await dispatch(getFollowerDetails(authState.data._id));
+          setFollowers(response.payload?.data?.userdata);
+          console.log(response);
+      }
 
     useEffect (() => {
       setGroup (groupState.groupDetails);
     }, [groupState.groupDetails])
 
+
     useEffect(() => {
       setGroup(groupState?.groupDetails);
+      if(activeTab==="followers"){
+        getDetails();
+    }
     },[activeTab]);
   
     useEffect (() => { 
@@ -280,8 +286,7 @@ const Messenger = () => {
           setRecent(chatState.recentMessages);
         } else {
           const filteredMessages = chatState.recentMessages.filter((msg) =>
-            msg.user?.name?.toLowerCase().includes(q) ||
-            msg.content?.toLowerCase().includes(q)
+            msg.user?.username?.toLowerCase().includes(q)
           );
           setRecent(filteredMessages);
         }
@@ -294,6 +299,8 @@ const Messenger = () => {
           );
           setGroup(filteredGroup);
         }
+      }else{
+
       }
     }, [query]);
 
