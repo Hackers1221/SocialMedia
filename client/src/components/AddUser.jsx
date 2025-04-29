@@ -41,14 +41,14 @@ function AddUser ({ userId, members, setMembers }) {
     }, [userId])
 
     return (
-        <div className="flex items-center gap-4 hover:cursor-pointer" onClick={handleCheckboxChange}>
+        <div className="flex items-center gap-4 hover:cursor-pointer">
             <input 
                 type="checkbox"
                 onChange={handleCheckboxChange}
                 checked={members?.some(member => member.id === userId)}
             />
             <Avatar url={user?.image?.url} size={'md'}/>
-            <h2>{user?.name}</h2>
+            <h2 onClick={handleCheckboxChange}>{user?.name}</h2>
         </div>
     )
 }

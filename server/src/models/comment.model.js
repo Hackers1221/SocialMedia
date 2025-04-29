@@ -19,6 +19,10 @@ const commentSchema = new Schema({
         type : String,
         required : true
     },
+    type: {
+        type: String,
+        default: "Post"
+    },
     createdAt: {
         type: Date,
         default: Date.now()

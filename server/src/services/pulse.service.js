@@ -1,9 +1,9 @@
-const pulsemodel = require('../models/pulse.model');
+const Pulse = require('../models/pulse.model');
 
 const CreatePulse = async (data) => {
     const response = {};
     try {
-        const pulseResponse = await pulsemodel.create(data);
+        const pulseResponse = await Pulse.create(data);
         
         if (!pulseResponse) {
             response.error = "Pulse not created";
@@ -21,7 +21,16 @@ const CreatePulse = async (data) => {
 const getAllPulse = async () => {
     const response = {};
     try {
-        const allPulse = await pulsemodel.find({});
+        const allPulse = await Pulse.find({})
+        .populate('user', 'image username') // Populate pulse's user with only image and username
+        .populate({
+            path: 'comments', // Populate pulse's comments
+            populate: {
+                path: 'user',   // Inside each comment, populate user
+                select: 'image username' // but only take image and username
+            }
+        });         
+          
         
         if (!allPulse || allPulse.length === 0) {
             response.error = "No pulse available";
@@ -39,7 +48,7 @@ const getAllPulse = async () => {
 const likePulse = async(id,userId) => {
     const response = {};
     try {
-        const likesArray = await pulsemodel.findById(id);
+        const likesArray = await Pulse.findById(id);
         if(!likesArray){
             response.error = "Pulse not found";
             return response;
@@ -49,7 +58,7 @@ const likePulse = async(id,userId) => {
         }else{
             likesArray.likes.push(userId);
         }
-        const updatedPulse = await pulsemodel.findByIdAndUpdate(
+        const updatedPulse = await Pulse.findByIdAndUpdate(
             id,
             { likes: likesArray.likes },
             { new: true } 

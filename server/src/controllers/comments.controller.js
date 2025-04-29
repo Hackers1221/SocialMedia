@@ -30,7 +30,22 @@ const getCommentByPostId = async(req,res) => {
     })
 }
 
+const getPulseComments = async(req,res) => {
+    const response = await commentService.getPulseComments();
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg : "Unable to fetched the comment",
+            error : response.error,
+        })
+    }
+    return res.status(StatusCodes.OK).send({
+        msg : "Successfully fetched the comment",
+        commentDetails : response.comments
+    })
+}
+
 module.exports = {
     CreateComment,
-    getCommentByPostId
+    getCommentByPostId,
+    getPulseComments
 }
