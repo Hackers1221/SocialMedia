@@ -13,7 +13,8 @@ import { Link, useNavigate } from "react-router-dom"
 import PostForm from "./PostForm";
 import PulseForm from "./PulseForm";
 import { useDispatch, useSelector } from "react-redux";
-import { logout, searchUser } from "../redux/Slices/auth.slice";
+import { logout, markAsRead, searchUser } from "../redux/Slices/auth.slice";
+import { deleteNonFR } from "../redux/Slices/notification.slice";
 import { IoMdPulse } from "react-icons/io";
 import { FiSearch } from "react-icons/fi";
 import { Search, X } from "lucide-react";
@@ -37,6 +38,7 @@ function Sidebar() {
     const [menuOpen, setMenuOpen] = useState (false);
 
     const navigate = useNavigate ();
+    const dispatch = useDispatch();
 
     useEffect (() => {
         if (!authState?.isLoggedIn || !authState?.data?.email) {
@@ -161,13 +163,19 @@ function Sidebar() {
                                     <span className="ml-2 text-sm tracking-wide truncate">Messages</span>
                                 </Link>
                             </li>
-                            <li onClick={() => setIsOpen(false)}>
-                                <Link to="/notification" className={`relative flex flex-row border-l-4 border-transparent hover:border-[var(--buttons)] items-center h-11 text-[var(--text)] hover:text-[var(--buttons)] hover:shadow-md font-semibold pr-4 border-l-4 border-transparent pr-6`}>
+                            <li onClick={async () => {
+                                    setIsOpen(false); 
+                                    setMenuOpen(false); 
+                                    setSelected('Notification'); 
+                                    if(authState.isRead == false) dispatch(deleteNonFR(authState?.data?._id));
+                                    dispatch(markAsRead());
+                                }}>
+                                <Link to="/notification" className={`relative flex flex-row border-l-4 border-transparent hover:border-[var(--buttons)] items-center h-11 text-[var(--text)] hover:text-[var(--buttons)] hover:shadow-md font-semibold pr-4 border-l-4 border-transparent pr-6 ${selected === 'Notification' ? `border-[var(--buttons)] text-[var(--buttons)] shadow-md` : `border-transparent text-[var(--text)]`}`}>
                                     <FaBell className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Notifications</span>
-                                    <span className="px-2 py-0.5 ml-auto text-xs font-medium text-red-500 bg-red-50 rounded-full">1.2k</span>
+                                    {authState?.isRead == false && authState?.notifications?.length > 0 && <span className="w-2.5 h-2.5 ml-auto rounded-full bg-red-500 inline-block" />                                    }
                                 </Link>
-                            </li>
+                            </li> n 
                             <li className="px-5 border-t">
                                 <div className="flex flex-row items-center h-8">
                                     <div className={`text-sm font-bold text-[var(--text)]`}>Manage</div>

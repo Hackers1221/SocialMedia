@@ -4,8 +4,10 @@ import axiosInstance from "../../config/axiosInstance";
 
 const initialState = {
     data: JSON.parse(localStorage.getItem("data")) || undefined,
+    notifications: JSON.parse(localStorage.getItem("notifications")) || [],
     token: localStorage.getItem("token") || "",
-    isLoggedIn: localStorage.getItem("isLoggedIn") || false,
+    isLoggedIn: localStorage.getItem("isLoggedIn") === "true",
+    isRead: localStorage.getItem("isRead") === "true",
     userList: []
 };
 
@@ -118,6 +120,23 @@ export const getUserByLimit = createAsyncThunk('/auth/userByLimit', async (data)
     }
 });
 
+export const followRequest = createAsyncThunk('/auth/followRequest' , async(data) => {
+    try {
+        const resp = {
+            id : data.id
+        }
+        const response = await axiosInstance.patch(`auth/follow-request/${data.id1}` , resp , {
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+        if(!response) toast.error('Something went wrong, try again');
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+});
+
 export const followUser = createAsyncThunk('/auth/follow' , async(data) => {
     try {
         const resp = {
@@ -177,8 +196,7 @@ export const searchUser = createAsyncThunk('search/user',async(query) => {
     } catch (error) {
         toast.error(error.response?.data?.msg || 'An error occurred');
     }
-})
-
+});
 
 const authSlice = createSlice({
     name: 'auth',
@@ -189,18 +207,46 @@ const authSlice = createSlice({
             state.data = "";
             state.isLoggedIn = false;
             state.token = "";
+            state.notifications = [];
+            state.isRead = false;
+        },
+        markAsRead: (state) => {
+            state.isRead = true;
+            localStorage.setItem("isRead", true);
+        },
+        deleteFR: (state, action) => {
+            const notificationToDelete = action.payload;
+          
+            state.notifications = state.notifications.filter(
+              (notification) => notification._id !== notificationToDelete._id
+            );
+            localStorage.setItem("notifications", JSON.stringify(state.notifications));
+        },
+        addNotification: (state, action) => {
+            state.isRead = false;
+            state.notifications.unshift(action.payload);
+            localStorage.setItem("notifications", JSON.stringify(state.notifications));
+        },
+        updateFollowingList: (state, action) => {
+            state.data.following.push(action.payload);
+            localStorage.setItem("data", JSON.stringify(state.data));
         }
     }, 
     extraReducers: (builder) => {
         builder
         .addCase(login.fulfilled, (state, action) => {
             if(!action.payload) return;
+            console.log(action.payload.data);
             state.isLoggedIn = (action.payload.data?.token != undefined);
             state.data = action.payload.data?.userdata;
             state.token = action.payload.data?.token;
+            state.notifications = action.payload.data?.notifications;
+            state.isRead = false;
             localStorage.setItem("token", action.payload.data?.token);
             localStorage.setItem("data", JSON.stringify(action.payload.data?.userdata));
             localStorage.setItem("isLoggedIn", (action.payload.data?.token != undefined));
+            localStorage.setItem("notifications", JSON.stringify(action.payload.data?.notifications));
+            localStorage.setItem("isRead", false);
         })
         .addCase(followUser.fulfilled , (state,action) => {
             if(!action.payload)return;
@@ -226,5 +272,5 @@ const authSlice = createSlice({
     }
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, markAsRead, deleteFR, addNotification, updateFollowingList } = authSlice.actions;
 export default authSlice.reducer;

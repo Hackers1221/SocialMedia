@@ -1,7 +1,9 @@
 const postsmodel = require('../models/posts.model');
 const usermodel  = require('../models/user.model');
 const commentsModel = require('../models/comment.model');
+const Notification = require("../models/notification.model")
 const { deleteImages, deleteVideos } = require('../../cloudConfig');
+const { userSocketMap, getIO } = require('../../socket/socketInstance');
 
 const CreatePost = async (data) => {
     const response = {};
@@ -69,27 +71,49 @@ const updatePost = async (postId, updatedData) => {
     }
 };
 
-const likePost = async(id,userId) => {
+const likePost = async(id, userId) => {
     const response = {};
     try {
-        const likesArray = await postsmodel.findById(id);
-        if(!likesArray){
+        const post = await postsmodel.findById(id);
+        if(!post){
             response.error = "Post not found";
             return response;
         }
-        if(likesArray.likes.includes(userId)){
-            likesArray.likes = likesArray.likes.filter((ids) => ids!=userId);
+        if(post.likes.includes(userId)){
+            post.likes = post.likes.filter((ids) => ids!=userId);
         }else{
-            likesArray.likes.push(userId);
+            post.likes.push(userId);
+
+            if(userId !== post.userId) {
+                const notification = await Notification.create({
+                    sender: userId,
+                    recipient: post.userId,
+                    type: "like",
+                    targetType: "post",
+                    post: post._id,
+                });
+
+                // Immediately fetch the populated version
+                const populatedNotification = await Notification.findById(notification._id)
+                .populate("sender", "id username avatarUrl")
+                .populate("post", "caption")
+                .populate("pulse", "caption");
+
+                const recipientSocketId = userSocketMap.get(post.userId.toString());
+                if (recipientSocketId) {
+                    getIO().to(recipientSocketId).emit("notification", populatedNotification);
+                }
+            }
         }
         const updatedPost = await postsmodel.findByIdAndUpdate(
             id,
-            { likes: likesArray.likes },
+            { likes: post.likes },
             { new: true } 
         );
         response.post = updatedPost;
         return response;
     } catch (error) {
+        console.log(error.message);
         response.error = error.message;
         return response;
     }

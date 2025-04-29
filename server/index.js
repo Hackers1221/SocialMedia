@@ -13,8 +13,9 @@ const messageRoutes = require('./src/routes/message.routes')
 const groupRoutes = require('./src/routes/group.routes')
 // server instance
 const http = require("http");
-const setupSocket = require("./socket");
+const setupSocket = require("../server/socket/socket");
 const groupRouter = require("./src/routes/group.routes");
+const notificationRouter = require("./src/routes/notification.routes");
 const server = http.createServer(app);
 
 app.use(function (req, res, next) {
@@ -36,6 +37,7 @@ app.use('/social/comment',commentRoutes);
 app.use('/social/verse',verseRoutes);
 app.use('/social/message',messageRoutes);
 app.use('/social/group',groupRoutes);
+app.use('/social/notification', notificationRouter);
 
 
 // Error handling middleware

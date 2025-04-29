@@ -64,7 +64,7 @@ const updatePost = async(req,res) => {
 }
 
 const likePost = async(req,res) => {
-    const response = await postsService.likePost(req.params.id,req.body.id)
+    const response = await postsService.likePost(req.params.id, req.body.id)
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
             msg : "Unable to update the Post",

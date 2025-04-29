@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { io } from "socket.io-client";
 import { updateMessages, setOnlineUsers } from "./chat.slice";
+import { addNotification, updateFollowingList } from "./auth.slice";
 
 
 let socketInstance = null;
@@ -44,6 +45,15 @@ const socketSlice = createSlice({
         socketInstance.on("online-users", (data) => {
           dispatch(setOnlineUsers({ onlineUsers: data }));
         });
+
+        socketInstance.on("notification", (data) => {
+          console.log("Received notification:", data);
+          dispatch(addNotification(data));
+        });
+
+        socketInstance.on("follow-accepted", (userID) => {
+          dispatch(updateFollowingList(userID));
+        });
       }
 
       state.socket = socketInstance;
@@ -55,6 +65,8 @@ const socketSlice = createSlice({
         socketInstance.off("disconnect");
         socketInstance.off("receiveMessage");
         socketInstance.off("online-users");
+        socketInstance.off("notification");
+        socketInstance.off("follow-accepted");
 
         socketInstance.disconnect();
         socketInstance = null;
