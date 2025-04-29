@@ -7,7 +7,6 @@ const mongoose = require("mongoose");
 const { date } = require("joi");
 
 const { setIO, userSocketMap, onlineUsers } = require("./socketInstance"); // To set io globally
-let onlineUsers = new Map ();
 
 const setupSocket = (server) => {
   const io = new Server(server, {

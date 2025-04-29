@@ -207,8 +207,7 @@ module.exports = {
     deleteUser,
     searchUser,
     getUserByLimit,
-    followRequest
-    getUserByLimit,
+    followRequest,
     searchFollower,
     getFollowerDetails
 }

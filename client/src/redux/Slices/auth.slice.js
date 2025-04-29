@@ -197,7 +197,6 @@ export const searchUser = createAsyncThunk('search/user',async(query) => {
         toast.error(error.response?.data?.msg || 'An error occurred');
     }
 });
-})
 
 export const searchFollower = createAsyncThunk('searchFollower',async(data) => {
     try {

@@ -1,9 +1,7 @@
 const { userSocketMap, getIO } = require('../../socket/socketInstance');
 const commentsModel = require('../models/comment.model');
 const Notification = require('../models/notification.model');
-const postsModel = require('../models/posts.model')
 const postsModel = require('../models/posts.model');
-const Pulse = require('../models/pulse.model');
 const Verse = require ('../models/verse.model')
 
 const CreateComment = async(data) => {

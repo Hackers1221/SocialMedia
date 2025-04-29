@@ -11,6 +11,7 @@ const mailer = require('../middlewares/mailer')
 const {deleteImages, deleteVideos} = require("../../cloudConfig.js");
 const { response } = require('express');
 const { userSocketMap, getIO } = require('../../socket/socketInstance.js');
+const mongoose = require("mongoose");
 
 const CreateUser = async(data) => { 
     const response  = {};
@@ -426,5 +427,7 @@ module.exports = {
     searchUser,
     getUserByLimit,
     followRequest,
+    searchFollower,
+    getFollowerDetails
 }
 
