@@ -197,6 +197,35 @@ export const searchUser = createAsyncThunk('search/user',async(query) => {
         toast.error(error.response?.data?.msg || 'An error occurred');
     }
 });
+})
+
+export const searchFollower = createAsyncThunk('searchFollower',async(data) => {
+    try {
+        const response = await axiosInstance.get('auth/searchFollower' , {
+            params: data,
+            headers: {
+            'x-access-token': localStorage.getItem('token')
+            }
+        })
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+export const getFollowerDetails = createAsyncThunk('followerDetails' ,async(id) => {
+    try {
+        const response = await axiosInstance.get(`auth/follower/${id}`,{
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+})
+
 
 const authSlice = createSlice({
     name: 'auth',

@@ -60,14 +60,6 @@ function Settings() {
     setImage(uploadedFile);
   };
 
-  const handleDeleteAccount = async () => {
-    setDeleting(true);
-    const Deleted = await dispatch(deleteUser(authState?.data?._id));
-    if(Deleted.payload) navigate("/signup");
-    setIsdeleteDialog(false); 
-    setDeleting(false);
-  }
-
   async function onLogout () {
     await dispatch (logout ());
     await dispatch (disconnectSocket ());
@@ -125,8 +117,7 @@ function Settings() {
     <ConfirmDeleteDialog 
       open={isDeleteDialog} 
       setOpen={setIsdeleteDialog} 
-      deleting={deleting}
-      onDelete={handleDeleteAccount} 
+      type={"accountDelete"}
     />
 
     <div className="fixed top-[9rem] md:top-[1rem]  md:left-[20rem] left-[1rem] w-[75vw] h-[82vh] md:h-[97vh] flex flex-grow overflow-y-auto">

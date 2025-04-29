@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from "@headlessui/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
@@ -7,14 +7,18 @@ import "swiper/css/navigation";
 import {useDispatch, useSelector} from 'react-redux'
 import { createPost, getAllPosts } from "../redux/Slices/post.slice";
 import toast from "react-hot-toast";
+import EmojiPicker from "emoji-picker-react";
 
 export default function PostForm({ open, setOpen }) {
   const [image, setImage] = useState([]);
   const [video, setVideo] = useState([]);
   const [caption, setCaption] = useState("");
   const [interests, setInterests] = useState("");
+  const [showPicker, setShowPicker] = useState(false);
+
   const authState = useSelector((state) => state.auth.data);
   const dispatch = useDispatch();
+  const emojiPickerRef = useRef (null);
 
   const Createpost = async () => {
     const formData = new FormData();
@@ -53,6 +57,11 @@ export default function PostForm({ open, setOpen }) {
     else setInterests (value);
   }
 
+  const handleEmojiClick = (emojiData) => {
+    console.log (emojiData.emoji);
+    setCaption ((prev) => prev + emojiData.emoji);
+  };
+
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
         e.preventDefault(); // Prevent form submission or default behavior
@@ -90,9 +99,25 @@ export default function PostForm({ open, setOpen }) {
     }
   };
 
+    useEffect (() => {
+        const handleClickOutside = (e) => {
+            if (emojiPickerRef.current && !emojiPickerRef.current.contains(e.target)) {
+            setShowPicker(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
   return (
     <Dialog open={open} onClose={setOpen} className="relative z-[9999]">
       <DialogBackdrop className="fixed inset-0 bg-gray-500/75 z-[9998] transition-opacity" />
+            {showPicker && (
+                <div ref={emojiPickerRef} className="absolute bottom-[19rem] left-[30rem] right-[50%] z-[99999]">
+                    <EmojiPicker onEmojiClick={handleEmojiClick} />
+                </div>
+            )}
+
       <div className="fixed inset-0 z-[9999] w-screen overflow-y-auto">
         <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
           <DialogPanel className="relative transform overflow-hidden rounded-lg bg-white text-center shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl p-6">
@@ -164,15 +189,23 @@ export default function PostForm({ open, setOpen }) {
             )}
 
             {/* Caption Input */}
-            <textarea
-              className="mt-4 bg-gray-200 text-black w-full p-3 border rounded-lg resize-none focus:outline-none"
-              rows="2"
-              placeholder="Write a caption..."
-              value={caption}
-              onKeyDown={handleKeyDown}
-              name="caption"
-              onChange={handleChange}
-            ></textarea>
+            <div className="relative w-full flex gap-4 rounded-lg bg-gray-200 mt-4 items-start p-4">
+                <i
+                    onClick={() => setShowPicker((prev) => !prev)}
+                    className="mt-1 fa-regular fa-face-smile hover:cursor-pointer text-xl"
+                ></i>
+
+                <textarea
+                    className="bg-transparent text-black w-full resize-none focus:outline-none"
+                    rows="4"
+                    placeholder="Write a caption..."
+                    value={caption}
+                    onKeyDown={handleKeyDown}
+                    name="caption"
+                    onChange={handleChange}
+                />
+            </div>
+
 
             {/* Post Button + interest */}
             <div className="flex justify-between items-center mt-4">

@@ -2,6 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import { io } from "socket.io-client";
 import { updateMessages, setOnlineUsers } from "./chat.slice";
 import { addNotification, updateFollowingList } from "./auth.slice";
+import { updateGroupDetails, updateGroupMessages } from "./group.slice";
+import { addGroup } from "./group.slice";
 
 
 let socketInstance = null;
@@ -54,6 +56,26 @@ const socketSlice = createSlice({
         socketInstance.on("follow-accepted", (userID) => {
           dispatch(updateFollowingList(userID));
         });
+
+        socketInstance.on("groupCreated", (data) => {
+          dispatch(addGroup ({ groupData: data }));
+        })
+
+        socketInstance.on("receiveGroupMessage", (data) => {
+          dispatch(updateGroupMessages({ message: data }));
+        });
+
+        socketInstance.on("updatedGroup", (data) => {
+          console.log (data);
+          dispatch(updateGroupDetails ({ groupData: data.updated, groupDetails: data.group }));
+        });
+
+        socketInstance.on("group-leave", (data) => {
+          dispatch(updateGroupDetails ({ groupData: data.updated, groupDetails: data.group }));
+        });
+        socketInstance.on("group-delete", (data) => {
+          dispatch(updateGroupDetails ({ groupDetails: data.group }));
+        });
       }
 
       state.socket = socketInstance;
@@ -64,9 +86,14 @@ const socketSlice = createSlice({
         socketInstance.off("connect");
         socketInstance.off("disconnect");
         socketInstance.off("receiveMessage");
+        socketInstance.off("receiveGroupMessage");
         socketInstance.off("online-users");
         socketInstance.off("notification");
         socketInstance.off("follow-accepted");
+        socketInstance.off("groupCreated");
+        socketInstance.off("updatedGroup");
+        socketInstance.off("group-leave");
+        socketInstance.off("group-delete");
 
         socketInstance.disconnect();
         socketInstance = null;

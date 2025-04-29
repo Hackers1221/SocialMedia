@@ -364,6 +364,42 @@ const searchUser = async(query) => {
     }
 }
 
+const searchFollower = async(userId,query) => {
+    const response = {};
+    try {
+        const currentUser = await User.findById(userId);
+        const followerIds = currentUser.follower.map(id => new mongoose.Types.ObjectId(id));
+        const users = await User.find({
+            _id: { $in: followerIds },
+            $or: [
+                { username: { $regex: query, $options: "i" } },
+                { name: { $regex: query, $options: "i" } }
+            ]
+        });
+        response.user = users;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response
+    }
+}
+
+const getFollowerDetails = async(userId) => {
+    const response = {};
+    try {
+        const currentUser = await User.findById(userId);
+        const followerIds = currentUser.follower.map(id => new mongoose.Types.ObjectId(id));
+        const users = await User.find({
+            _id: { $in: followerIds },
+        });
+        response.user = users;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response
+    }
+}
+
 const getUserByLimit = async (userId, limit) => {
     const response = {};
     try {

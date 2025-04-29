@@ -2,17 +2,24 @@ import React, { useEffect } from "react";
 import PulseCard from "../../components/PulseCard";
 import { getAllPulse } from "../../redux/Slices/pulse.slice";
 import { useDispatch, useSelector } from "react-redux";
+import { getPulseComments } from "../../redux/Slices/comment.slice";
 
 function Pulse() {
   const pulseState = useSelector((state) => state.pulse);
   const dispatch = useDispatch();
 
-  async function getPulses () {
-    const res = await dispatch (getAllPulse());
-    if (!res) toast.error ("Something went wrong");
-  }
+    async function getPulses () {
+        const res = await dispatch (getAllPulse());
+        if (!res) toast.error ("Something went wrong");
+    }
+
+    async function getAllComments () {
+        await dispatch (getPulseComments ());
+    }
+
   useEffect (() => {
     getPulses();
+    getAllComments ();
   }, [])
 
   return (

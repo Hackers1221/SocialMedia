@@ -2,6 +2,8 @@ const { userSocketMap, getIO } = require('../../socket/socketInstance');
 const commentsModel = require('../models/comment.model');
 const Notification = require('../models/notification.model');
 const postsModel = require('../models/posts.model')
+const postsModel = require('../models/posts.model');
+const Pulse = require('../models/pulse.model');
 const Verse = require ('../models/verse.model')
 
 const CreateComment = async(data) => {
@@ -11,7 +13,10 @@ const CreateComment = async(data) => {
             description : data.description,
             user: data.userId,
             postId : data.postId,
+            type: data.type
         }
+
+        console.log (commentsData)
         const result = await commentsModel.create(commentsData);
         if(result){
             if (data.type === "post") {
@@ -72,9 +77,21 @@ const getCommentByPostId = async(id) => {
     }
 }
 
+const getPulseComments = async() => {
+    const response = {};
+    try {
+        const commentsData = await commentsModel.find({type : "pulse"}).populate("user");
+        response.comments = commentsData;
+        return response;
 
+    } catch (error) {
+        response.error = error.message;
+        return response;
+    }
+}
 
 module.exports = {
     CreateComment,
-    getCommentByPostId
+    getCommentByPostId,
+    getPulseComments
 }

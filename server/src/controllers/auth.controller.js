@@ -155,6 +155,33 @@ const searchUser = async(req,res) => {
     })
 }
 
+const searchFollower = async(req,res) => {
+    const response = await userService.searchFollower(req.query.userId,req.query.q);
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg:"Unable to fetch the searched user",
+            error : response.error
+        })
+    }
+    return res.status(StatusCodes.ACCEPTED).json({
+        msg : "Successfully fetched the searched users",
+        userdata : response.user,
+    })
+}
+
+const getFollowerDetails = async(req,res) => {
+    const response = await userService.getFollowerDetails(req.params.id);
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg:"Unable to fetch the follower user details",
+            error : response.error
+        })
+    }
+    return res.status(StatusCodes.ACCEPTED).json({
+        msg : "Successfully fetched the follower user details",
+        userdata : response.user,
+    })
+}
 const getUserByLimit = async(req, res) => {
     const response = await userService.getUserByLimit(req.query.userId, req.query.limit);
     if(response.error){
@@ -181,4 +208,7 @@ module.exports = {
     searchUser,
     getUserByLimit,
     followRequest
+    getUserByLimit,
+    searchFollower,
+    getFollowerDetails
 }

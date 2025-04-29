@@ -5,12 +5,11 @@ const messageSchema = new Schema({
     sender: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Users",
-        required: true,
     },
-    recipient: {
+    recipient: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Users",
-    },
+    }],    
     content: {
         type: String,
     },
@@ -19,13 +18,17 @@ const messageSchema = new Schema({
         url: { type: String, required: true },
         filename: { type: String, required: true }
     }],
-    timestamp: {
+    createdAt: {
         type: Date,
         default: Date.now,
     },
-    groupChat : {
+    groupId : {
         type : String,
         default : ""
+    },
+    messageType : {
+        type : Boolean,
+        default : false
     }
 });
 

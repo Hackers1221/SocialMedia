@@ -18,16 +18,16 @@ const pulseSchema = new Schema({
         type: String,
         default: ""
     },
-    comments: {
-        type: [String],
-        default : []
-    },
+    comments: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Comments'
+    }],    
     interests : {
         type : String,
     },
-    userId : {
-        type : String,
-        required : true
+    user : {
+        type : Schema.Types.ObjectId,
+        ref: 'Users'
     },
     createdAt: {
         type: Date,

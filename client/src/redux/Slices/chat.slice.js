@@ -59,12 +59,12 @@ const ChatSlice = createSlice({
       .addCase(getMessages.fulfilled,(state, action)=>{
           if (!action.payload?.data) return;
           state.messages = action.payload?.data?.messages;
-          state.messages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+          state.messages.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
       })
       .addCase (getRecentMessages.fulfilled, (state, action) => {
         if (!action.payload?.data) return;
         state.recentMessages = action.payload?.data?.messages;
-        state.recentMessages.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        state.recentMessages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       })
   }
 });

@@ -25,8 +25,6 @@ const DisplayPost = ({ open, setOpen, index, list }) => {
   if (list === 'postList') array = postState?.postList;
   if (list === 'savedList') array = postState?.savedList;
 
-  // let post = array[index - 1];
-
   const dispatch = useDispatch();
   const dialogRef = useRef(null);
   const videoRefs = useRef([]);
@@ -69,7 +67,7 @@ const DisplayPost = ({ open, setOpen, index, list }) => {
 
       if(response.payload){
         setDescription("");
-        await dispatch (getAllPosts ());
+        // await dispatch (getAllPosts ());
         await dispatch(getCommentByPostId(post?._id));
       }
   }

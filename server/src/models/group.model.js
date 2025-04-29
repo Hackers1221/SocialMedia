@@ -6,8 +6,30 @@ const GroupSchema = new Schema({
         type : String,
         required : true
     },
+    creator : {
+        type: String,
+        required: [true, 'Creator cannot be empty'],
+    },
     members : {
-        type : [String],
+        type : [
+            {
+                userId : {
+                    type : Schema.Types.ObjectId,
+                    required : true
+                },
+                joinedAt : {
+                    type: Date,
+                    default: Date.now()
+                },
+                addedBy :{
+                    type : Schema.Types.ObjectId,
+                    ref:"Users"
+                },
+                isActive :{
+                    type : Boolean,
+                }
+            }
+        ],
         required : true
     },
     image: {
@@ -15,8 +37,12 @@ const GroupSchema = new Schema({
         filename: { type: String }
     },
     admins : {
-        type : [String],
+        type : [Schema.Types.ObjectId],
     },
+    createdAt: {
+        type: Date,
+        default: Date.now()
+    }
 });
 
 

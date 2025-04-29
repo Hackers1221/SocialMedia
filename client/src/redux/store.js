@@ -7,6 +7,8 @@ import verseSliceReducer from './Slices/verse.slice'
 import chatSliceReducer from './Slices/chat.slice'
 import socketSliceReducer from "./Slices/socket.slice";
 import notificationSliceReducer from "./Slices/notification.slice"
+import socketReducer from "./Slices/socket.slice";
+import groupSliceReducer from "./Slices/group.slice"
 
 const Store = configureStore({
     reducer: {
@@ -18,6 +20,8 @@ const Store = configureStore({
         chat: chatSliceReducer,
         socket: socketSliceReducer,
         notification: notificationSliceReducer,
+        socket: socketReducer,
+        group: groupSliceReducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false}),
     devTools: true
