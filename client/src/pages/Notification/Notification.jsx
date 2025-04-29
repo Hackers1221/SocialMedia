@@ -2,7 +2,7 @@ import React from 'react';
 import NotificationItem from '../../components/NotificationItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { rejectFR, acceptFR } from '../../redux/Slices/notification.slice';
-import { deleteFR } from '../../redux/Slices/auth.slice';
+import { deleteFR, updateFollowerList } from '../../redux/Slices/auth.slice';
 
 function Notification() {
   const dispatch = useDispatch();
@@ -17,6 +17,7 @@ function Notification() {
         socket.emit("follow-accepted", {sender: Item.sender._id, recipient: Item.recipient});
       }
     }
+    dispatch(updateFollowerList(Item.sender._id));
     dispatch(deleteFR(Item));
   };
 
