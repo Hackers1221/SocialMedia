@@ -13,8 +13,6 @@ const CreateComment = async(data) => {
             postId : data.postId,
             type: data.type
         }
-
-        console.log (commentsData)
         const result = await commentsModel.create(commentsData);
         if(result){
             if (data.type === "post") {
