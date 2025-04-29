@@ -31,44 +31,86 @@ const setupSocket = (server) => {
     io.emit("online-users", Array.from(onlineUsers.values()));
   };
 
-    const sendMessage = async (message) => {    
-        const senderSocketId = userSocketMap.get(message.sender);
-        const recipientSocketId = userSocketMap.get(message.recipient);
-    
-        console.log(
-          `Sending message to ${recipientSocketId} from ${senderSocketId}`
-        );
-
-        const uploadedFiles = [];
-
-        // Upload files to Cloudinary
-        for (const file of message?.files) {
-          try {
-            const uploadRes = await uploadFile(file);
-            uploadedFiles.push({
-              name: file.name,
-              url: uploadRes.secure_url,
-              filename: file.type,
-            });
-          } catch (err) {
-            console.error("Cloudinary upload error:", err);
-          }
+  const sendMessage = async (message) => {    
+    const senderSocketId = userSocketMap.get(message.sender);
+    const recipientSocketId = userSocketMap.get(message.recipient);
+  
+    console.log(`Sending message to ${recipientSocketId} from ${senderSocketId}`);
+  
+    const uploadedFiles = [];
+  
+    // Upload files to Cloudinary
+    for (const file of message?.files) {
+      try {
+        const uploadRes = await uploadFile(file);
+        uploadedFiles.push({
+          name: file.name,
+          url: uploadRes.secure_url,
+          filename: file.type,
+        });
+      } catch (err) {
+        console.error("Cloudinary upload error:", err);
+      }
+    }
+  
+    // 1. Get the latest message between the two users
+    const latestMessage = await Message.findOne({
+      $or: [
+        {
+          sender: message.sender,
+          recipient: message.recipient,
+        },
+        {
+          sender: message.recipient,
+          recipient: message.sender,
         }
-    
-        const createdMessage = await Message.create({...message, files: uploadedFiles});
-    
-        const messageData = await Message.findById(createdMessage._id)
-        .populate("sender", "id name image")
-        .populate("recipient", "id name image");
-
-    
-        if (recipientSocketId) {
-          io.to(recipientSocketId).emit("receiveMessage", messageData);
-        }
-        if (senderSocketId) {
-          io.to(senderSocketId).emit("receiveMessage", messageData);
-        }
-    };
+      ]
+    }).sort({ createdAt: -1 });
+  
+    // 2. Check if date separator is needed (before creating the main message)
+    const nowDate = new Date().toISOString().slice(0, 10);
+    const latestDate = latestMessage?.createdAt?.toISOString().slice(0, 10);
+  
+    if (!latestMessage || nowDate !== latestDate) {
+      const months = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+      ];
+  
+      const now = new Date();
+      const formattedDate = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+  
+      const dateMessage = await Message.create({
+        sender: message.sender,
+        recipient: message.recipient,
+        content: formattedDate,
+        files: [],
+        messageType: true
+      });
+  
+      if (recipientSocketId) {
+        io.to(recipientSocketId).emit("receiveMessage", dateMessage);
+      }
+      if (senderSocketId) {
+        io.to(senderSocketId).emit("receiveMessage", dateMessage);
+      }
+    }
+  
+    // 3. Now create the actual message
+    const createdMessage = await Message.create({ ...message, files: uploadedFiles });
+  
+    const messageData = await Message.findById(createdMessage._id)
+      .populate("sender", "id name image")
+      .populate("recipient", "id name image");
+  
+    if (recipientSocketId) {
+      io.to(recipientSocketId).emit("receiveMessage", messageData);
+    }
+    if (senderSocketId) {
+      io.to(senderSocketId).emit("receiveMessage", messageData);
+    }
+  };
+  
 
     const sendGroupMessage = async (message) => {    
       const uploadedFiles = [];
