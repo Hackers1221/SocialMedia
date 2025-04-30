@@ -1,18 +1,17 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { likePulse } from "../redux/Slices/pulse.slice";
-import { getUserById } from "../redux/Slices/auth.slice"
 import Avatar from '../components/Avatar'
 import { FaPaperPlane } from "react-icons/fa";
 import { CreateComment, getCommentByPostId } from "../redux/Slices/comment.slice";
 import Comment from "./Comment";
 import { motion, AnimatePresence } from "framer-motion";
+import SelectedUser from "./SelectedUser";
 
-export default function PulseCard({ pulse }) {
+export default function PulseCard({ pulse, followers }) {
     if (!pulse) return null;
 
     const authState = useSelector((state) => state.auth);
-    const commentState = useSelector ((state) => state.comment);
 
     const dispatch = useDispatch();
 
@@ -23,6 +22,7 @@ export default function PulseCard({ pulse }) {
     const [showComment, setShowComment] = useState (false);
     const [commentDescription, setCommentDescription] = useState ("");
     const [comments, setComments] = useState ([]);
+    const [isOpen, setOpen] = useState (false);
 
     const videoRef = useRef(null);
     const timeoutRef = useRef(null);
@@ -124,7 +124,9 @@ export default function PulseCard({ pulse }) {
         <div
             className="reel-container w-full h-full sm:w-96 sm:h-[78vh] overflow-hidden rounded-xl shadow-lg flex justify-center relative bg-black"
         >
-            {!showComment && <div onClick={togglePlay}>
+                <SelectedUser isOpen={isOpen} setOpen={setOpen} followers={followers}/>
+
+                {!showComment && <div onClick={togglePlay}>
                 <video ref={videoRef} className="w-max bg-black" src={pulse.video} loop></video>
 
                 {/* Play/Pause Button */}
@@ -142,30 +144,32 @@ export default function PulseCard({ pulse }) {
 
                 {/* Left Side Buttons */}
                 <div className="absolute right-4 bottom-[1.5rem] flex flex-col gap-2">
-                <button
-                    className="flex flex-col items-center justify-center gap-1 text-white px-2"
-                    onClick = {handleLike}
-                    >
-                    {liked ? (
-                        <i className="text-red-600 fa-solid fa-heart text-2xl"></i>
-                    ) : (
-                        <i className={`text-white fa-regular fa-heart text-2xl`}></i>
-                    )}
-                    <span className="text-base font-medium">{countLike}</span>
-                </button>
+                    <button
+                        className="flex flex-col items-center justify-center gap-1 text-white px-2"
+                        onClick = {handleLike}
+                        >
+                        {liked ? (
+                            <i className="text-red-600 fa-solid fa-heart text-2xl"></i>
+                        ) : (
+                            <i className={`text-white fa-regular fa-heart text-2xl`}></i>
+                        )}
+                        <span className="text-base font-medium">{countLike}</span>
+                    </button>
 
-                <button className="flex flex-col items-center justify-center gap-1 text-white px-2">
-                    <i className="fa-regular fa-comment text-white text-2xl" onClick={() => setShowComment (true)}></i>
-                    <span className="text-base font-medium">{comments?.filter (comment => comment.postId === pulse._id)?.length}</span>
-                </button>
+                    <button className="flex flex-col items-center justify-center gap-1 text-white px-2">
+                        <i className="fa-regular fa-comment text-white text-2xl" onClick={() => setShowComment (true)}></i>
+                        <span className="text-base font-medium">{comments?.filter (comment => comment.postId === pulse._id)?.length}</span>
+                    </button>
 
-                <div className="flex flex-col items-center justify-center gap-1 text-white px-2">
-                    <i className="fa-solid fa-bookmark text-white text-xl p-3"></i>
-                </div>
+                    <div className="flex flex-col items-center justify-center gap-1 text-white px-2">
+                        <i className="fa-solid fa-bookmark text-white text-xl p-3"></i>
+                    </div>
 
-                <div className="flex flex-col items-center justify-center text-white px-2">
-                    <i className="fa-solid fa-paper-plane text-white text-xl p-3"></i>
-                </div>
+                    <div className="flex flex-col items-center justify-center text-white px-2">
+                        <i 
+                            className="fa-solid fa-paper-plane text-white text-xl p-3"
+                            onClick={() => setOpen(true)}></i>
+                    </div>
                 </div>
 
                 {/* User Profile Section */}

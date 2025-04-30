@@ -9,6 +9,8 @@ function usePulse () {
 
     function loadPulse () {
         if(!pulseState?.downloadedPulse?.length) dispatch (getAllPulse ()); 
+
+        if (location.pathname === '/saved' || location.pathname === '/explore') dispatch(getSavedPost (authState?.data?._id));
     }
 
     useEffect (() => {

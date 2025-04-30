@@ -26,6 +26,10 @@ const messageSchema = new Schema({
         type : String,
         default : ""
     },
+    isPost: {
+        type: Boolean,
+        default: false
+    },
     messageType : {
         type : Boolean,
         default : false

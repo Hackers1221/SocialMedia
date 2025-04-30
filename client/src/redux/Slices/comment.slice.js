@@ -56,7 +56,6 @@ const commentSlice = createSlice({
             state.comments = action.payload?.data?.commentDetails;
         })
         .addCase(getPulseComments.fulfilled,(state,action)=>{
-            console.log (action.payload.data);
             state.comments = action.payload?.data?.commentDetails;
         })
     }

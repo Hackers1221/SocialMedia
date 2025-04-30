@@ -80,7 +80,7 @@ function Message({ message }) {
     useEffect(() => {
         getTime();
         getContent ();
-    }, []);
+    }, [message._id]);
 
     return (
         <div className={`flex ${baseMessage ? `justify-center` : message.sender._id !== authState.data?._id ? `justify-start` : `justify-end`} items-start gap-4 mt-2 w-full`}>

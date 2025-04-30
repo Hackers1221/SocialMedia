@@ -4,6 +4,8 @@ import axiosInstance from "../../config/axiosInstance";
 
 const initialState = {
     downloadedPulse: [],
+    pulseList: [],
+    savedPulse: []
 };
 
 export const getAllPulse = createAsyncThunk('posts/getAllPulse', async () => {
@@ -51,53 +53,53 @@ export const likePulse = createAsyncThunk('pulse/likePulse', async(data) => {
     }
 })
 
-// export const getPostByUserId = createAsyncThunk('post/getpost' ,async(id) => {
-//     try {
-//         const response = await axiosInstance.get(`post/posts/${id}`, { 
-//             headers: {
-//                 'x-access-token': localStorage.getItem('token')
-//             }
-//         })
-//         if(response){
-//             return response;
-//         }
-//     } catch (error) {
-//         toast.error(error.message || "Failed to get post");
-//     }
-// })
+export const getPulseByUserId = createAsyncThunk('pulse/getPulse' ,async(id) => {
+    try {
+        const response = await axiosInstance.get(`pulse/pulse/${id}`, { 
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+        if(response){
+            return response;
+        }
+    } catch (error) {
+        toast.error(error.message || "Failed to get post");
+    }
+})
 
-// export const getSavedPost = createAsyncThunk('post/getSavedPost' , async(id) => {
-//     try {
-//         const response = await axiosInstance.get(`post/save/${id}`, {
-//             headers: {
-//                 'x-access-token': localStorage.getItem('token')
-//             }
-//         })
-//         if(response){
-//             return response;
-//         }
-//     } catch (error) {
-//         toast.error(error.message || "Failed to save post");
-//     }
-// })
+export const getSavedPulse = createAsyncThunk('pulse/getSavedPulse' , async(id) => {
+    try {
+        const response = await axiosInstance.get(`pulse/save/${id}`, {
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+        if(response){
+            return response;
+        }
+    } catch (error) {
+        toast.error(error.message || "Failed to save post");
+    }
+})
 
-// export const updateSavedPost = createAsyncThunk('post/updatesavedPost', async(data) => {
-//     try {
-//         const resp = {
-//             id : data.id
-//         }
-//         const response = await axiosInstance.patch(`post/save/${data._id1}`,resp , {
-//             headers: {
-//                 'x-access-token': localStorage.getItem('token')
-//             }
-//         })
-//         if(response){
-//             return response;
-//         }
-//     } catch (error) {
-//         toast.error(error.message || "Failed to update post");
-//     }
-// })
+export const updateSavedPulse = createAsyncThunk('post/updateSavedPulse', async(data) => {
+    try {
+        const resp = {
+            id : data.id
+        }
+        const response = await axiosInstance.patch(`pulse/save/${data._id1}`,resp , {
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+        if(response){
+            return response;
+        }
+    } catch (error) {
+        toast.error(error.message || "Failed to update post");
+    }
+})
 
 const PulseSlice = createSlice({
     name: 'pulse',
@@ -107,11 +109,12 @@ const PulseSlice = createSlice({
             .addCase(getAllPulse.fulfilled, (state, action) => {
                 if (!action.payload?.data) return;
                 state.downloadedPulse = action.payload?.data?.pulsedata?.pulse.reverse();
+                state.pulseList = action.payload?.data?.pulsedata?.pulse.reverse();
             })
             .addCase(createPulse.fulfilled, (state, action) => {
                 if (!action.payload?.data) return;
-                const newPulse = action.payload?.data?.pulseData?.pulse;
-                state.downloadedPulse = [newPulse, ...state.downloadedPulse];
+                state.downloadedPulse = [action.payload?.data?.pulseData?.pulse, ...state.downloadedPulse];
+                state.pulseList = state.downloadedPulse;
             })
     }
 });
