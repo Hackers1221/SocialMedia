@@ -1,14 +1,12 @@
-import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { BsCameraReels } from "react-icons/bs";
-import DisplayPost from "../../components/DisplayPost";
 import usePosts from "../../hooks/usePosts";
 import ExploreCard from "../../components/ExploreCard";
+import usePulse from "../../hooks/usePulse";
 
 const SavedPost = () => {
   const [postState] = usePosts ();
-  
-  const savedArray = postState?.savedList;
+  const [pulseState] = usePulse ();
 
   const [activeTab, setActiveTab] = useState("images");
 
@@ -45,12 +43,12 @@ const SavedPost = () => {
   };
 
   useEffect (() => {
-
-    savedArray?.forEach((post, index) => {
+    postState.savedList?.forEach((post, index) => {
         if (post?.video[0]?.url) {
           extractThumbnail(post?.video[0].url, index);
         }
-      });
+    });
+    
     }, []);
 
   return (
@@ -71,30 +69,17 @@ const SavedPost = () => {
           className={`px-4 py-2 font-semibold flex items-center space-x-2 ${
             activeTab === "reels" ? `text-[var(--buttons)]` : "text-gray-400"
           }`}
-          onClick={() => setActiveTab("reels")}
+          onClick={() => setActiveTab("pulse")}
         >
           <BsCameraReels />
           <span>Pulse</span>
         </button>
       </div>
 
-      {/* Main Content */}
-      {activeTab == "images" && (savedArray?.length > 0 ? <div className="w-full mt-4">
+      {/* Post Content */}
+      {activeTab == "images" && (postState.savedList?.length > 0 ? <div className="w-full mt-4">
         <div className="columns-2 sm:columns-3 md:columns-4 gap-3 overflow-y-auto">
-          {savedArray?.map((post, index) => (
-            // <div key={index} className="relative h-[10rem] group hover:cursor-pointer overflow-hidden rounded-lg" onClick={() => {
-            //   setDialogOpen(true);
-            //   setSelectedPost (post);
-            // }}>
-            //   {activeTab === "images" && <img
-            //     src={post?.image[0]?.url || thumbnails[index]}
-            //     alt="Explore"
-            //     className="w-full h-full object-cover rounded-lg transition-transform duration-300 group-hover:scale-110"
-            //   />}
-            //   <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-lg font-semibold">
-            //     View
-            //   </div>
-            // </div>
+          {postState.savedList?.map((post, index) => (
               <ExploreCard 
               post={post} 
               key={index + 1} 
@@ -105,6 +90,20 @@ const SavedPost = () => {
           ))}
         </div>
       </div> : <h2 className={`w-full text-center font-extralight text-[var(--text)] mt-4`}>Save a post to keep track of content that matters to you!</h2>)}
+
+      {activeTab == "pulse" && (pulseState.savedList?.length > 0 ? <div className="w-full mt-4">
+        <div className="columns-2 sm:columns-3 md:columns-4 gap-3 overflow-y-auto">
+          {pulseState.savedList?.map((post, index) => (
+              <ExploreCard 
+              post={post} 
+              key={index + 1} 
+              index={index + 1}
+              postThumbnail={post?.image[0]?.url || thumbnails[index]} 
+              video={post?.image[0]?.url ? false : true}
+              list={'savedList'}/>
+          ))}
+        </div>
+      </div> : <h2 className={`w-full text-center font-extralight text-[var(--text)] mt-4`}>Save a pulse to keep track of content that matters to you!</h2>)}
     </div>
     </>
   );

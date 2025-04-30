@@ -82,7 +82,7 @@ function User ({ chat, type, isAdmin, amAdmin }) {
                 {(!isAdmin && amAdmin) && <h2 className="absolute bottom-2 right-2 text-[0.6rem] border hover:bg-[var(--card)] font-semibold p-1 px-2 rounded-sm" onClick={makeAdmin}>Make admin</h2>}
                 <img src={chat?.user?.image?.url || user?.image?.url || chat?.group?.image?.url || defaultImage} className="flex items-center justify-center h-8 w-8 rounded-full object-cover"/>
                 <div className="ml-2 w-full">
-                    <h2 className="text-sm font-semibold">{(username === authState.data.username ? "You" : username) || (user?.name === authState.data.user?.name ? "You" : username) || chat?.group?.name}</h2>
+                    <h2 className="text-sm font-semibold">{(username === authState.data.username ? "You" : chat?.user?.name) || (user?.name === authState.data.name ? "You" : user?.name) || chat?.group?.name}</h2>
                     {(type !== 'group-info' && type !== 'follower') && <h3 className="text-xs font-extralight">{content?.toString().slice(0, 20) + (content?.length > 20 ? "..." : "")}</h3>}
                 </div>
                 {(online?.includes(chat?.user?._id || user?._id) && chat?.user?._id !== authState.data?._id && user?._id !== authState.data?._id) && <div className="w-[0.7rem] h-[0.6rem] bg-green-400 rounded-full inline-block"></div>}

@@ -53,42 +53,6 @@ const Messenger = () => {
 
   const sendMessage = () => {
     if (message?.trim() || files?.length) { 
-      const lastMessage = chatState.messages
-        .slice()
-        .reverse()
-        .find(msg => !msg.groupId?.length);
-
-      if (lastMessage) {
-        const time = isDifferentDate (lastMessage?.createdAt);
-
-        if (time && socket && socket.connected) {
-          socket.emit("sendMessage", {
-            sender: authState.data?._id,
-            recipient: chatState.recipient?._id,
-            content: time,
-            files: [],
-            messageType: true
-          });
-        }
-      }
-      else {
-        const today = new Date();
-        const time = today.toLocaleDateString("en-GB", {
-          day: "numeric",
-          month: "long",
-          year: "numeric"
-        });
-
-        if (time && socket && socket.connected) {
-          socket.emit("sendMessage", {
-            sender: authState.data?._id,
-            recipient: chatState.recipient?._id,
-            content: time,
-            files: [],
-            messageType: true
-          });
-        }
-      }
 
       const readerPromises = files.map(
         (file) =>
@@ -143,37 +107,6 @@ const Messenger = () => {
 
   const sendGroupMessage = () => {
     if (groupMessage?.trim() || groupFiles?.length) {  
-      if (groupState.liveGroup.messages?.length) {
-        const time = isDifferentDate(groupState.liveGroup.messages[groupState.liveGroup.messages?.length - 1].createdAt);
-        if (time && socket && socket.connected) {
-          socket.emit("sendGroupMessage", {
-            groupId: groupState.liveGroup?._id,
-            sender: authState.data?._id,
-            recipient: groupState.liveGroup?.members,
-            content: time,
-            files: [],
-            messageType: true
-          });
-        }
-      }
-      else {
-        const today = new Date();
-        const time = today.toLocaleDateString("en-GB", {
-          day: "numeric",
-          month: "long",
-          year: "numeric"
-        });
-        if (time && socket && socket.connected) {
-          socket.emit("sendGroupMessage", {
-            groupId: groupState.liveGroup?._id,
-            sender: authState.data?._id,
-            recipient: groupState.liveGroup?.members,
-            content: time,
-            files: [],
-            messageType: true
-          });
-        }
-      }
 
       const readerPromises = groupFiles.map(
         (file) =>
@@ -181,7 +114,7 @@ const Messenger = () => {
             const reader = new FileReader();
             reader.onload = () => resolve({ name: file.name, type: file.type, data: reader.result });
             reader.onerror = reject;
-            reader.readAsDataURL(file); // base64 encode
+            reader.readAsDataURL(file); 
           })
       );
   
@@ -236,11 +169,14 @@ const Messenger = () => {
       else setGroupMessage ((prev) => prev + emojiData.emoji);
     };
 
-     const getDetails = async() => {
-          const response = await dispatch(getFollowerDetails(authState.data._id));
-          setFollowers(response.payload?.data?.userdata);
-          console.log(response);
-      }
+    const onSearchHandler = (e) => {
+        setQuery(e.target.value);
+    }
+
+    const getDetails = async() => {
+        const response = await dispatch(getFollowerDetails(authState.data._id));
+        setFollowers(response.payload?.data?.userdata);
+    }
 
     useEffect (() => {
       setGroup (groupState.groupDetails);
@@ -249,9 +185,7 @@ const Messenger = () => {
 
     useEffect(() => {
       setGroup(groupState?.groupDetails);
-      if(activeTab==="followers"){
-        getDetails();
-    }
+      if(activeTab==="followers") getDetails();
     },[activeTab]);
   
     useEffect (() => { 
@@ -299,8 +233,6 @@ const Messenger = () => {
           );
           setGroup(filteredGroup);
         }
-      }else{
-
       }
     }, [query]);
 
@@ -313,11 +245,6 @@ const Messenger = () => {
       document.addEventListener("mousedown", handleClickOutside);
       return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
-    
-
-    const onSearchHandler = (e) => {
-      setQuery(e.target.value);
-    }
 
   return (
     <div className={`fixed top-[4rem] md:top-0 md:left-[18rem] left-[1rem] w-[85%] h-[82vh] md:h-[100vh] flex flex-col flex-grow overflow-y-auto`}>
