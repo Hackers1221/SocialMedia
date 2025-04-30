@@ -128,9 +128,6 @@ function CreateGroup ({ isOpen, setOpen }) {
     }
 
     useEffect(() => {
-    },[queriedFollowers])
-
-    useEffect(() => {
         getDetails();
     },[])
 

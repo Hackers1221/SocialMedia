@@ -1,10 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
-import { followUser, getUserById, getUserByLimit, searchUser } from "../redux/Slices/auth.slice";
+import { getUserById, getUserByLimit, searchUser } from "../redux/Slices/auth.slice";
 import { useEffect, useState } from "react";
 import Avatar from "./Avatar";
 import { Link } from "react-router-dom";
 import { X } from "lucide-react";
-import toast from "react-hot-toast";
 
 function Suggestions () {
     const authState = useSelector ((state) => state.auth);
@@ -55,11 +54,14 @@ function Suggestions () {
             }, 300); // 300ms debounce delay
             return () => clearTimeout(delayDebounceFn);
         },[query])
+    
+        useEffect (() => {
+            getFollowers ();
+        }, [authState.data.follower])
 
     useEffect (() => {
         setFollowers([]);
         getUser ();
-        getFollowers ();
     }, [])
 
     return (

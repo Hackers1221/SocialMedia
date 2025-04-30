@@ -82,6 +82,29 @@ const Messenger = () => {
     }
   };
 
+  const isDifferentDate = (dateString) => {
+    const inputDate = new Date(dateString);
+    const today = new Date();
+  
+    const isDifferent =
+      inputDate.getFullYear() !== today.getFullYear() ||
+      inputDate.getMonth() !== today.getMonth() ||
+      inputDate.getDate() !== today.getDate();
+  
+    if (isDifferent) {
+      const formattedToday = today.toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+      });
+
+      return formattedToday;
+    }
+  
+    return null;
+  };
+  
+
   const sendGroupMessage = () => {
     if (groupMessage?.trim() || groupFiles?.length) {  
 

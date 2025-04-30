@@ -15,7 +15,6 @@ function UpdateGroup ({ isOpen, setOpen, isDelete, setDelete }) {
     const liveGroup = useSelector ((state) => state.group.liveGroup);
 
     const dialogRef = useRef (null);
-    const dispatch = useDispatch ();
 
     const [editName, setEditName] = useState (false);
     const [date, setDate] = useState ("");
@@ -30,10 +29,6 @@ function UpdateGroup ({ isOpen, setOpen, isDelete, setDelete }) {
     const [queriedParticipants,setQueriedParticipants] = useState(liveGroup);
 
     const defaultImage = "https://t3.ftcdn.net/jpg/12/81/12/20/240_F_1281122039_wYCRIlTBPzTUzyh8KrPd87umoo52njyw.jpg";
-
-    function close () {
-        setOpen (!isOpen);
-    }
 
     function getDate () {
         const date = new Date(queriedParticipants.createdAt);
@@ -128,7 +123,6 @@ function UpdateGroup ({ isOpen, setOpen, isDelete, setDelete }) {
         else if (!isOpen && dialogRef.current?.open) {
             dialogRef.current.close();
         }
-
     }, [isOpen]);
 
     useEffect (() => {
@@ -171,7 +165,7 @@ function UpdateGroup ({ isOpen, setOpen, isDelete, setDelete }) {
         <>
             {isOpen && <div className="fixed left-0 top-0 inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-10"></div>}
             <dialog ref={dialogRef} className="w-[30%] h-[80%] bg-[var(--background)] py-4 z-10">
-                <button onClick={close} className={`fixed top-5 right-6 w-max h-max text-white font-bold text-xl focus:outline-none hover:cursor-pointer z-[10]`}>✕</button>
+                <button onClick={() => setOpen (!isOpen)} className={`fixed top-5 right-6 w-max h-max text-white font-bold text-xl focus:outline-none hover:cursor-pointer z-[10]`}>✕</button>
                 {!addParticipants ? <div className="flex flex-col gap-2">
                     <div className="relative w-20 h-20 mx-auto">
                         <img

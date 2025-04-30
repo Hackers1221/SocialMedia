@@ -1,4 +1,8 @@
 const Pulse = require('../models/pulse.model');
+const User  = require('../models/user.model');
+const Comment = require('../models/comment.model');
+const { deleteVideos } = require('../../cloudConfig');
+const { userSocketMap, getIO } = require('../../socket/socketInstance'); 
 
 const CreatePulse = async (data) => {
     const response = {};
@@ -15,7 +19,7 @@ const CreatePulse = async (data) => {
         console.log(error);
         response.error = error.message;
     }
-    return response;  
+    return response;   
 };
 
 const getAllPulse = async () => {
@@ -45,22 +49,45 @@ const getAllPulse = async () => {
 };
 
 
-const likePulse = async(id,userId) => {
+const likePulse = async(id, userId) => {
     const response = {};
     try {
-        const likesArray = await Pulse.findById(id);
-        if(!likesArray){
+        const pulse = await Pulse.findById(id);
+        if(!pulse){
             response.error = "Pulse not found";
             return response;
         }
-        if(likesArray.likes.includes(userId)){
-            likesArray.likes = likesArray.likes.filter((ids) => ids!=userId);
+        if(pulse.likes.includes(userId)){
+            pulse.likes = pulse.likes.filter((ids) => ids != userId);
         }else{
-            likesArray.likes.push(userId);
+            pulse.likes.push(userId);
+
+            // Notification 
+            if(userId !== pulse.user) {
+                const notification = await Notification.create({
+                    sender: userId,
+                    recipient: pulse.user,
+                    type: "like",
+                    targetType: "pulse",
+                    pulse: pulse._id,
+                });
+
+                // Immediately fetch the populated version
+                const populatedNotification = await Notification.findById(notification._id)
+                .populate("sender", "id username avatarUrl")
+                .populate("post", "caption")
+                .populate("pulse", "caption");
+
+                const recipientSocketId = userSocketMap.get(pulse.user.toString());
+                if (recipientSocketId) {
+                    getIO().to(recipientSocketId).emit("notification", populatedNotification);
+                }
+            }
         }
+
         const updatedPulse = await Pulse.findByIdAndUpdate(
             id,
-            { likes: likesArray.likes },
+            { likes: pulse.likes },
             { new: true } 
         );
         response.pulse = updatedPulse;
@@ -71,9 +98,140 @@ const likePulse = async(id,userId) => {
     }
 }
 
+const getPulseByUserId = async(id) => {
+    const response = {};
+    try {
+        const pulsedata = await Pulse.find({userId : id });
+        if(!pulsedata){
+            response.error = "Pulse not found";
+            return response;
+        }
+        response.pulse = pulsedata;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response
+    }
+}
+
+const getAllSavedPulse = async(userId) => {
+    const response = {};
+    try {
+        const userData = await User.findById(userId);
+        if(!userData){
+            response.error = "User not found";
+            return response;
+        }
+
+        const savedPulseDetails = await Pulse.find({ _id: { $in: userData.saved } });
+        response.pulse = savedPulseDetails;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response
+    }
+}
+
+const DeletePulse = async(id, userId) => {
+    const response = {};
+    try {
+        const PulseDetails = await Pulse.findByIdAndDelete(id);
+
+        // Cloudinary post data delete
+        let videoFilenames = [];
+        videoFilenames = videoFilenames.concat(PostDetails.filename);
+        try {
+            if (videoFilenames.length) await deleteVideos(videoFilenames);
+        } catch (cloudError) {
+            console.log("Error deleting media:", cloudError);
+        }
+        //----------------------------
+
+        const deletecomments = await Comment.deleteMany({postId : id});
+        const userDetails = await User.findById(userId);
+        let userDetailsSaved = userDetails.saved;
+        userDetailsSaved = userDetailsSaved.filter((ids) => ids != id);
+        const updateUser = await User.findByIdAndUpdate(
+            userId,
+            {saved : userDetailsSaved}
+        )
+        response.pulse = PulseDetails;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response
+    }
+}
+
+const savePulse = async(userId, id) => {
+    const response = {};
+    try {
+        let userData = await User.findById(userId);
+        if(!userData){
+            response.error = "User not found";
+            return response;
+        }
+
+        if(userData.saved.includes(id)){
+            userData.saved = userData.saved.filter((ids) => ids !== id);
+        }else{
+            userData.saved.push(id);
+        }
+        const updateuser = await User.findByIdAndUpdate(
+            userId,
+            {saved : userData.saved},
+            {new  :true}
+        )
+        const savedPulseDetails = await Pulse.find({ _id: { $in: updateuser.saved } });
+        response.pulse = savedPulseDetails;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response
+    }
+}
+
+const getPulseById = async(id) => {
+    const response = {};
+    try {
+        const pulsedata = await Pulse.findById(id);
+        if(!pulsedata){
+            response.error = "Pulse not found!";
+            return response;
+        }
+        response.pulse = pulsedata;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response
+    }
+}
+
+const searchPulse = async(query) => {
+    const response = {};
+    try {
+        const pulse = await Pulse.find({
+            $or: [
+                { caption: { $regex: query, $options: "i" } },
+                { interests : { $regex: query, $options: "i" } }
+            ]
+        });
+        response.pulse = pulse;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response
+    }
+}
 
 module.exports = {
     CreatePulse,
     getAllPulse,
-    likePulse
+    likePulse,
+    getPulseByUserId,
+    getAllSavedPulse,
+    DeletePulse,
+    savePulse,
+    getPulseById,
+    searchPulse,
 };

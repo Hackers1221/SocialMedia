@@ -4,7 +4,6 @@ const Group = require('../src/models/group.model');
 const User = require("../src/models/user.model");
 const { uploadFile, deleteImages } = require("../cloudConfig");
 const mongoose = require("mongoose");
-const { date } = require("joi");
 
 const { setIO, userSocketMap, onlineUsers } = require("./socketInstance"); // To set io globally
 
@@ -79,6 +78,7 @@ const setupSocket = (server) => {
         recipient: message.recipient,
         content: formattedDate,
         files: [],
+        isPost: message.isPost,
         messageType: true
       });
   
@@ -141,6 +141,7 @@ const setupSocket = (server) => {
       recipient,
       content: message.content,
       files: uploadedFiles,
+      isPost: message.isPost,
       messageType: message.messageType
     });
   

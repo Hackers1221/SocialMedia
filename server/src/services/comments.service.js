@@ -3,6 +3,7 @@ const commentsModel = require('../models/comment.model');
 const Notification = require('../models/notification.model');
 const postsModel = require('../models/posts.model');
 const Verse = require ('../models/verse.model')
+const Pulse = require ('../models/pulse.model')
 
 const CreateComment = async(data) => {
     const response = {};
@@ -50,6 +51,33 @@ const CreateComment = async(data) => {
                     {comments : verseData.comments },
                     {new : true}
                 )
+            }
+            if (data.type === "pulse") {
+                const pulsedata = await Pulse.findById(data.postId);
+                pulsedata.comments.push(data.userId);
+                await Pulse.findByIdAndUpdate(
+                    data.postId,
+                    {comments : pulsedata.comments },
+                    {new : true}
+                )
+                const notification = await Notification.create({
+                    sender: data.userId,
+                    recipient: pulsedata.user,
+                    type: "comment",
+                    targetType: "pulse",
+                    pulse: pulsedata._id,
+                    commentText: data.description,
+                });
+                // Immediately fetch the populated version
+                const populatedNotification = await Notification.findById(notification._id)
+                .populate("sender", "id username avatarUrl")
+                .populate("post", "caption")
+                .populate("pulse", "caption");
+
+                const recipientSocketId = userSocketMap.get(pulsedata.user.toString());
+                if (recipientSocketId) {
+                    getIO().to(recipientSocketId).emit("notification", populatedNotification);
+                }
             }
         }
         response.comments = result;

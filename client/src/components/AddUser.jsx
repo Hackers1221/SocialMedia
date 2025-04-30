@@ -1,9 +1,7 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getUserById } from "../redux/Slices/auth.slice";
+import { useSelector } from "react-redux";
 import Avatar from '../components/Avatar'
 
-function AddUser ({userId,image,username, members, setMembers }) {
+function AddUser ({userId, image, username, members, setMembers }) {
     if (!userId) return null;
 
     const authState = useSelector ((state) => state.auth);

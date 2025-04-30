@@ -1,9 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { filterPostsByUser, getAllPosts, getPostByUserId, getSavedPost } from "../redux/Slices/post.slice";
-import { useSearchParams } from "react-router-dom";
-import { getUserByUsername } from "../redux/Slices/auth.slice";
-import { useParams } from "react-router-dom";
+import { getAllPosts, getSavedPost } from "../redux/Slices/post.slice";
 
 function usePosts () {
     const postState = useSelector((state) => state.post);
