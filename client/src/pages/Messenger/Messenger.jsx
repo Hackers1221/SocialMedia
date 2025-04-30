@@ -53,42 +53,6 @@ const Messenger = () => {
 
   const sendMessage = () => {
     if (message?.trim() || files?.length) { 
-      const lastMessage = chatState.messages
-        .slice()
-        .reverse()
-        .find(msg => !msg.groupId?.length);
-
-      if (lastMessage) {
-        const time = isDifferentDate (lastMessage?.createdAt);
-
-        if (time && socket && socket.connected) {
-          socket.emit("sendMessage", {
-            sender: authState.data?._id,
-            recipient: chatState.recipient?._id,
-            content: time,
-            files: [],
-            messageType: true
-          });
-        }
-      }
-      else {
-        const today = new Date();
-        const time = today.toLocaleDateString("en-GB", {
-          day: "numeric",
-          month: "long",
-          year: "numeric"
-        });
-
-        if (time && socket && socket.connected) {
-          socket.emit("sendMessage", {
-            sender: authState.data?._id,
-            recipient: chatState.recipient?._id,
-            content: time,
-            files: [],
-            messageType: true
-          });
-        }
-      }
 
       const readerPromises = files.map(
         (file) =>
@@ -143,37 +107,6 @@ const Messenger = () => {
 
   const sendGroupMessage = () => {
     if (groupMessage?.trim() || groupFiles?.length) {  
-      if (groupState.liveGroup.messages?.length) {
-        const time = isDifferentDate(groupState.liveGroup.messages[groupState.liveGroup.messages?.length - 1].createdAt);
-        if (time && socket && socket.connected) {
-          socket.emit("sendGroupMessage", {
-            groupId: groupState.liveGroup?._id,
-            sender: authState.data?._id,
-            recipient: groupState.liveGroup?.members,
-            content: time,
-            files: [],
-            messageType: true
-          });
-        }
-      }
-      else {
-        const today = new Date();
-        const time = today.toLocaleDateString("en-GB", {
-          day: "numeric",
-          month: "long",
-          year: "numeric"
-        });
-        if (time && socket && socket.connected) {
-          socket.emit("sendGroupMessage", {
-            groupId: groupState.liveGroup?._id,
-            sender: authState.data?._id,
-            recipient: groupState.liveGroup?.members,
-            content: time,
-            files: [],
-            messageType: true
-          });
-        }
-      }
 
       const readerPromises = groupFiles.map(
         (file) =>
@@ -181,7 +114,7 @@ const Messenger = () => {
             const reader = new FileReader();
             reader.onload = () => resolve({ name: file.name, type: file.type, data: reader.result });
             reader.onerror = reject;
-            reader.readAsDataURL(file); // base64 encode
+            reader.readAsDataURL(file); 
           })
       );
   

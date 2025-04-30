@@ -132,44 +132,6 @@ const setupSocket = (server) => {
     // Get the recipient user IDs
     const recipient = message.recipient.map(user => user.userId);
   
-    // 1. Get the latest message in the group
-    const latestGroupMessage = await Message.findOne({
-      groupId: message.groupId,
-    }).sort({ createdAt: -1 });
-  
-    // 2. Check if date separator is needed (before creating the main message)
-    const nowDate = new Date().toISOString().slice(0, 10);
-    const latestDate = latestGroupMessage?.createdAt?.toISOString().slice(0, 10);
-  
-    if (!latestGroupMessage || nowDate !== latestDate) {
-      const months = [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-      ];
-  
-      const now = new Date();
-      const formattedDate = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
-  
-      // Create date message
-      const dateMessage = await Message.create({
-        groupId: message.groupId,
-        sender: message.sender,
-        recipient: message.recipient,
-        content: formattedDate,
-        files: [],
-        isPost: message.isPost,
-        messageType: true
-      });
-  
-      // Emit the date message to the group
-      for (const member of message.recipient) {
-        const socketId = userSocketMap.get(member.userId.toString());
-        if (socketId) {
-          io.to(socketId).emit("receiveGroupMessage", dateMessage);
-        }
-      }
-    }
-  
     // 3. Create the actual message
     const createdMessage = await Message.create({
       groupId: message.groupId,
