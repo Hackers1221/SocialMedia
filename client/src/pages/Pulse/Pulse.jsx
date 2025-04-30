@@ -3,7 +3,6 @@ import PulseCard from "../../components/PulseCard";
 import { useDispatch, useSelector } from "react-redux";
 import { getPulseComments } from "../../redux/Slices/comment.slice";
 import { getFollowerDetails } from "../../redux/Slices/auth.slice";
-import 
 
 function Pulse() {
     const authState = useSelector ((state) => state.auth);
