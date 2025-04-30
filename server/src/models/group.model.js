@@ -15,7 +15,7 @@ const GroupSchema = new Schema({
             {
                 userId : {
                     type : Schema.Types.ObjectId,
-                    required : true
+                    ref:"Users"
                 },
                 joinedAt : {
                     type: Date,

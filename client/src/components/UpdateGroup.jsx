@@ -26,6 +26,8 @@ function UpdateGroup ({ isOpen, setOpen, isDelete, setDelete }) {
     const [groupName, setGroupName] = useState (liveGroup?.name);
     const [imageUrl, setImageUrl] = useState (liveGroup?.image?.url);
     const [isDialogOpen, setDialogOpen] = useState (false);
+    const [query,SetQuery] = useState("");
+    const [queriedParticipants,setQueriedParticipants] = useState(liveGroup);
 
     const defaultImage = "https://t3.ftcdn.net/jpg/12/81/12/20/240_F_1281122039_wYCRIlTBPzTUzyh8KrPd87umoo52njyw.jpg";
 
@@ -34,7 +36,7 @@ function UpdateGroup ({ isOpen, setOpen, isDelete, setDelete }) {
     }
 
     function getDate () {
-        const date = new Date(liveGroup.createdAt);
+        const date = new Date(queriedParticipants.createdAt);
 
         const day = String(date.getDate()).padStart(2, '0');
         const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -45,9 +47,9 @@ function UpdateGroup ({ isOpen, setOpen, isDelete, setDelete }) {
     }
 
     function getNonParticipants () {
-        const memberIds = liveGroup.members?.map(member => member.userId);
+        const memberIds = queriedParticipants.members?.map(member => member.userId);
         let arr = authState.data?.follower?.filter(user => !memberIds.includes(user));
-        const inactiveMembers = liveGroup.members
+        const inactiveMembers = queriedParticipants.members
             .filter(member => !member.isActive)
             .map(member => member.userId);
         
@@ -59,7 +61,7 @@ function UpdateGroup ({ isOpen, setOpen, isDelete, setDelete }) {
     function onLeaveGroup () {
         if (socket && socket.connected) {
             socket.emit ("leave-group", {
-                _id: liveGroup._id,
+                _id: queriedParticipants._id,
                 userId: authState.data?._id
             })
         }
@@ -71,7 +73,7 @@ function UpdateGroup ({ isOpen, setOpen, isDelete, setDelete }) {
 
             const sendPayload = (encodedImage) => {
                 const payload = {
-                  _id: liveGroup._id,
+                  _id: queriedParticipants._id,
                   members: selectedUsers,
                   admin: authState.data?._id,
                   image: encodedImage, // can be undefined
@@ -130,16 +132,40 @@ function UpdateGroup ({ isOpen, setOpen, isDelete, setDelete }) {
     }, [isOpen]);
 
     useEffect (() => {
-        if (!liveGroup.messages) {
+        if (!queriedParticipants.messages) {
             setOpen (false); return null;
         }
         getDate ();
         getNonParticipants ();
-    }, [liveGroup]);
+    }, [queriedParticipants]);
 
     useEffect (() => {
         if (image) submitDetails ();
     }, [image])
+
+
+    useEffect(() => {
+        if (query.trim() === "") {
+            setQueriedParticipants(liveGroup);
+            return;
+        }
+    
+        const filteredMembers = liveGroup.members.filter(member =>
+            member.userId?.name?.toLowerCase().includes(query.toLowerCase())
+        );
+
+        console.log(liveGroup);
+    
+        setQueriedParticipants({
+            ...liveGroup,
+            members: filteredMembers
+        });
+    }, [query, liveGroup]);
+    
+
+    const onChangeHandler = (e) => {
+        SetQuery(e.target.value);
+    }
 
     return (
         <>
@@ -176,7 +202,7 @@ function UpdateGroup ({ isOpen, setOpen, isDelete, setDelete }) {
 
                     <div className="flex justify-center w-full mt-2">
                         {!editName && <div className="flex justify-center items-center gap-4 w-full">
-                            <h2 className="text-lg">{liveGroup.name}</h2>
+                            <h2 className="text-lg">{queriedParticipants.name}</h2>
                             <i className="fa-solid fa-pencil text-[var(--heading)] text-sm hover:cursor-pointer" onClick={() => setEditName (true)}></i>
                         </div>}
                         {editName && <div className="flex items-center px-2 gap-2 w-[75%] border rounded-xl">
@@ -190,20 +216,20 @@ function UpdateGroup ({ isOpen, setOpen, isDelete, setDelete }) {
                                 placeholder="Group name"
                                 required
                             />
-                            {(groupName?.trim()?.length > 0 && groupName?.trim() !== liveGroup?.name) && <i className="fa-solid fa-check hover:text-green-400 hover:cursor-pointer" onClick={submitDetails}></i>}
+                            {(groupName?.trim()?.length > 0 && groupName?.trim() !== queriedParticipants?.name) && <i className="fa-solid fa-check hover:text-green-400 hover:cursor-pointer" onClick={submitDetails}></i>}
                         </div>}
                     </div>
 
                     <h2 className="flex justify-center w-full text-sm font-extralight">
-                        {liveGroup.members?.filter(member => member.isActive).length} members
+                        {queriedParticipants.members?.filter(member => member.isActive).length} members
                     </h2>
 
                     <h2 className="flex justify-center w-full text-sm font-extralight gap-2">
-                        Created by <span className="font-semibold">{liveGroup.creator}</span> on <span className="font-semibold">{date}</span>
+                        Created by <span className="font-semibold">{queriedParticipants.creator}</span> on <span className="font-semibold">{date}</span>
                     </h2>
 
                     <div className="w-full flex justify-between gap-4 px-4">
-                        {liveGroup.members.find (member => member.userId === authState.data?._id).isActive && <button onClick={onLeaveGroup} className="w-full text-sm border border-[var(--input)] hover:bg-[var(--card)] text-[var(--text)] rounded-md py-2 font-bold">Leave group</button>}
+                        {liveGroup.members.find (member => member.userId._id === authState.data?._id)?.isActive && <button onClick={onLeaveGroup} className="w-full text-sm border border-[var(--input)] hover:bg-[var(--card)] text-[var(--text)] rounded-md py-2 font-bold">Leave group</button>}
                         <button onClick={() => {
                             setDelete (true); setOpen (false);}} className="w-full text-sm border border-red-400 hover:bg-[var(--card)] text-red-400 rounded-md py-2 font-bold">Delete group</button>
                     </div>
@@ -215,27 +241,27 @@ function UpdateGroup ({ isOpen, setOpen, isDelete, setDelete }) {
                                 type="text"
                                 placeholder="Search participants ..."
                                 className={`w-full p-2 bg-transparent text-[var(--text)] focus:outline-none text-sm`}
-                                // onChange={onChangeHandler}
+                                onChange={onChangeHandler}
                                 name = "query"
-                                // value = {query}
+                                value = {query}
                             />
                             <button className={`text-[var(--text)] text-2xl h-full`}>
                                 <X />
                             </button>
                         </div>
                         <div className="flex flex-col max-h-[20rem] overflow-y-auto">
-                            {liveGroup.admins?.includes(authState.data._id) && <div 
+                            {queriedParticipants.admins?.includes(authState.data._id) && <div 
                                 className="flex items-center bg-transparent hover:shadow-md hover:cursor-pointer rounded-md hover:bg-[var(--topic)] p-2 px-4"
                                 onClick={() => setAddParticipants (true)}
                             >
                                 <i className="fa-solid fa-user-plus flex items-center justify-center rounded-full object-cover"></i>
                                 <div className="ml-2 w-full">Add particpiants</div>
                             </div>}
-                            {liveGroup.members?.some(m => m.isActive) ? (
-                            liveGroup.members
+                            {queriedParticipants.members?.some(m => m.isActive) ? (
+                            queriedParticipants.members
                                 .filter(member => member.isActive)
                                 .map((user, index) => (
-                                <User chat={user.userId} type="group-info" isAdmin={liveGroup.admins.includes(user.userId)} amAdmin={liveGroup.admins.includes(authState.data?._id)} key={index} />
+                                <User chat={user.userId} type="group-info" isAdmin={queriedParticipants.admins.includes(user.userId._id)} amAdmin={queriedParticipants.admins.includes(authState.data?._id)} key={index} />
                                 ))
                             ) : (
                             <h2>No participants</h2>

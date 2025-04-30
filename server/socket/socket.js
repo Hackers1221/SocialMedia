@@ -128,9 +128,11 @@ const setupSocket = (server) => {
         console.error("Cloudinary upload error:", err);
       }
     }
+
   
     // Get the recipient user IDs
-    const recipient = message.recipient.map(user => user.userId);
+    const recipient = message.recipient.map(user => user.userId._id);
+
   
     // 3. Create the actual message
     const createdMessage = await Message.create({
@@ -147,8 +149,8 @@ const setupSocket = (server) => {
       .populate("sender", "id name image");
   
     // Emit the message to the group members
-    for (const member of message.recipient) {
-      const socketId = userSocketMap.get(member.userId.toString());
+    for (const member of recipient) {
+      const socketId = userSocketMap.get(member.toString());
       if (socketId) {
         io.to(socketId).emit("receiveGroupMessage", messageData);
       }
@@ -328,7 +330,7 @@ const setupSocket = (server) => {
           );
         }
 
-        const groupDetails = await Group.findById (groupData._id);
+        const groupDetails = await Group.findById (groupData._id).populate("members.userId" , "image name username");
 
         const adminDetails = await User.findById(data.admin);
 
@@ -359,7 +361,7 @@ const setupSocket = (server) => {
           });
           msg = updatedImageMessage;
           groupDetails.members.forEach(member => {
-            const socketId = userSocketMap.get(member.userId.toString());
+            const socketId = userSocketMap.get(member.userId._id.toString());
             if (socketId) {
               io.to(socketId).emit('receiveGroupMessage', updatedImageMessage);
             }
@@ -382,7 +384,7 @@ const setupSocket = (server) => {
 
           message.forEach ((msg) => {
             groupDetails.members.forEach(member => {
-              const socketId = userSocketMap.get(member.userId.toString());
+              const socketId = userSocketMap.get(member.userId._id.toString());
               if (socketId) {
                 io.to(socketId).emit('receiveGroupMessage', msg);
               }
@@ -400,7 +402,7 @@ const setupSocket = (server) => {
             msg = updatedMemberMessage;
 
             groupDetails.members.forEach(member => {
-              const socketId = userSocketMap.get(member.userId.toString());
+              const socketId = userSocketMap.get(member.userId._id.toString());
               if (socketId) {
                 io.to(socketId).emit('receiveGroupMessage', msg);
               }
@@ -420,7 +422,7 @@ const setupSocket = (server) => {
         }
 
         groupDetails.members.forEach(member => {
-          const socketId = userSocketMap.get(member.userId.toString());
+          const socketId = userSocketMap.get(member.userId._id.toString());
           console.log (member.userId);
           if (socketId) {
             io.to(socketId).emit('updatedGroup', {updated: uploadData, group: groupDetails});

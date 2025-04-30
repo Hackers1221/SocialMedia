@@ -26,6 +26,7 @@ export const getGroupById = createAsyncThunk ('getGroupById', async (id) => {
                 'x-access-token': localStorage.getItem('token')
             }
         })
+        console.log(response);
         return response;
     } catch (error) {
         console.log (error);
