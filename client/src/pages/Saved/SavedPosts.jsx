@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { BsCameraReels } from "react-icons/bs";
 import usePosts from "../../hooks/usePosts";
 import ExploreCard from "../../components/ExploreCard";
+import usePulse from "../../hooks/usePulse";
 
 const SavedPost = () => {
   const [postState] = usePosts ();
