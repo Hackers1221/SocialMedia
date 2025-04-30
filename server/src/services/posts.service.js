@@ -3,7 +3,7 @@ const usermodel  = require('../models/user.model');
 const commentsModel = require('../models/comment.model');
 const Notification = require("../models/notification.model")
 const { deleteImages, deleteVideos } = require('../../cloudConfig');
-const { userSocketMap, getIO } = require('../../socket/socketInstance');
+const { userSocketMap, getIO } = require('../../socket/socketInstance'); 
 
 const CreatePost = async (data) => {
     const response = {};
@@ -83,7 +83,8 @@ const likePost = async(id, userId) => {
             post.likes = post.likes.filter((ids) => ids!=userId);
         }else{
             post.likes.push(userId);
-
+            
+            // Notification 
             if(userId !== post.userId) {
                 const notification = await Notification.create({
                     sender: userId,
