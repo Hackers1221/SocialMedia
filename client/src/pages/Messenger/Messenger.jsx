@@ -91,7 +91,7 @@ const Messenger = () => {
             const reader = new FileReader();
             reader.onload = () => resolve({ name: file.name, type: file.type, data: reader.result });
             reader.onerror = reject;
-            reader.readAsDataURL(file); // base64 encode
+            reader.readAsDataURL(file); 
           })
       );
   
