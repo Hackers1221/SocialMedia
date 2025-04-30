@@ -138,7 +138,7 @@ const VerseSlice = createSlice({
         builder
             .addCase(getAllVerse.fulfilled, (state, action) => {
                 if (!action.payload?.data) return;
-                state.downloadedVerse = action.payload?.data?.verse?.Verses.reverse();
+                state.downloadedVerse = action.payload?.data?.verse?.Verses?.reverse();
                 state.verseList = state.downloadedVerse;
             })
             .addCase(createVerse.fulfilled, (state, action) => {
@@ -151,26 +151,11 @@ const VerseSlice = createSlice({
             })
             .addCase(getVerseByUserId.fulfilled , (state,action) => {
                 if(!action.payload?.data)return; 
-                state.verseList = action.payload?.data?.verse.reverse();
+                state.verseList = action.payload?.data?.verse?.reverse();
             })
             .addCase (getVerseById.fulfilled, (state, action) => {
                 if (!action.payload?.data) return;
                 console.log (action.payload?.data);
-                // const idx = state.downloadedVerse.findIndex(
-                //     (verse) => verse._id === action.payload.data.postDetails._id
-                // );
-            
-                // if (idx !== -1) {
-                //     state.downloadedVerse[idx] = action.payload.data.postDetails;
-                // }
-
-                // const index = state.verseList.findIndex(
-                //     (post) => post._id === action.payload.data.postDetails._id
-                // );
-            
-                // if (index !== -1) {
-                //     state.verseList[index] = action.payload.data.postDetails;
-                // }
             })
     }
 });

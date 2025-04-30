@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import AddUser from "./AddUser";
 
-function SelectedUser ({ isOpen, setOpen, followers, pulseURL }) {
+function SelectedUser ({ isOpen, setOpen, followers, post }) {
     const socket = useSelector ((state) => state.socket.socket);
 
     const dialogRef = useRef (null);
@@ -11,12 +11,11 @@ function SelectedUser ({ isOpen, setOpen, followers, pulseURL }) {
     const [selectedUsers, setSelectedUsers] = useState ([]);
 
     function sendPulse () {
-        console.log (selectedUsers);
         selectedUsers.map ((user) => {
             const payload = {
                 sender: user.addedBy,
                 recipient: user.id,
-                content: pulseURL,
+                content: post,
                 isPost: true,
                 files: []
             };
@@ -25,6 +24,8 @@ function SelectedUser ({ isOpen, setOpen, followers, pulseURL }) {
                 socket.emit("sendMessage", payload);
             }
         })
+
+        setOpen (!isOpen);
     }
 
     useEffect (() => {

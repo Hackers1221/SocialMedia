@@ -29,6 +29,8 @@ function Message({ message }) {
     }
 
     function getContent () {
+        if (!message.content) return;
+
         const msg = message.content.split (" ");
         if (msg[1] === "added") {
             const firstPerson = (authState.data?.username !== msg[0] ? msg[0] : "You");
@@ -131,7 +133,7 @@ function Message({ message }) {
                                             <img
                                                 src={videoThumbnails[file.url]}
                                                 alt={file.name}
-                                                className="max-w-full max-h-48 rounded-md object-cover hover:cursor-pointer"
+                                                className="w-full max-h-96 rounded-md object-cover hover:cursor-pointer"
                                             />
                                         </a>
                                     );

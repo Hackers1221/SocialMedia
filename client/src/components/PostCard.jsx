@@ -9,8 +9,9 @@ import DisplayPost from "./DisplayPost";
 import { CreateComment, getCommentByPostId } from "../redux/Slices/comment.slice";
 import usePosts from "../hooks/usePosts";
 import LinkDetector from '../components/LinkDetector'
+import SelectedUser from "./SelectedUser";
 
-function PostCard({ post, index, list }) {
+function PostCard({ post, index, list, followers }) {
     const authState = useSelector((state) => state.auth.data);
     const currUser = useSelector((state) => state.auth);
     const [postState] = usePosts();
@@ -32,10 +33,10 @@ function PostCard({ post, index, list }) {
     const [deleting, setDeleting] = useState(false);
 
     const [date, setDate] = useState("");
-    const [check, setCheck] = useState(false);
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [countComment, setCountComment] = useState(comments?.length);
     const [title, setTitle] = useState ();
+    const [isShare, setShare] = useState (false);
     const [creator, setCreator] = useState({
         image: "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png",
         name: "",
@@ -274,6 +275,8 @@ function PostCard({ post, index, list }) {
     return (
         <div className={`mb-4 bg-[var(--card)] relative shadow-xl rounded-xl`} >
             <DisplayPost open={isDialogOpen} setOpen={setDialogOpen} index={index} list={list} />
+            <SelectedUser isOpen={isShare} setOpen={setShare} followers={followers} post={post}/>
+
             <div className="flex justify-between bg-[var(--topic)] rounded-t-xl p-[0.3rem] px-4">
                 <div className="flex items-center gap-2">
                     <div className="flex items-center">
@@ -315,12 +318,6 @@ function PostCard({ post, index, list }) {
                     </ul>
                 </div>
             </div>
-            {/* {title?.length > 0 && <p className={`text-sm mt-4 text-[var(--text)] px-4`}>
-                {title} {caption?.toString().length > 200 && (
-                    <span onClick={toggleReadability} className={`text-[var(--buttons)] font-bold hover:cursor-pointer`}>
-                        {check ? ' Show Less' : '... Read More'}
-                    </span>)}
-            </p>} */}
             {title?.length > 0 && <LinkDetector title={title} type={'post'}></LinkDetector>}
             <p className="text-[var(--buttons)] px-4 mt-4 text-sm">{hashtags}</p>
 
@@ -396,6 +393,10 @@ function PostCard({ post, index, list }) {
                     }}>
                         <i className={`text-[var(--text)] fa-regular fa-comment`}></i>
                         <h2 className="text-sm font-semibold">Comment</h2>
+                    </button>
+                    <button className={`flex gap-2 items-center`} onClick={() => setShare (true)}>
+                        <i className={`text-[var(--text)] fa-regular fa-paper-plane`}></i>
+                        <h2 className="text-sm font-semibold">Share</h2>
                     </button>
                 </div>
                 <div className="flex">

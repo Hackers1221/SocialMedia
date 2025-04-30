@@ -2,17 +2,18 @@ import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserById } from "../redux/Slices/auth.slice";
 import Avatar from "./Avatar";
-import { FaPaperPlane, FaPlay, FaPause } from "react-icons/fa";
+import { FaPaperPlane } from "react-icons/fa";
 import Comment from "./Comment";
 import Loader from "./Loader";
 import { CreateComment, getCommentByPostId } from "../redux/Slices/comment.slice";
-import { getAllPosts, getPostById, getSavedPost, likePost, updateSavedPost } from "../redux/Slices/post.slice";
+import { getPostById, getSavedPost, likePost, updateSavedPost } from "../redux/Slices/post.slice";
 import usePosts from "../hooks/usePosts";
 import { Link } from "react-router-dom";
 import LinkDetector from '../components/LinkDetector'
+import SelectedUser from "./SelectedUser";
 
 
-const DisplayPost = ({ open, setOpen, index, list }) => {
+const DisplayPost = ({ open, setOpen, index, list, followers }) => {
   if (!index || !open) return null;
 
   const authState = useSelector((state) => state.auth);
@@ -45,6 +46,7 @@ const DisplayPost = ({ open, setOpen, index, list }) => {
   const [caption, setCaption] = useState (post?.caption || "");
   const [interest, setInterest] = useState ("");
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isShare, setShare] = useState (false);
 
   const totalItems = (post.image?.length || 0) + (post.video?.length || 0);
 
@@ -291,6 +293,8 @@ const DisplayPost = ({ open, setOpen, index, list }) => {
     <>
     {open && <div className="fixed left-0 top-0 inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-[20]"></div>}
     <dialog ref={dialogRef} className={`w-[60%] h-[90vh] bg-[var(--card)] rounded-lg shadow-xl p-2`}>
+        <SelectedUser isOpen={isShare} setOpen={setShare} followers={followers} post={post}/>
+
       <div className="fixed right-8 top-1/2 bottom-1/2 z-[50] hover:cursor-pointer" onClick={postForward} title="Next post">
         <i className="fa-solid fa-circle-chevron-right text-[var(--dropdown)] text-[2rem]"></i>
       </div>
@@ -401,6 +405,10 @@ const DisplayPost = ({ open, setOpen, index, list }) => {
                 <i className={`text-[var(--text)] fa-regular fa-comment`}></i>
                 <h2 className="text-sm font-semibold">Comment</h2>
               </button>
+              <button className={`flex gap-2 items-center`} onClick={() => setShare (true)}>
+                <i className={`text-[var(--text)] fa-regular fa-paper-plane`}></i>
+                <h2 className="text-sm font-semibold">Share</h2>
+            </button>
             </div>
             <div className="flex">
             <button className={`flex gap-2 items-center text-[var(--text)]`} onClick={toggleBookmark}>

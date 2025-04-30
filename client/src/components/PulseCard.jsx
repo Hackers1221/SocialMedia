@@ -7,6 +7,7 @@ import { CreateComment, getCommentByPostId } from "../redux/Slices/comment.slice
 import Comment from "./Comment";
 import { motion, AnimatePresence } from "framer-motion";
 import SelectedUser from "./SelectedUser";
+import { LuSend } from "react-icons/lu";
 
 export default function PulseCard({ pulse, followers }) {
     if (!pulse) return null;
@@ -124,7 +125,7 @@ export default function PulseCard({ pulse, followers }) {
         <div
             className="reel-container w-full h-full sm:w-96 sm:h-[78vh] overflow-hidden rounded-xl shadow-lg flex justify-center relative bg-black"
         >
-                <SelectedUser isOpen={isOpen} setOpen={setOpen} followers={followers}/>
+                <SelectedUser isOpen={isOpen} setOpen={setOpen} followers={followers} post={pulse}/>
 
                 {!showComment && <div onClick={togglePlay}>
                 <video ref={videoRef} className="w-max bg-black" src={pulse.video} loop></video>
@@ -167,8 +168,9 @@ export default function PulseCard({ pulse, followers }) {
 
                     <div className="flex flex-col items-center justify-center text-white px-2">
                         <i 
-                            className="fa-solid fa-paper-plane text-white text-xl p-3"
-                            onClick={() => setOpen(true)}></i>
+                            className="fa-regular fa-paper-plane text-white text-xl p-3 hover:cursor-pointer"
+                            onClick={() => setOpen (true)}
+                            ></i>
                     </div>
                 </div>
 
