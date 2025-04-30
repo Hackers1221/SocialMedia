@@ -40,19 +40,19 @@ const Profile = () => {
   }
 
   useEffect(() => {
-    setIsLoading(true); 
+    setIsLoading(true);
     dispatch(getUserByUsername(username))
       .then((user) => {
         if (!user.payload) {
           toast.error("Something went wrong");
         } else {
           const userData = user.payload?.data?.userDetails;
-          getPosts (userData?._id);
+          getPosts(userData?._id);
           setCreator(userData);
           setCountFollowers(userData?.follower?.length || 0);
           setCountFollowing(userData?.following?.length || 0);
           setCheck(userData._id === authState.data._id);
-          setImage (userData?.image?.url);
+          setImage(userData?.image?.url);
 
           const dateObj = new Date(userData?.createdAt);
           const date = dateObj.getDate();
@@ -70,13 +70,11 @@ const Profile = () => {
   }, [username]);
 
   useEffect(() => {
-    console.log("hello");
     if (creator && authState?.data?.following) {
       setFollow(authState.data.following.includes(creator._id));
       setPending(creator?.requests?.includes(authState?.data?._id));
     }
-  }, [authState.data.following]);
-
+  }, [authState.data.following, creator]);
 
   const toggleFollow = async () => {
     if (!creator) return;
@@ -84,8 +82,10 @@ const Profile = () => {
       id1: authState?.data?._id,
       id: creator._id,
     }));
+
     if (response.payload) {
-      setCountFollowers((prev) => (follow ? prev - 1 : prev + 1));
+      setFollow(!follow);
+      setCountFollowers(follow ? countFollowers - 1 : countFollowers + 1);
     }
   };
 
@@ -95,8 +95,9 @@ const Profile = () => {
       id1: authState?.data?._id,
       id: creator._id,
     }));
+
     if (response.payload) {
-      setPending((prev) => !prev);
+      setPending(!pending);
     }
   };
 

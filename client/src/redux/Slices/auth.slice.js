@@ -251,10 +251,14 @@ const authSlice = createSlice({
             localStorage.setItem("notifications", JSON.stringify(state.notifications));
         },
         addNotification: (state, action) => {
-            const exists = state.notifications.some(
-                (notif) => notif.id === action.payload.id
+            const exists = state.notifications?.some(
+                (notif) => notif._id === action.payload._id
             );
             if (!exists) {
+                toast("New notification", {
+                    icon: "🔔",
+                    duration: 1000,
+                });
                 state.isRead = false;
                 state.notifications.unshift(action.payload);
                 localStorage.setItem("notifications", JSON.stringify(state.notifications));
