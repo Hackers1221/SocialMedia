@@ -41,7 +41,11 @@ const userSchema = new Schema({
         minLength: 5,
         required: true,
     },
-    saved : {
+    savedPost : {
+        type : [String],
+        default : []
+    },
+    savedPulse : {
         type : [String],
         default : []
     },

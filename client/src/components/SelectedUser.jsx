@@ -2,11 +2,13 @@ import { X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import AddUser from "./AddUser";
+import { useNavigate } from 'react-router-dom';
 
 function SelectedUser ({ isOpen, setOpen, followers, post }) {
     const socket = useSelector ((state) => state.socket.socket);
 
     const dialogRef = useRef (null);
+    const navigate = useNavigate ();
 
     const [selectedUsers, setSelectedUsers] = useState ([]);
 
@@ -26,6 +28,8 @@ function SelectedUser ({ isOpen, setOpen, followers, post }) {
         })
 
         setOpen (!isOpen);
+
+        navigate ('/messenger');
     }
 
     useEffect (() => {

@@ -57,7 +57,7 @@ function Message({ message }) {
                 video.muted = true;
     
                 video.addEventListener("loadedmetadata", () => {
-                    video.currentTime = Math.min(5, video.duration / 2);
+                    video.currentTime = Math.min(8, video.duration / 2);
                 });
     
                 video.addEventListener("seeked", () => {

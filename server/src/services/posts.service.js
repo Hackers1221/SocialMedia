@@ -160,7 +160,7 @@ const getAllSavedPost = async(userId) => {
             response.error = "User not found";
             return response;
         }
-        const savedPostDetails = await postsmodel.find({ _id: { $in: userData.saved } });
+        const savedPostDetails = await postsmodel.find({ _id: { $in: userData.savedPost } });
         response.post = savedPostDetails;
         return response;
     } catch (error) {
@@ -178,17 +178,17 @@ const savePost = async(userId, id) => {
             return response;
         }
 
-        if(userData.saved.includes(id)){
-            userData.saved = userData.saved.filter((ids) => ids!==id);
+        if(userData.savedPost.includes(id)){
+            userData.savedPost = userData.savedPost.filter((ids) => ids!==id);
         }else{
-            userData.saved.push(id);
+            userData.savedPost.push(id);
         }
         const updateuser = await usermodel.findByIdAndUpdate(
             userId,
-            {saved : userData.saved},
+            {savedPost : userData.savedPost},
             {new  :true}
         )
-        const savedPostDetails = await postsmodel.find({ _id: { $in: updateuser.saved } });
+        const savedPostDetails = await postsmodel.find({ _id: { $in: updateuser.savedPost } });
         response.post = savedPostDetails;
         return response;
     } catch (error) {

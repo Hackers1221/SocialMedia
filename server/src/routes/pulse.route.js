@@ -15,4 +15,5 @@ pulseRoutes.delete('/:id',validators.isUserAuthenticated, pulseController.Delete
 pulseRoutes.patch('/save/:id',validators.isUserAuthenticated, pulseController.savePulse);
 pulseRoutes.get('/:id',validators.isUserAuthenticated, pulseController.getPulseById);
 pulseRoutes.get('/search/:q',validators.isUserAuthenticated, pulseController.searchPulse);
+
 module.exports = pulseRoutes;

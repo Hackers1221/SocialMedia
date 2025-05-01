@@ -1,21 +1,23 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllPulse } from "../redux/Slices/pulse.slice";
+import { getAllPulse, getSavedPulse } from "../redux/Slices/pulse.slice";
 
 function usePulse () {
+    const authState = useSelector ((state) => state.auth);
     const pulseState = useSelector ((state) => state.pulse);
 
     const dispatch = useDispatch ();
 
     function loadPulse () {
-        if(!pulseState?.downloadedPulse?.length) dispatch (getAllPulse ()); 
-
-        if (location.pathname === '/saved' || location.pathname === '/explore') dispatch(getSavedPost (authState?.data?._id));
+        if(!pulseState?.downloadedPulse?.length) {
+            dispatch (getAllPulse ()); 
+            dispatch(getSavedPulse (authState?.data?._id));
+        }
     }
 
     useEffect (() => {
         loadPulse ();
-    }, [pulseState?.downloadedPulse]);
+    }, []);
 
     return [pulseState];
 }

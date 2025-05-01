@@ -6,14 +6,13 @@ import Avatar from "./Avatar";
 import { useEffect, useRef, useState } from "react";
 import { DeletePost, getAllPosts, getPostById, likePost, updateSavedPost } from "../redux/Slices/post.slice";
 import DisplayPost from "./DisplayPost";
-import { CreateComment, getCommentByPostId } from "../redux/Slices/comment.slice";
+import { getCommentByPostId } from "../redux/Slices/comment.slice";
 import usePosts from "../hooks/usePosts";
 import LinkDetector from '../components/LinkDetector'
 import SelectedUser from "./SelectedUser";
 
 function PostCard({ post, index, list, followers }) {
     const authState = useSelector((state) => state.auth.data);
-    const currUser = useSelector((state) => state.auth);
     const [postState] = usePosts();
     const videoRefs = useRef([]);
     const timeoutRef = useRef({});

@@ -1,18 +1,20 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { likePulse } from "../redux/Slices/pulse.slice";
+import { likePulse, updateSavedPulse } from "../redux/Slices/pulse.slice";
 import Avatar from '../components/Avatar'
 import { FaPaperPlane } from "react-icons/fa";
 import { CreateComment, getCommentByPostId } from "../redux/Slices/comment.slice";
 import Comment from "./Comment";
 import { motion, AnimatePresence } from "framer-motion";
 import SelectedUser from "./SelectedUser";
-import { LuSend } from "react-icons/lu";
+import usePulse from "../hooks/usePulse";
+import toast from "react-hot-toast";
 
-export default function PulseCard({ pulse, followers }) {
+export default function PulseCard({ pulse, index, list, followers }) {
     if (!pulse) return null;
 
     const authState = useSelector((state) => state.auth);
+    const [pulseState] = usePulse ();
 
     const dispatch = useDispatch();
 
@@ -24,6 +26,7 @@ export default function PulseCard({ pulse, followers }) {
     const [commentDescription, setCommentDescription] = useState ("");
     const [comments, setComments] = useState ([]);
     const [isOpen, setOpen] = useState (false);
+    const [saved, setSaved] = useState ();
 
     const videoRef = useRef(null);
     const timeoutRef = useRef(null);
@@ -81,6 +84,25 @@ export default function PulseCard({ pulse, followers }) {
         const res = await dispatch(getCommentByPostId (pulse?._id));
         setComments (res.payload.data.commentDetails);
     }
+
+    const toggleBookmark = async () => {
+        const response = await dispatch(updateSavedPulse ({
+            _id1: authState.data._id,
+            id: pulse._id
+        }));
+
+        if (!response?.payload) {
+            toast.error('Pulse not added to saved pulse');
+            return;
+        }
+
+        toast.success('Pulse added to saved pulse');
+        setSaved((prev) => !prev);
+    }
+
+    useEffect(() => {
+        setSaved (pulseState?.savedList?.find((item) => pulse._id === item._id));
+    }, [pulseState?.savedList]);
 
     useEffect (() => {
         getComments ();
@@ -162,8 +184,8 @@ export default function PulseCard({ pulse, followers }) {
                         <span className="text-base font-medium">{comments?.filter (comment => comment.postId === pulse._id)?.length}</span>
                     </button>
 
-                    <div className="flex flex-col items-center justify-center gap-1 text-white px-2">
-                        <i className="fa-solid fa-bookmark text-white text-xl p-3"></i>
+                    <div className="flex flex-col items-center justify-center gap-1 text-white px-2" onClick={toggleBookmark}>
+                        {saved ? <i className="fa-solid fa-bookmark text-xl p-3"></i> : <i className="fa-regular fa-bookmark text-xl p-3"></i>}
                     </div>
 
                     <div className="flex flex-col items-center justify-center text-white px-2">
@@ -189,6 +211,7 @@ export default function PulseCard({ pulse, followers }) {
                 </div>
             </div>}
 
+            {/* Comment View */}
             <AnimatePresence>
             {showComment && (
                 <motion.div
