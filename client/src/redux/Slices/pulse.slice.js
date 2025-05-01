@@ -118,8 +118,11 @@ const PulseSlice = createSlice({
             })
             .addCase(getSavedPulse.fulfilled,(state,action) => {
                 if(!action.payload?.data) return;
-                console.log (action.payload.data); 
                 state.savedList = action.payload?.data?.pulseDetails.reverse();
+            })
+            .addCase(getPulseByUserId.fulfilled, (state, action) => {
+                if (!action.payload?.data) return;
+                state.pulseList = action.payload?.data?.pulseDetails?.reverse();
             })
     }
 });

@@ -19,7 +19,7 @@ export const sendOtp = createAsyncThunk('/auth/sendotp',async(data) => {
         localStorage.setItem("email", data.email);
         return  response;
     } catch (error) {
-        toast.error(error.response.data.error);
+        toast.error(error.response.data.error || "An error occurred!");
     }
 });
 

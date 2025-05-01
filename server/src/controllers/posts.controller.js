@@ -24,12 +24,12 @@ const createPost = async(req, res) => {
     const response = await postsService.CreatePost(newPost);
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
-            msg : "Something Went wrong",
+            message : "Could not create the post",
             error : response.error
         })
     }
     return res.status(StatusCodes.CREATED).send({
-        msg : "Successfully created the post",
+        message : "Successfully created the post",
         postsdata: response
     })
 }
@@ -38,12 +38,12 @@ const getallPosts = async(req,res) => {
     const response = await postsService.getAllPosts();
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
-            msg : "Something Went wrong",
+            message : "Something Went wrong",
             error : response.error
         })
     }
     return res.status(StatusCodes.OK).send({
-        msg : "All posts fetched",
+        message : "All posts fetched",
         postsdata: response
     })
 }
@@ -53,12 +53,12 @@ const updatePost = async(req,res) => {
 
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
-            msg : "Unable to update the Post",
+            message : "Unable to update the Post",
             error : response.error
         })
     }
     return res.status(StatusCodes.OK).send({
-        msg : "Successfully updated the post",
+        message : "Successfully updated the post",
         userDetails : response.post
     })
 }
@@ -67,12 +67,12 @@ const likePost = async(req,res) => {
     const response = await postsService.likePost(req.params.id, req.body.id)
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
-            msg : "Unable to update the Post",
+            message : "Unable to update the Post",
             error : response.error
         })
     }
     return res.status(StatusCodes.OK).send({
-        msg : "Successfully updated the post",
+        message : "Successfully updated the post",
         postDetails : response.post
     })
 }
@@ -81,12 +81,12 @@ const getPostByUserId = async(req,res) => {
     const response = await postsService.getPostByUserId(req.params.id);
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
-            msg : "Unable to get the Post",
+            message : "Unable to get the Post",
             error : response.error
         })
     }
     return res.status(StatusCodes.OK).send({
-        msg : "Successfully fetched the post",
+        message : "Successfully fetched the post",
         postDetails : response.post
     })
 }
@@ -95,12 +95,12 @@ const getPostById= async(req,res) => {
     const response = await postsService.getPostById(req.params.id);
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
-            msg : "Unable to get the Post",
+            message : "Unable to fetch the post",
             error : response.error
         })
     }
     return res.status(StatusCodes.OK).send({
-        msg : "Successfully fetched the post",
+        message : "Successfully fetched the post",
         postDetails : response.post
     })
 }
@@ -109,12 +109,12 @@ const savePost = async(req,res) => {
     const response = await postsService.savePost(req.params.id,req.body.id);
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
-            msg : "Unable to save the Post",
+            message : "Unable to save the post",
             error : response.error
         })
     }
     return res.status(StatusCodes.OK).send({
-        msg : "Successfully saved the post",
+        message : "Successfully saved the post",
         postDetails : response.post
     })
 }
@@ -123,12 +123,12 @@ const getAllSavedPost = async(req,res) => {
     const response = await postsService.getAllSavedPost(req.params.id);
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
-            msg : "Unable to load the save Post",
+            message : "Unable to load the saved posts",
             error : response.error
         })
     }
     return res.status(StatusCodes.OK).send({
-        msg : "Successfully loaded the saved post",
+        message : "Successfully loaded all saved posts",
         postDetails : response.post
     })
 }
@@ -137,12 +137,12 @@ const DeletePost = async(req,res) => {
     const response = await postsService.DeletePost(req.params.id,req.body.id);
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
-            msg : "Unable to delete the  Post",
+            message : "Unable to delete the post",
             error : response.error
         })
     }
     return res.status(StatusCodes.OK).send({
-        msg : "Successfully deleted the saved post",
+        message : "Successfully deleted the post",
         postDetails : response.post
     })
 }
@@ -151,12 +151,12 @@ const searchPost = async(req,res) => {
     const response = await postsService.searchPost(req.params.q);
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
-            msg : "Unable to fetch the search Posts",
+            message : "Unable to search for the posts",
             error : response.error
         })
     }
     return res.status(StatusCodes.OK).send({
-        msg : "Successfully fetched the search Posts",
+        message : "Successfully search for the posts",
         postDetails : response.post
     })
 }
