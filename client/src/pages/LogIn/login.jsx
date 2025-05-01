@@ -47,12 +47,12 @@ function LogIn () {
         const newErrors = {};
         let isValid = true;
 
-        // Email Validation
+        // Email/Username Validation (either valid email or non-empty username)
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!userDetails.email.trim()) {
-            newErrors.email = "Email is required.";
+            newErrors.email = "Email or Username is required.";
             isValid = false;
-        } else if (!emailRegex.test(userDetails.email)) {
+        } else if (!emailRegex.test(userDetails.email) && userDetails.email.includes('@')) {
             newErrors.email = "Please enter a valid email.";
             isValid = false;
         }
