@@ -3,13 +3,16 @@ import { BsCameraReels } from "react-icons/bs";
 import usePosts from "../../hooks/usePosts";
 import ExploreCard from "../../components/ExploreCard";
 import usePulse from "../../hooks/usePulse";
+import { useNavigate } from "react-router-dom";
+import { IoMdPulse } from "react-icons/io";
 
 const SavedPost = () => {
     const [postState] = usePosts ();
     const [pulseState] = usePulse ();
 
-    const [activeTab, setActiveTab] = useState("post");
+    const navigate = useNavigate ();
 
+    const [activeTab, setActiveTab] = useState("post");
     const [postThumbnails, setPostThumbnails] = useState([]);
     const [pulseThumbnails, setPulseThumbnails] = useState({});
 
@@ -74,6 +77,10 @@ const SavedPost = () => {
         video.load(); // Ensures metadata loads before seeking
     };
 
+    function handlePulseClick (index) {
+        navigate ('/pulse', {state : { start: index, source: 'savedList'}});
+    }
+
     useEffect (() => {
         postState.savedList?.forEach((post, index) => {
             if (post?.video[0]?.url) {
@@ -110,7 +117,7 @@ const SavedPost = () => {
           }`}
           onClick={() => setActiveTab("pulse")}
         >
-          <BsCameraReels />
+          <IoMdPulse />
           <span>Pulse</span>
         </button>
       </div>
@@ -133,7 +140,7 @@ const SavedPost = () => {
       {activeTab == "pulse" && (pulseState.savedList?.length > 0 ? <div className="w-full mt-4">
         <div className="columns-2 sm:columns-3 md:columns-4 gap-3 overflow-y-auto">
             {pulseState.savedList?.map((pulse, index) => (
-                <div key={index} className="h-[20rem] flex flex-col justify-center rounded-lg bg-red-400">
+                <div key={index} className="h-[20rem] flex flex-col justify-center rounded-lg hover:cursor-pointer" onClick={() => handlePulseClick (index)}>
                     <img
                         src={pulseThumbnails[index]}
                         className="rounded-lg shadow-md h-full w-full"

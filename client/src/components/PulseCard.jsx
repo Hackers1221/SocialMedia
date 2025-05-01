@@ -10,9 +10,7 @@ import SelectedUser from "./SelectedUser";
 import usePulse from "../hooks/usePulse";
 import toast from "react-hot-toast";
 
-export default function PulseCard({ pulse, index, list, followers }) {
-    if (!pulse) return null;
-
+export default function PulseCard({ pulse, followers }) {
     const authState = useSelector((state) => state.auth);
     const [pulseState] = usePulse ();
 
@@ -184,7 +182,7 @@ export default function PulseCard({ pulse, index, list, followers }) {
                         <span className="text-base font-medium">{comments?.filter (comment => comment.postId === pulse._id)?.length}</span>
                     </button>
 
-                    <div className="flex flex-col items-center justify-center gap-1 text-white px-2" onClick={toggleBookmark}>
+                    <div className="flex flex-col items-center justify-center gap-1 text-white px-2 hover:cursor-pointer" onClick={toggleBookmark}>
                         {saved ? <i className="fa-solid fa-bookmark text-xl p-3"></i> : <i className="fa-regular fa-bookmark text-xl p-3"></i>}
                     </div>
 

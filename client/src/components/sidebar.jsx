@@ -152,7 +152,7 @@ function Sidebar() {
                                 </div>
                             </li>
                             <li onClick={() => {setIsOpen(false); setMenuOpen(false); setSelected('Messages')}}>
-                                <Link to="/messenger" className={`relative border-l-4 hover:border-[var(--buttons)] flex flex-row items-center h-11 hover:text-[var(--buttons)] hover:shadow-md font-semibold border-l-4 pr-6 ${selected === 'Messages' ? `border-[var(--buttons)] text-[var(--buttons)] shadow-md` : `border-transparent text-[var(--text)]`}`}>
+                                <Link to="/message" className={`relative border-l-4 hover:border-[var(--buttons)] flex flex-row items-center h-11 hover:text-[var(--buttons)] hover:shadow-md font-semibold border-l-4 pr-6 ${selected === 'Messages' ? `border-[var(--buttons)] text-[var(--buttons)] shadow-md` : `border-transparent text-[var(--text)]`}`}>
                                     <IoChatboxEllipsesSharp className="ml-4" />
                                     <span className="ml-2 text-sm tracking-wide truncate">Messages</span>
                                 </Link>
@@ -184,7 +184,7 @@ function Sidebar() {
                             <li onClick={() => {setIsOpen(false); setMenuOpen(false); setSelected('Saved')}}>
                                 <Link to="/saved" className={`relative border-l-4 hover:border-[var(--buttons)] flex flex-row items-center h-11 hover:text-[var(--buttons)] hover:shadow-md font-semibold border-l-4 pr-6 ${selected === 'Saved' ? `border-[var(--buttons)] text-[var(--buttons)] shadow-md` : `border-transparent text-[var(--text)]`}`}>
                                     <FaBookmark className="ml-4" />
-                                    <span className="ml-2 text-sm tracking-wide truncate">Saved Posts</span>
+                                    <span className="ml-2 text-sm tracking-wide truncate">Saved</span>
                                 </Link>
                             </li>
                         </ul>

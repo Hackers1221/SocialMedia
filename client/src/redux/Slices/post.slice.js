@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import toast from "react-hot-toast";
 import axiosInstance from "../../config/axiosInstance";
+import { toast } from 'react-toastify';
 
 const initialState = {
     downloadedPosts: [],
@@ -30,8 +30,8 @@ export const createPost = createAsyncThunk('post/createPost', async (postData) =
         });
         return response;
     } catch (error) {
-        console.log (error.message);
-        toast.error(error.message || "Failed to create post");
+        console.log (error);
+        toast.error(error.response?.data?.message || "Failed to create post");
     }
 });
 

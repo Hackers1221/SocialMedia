@@ -31,7 +31,7 @@ function MainRoutes() {
         <Route path="saved" element={<SavedPost />} />
         <Route path="profile/:username" element={<Profile />} />
         <Route path="explore" element={<Explore />} />
-        <Route path="messenger" element={<Messenger />} />
+        <Route path="message" element={<Messenger />} />
         <Route path="notification" element={<Notification />} />
         <Route path="pulse" element={<Pulse />} />
         <Route path="settings" element={<Settings />} />

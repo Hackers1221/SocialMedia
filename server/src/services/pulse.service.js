@@ -105,7 +105,15 @@ const likePulse = async(id, userId) => {
 const getPulseByUserId = async(id) => {
     const response = {};
     try {
-        const pulsedata = await Pulse.find({userId : id });
+        const pulsedata = await Pulse.find({user : id })
+            .populate('user', 'image username') // Populate pulse's user with only image and username
+            .populate({
+                path: 'comments', // Populate pulse's comments
+                populate: {
+                    path: 'user',   // Inside each comment, populate user
+                    select: 'image username' // but only take image and username
+                }
+            });     ;
         if(!pulsedata){
             response.error = "Pulse not found";
             return response;
@@ -127,7 +135,15 @@ const getAllSavedPulse = async(userId) => {
             return response;
         }
 
-        const savedPulseDetails = await Pulse.find({ _id: { $in: userData.savedPulse } });
+        const savedPulseDetails = await Pulse.find({ _id: { $in: userData.savedPulse } })
+            .populate('user', 'image username') // Populate pulse's user with only image and username
+            .populate({
+                path: 'comments', // Populate pulse's comments
+                populate: {
+                    path: 'user',   // Inside each comment, populate user
+                    select: 'image username' // but only take image and username
+                }
+            });     
         response.pulse = savedPulseDetails;
         return response;
     } catch (error) {
