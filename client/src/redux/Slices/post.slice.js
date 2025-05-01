@@ -17,7 +17,7 @@ export const getAllPosts = createAsyncThunk('posts/getAllPosts', async () => {
         });
         return response;
     } catch (error) {
-        toast.error(error.message || "Failed to fetch posts");
+        toast.error(error.response?.data?.message || "Failed to fetch posts");
     }
 });
 
@@ -30,7 +30,6 @@ export const createPost = createAsyncThunk('post/createPost', async (postData) =
         });
         return response;
     } catch (error) {
-        console.log (error);
         toast.error(error.response?.data?.message || "Failed to create post");
     }
 });
@@ -46,7 +45,7 @@ export const updatePost = createAsyncThunk('post/updatePost',async(id,postdata) 
             return response;
         }
     } catch (error) {
-        toast.error(error.message || "Failed to update post");
+        toast.error(error.response?.data?.message || "Failed to update post");
     }
 })
 
@@ -64,7 +63,7 @@ export const likePost = createAsyncThunk('post/likePost', async(data) => {
             return response;
         }
     } catch (error) {
-        toast.error(error.message || "Failed to update post");
+        toast.error(error.response?.data?.message || "Failed to update post");
     }
 })
 
@@ -79,7 +78,7 @@ export const getPostByUserId = createAsyncThunk('post/getpost' ,async(id) => {
             return response;
         }
     } catch (error) {
-        toast.error(error.message || "Failed to get post");
+        toast.error(error.response?.data?.message || "Failed to get post");
     }
 })
 
@@ -94,7 +93,7 @@ export const getPostById = createAsyncThunk('post/getpostnyId' ,async(id) => {
             return response;
         }
     } catch (error) {
-        toast.error(error.message || "Failed to get post");
+        toast.error(error.response?.data?.message || "Failed to get post");
     }
 })
 
@@ -109,7 +108,7 @@ export const getSavedPost = createAsyncThunk('post/getSavedPost' , async(id) => 
             return response;
         }
     } catch (error) {
-        toast.error(error.message || "Failed to save post");
+        toast.error(error.response?.data?.message || "Failed to save post");
     }
 })
 
@@ -127,7 +126,7 @@ export const updateSavedPost = createAsyncThunk('post/updatesavedPost', async(da
             return response;
         }
     } catch (error) {
-        toast.error(error.message || "Failed to update post");
+        toast.error(error.response?.data?.message || "Failed to update post");
     }
 })
 

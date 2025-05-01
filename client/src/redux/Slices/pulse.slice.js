@@ -17,7 +17,7 @@ export const getAllPulse = createAsyncThunk('posts/getAllPulse', async () => {
         });
         return response;
     } catch (error) {
-        toast.error(error.message || "Failed to fetch pulses");
+        toast.error(error.response?.data?.message || "Failed to fetch pulses");
     }
 });
 
@@ -30,8 +30,8 @@ export const createPulse = createAsyncThunk('post/createPulse', async (pulseData
         });
         return response;
     } catch (error) {
-        console.log (error.message);
-        toast.error(error.message || "Failed to create pulse");
+        console.log (error.response?.data?.message);
+        toast.error(error.response?.data?.message || "Failed to create pulse");
     }
 });
 
@@ -49,7 +49,7 @@ export const likePulse = createAsyncThunk('pulse/likePulse', async(data) => {
             return response;
         }
     } catch (error) {
-        toast.error(error.message || "Failed to update post");
+        toast.error(error.response?.data?.message || "Failed to update post");
     }
 })
 
@@ -64,7 +64,7 @@ export const getPulseByUserId = createAsyncThunk('pulse/getPulse' ,async(id) => 
             return response;
         }
     } catch (error) {
-        toast.error(error.message || "Failed to get post");
+        toast.error(error.response?.data?.message || "Failed to get post");
     }
 })
 
@@ -79,7 +79,7 @@ export const getSavedPulse = createAsyncThunk('pulse/getSavedPulse' , async(id) 
             return response;
         }
     } catch (error) {
-        toast.error(error.message || "Failed to save post");
+        toast.error(error.response?.data?.message);
     }
 })
 
@@ -97,7 +97,7 @@ export const updateSavedPulse = createAsyncThunk('pulse/updateSavedPulse', async
             return response;
         }
     } catch (error) {
-        toast.error(error.message || "Failed to update post");
+        toast.error(error.response?.data?.message || "Failed to update post");
     }
 })
 
