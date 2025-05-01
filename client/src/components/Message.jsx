@@ -14,6 +14,8 @@ function Message({ message }) {
 
     const [content, setContent] = useState ("");
 
+    
+
 
     function getTime() {
         const date = new Date(message?.createdAt);

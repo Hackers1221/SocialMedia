@@ -444,7 +444,7 @@ const Messenger = () => {
               </div>
               <div className="absolute bottom-0 pb-4 flex flex-row items-center h-16 bg-[var(--card)] w-full px-4">
                 <div className="mt-auto flex flex-col items-center gap-3 p-2 relative w-full">
-                  {groupState.liveGroup?.members?.find((member) => member.userId === authState.data._id).isActive ? <div className="flex items-center w-full p-2 px-4 rounded-full border border-[var(--input)] relative">
+                  {groupState.liveGroup?.members?.find((member) => member.userId._id === authState.data._id)?.isActive ? <div className="flex items-center w-full p-2 px-4 rounded-full border border-[var(--input)] relative">
                     {/* File Upload Button */}
                     <label htmlFor="file-upload" className="cursor-pointer text-[var(--text)]">
                       <i className="fa-solid fa-paperclip text-sm"></i>

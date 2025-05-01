@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { verifyOtp} from "../../redux/Slices/auth.slice";
+import { sendOtp, verifyOtp} from "../../redux/Slices/auth.slice";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
@@ -90,13 +90,21 @@ function VerifyOtp() {
   };
 
   // Resend OTP function
-  const resendOtp = () => {
-    toast.success("New OTP sent to your email!");
-    setOtp(["", "", "", "", "", ""]);
-    setTimer(60); // Reset timer
-    setCanResend(false);
-    localStorage.setItem("otpTimer", 60);
-    localStorage.setItem("otpStartTime", Date.now());
+  const resendOtp = async () => {
+    try {
+      setLoading(true); // Start loader
+      const response = await dispatch(sendOtp({ email: localStorage.getItem("email") }));
+      toast.success("New OTP sent to your email!");
+      setOtp(["", "", "", "", "", ""]);
+      setTimer(60); // Reset timer
+      setCanResend(false);
+      localStorage.setItem("otpTimer", 60);
+      localStorage.setItem("otpStartTime", Date.now());
+    } catch (error) {
+      toast.error("Failed to resend OTP.");
+    } finally {
+      setLoading(false); // Stop loader
+    }
   };
 
   return (

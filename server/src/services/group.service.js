@@ -33,14 +33,13 @@ const getGroupByUserId = async(userId) => {
 const getGroupById = async(id,userId) => {
     const response = {};
     try {
-        let groupData = await groupModel.findById(id);
+        let groupData = await groupModel.findById(id).populate("members.userId","username name image");
         const messages = await MessageModel.find ({ groupId: id}).populate("sender", "id username image"); 
 
         response.groupDetails = {
             ...groupData.toObject(),
             messages
         };
-
         return response;
     } catch (error) {
         response.error = error.message;
