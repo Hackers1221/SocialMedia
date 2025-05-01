@@ -377,7 +377,7 @@ const DisplayPost = ({ open, setOpen, index, list, followers }) => {
             {commentState.comments.length > 0 ? (
               commentState.comments.map((comment, idx) => (
                 <div key={idx}>
-                  <Comment avatar={comment.user.image?.url} username={comment.user.username} text={comment.description} time={"10 h"} />
+                  <Comment commentId = {comment._id} avatar={comment.user.image?.url} username={comment.user.username} text={comment.description} time={"10 h"} />
                 </div>
               ))
             ) : (
@@ -385,15 +385,11 @@ const DisplayPost = ({ open, setOpen, index, list, followers }) => {
             )}
           </div>
 
-          {(countLike - liked > 0 || countComment > 0) && <div className={`mt-2 flex gap-2 w-full px-2 text-xs text-[var(--text)]`}>
-                {countLike - liked > 0 && <h2>
-                    Liked by {countLike - liked} other{countLike - liked > 1 ? 's' : ''}
-                </h2>}
-                {countLike - liked > 0 &&countComment > 0 && <h2>•</h2>}
-                {countComment > 0 && <h2>
-                    {countComment} Comment{countComment > 1 ? 's' : ''}
-                </h2>}
-            </div>}
+          <div className={`text-white text-sm ${commentState.comments.length === 1 ? "font-semibold" : ""}`}>
+  {commentState.comments.length} {commentState.comments.length === 1 ? "comment" : "comments"}
+</div>
+
+
           <div className="mt-2 flex w-full justify-between p-2 border-t">
             <div className="flex gap-4">
               <button className={`flex gap-2 items-center text-[var(--text)]`} onClick={toggleLike}>

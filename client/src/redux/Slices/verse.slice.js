@@ -17,7 +17,7 @@ export const getAllVerse = createAsyncThunk('verse/getAllVerse', async () => {
         });
         return response;
     } catch (error) {
-        toast.error(error.message || "Failed to fetch posts");
+        toast.error(error.response?.data?.message || "Failed to fetch posts");
     }
 });
 
@@ -30,8 +30,8 @@ export const createVerse = createAsyncThunk('verse/createVerse', async (verseDat
         });
         return response;
     } catch (error) {
-        console.log (error.message);
-        toast.error(error.message || "Failed to create post");
+        console.log (error.response?.data?.message);
+        toast.error(error.response?.data?.message || "Failed to create post");
     }
 });
 
@@ -46,7 +46,7 @@ export const updateVerse = createAsyncThunk('verse/updateVerse',async(id, verseD
             return response;
         }
     } catch (error) {
-        toast.error(error.message || "Failed to update post");
+        toast.error(error.response?.data?.message || "Failed to update post");
     }
 })
 
@@ -64,7 +64,7 @@ export const likeVerse = createAsyncThunk('verse/likeVerse', async(data) => {
             return response;
         }
     } catch (error) {
-        toast.error(error.message || "Failed to update post");
+        toast.error(error.response?.data?.message || "Failed to update post");
     }
 })
 
@@ -79,7 +79,7 @@ export const getVerseByUserId = createAsyncThunk('verse/getVerse' ,async(id) => 
             return response;
         }
     } catch (error) {
-        toast.error(error.message || "Failed to get post");
+        toast.error(error.response?.data?.message || "Failed to get post");
     }
 })
 
@@ -94,7 +94,7 @@ export const getVerseById = createAsyncThunk('verse/getVerseById' ,async(id) => 
             return response;
         }
     } catch (error) {
-        toast.error(error.message || "Failed to get post");
+        toast.error(error.response?.data?.message || "Failed to get post");
     }
 })
 

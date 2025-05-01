@@ -29,7 +29,7 @@ export const verifyOtp = createAsyncThunk('/auth/verifyotp',async(data) => {
         if(!response) toast.error('Something went wrong, try again');
         return  response;
     } catch (error) {
-        console.log(error);
+        toast.error(error.response.data.error || "An error occurred!");
     }
 });
 
@@ -39,7 +39,7 @@ export const login = createAsyncThunk('/auth/login', async (data) => {
         if(!response) toast.error('Something went wrong, try again');
         return  response;
     } catch (error) {
-        console.log(error);
+        toast.error(error.response.data.error || "An error occurred!");
     }
 });
 
@@ -49,7 +49,7 @@ export const signup = createAsyncThunk('/auth/signup', async (data) => {
         if(!response) toast.error('Something went wrong, try again');
         return  response;
     } catch (error) {
-        console.log(error);
+        toast.error(error.response.data.error || "An error occurred!");
     }
 });
 
@@ -59,7 +59,7 @@ export const forgetPass = createAsyncThunk('auth/forget',async(data) => {
         if(!response) toast.error('Something went wrong, try again');
         return  response;
     } catch (error) {
-        console.log(error);
+        toast.error(error.response.data.error || "An error occurred!");
     }
 })
 
@@ -69,7 +69,7 @@ export const resetPass = createAsyncThunk('auth/reset',async(data) => {
         if(!response) toast.error('Something went wrong, try again');
         return  response;
     } catch (error) {
-        console.log(error);
+        toast.error(error.response.data.error || "An error occurred!");
     }
 })
 
@@ -83,7 +83,7 @@ export const getUserById = createAsyncThunk('/auth/user', async (id) => {
         if(!response) toast.error('Something went wrong, try again');
         return  response;
     } catch (error) {
-        console.log(error);
+        toast.error(error.response.data.error || "An error occurred!");
     }
 });
 
@@ -97,7 +97,7 @@ export const getUserByUsername = createAsyncThunk('/auth/user', async (username)
         if(!response) toast.error('Something went wrong, try again');
         return response;
     } catch (error) {
-        console.log(error);
+        toast.error(error.response.data.error || "An error occurred!");
     }
 });
 
@@ -116,7 +116,7 @@ export const getUserByLimit = createAsyncThunk('/auth/userByLimit', async (data)
         if (!response) toast.error('Something went wrong, try again');
         return response;
     } catch (error) {
-        console.log(error);
+        toast.error(error.response.data.error || "An error occurred!");
     }
 });
 
@@ -133,7 +133,7 @@ export const followRequest = createAsyncThunk('/auth/followRequest' , async(data
         if(!response) toast.error('Something went wrong, try again');
         return response;
     } catch (error) {
-        console.log(error);
+        toast.error(error.response.data.error || "An error occurred!");
     }
 });
 
@@ -150,7 +150,7 @@ export const followUser = createAsyncThunk('/auth/follow' , async(data) => {
         if(!response) toast.error('Something went wrong, try again');
         return response;
     } catch (error) {
-        console.log(error);
+        toast.error(error.response.data.error || "An error occurred!");
     }
 })
 
@@ -208,7 +208,7 @@ export const searchFollower = createAsyncThunk('searchFollower',async(data) => {
         })
         return response;
     } catch (error) {
-        console.log(error);
+        toast.error(error.response.data.error || "An error occurred!");
     }
 })
 
@@ -221,7 +221,7 @@ export const getFollowerDetails = createAsyncThunk('followerDetails' ,async(id) 
         })
         return response;
     } catch (error) {
-        console.log(error);
+        toast.error(error.response.data.error || "An error occurred!");
     }
 })
 

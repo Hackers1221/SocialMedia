@@ -17,12 +17,12 @@ const createGroup = async(req,res) => {
     const response = await groupService.createGroup(groupData,req.body.messageData);
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
-            msg : "Unable to create the group",
+            message : "Unable to create the group",
             error : response.error
         })
     }
     return res.status(StatusCodes.CREATED).send({
-        msg : "Successfully created the group",
+        message : "Successfully created the group",
         groupData: response.groupDetails
     })
 }
@@ -31,12 +31,12 @@ const getGroupByUserId = async(req,res) => {
     const response = await groupService.getGroupByUserId(req.params.userId);
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
-            msg : "Unable to fetch the groupdetals",
+            message : "Unable to fetch the groupdetals",
             error : response.error
         })
     }
     return res.status(StatusCodes.CREATED).send({
-        msg : "Successfully fetched the group details",
+        message : "Successfully fetched the group details",
         groupData: response.groupDetails
     })
 }
@@ -45,12 +45,12 @@ const getGroupById = async(req,res) => {
     const response = await groupService.getGroupById(req.params.id,req.body.userId);
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
-            msg : "Unable to fetch the groupdetals",
+            message : "Unable to fetch the groupdetals",
             error : response.error
         })
     }
         return res.status(StatusCodes.CREATED).send({
-            msg : "Successfully fetched the group details",
+            message : "Successfully fetched the group details",
             groupData: response.groupDetails
     })
 }
@@ -59,12 +59,12 @@ const getRecentMessage = async(req,res) => {
     const response = await groupService.getRecentMessage(req.params.userId);
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
-            msg : "Unable to fetch the recent group chats",
+            message : "Unable to fetch the recent group chats",
             error : response.error
         })
     }
         return res.status(StatusCodes.CREATED).send({
-            msg : "Successfully fetched the recent group chats",
+            message : "Successfully fetched the recent group chats",
             recentChats: response.messages,
     })
 }

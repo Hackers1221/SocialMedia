@@ -3,7 +3,8 @@ const commentsModel = require('../models/comment.model');
 const Notification = require('../models/notification.model');
 const postsModel = require('../models/posts.model');
 const Verse = require ('../models/verse.model')
-const Pulse = require ('../models/pulse.model')
+const Pulse = require ('../models/pulse.model');
+const { findByIdAndDelete, findByIdAndUpdate } = require('../models/otp.model');
 
 const CreateComment = async(data) => {
     const response = {};
@@ -114,8 +115,40 @@ const getPulseComments = async() => {
     }
 }
 
+const likeComment = async (commentId, userId) => {
+    const response = {};
+    try {
+      const comment = await commentsModel.findById( commentId );
+      if (!comment) {
+        response.error = "Comment not found";
+        return response;
+      }
+  
+      let likesArray = comment.likes || [];
+  
+      if (likesArray.includes(userId)) {
+        likesArray = likesArray.filter((id) => id !== userId);
+      } else {
+        likesArray.push(userId);
+      }
+      const updatedComment = await commentsModel.findByIdAndUpdate(
+        comment._id,
+        { likes: likesArray },
+        { new: true }
+      );
+  
+      response.comment = updatedComment;
+      return response;
+    } catch (error) {
+      response.error = error.message;
+      return response;
+    }
+  };
+  
+
 module.exports = {
     CreateComment,
     getCommentByPostId,
-    getPulseComments
+    getPulseComments,
+    likeComment
 }
