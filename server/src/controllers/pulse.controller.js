@@ -2,14 +2,14 @@ const { StatusCodes } = require('http-status-codes');
 const pulseService = require('../services/pulse.service');
 
 const createPulse = async(req, res) => {
-    const { caption, interests, userId } = req.body;
+    const { caption, interests, user } = req.body;
 
     // Extract file URLs from Cloudinary response
     const videoUrl = req.file.path;
     const videoName = req.file.filename;
 
     const newPulse = {
-        userId,
+        user,
         caption,
         interests,
         video: videoUrl,

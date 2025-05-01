@@ -169,7 +169,7 @@ function Sidebar() {
                                     <span className="ml-2 text-sm tracking-wide truncate">Notifications</span>
                                     {authState?.isRead == false && authState?.notifications?.length > 0 && <span className="w-2.5 h-2.5 ml-auto rounded-full bg-red-500 inline-block" />                                    }
                                 </Link>
-                            </li> n 
+                            </li>
                             <li className="px-5 border-t">
                                 <div className="flex flex-row items-center h-8">
                                     <div className={`text-sm font-bold text-[var(--text)]`}>Manage</div>

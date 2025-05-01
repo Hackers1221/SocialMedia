@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Avatar from '../../components/Avatar';
 import PostCard from '../../components/PostCard';
 import usePosts from '../../hooks/usePosts';
-import { followRequest, followUser, getUserByUsername } from '../../redux/Slices/auth.slice';
+import { followRequest, followUser, getFollowerDetails, getUserByUsername } from '../../redux/Slices/auth.slice';
 import toast from 'react-hot-toast';
 import { Link, useParams } from 'react-router-dom';
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -31,6 +31,8 @@ const Profile = () => {
   const [joining, setJoining] = useState ("");
   const [isOpen, setOpen] = useState (false);
   const [image, setImage] = useState ();
+  const [followers, setFollowers] = useState ([]);
+
 
   const dispatch = useDispatch ();
   const { username } = useParams();
@@ -39,7 +41,14 @@ const Profile = () => {
     const res = await dispatch (filterPostsByUser ({id: userId}));
   }
 
+  const getDetails = async() => {
+        const response = await dispatch(getFollowerDetails (authState.data._id));
+        setFollowers(response.payload?.data?.userdata);
+    }
+
   useEffect(() => {
+    getDetails ();
+
     setIsLoading(true);
     dispatch(getUserByUsername(username))
       .then((user) => {
@@ -196,9 +205,9 @@ const Profile = () => {
           </div>
         </div>}
 
-        {(creator?.isPrivate  && creator?._id !== authState.data?._id) && <h2 className='w-full text-center text-[var(--buttons)]'>This account is private</h2>}
+        {(creator?.isPrivate  && creator?._id !== authState.data?._id && !authState.data.following.includes (creator?._id)) && <h2 className='w-full text-center text-[var(--buttons)]'>This account is private</h2>}
 
-        {(!creator?.isPrivate  || creator?._id === authState.data?._id) && (
+        {(!creator?.isPrivate  || creator?._id === authState.data?._id || authState.data.following.includes (creator?._id)) && (
           <>
             {selected === "Posts" &&
               (postState?.postList?.length > 0 ? (
@@ -207,7 +216,7 @@ const Profile = () => {
                   <div className="w-full h-screen">
                     {!isLoading &&
                       postState?.postList?.map((post, key) => (
-                        <PostCard post={post} key={key} index={key + 1} list={"postList"} />
+                        <PostCard post={post} key={key} index={key + 1} list={"postList"} followers={followers} />
                       ))}
                   </div>
                 </div>

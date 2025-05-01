@@ -3,6 +3,7 @@ const User  = require('../models/user.model');
 const Comment = require('../models/comment.model');
 const { deleteVideos } = require('../../cloudConfig');
 const { userSocketMap, getIO } = require('../../socket/socketInstance'); 
+const Notification = require ('../models/notification.model')
 
 const CreatePulse = async (data) => {
     const response = {};
@@ -90,6 +91,9 @@ const likePulse = async(id, userId) => {
             { likes: pulse.likes },
             { new: true } 
         );
+
+        console.log (updatedPulse);
+
         response.pulse = updatedPulse;
         return response;
     } catch (error) {
@@ -123,7 +127,7 @@ const getAllSavedPulse = async(userId) => {
             return response;
         }
 
-        const savedPulseDetails = await Pulse.find({ _id: { $in: userData.saved } });
+        const savedPulseDetails = await Pulse.find({ _id: { $in: userData.savedPulse } });
         response.pulse = savedPulseDetails;
         return response;
     } catch (error) {
@@ -166,23 +170,24 @@ const DeletePulse = async(id, userId) => {
 const savePulse = async(userId, id) => {
     const response = {};
     try {
+        console.log (userId, id);
         let userData = await User.findById(userId);
         if(!userData){
             response.error = "User not found";
             return response;
         }
 
-        if(userData.saved.includes(id)){
-            userData.saved = userData.saved.filter((ids) => ids !== id);
+        if(userData.savedPulse.includes(id)){
+            userData.savedPulse = userData.savedPulse.filter((ids) => ids !== id);
         }else{
-            userData.saved.push(id);
+            userData.savedPulse.push(id);
         }
         const updateuser = await User.findByIdAndUpdate(
             userId,
-            {saved : userData.saved},
+            {savedPulse : userData.savedPulse},
             {new  :true}
         )
-        const savedPulseDetails = await Pulse.find({ _id: { $in: updateuser.saved } });
+        const savedPulseDetails = await Pulse.find({ _id: { $in: updateuser.savedPulse } });
         response.pulse = savedPulseDetails;
         return response;
     } catch (error) {

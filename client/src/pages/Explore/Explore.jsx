@@ -4,9 +4,10 @@ import { getAllPosts, searchPost } from "../../redux/Slices/post.slice";
 import { X } from "lucide-react";
 import ExploreCard from "../../components/ExploreCard";
 import usePosts from "../../hooks/usePosts";
+import { getFollowerDetails } from "../../redux/Slices/auth.slice";
 
 const Explore = () => {
-
+    const authState = useSelector ((state) => state.auth);
   const [postState] = usePosts ();
 
   const dispatch = useDispatch();
@@ -14,6 +15,7 @@ const Explore = () => {
   const [query,setQuery] = useState("");
 
   const [postList, setPostList] = useState(postState?.downloadedPosts);
+  const [followers, setFollowers] = useState ([]);
 
   const extractThumbnail = (videoURL, index) => {
     const video = document.createElement("video");
@@ -53,6 +55,11 @@ const Explore = () => {
     setQuery(value);
   };  
 
+  const getDetails = async() => {
+        const response = await dispatch(getFollowerDetails (authState.data._id));
+        setFollowers(response.payload?.data?.userdata);
+    }
+
   useEffect(() => {
     if(query.trim()==""){
       setPostList(postState?.downloadedPosts)
@@ -79,6 +86,7 @@ useEffect (() => {
 }, [postState?.downloadedPosts])
 
 useEffect(() => {
+    getDetails ();
     postList.forEach((post, index) => {
         if (post?.video?.[0]?.url) {
             extractThumbnail(post.video[0]?.url, index);
@@ -107,25 +115,14 @@ useEffect(() => {
         </div>
         <div className="columns-2 sm:columns-3 md:columns-4 gap-3">
           {postList?.map((post, index) => (
-            // <div key={index} className="relative group overflow-hidden rounded-lg shadow-lg hover:cursor-pointer" onClick={() => {setDialogOpen(true);
-            //   setSelectedPost (post);
-            // }}>
-            //   {<img
-            //     src={post?.image[0]?.url || thumbnails[index]}
-            //     alt="Explore"
-            //     className="w-full h-max object-cover rounded-lg transition-transform duration-300 group-hover:scale-110"
-            //   />}
-            //   <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-lg font-semibold">
-            //     View
-            //   </div>
-            // </div>
             <ExploreCard 
               post={post} 
               key={index + 1} 
               index={index + 1}
               postThumbnail={post?.image[0]?.url || thumbnails[index]} 
               video={post?.image[0]?.url ? false : true}
-              list={'postList'}/>
+              list={'postList'}
+              followers={followers}/>
           ))}
         </div>
       </div>

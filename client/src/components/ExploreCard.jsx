@@ -1,7 +1,7 @@
 import { useState } from "react";
 import DisplayPost from "./DisplayPost";
 
-function ExploreCard ({ post, postThumbnail, video, index, list }) {
+function ExploreCard ({ post, postThumbnail, video, index, list, followers }) {
 
     const [isOpen, setOpen] = useState (false);
 
@@ -9,7 +9,7 @@ function ExploreCard ({ post, postThumbnail, video, index, list }) {
 
     return (
         <>
-            <DisplayPost open={isOpen} setOpen={setOpen} index={index} list={list}/>
+            <DisplayPost open={isOpen} setOpen={setOpen} index={index} list={list} followers={followers}/>
             <div className="relative w-full h-max rounded-xl bg-[var(--card)] mb-4 break-inside-avoid shadow-xl hover:shadow-2xl hover:cursor-pointer" onClick={() => setOpen(true)}>
                 <img 
                     src={postThumbnail}

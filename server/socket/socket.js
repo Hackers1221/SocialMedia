@@ -35,6 +35,8 @@ const setupSocket = (server) => {
     const recipientSocketId = userSocketMap.get(message.recipient);
     
     const uploadedFiles = [];
+
+    console.log (message);
   
     // Upload files to Cloudinary
     for (const file of message?.files) {
@@ -90,11 +92,35 @@ const setupSocket = (server) => {
         io.to(senderSocketId).emit("receiveMessage", dateMessage);
       }
     }
+
+    if (message.isPost) {
+        const parts = message.content.filename?.split('.') || message.content.image[0]?.filename?.split('.') || message.content.video[0]?.filename?.split('.');
+        const extension = parts.pop();
+        const base = parts.join('.');
+
+        const url = typeof message.content.video === 'string'
+        ? message.content.video
+        : message.content.image?.[0]?.url || message.content.video?.[0]?.url;
+
+        if (url) {
+            uploadedFiles.push({
+                name: message.content.caption || "File",
+                url: url,
+                filename: `${base}/${extension}`,
+            });
+        }
+
+        message.content = message.content.caption || ""
+    }
   
     // 3. Create the actual message
     const createdMessage = await Message.create({
-      ...message,
-      files: uploadedFiles
+        sender: message.sender,
+        recipient: message.recipient,
+        isPost: message.isPost,
+        content: message.content,
+        messageType: false,
+        files: uploadedFiles
     });
   
     const messageData = await Message.findById(createdMessage._id)

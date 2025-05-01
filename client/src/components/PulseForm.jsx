@@ -19,7 +19,7 @@ export default function PulseForm({ open, setOpen }) {
     formData.append("caption", caption);
     formData.append("video", video);
     formData.append("interests", interests);
-    formData.append("userId", authState._id);
+    formData.append("user", authState._id);
 
     const response = await dispatch(createPulse(formData));
     if (!response) {

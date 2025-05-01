@@ -5,7 +5,7 @@ import axiosInstance from "../../config/axiosInstance";
 const initialState = {
     downloadedPulse: [],
     pulseList: [],
-    savedPulse: []
+    savedList: []
 };
 
 export const getAllPulse = createAsyncThunk('posts/getAllPulse', async () => {
@@ -40,7 +40,7 @@ export const likePulse = createAsyncThunk('pulse/likePulse', async(data) => {
         const resp = {
             id : data.id
         }
-        const response = await axiosInstance.patch(`pulse/like/${data._id}`,resp , {
+        const response = await axiosInstance.patch(`pulse/like/${data._id}`, resp , {
             headers: {
                 'x-access-token': localStorage.getItem('token')
             }
@@ -83,12 +83,12 @@ export const getSavedPulse = createAsyncThunk('pulse/getSavedPulse' , async(id) 
     }
 })
 
-export const updateSavedPulse = createAsyncThunk('post/updateSavedPulse', async(data) => {
+export const updateSavedPulse = createAsyncThunk('pulse/updateSavedPulse', async(data) => {
     try {
         const resp = {
             id : data.id
         }
-        const response = await axiosInstance.patch(`pulse/save/${data._id1}`,resp , {
+        const response = await axiosInstance.patch(`pulse/save/${data._id1}`, resp, {
             headers: {
                 'x-access-token': localStorage.getItem('token')
             }
@@ -115,6 +115,11 @@ const PulseSlice = createSlice({
                 if (!action.payload?.data) return;
                 state.downloadedPulse = [action.payload?.data?.pulseData?.pulse, ...state.downloadedPulse];
                 state.pulseList = state.downloadedPulse;
+            })
+            .addCase(getSavedPulse.fulfilled,(state,action) => {
+                if(!action.payload?.data) return;
+                console.log (action.payload.data); 
+                state.savedList = action.payload?.data?.pulseDetails.reverse();
             })
     }
 });

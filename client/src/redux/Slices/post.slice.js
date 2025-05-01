@@ -191,23 +191,15 @@ const PostSlice = createSlice({
             })
             .addCase(createPost.fulfilled, (state, action) => {
                 if (!action.payload?.data) return;
-                const newPost = action.payload?.data?.postsdata?.post;
-                state.downloadedPosts = [newPost, ...state.downloadedPosts];
-            })
-            .addCase(updatePost.fulfilled, (state, action) => {
-                if (!action.payload?.data) return;
-                console.log(action.payload);
+                state.downloadedPosts = [action.payload?.data?.postsdata?.post, ...state.downloadedPosts];
             })
             .addCase(getPostByUserId.fulfilled , (state,action) => {
                 if(!action.payload?.data)return; 
                 state.postList = action.payload?.data?.postDetails.reverse();
             })
             .addCase(getSavedPost.fulfilled,(state,action) => {
-                if(!action.payload?.data)return; 
+                if(!action.payload?.data) return; 
                 state.savedList = action.payload?.data?.postDetails.reverse();
-            })
-            .addCase(updateSavedPost.fulfilled,(state,action) => {
-                console.log(action.payload);
             })
             .addCase (getPostById.fulfilled, (state, action) => {
                 if (!action.payload?.data) return;

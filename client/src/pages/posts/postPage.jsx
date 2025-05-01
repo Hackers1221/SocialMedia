@@ -9,6 +9,7 @@ import Avatar from "../../components/Avatar";
 import toast from "react-hot-toast";
 import SkeletonPostCard from "../../components/SkeletonPostCard";
 import Stories from "../../components/Stories";
+import { getFollowerDetails } from "../../redux/Slices/auth.slice";
 
 function PostPage() {
     const authState = useSelector ((state) => state.auth);
@@ -18,6 +19,7 @@ function PostPage() {
 
     const [isLoading, setIsLoading] = useState (false);
     const [selected, setSelected] = useState ("All");
+    const [followers, setFollowers] = useState ([]);
 
     const options = ["All", "Following", "Liked"]
 
@@ -50,9 +52,15 @@ function PostPage() {
         if (option === "All") await dispatch (getAllPosts ());
     }
 
+    const getDetails = async() => {
+        const response = await dispatch(getFollowerDetails (authState.data._id));
+        setFollowers(response.payload?.data?.userdata);
+    }
+
     useEffect (() => {
         getPosts ();
         getSavedPosts ();
+        getDetails ();
     }, [])
 
     return (
@@ -84,8 +92,7 @@ function PostPage() {
                 {!isLoading && <div className="pt-4 w-full h-screen">
                     {postState?.postList?.length > 0 ? postState?.postList?.map((post, index) => (
                         <div key={index}>
-                            <PostCard post={post} index={index + 1} list={"postList"}/>
-                            {/* {index != postState?.postList?.length - 1 && <div className={`h-[1px] bg-[var(--text)]`}></div>} */}
+                            <PostCard post={post} index={index + 1} list={"postList"} followers={followers}/>
                         </div>
                     )) : <h2 className={`w-full text-center font-extralight text-[var(--text)]`}>No posts to show</h2>}
                 </div>}

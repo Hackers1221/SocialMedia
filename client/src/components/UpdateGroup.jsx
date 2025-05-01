@@ -5,9 +5,8 @@ import AddUser from "./AddUser";
 import toast from "react-hot-toast";
 import User from '../components/User'
 import { getUserById } from "../redux/Slices/auth.slice";
-import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
 
-function UpdateGroup ({ isOpen, setOpen, isDelete, setDelete }) {
+function UpdateGroup ({ isOpen, setOpen, setDelete }) {
     if (!isOpen) return null;
 
     const authState = useSelector ((state) => state.auth);
@@ -15,6 +14,7 @@ function UpdateGroup ({ isOpen, setOpen, isDelete, setDelete }) {
     const liveGroup = useSelector ((state) => state.group.liveGroup);
 
     const dialogRef = useRef (null);
+    const dispatch = useDispatch ();
 
     const [editName, setEditName] = useState (false);
     const [date, setDate] = useState ("");
@@ -50,7 +50,18 @@ function UpdateGroup ({ isOpen, setOpen, isDelete, setDelete }) {
         
         arr = [...arr, ...inactiveMembers];
 
-        setNonParticipants (arr);
+        const objects = await Promise.all(
+            arr.map(async (id) => {
+                const res = await dispatch(getUserById(id));
+                return {
+                    userId: id,
+                    image: res.payload.data.userdetails.image,
+                    username: res.payload.data.userdetails.username
+                };
+            })
+        );
+        
+        setNonParticipants (objects);
     }
 
     function onLeaveGroup () {
@@ -63,9 +74,6 @@ function UpdateGroup ({ isOpen, setOpen, isDelete, setDelete }) {
     }
 
     function submitDetails () {
-        try {
-            // setLoading (true);
-
             const sendPayload = (encodedImage) => {
                 const payload = {
                   _id: queriedParticipants._id,
@@ -103,12 +111,8 @@ function UpdateGroup ({ isOpen, setOpen, isDelete, setDelete }) {
                 reader.readAsDataURL(image);
             } else {
                 sendPayload();
-            }              
-        } catch (error) {
-            toast.error ('Something went wrong');
-        } finally {
-            close ();
-        }
+            }
+            setOpen (!isOpen);
     }
 
     const handleFileChange = (e) => {
@@ -279,7 +283,7 @@ function UpdateGroup ({ isOpen, setOpen, isDelete, setDelete }) {
                         </button>
                     </div>
                     {nonParticipants?.length > 0 ? nonParticipants?.map ((user, key) => (
-                        <AddUser userId={user} members={selectedUsers} setMembers={setSelectedUsers} key={key}/>
+                        <AddUser userId={user.userId} image={user.image} username={user.username} members={selectedUsers} setMembers={setSelectedUsers} key={key}/>
                     )) : <h2>No followers to add</h2>}
 
                     <div onClick={submitDetails} className="absolute bottom-4 w-full flex justify-center items-center rounded-md py-2 hover:cursor-pointer">
