@@ -23,7 +23,6 @@ function SendOtp() {
       localStorage.setItem("otpStartTime", Date.now());
       navigate("/verifyotp");
     } else {
-      toast.error("Unable to send OTP. Please verify your email.");
       navigate("/signup");
     }
     setIsLoading(false); // Hide loader

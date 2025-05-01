@@ -41,7 +41,7 @@ function UpdateGroup ({ isOpen, setOpen, setDelete }) {
         setDate (formattedDate);
     }
 
-    function getNonParticipants () {
+    async function getNonParticipants () {
         const memberIds = queriedParticipants.members?.map(member => member.userId);
         let arr = authState.data?.follower?.filter(user => !memberIds.includes(user));
         const inactiveMembers = queriedParticipants.members

@@ -70,6 +70,7 @@ function SignUp() {
 
             const signupRes = await dispatch(signup(userDetails));
 
+
             if (signupRes.payload) {
                 const signIn = await dispatch (login (userDetails));
                 if (signIn.payload) navigate('/', { replace: true });
