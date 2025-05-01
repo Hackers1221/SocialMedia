@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { getUserById } from "../redux/Slices/auth.slice";
 import Avatar from "./Avatar";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { DeletePost, getAllPosts, getPostById, likePost, updateSavedPost } from "../redux/Slices/post.slice";
 import DisplayPost from "./DisplayPost";
 import { getCommentByPostId } from "../redux/Slices/comment.slice";
@@ -11,11 +11,9 @@ import usePosts from "../hooks/usePosts";
 import LinkDetector from '../components/LinkDetector'
 import SelectedUser from "./SelectedUser";
 
-function PostCard({ post, index, list, followers }) {
+function PostCard ({ post, index, list, followers }) {
     const authState = useSelector((state) => state.auth.data);
     const [postState] = usePosts();
-    const videoRefs = useRef([]);
-    const timeoutRef = useRef({});
 
     const dispatch = useDispatch();
 
@@ -45,51 +43,6 @@ function PostCard({ post, index, list, followers }) {
         birth: ""
     });
     const [hashtags, setHashtags] = useState ("");
-
-    const togglePlay = (index) => {
-        videoRefs.current.forEach((video, i) => {
-            if (video && i !== index) {
-                video.pause();
-                setIsPlaying((prev) => ({
-                    ...prev,
-                    [i]: false,
-                }));
-            }
-        });
-
-        const video = videoRefs.current[index];
-        if (!video) return;
-
-        if (video.paused) {
-            video.play();
-            setIsPlaying((prev) => ({
-                ...prev,
-                [index]: true,
-            }));
-        } else {
-            video.pause();
-            setIsPlaying((prev) => ({
-                ...prev,
-                [index]: false,
-            }));
-        }
-        setShowButton((prev) => ({
-            ...prev,
-            [index]: true,
-        }));
-
-        resetHideButtonTimer(index);
-    };
-
-    const resetHideButtonTimer = (index) => {
-        if (timeoutRef.current[index]) clearTimeout(timeoutRef.current[index]);
-        timeoutRef.current[index] = setTimeout(() => {
-            setShowButton((prev) => ({
-                ...prev,
-                [index]: false,
-            }));
-        }, 500);
-    };
 
     const toggleBookmark = async () => {
         const response = await dispatch(updateSavedPost({

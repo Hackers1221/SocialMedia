@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import SkeletonPostCard from "../../components/SkeletonPostCard";
 import Stories from "../../components/Stories";
 import { getFollowerDetails } from "../../redux/Slices/auth.slice";
+import { useSearchParams } from "react-router-dom";
 
 function PostPage() {
     const authState = useSelector ((state) => state.auth);
@@ -20,6 +21,7 @@ function PostPage() {
     const [isLoading, setIsLoading] = useState (false);
     const [selected, setSelected] = useState ("All");
     const [followers, setFollowers] = useState ([]);
+    const [searchParams, setSearchParams] = useSearchParams ();
 
     const options = ["All", "Following", "Liked"]
 
@@ -45,9 +47,10 @@ function PostPage() {
         }
     }
 
-    async function optionChange (option) {
-        setSelected (option);
-        if (option === "Liked") await dispatch( filterPostsByLiked ({id : authState?.data?._id}));
+    async function optionChange () {
+        const option = searchParams.get ("type") || "All";
+
+        if (option === "Liked") await dispatch ( filterPostsByLiked ({id : authState?.data?._id}));
         if (option === "Following") await dispatch( filterPostsByFollowing ({following : authState?.data?.following}));
         if (option === "All") await dispatch (getAllPosts ());
     }
@@ -56,6 +59,12 @@ function PostPage() {
         const response = await dispatch(getFollowerDetails (authState.data._id));
         setFollowers(response.payload?.data?.userdata);
     }
+
+    const type = searchParams.get("type") || "All";
+
+    useEffect (() => {
+        optionChange ();
+    }, [type])
 
     useEffect (() => {
         getPosts ();
@@ -80,9 +89,9 @@ function PostPage() {
                         {options?.map ((option, index) => {
                            return (<h2 
                             key={index} 
-                            className={`${ selected === option ? `text-[var(--heading)]` : `text-gray-400` // Default color
+                            className={`${ type === option ? `text-[var(--heading)]` : `text-gray-400` // Default color
                             } font-bold text-[1rem] hover:cursor-pointer`} 
-                            onClick={() => optionChange(option)}>{option}</h2>)
+                            onClick={() => setSearchParams({ type: option })}>{option}</h2>)
                         })}
                     </div>
                 </div>

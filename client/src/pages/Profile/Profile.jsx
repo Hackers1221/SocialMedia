@@ -5,7 +5,7 @@ import PostCard from '../../components/PostCard';
 import usePosts from '../../hooks/usePosts';
 import { followRequest, followUser, getFollowerDetails, getUserByUsername } from '../../redux/Slices/auth.slice';
 import toast from 'react-hot-toast';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import 'react-loading-skeleton/dist/skeleton.css'
 import SkeletonPostCard from '../../components/SkeletonPostCard';
 import ProfileInfo from '../../components/ProfileInfo';
@@ -14,11 +14,16 @@ import useVerse from '../../hooks/useVerse';
 import VerseCard from '../../components/VerseCard'
 import { filterPostsByUser } from '../../redux/Slices/post.slice';
 import ImagePreview from '../../components/ImagePreview';
+import { getPulseByUserId } from '../../redux/Slices/pulse.slice';
+import usePulse from '../../hooks/usePulse';
 
 const Profile = () => {
   const authState = useSelector ((state) => state.auth);
   const [postState] = usePosts ();
   const [verseState] = useVerse ();
+  const [pulseState] = usePulse ();
+
+  const navigate = useNavigate ();
 
   const [creator, setCreator] = useState (null);
   const [pending, setPending] = useState(false);
@@ -32,6 +37,7 @@ const Profile = () => {
   const [isOpen, setOpen] = useState (false);
   const [image, setImage] = useState ();
   const [followers, setFollowers] = useState ([]);
+  const [pulseThumbnails, setPulseThumbnails] = useState({});
 
 
   const dispatch = useDispatch ();
@@ -39,11 +45,79 @@ const Profile = () => {
 
   async function getPosts (userId) {
     const res = await dispatch (filterPostsByUser ({id: userId}));
+    await dispatch (getPulseByUserId (userId));
   }
 
   const getDetails = async() => {
         const response = await dispatch(getFollowerDetails (authState.data._id));
         setFollowers(response.payload?.data?.userdata);
+    }
+
+    const toggleFollow = async () => {
+        if (!creator) return;
+        const response = await dispatch(followUser({
+          id1: authState?.data?._id,
+          id: creator._id,
+        }));
+    
+        if (response.payload) {
+          setFollow(!follow);
+          setCountFollowers(follow ? countFollowers - 1 : countFollowers + 1);
+        }
+      };
+    
+      const toggleFollowRequest = async () => {
+        if (!creator) return;
+        const response = await dispatch(followRequest({
+          id1: authState?.data?._id,
+          id: creator._id,
+        }));
+    
+        if (response.payload) {
+          setPending(!pending);
+        }
+      };
+
+    const extractPulseThumbnail = (videoURL, index) => {
+        const video = document.createElement("video");
+        video.src = videoURL;
+        video.crossOrigin = "anonymous"; // Prevents CORS issues
+        video.preload = "metadata"; // Load only metadata, not the full video
+        video.muted = true; // Prevents autoplay issues in some browsers
+
+        video.addEventListener("loadedmetadata", () => {
+            video.currentTime = Math.min(15, video.duration / 2); // Seek to a valid frame
+        });
+
+        video.addEventListener("seeked", () => {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+
+            // Use full resolution
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            setPulseThumbnails((prev) => ({
+                ...prev,
+                [index]: canvas.toDataURL("image/png"),
+            }));
+        });
+
+        video.load(); // Ensures metadata loads before seeking
+    };
+
+    useEffect (() => {
+        pulseState.pulseList?.forEach ((pulse, index) => {
+            if (pulse.video) {
+                extractPulseThumbnail(pulse.video, index);
+            }
+        })
+    }, [pulseState.pulseList]);
+
+    function handlePulseClick (index) {
+        navigate ('/pulse', {state : { start: index, source: 'pulseList'}});
     }
 
   useEffect(() => {
@@ -84,31 +158,6 @@ const Profile = () => {
       setPending(creator?.requests?.includes(authState?.data?._id));
     }
   }, [authState.data.following, creator]);
-
-  const toggleFollow = async () => {
-    if (!creator) return;
-    const response = await dispatch(followUser({
-      id1: authState?.data?._id,
-      id: creator._id,
-    }));
-
-    if (response.payload) {
-      setFollow(!follow);
-      setCountFollowers(follow ? countFollowers - 1 : countFollowers + 1);
-    }
-  };
-
-  const toggleFollowRequest = async () => {
-    if (!creator) return;
-    const response = await dispatch(followRequest({
-      id1: authState?.data?._id,
-      id: creator._id,
-    }));
-
-    if (response.payload) {
-      setPending(!pending);
-    }
-  };
 
   return (
       <div className={`fixed top-[1rem] md:left-[20rem] left-[4rem] w-[85%] md:w-[50%] h-[97vh] flex flex-col flex-grow overflow-y-auto`}>
@@ -217,6 +266,28 @@ const Profile = () => {
                     {!isLoading &&
                       postState?.postList?.map((post, key) => (
                         <PostCard post={post} key={key} index={key + 1} list={"postList"} followers={followers} />
+                      ))}
+                  </div>
+                </div>
+              ) : (
+                <h2 className="w-full text-center font-extralight text-[var(--text)]">
+                  No posts to show
+                </h2>
+              ))}
+
+            {selected === "Pulse" &&
+              (pulseState?.pulseList?.length > 0 ? (
+                <div>
+                  {isLoading && <SkeletonPostCard />}
+                  <div className="w-full h-screen columns-2 sm:columns-3 md:columns-4">
+                    {!isLoading &&
+                      pulseState?.pulseList?.map((pulse, index) => (
+                        <div key={index} className="h-[20rem] flex flex-col justify-center rounded-lg hover:cursor-pointer" onClick={() => handlePulseClick (index)}>
+                            <img
+                                src={pulseThumbnails[index]}
+                                className="rounded-lg shadow-md h-full w-full"
+                            ></img>
+                        </div>
                       ))}
                   </div>
                 </div>
