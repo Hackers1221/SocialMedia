@@ -1,6 +1,6 @@
 import Calendar from "../../layouts/calendar";
 import { useState, useRef, useCallback, useEffect } from "react";
-import { FaEye, FaSpinner } from "react-icons/fa";
+import { FaEye, FaSpinner, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { LuEyeClosed } from "react-icons/lu";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -13,7 +13,17 @@ function SignUp() {
     const birthRef = useRef(null);
 
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [loading, setLoading] = useState(false); // Loader state
+    const [loading, setLoading] = useState(false);
+    const [visible, setVisible] = useState(false);
+
+    const [errors, setErrors] = useState({});
+    const [passwordCriteria, setPasswordCriteria] = useState({
+        length: false,
+        lower: false,
+        upper: false,
+        digit: false,
+        special: false
+    });
 
     const [userDetails, setUserDetails] = useState({
         name: "",
@@ -23,23 +33,28 @@ function SignUp() {
         birth: ""
     });
 
-    const [visible, setVisible] = useState(false);
-
     function handleChange(e) {
         const { name, value } = e.target;
         if (name !== "confirmPassword") {
-            setUserDetails({
-                ...userDetails,
-                [name]: value
-            });
-        } else setConfirmPassword(value);
+            setUserDetails({ ...userDetails, [name]: value });
+            if (name === "password") updatePasswordCriteria(value);
+        } else {
+            setConfirmPassword(value);
+        }
+    }
+
+    function updatePasswordCriteria(password) {
+        setPasswordCriteria({
+            length: password.length >= 8,
+            lower: /[a-z]/.test(password),
+            upper: /[A-Z]/.test(password),
+            digit: /[0-9]/.test(password),
+            special: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+        });
     }
 
     function handleBirthChange(date) {
-        setUserDetails({
-            ...userDetails,
-            birth: date
-        });
+        setUserDetails({ ...userDetails, birth: date });
     }
 
     function resetDetails() {
@@ -50,38 +65,49 @@ function SignUp() {
             password: "",
             birth: ""
         });
-
         setConfirmPassword("");
+        setPasswordCriteria({
+            length: false,
+            lower: false,
+            upper: false,
+            digit: false,
+            special: false
+        });
+        setErrors({});
+    }
+
+    function validateFields() {
+        const newErrors = {};
+        if (!userDetails.name.trim()) newErrors.name = "Name is required";
+        if (!userDetails.username.trim()) newErrors.username = "Username is required";
+        if (!userDetails.password) newErrors.password = "Password is required";
+        if (confirmPassword !== userDetails.password) newErrors.confirmPassword = "Passwords do not match";
+
+        const criteria = passwordCriteria;
+        if (!criteria.length || !criteria.lower || !criteria.upper || !criteria.digit || !criteria.special) {
+            newErrors.password = "Password does not meet requirements";
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     }
 
     async function onSubmit() {
+        if (!validateFields()) return;
+
         try {
-            if (confirmPassword !== userDetails.password) {
-                toast.error('Passwords do not match');
-                return;
-            }
-
-            if (!userDetails.name.trim() || !userDetails.username.trim() || !confirmPassword.trim()) {
-                toast.error('Fields cannot be empty');
-                return;
-            }
-
-            setLoading(true); // Start loader
-
+            setLoading(true);
             const signupRes = await dispatch(signup(userDetails));
-
-
             if (signupRes.payload) {
-                const signIn = await dispatch (login (userDetails));
+                const signIn = await dispatch(login(userDetails));
                 if (signIn.payload) navigate('/', { replace: true });
+            } else {
+                resetDetails();
             }
-            else resetDetails();
-
         } catch (error) {
             toast.error(error.message);
-        }
-        finally {
-            setLoading (false);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -91,139 +117,151 @@ function SignUp() {
 
     useEffect(() => {
         document.addEventListener('keydown', handleKeyPress);
-        return () => {
-            document.removeEventListener('keydown', handleKeyPress);
-        };
+        return () => document.removeEventListener('keydown', handleKeyPress);
     }, [handleKeyPress]);
 
     return (
-        <div className={`flex items-center justify-center h-screen w-full px-5 sm:px-0 bg-[url("https://images.stockcake.com/public/2/9/c/29cc0acd-d266-46bf-b9b8-b5330cd2918b_large/greenery-on-wood-stockcake.jpg")]  bg-no-repeat bg-cover bg-center`}>
-      <div className={`flex items-center justify-center bg-[#131842] bg-opacity-[40%] backdrop-blur-lg backdrop-saturate-300 w-full h-full`}>
-                      <div className="flex justify-evenly w-[90%] h-[90%]">
-                      <div className="hidden md:flex flex-col justify-center text-[3rem] w-[40%] text-white font-bold leading-[1.2]">
-                          <span>Be part of</span>
-                          <span className={`text-[var(--buttons)]`}>something bigger by</span>
-                          <span>joining today</span>
-                      </div>
-      
-                      <div className="flex flex-col items-center h-full justify-center w-[50%]">
-                        <div className="flex steps gap-4 max-w-full">
-                          <div className={`step step-info step-neutral`}>
-                            <p className={`text-info text-xs`}>Email Entry</p>
-                          </div>
-                          <div className="step step-info step-neutral">
-                            <p className={`text-info text-xs`}>Otp Verification</p>
-                          </div>
-                          <div className="step step-info step-neutral">
-                            <p className={`text-info text-xs`}>Personal Details</p>
-                          </div>
+        <div className="fixed inset-0 bg-[url('https://images.stockcake.com/public/2/9/c/29cc0acd-d266-46bf-b9b8-b5330cd2918b_large/greenery-on-wood-stockcake.jpg')] bg-no-repeat bg-cover bg-center overflow-hidden">
+            <div className="absolute inset-0 bg-[#131842] bg-opacity-40 backdrop-blur-lg backdrop-saturate-300 flex items-center justify-center">
+                <div className="flex flex-wrap justify-evenly items-center w-full max-w-[1200px] py-10 px-4 md:px-10">
+
+                    <div className="hidden md:flex flex-col justify-start text-[2rem] lg:text-[3rem] w-full md:w-[45%] text-white font-bold leading-[1.2] mb-10 md:mb-0">
+                        <p className="text-[2rem] sm:text-[2.5rem] text-white text-left font-bold mt-2 border-b-2 border-white pb-2 mb-4">Welcome!</p>
+                        <span className="text-[var(--buttons)] mb-2">Be part of</span>
+                        <span className="text-[var(--buttons)] mb-2">something bigger by</span>
+                        <span className="mb-4">joining today</span>
+                    </div>
+
+                    <div className="flex flex-col items-center justify-center w-full md:w-[50%] px-4">
+                        <div className="flex steps gap-2 sm:gap-4 flex-wrap justify-center">
+                            <div className="step step-info step-neutral">
+                                <p className="text-info text-xs">Email Entry</p>
+                            </div>
+                            <div className="step step-info step-neutral">
+                                <p className="text-info text-xs">Otp Verification</p>
+                            </div>
+                            <div className="step step-info step-neutral">
+                                <p className="text-info text-xs">Personal Details</p>
+                            </div>
                         </div>
-                        <div className="flex overflow-hidden max-w-md w-full">
-                            <div className="w-full p-8">
-                                <p className="text-[3rem] text-white text-center font-bold">Welcome!</p>
-                                <div className="mt-4">
-                                    <label className="block text-white text-sm font-bold mb-2">
-                                        Name
-                                    </label>
+
+                        <div className="w-full max-w-[500px] bg-opacity-80 p-6 sm:p-8">
+                            <div className="mt-4 flex gap-4 flex-col sm:flex-row">
+                                <div className="w-full">
+                                    <label className="block text-white text-sm font-bold mb-2">Name</label>
                                     <input
                                         name="name"
                                         value={userDetails.name}
                                         onChange={handleChange}
-                                        className={`text-white rounded-xl py-[0.6rem] px-4 block w-full focus:outline-none bg-[var(--input)]`}
+                                        className="text-white rounded-xl py-[0.6rem] px-4 w-full focus:outline-none bg-[var(--input)]"
                                         type="text"
-                                        autoComplete="off" autoCorrect="off" spellCheck="false"
                                         placeholder="Your name"
-                                        required
                                     />
+                                    {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
                                 </div>
-                                <div className="mt-4">
-                                    <label className="block text-white text-sm font-bold mb-2">
-                                        Username
-                                    </label>
+                                <div className="w-full">
+                                    <label className="block text-white text-sm font-bold mb-2">Username</label>
                                     <input
                                         name="username"
                                         value={userDetails.username}
                                         onChange={handleChange}
-                                        className={`text-white rounded-xl py-[0.6rem] px-4 block w-full focus:outline-none bg-[var(--input)]`}
+                                        className="text-white rounded-xl py-[0.6rem] px-4 w-full focus:outline-none bg-[var(--input)]"
                                         type="text"
-                                        autoComplete="false" autoCorrect="false" spellCheck="false"
                                         placeholder="Your username"
-                                        required
                                     />
+                                    {errors.username && <p className="text-red-400 text-xs mt-1">{errors.username}</p>}
                                 </div>
-                                <div className="mt-4">
-                                    <Calendar ref={birthRef} value={userDetails.birth} onChange={handleBirthChange} />
+                            </div>
+
+                            <div className="mt-4">
+                                <Calendar ref={birthRef} value={userDetails.birth} onChange={handleBirthChange} />
+                            </div>
+
+                            <div className="mt-4">
+                                <label className="block text-white text-sm font-bold mb-2">Password</label>
+                                <input
+                                    name="password"
+                                    value={userDetails.password}
+                                    onChange={handleChange}
+                                    className="text-white rounded-xl py-[0.6rem] px-4 w-full focus:outline-none bg-[var(--input)]"
+                                    type="password"
+                                    placeholder="********"
+                                />
+                                {errors.password && <p className="text-red-400 text-xs mt-1">{errors.password}</p>}
+                                <div className="flex justify-between mt-2">
+                                    <ul className="text-xs space-y-1 w-[48%]">
+                                        <li className="flex items-center gap-2 text-white">
+                                            {passwordCriteria.length ? <FaCheckCircle className="text-green-400" /> : <FaTimesCircle className="text-red-400" />}
+                                            Minimum 8 characters
+                                        </li>
+                                        <li className="flex items-center gap-2 text-white">
+                                            {passwordCriteria.lower ? <FaCheckCircle className="text-green-400" /> : <FaTimesCircle className="text-red-400" />}
+                                            At least 1 lowercase letter
+                                        </li>
+                                        <li className="flex items-center gap-2 text-white">
+                                            {passwordCriteria.upper ? <FaCheckCircle className="text-green-400" /> : <FaTimesCircle className="text-red-400" />}
+                                            At least 1 uppercase letter
+                                        </li>
+                                    </ul>
+
+                                    <ul className="text-xs space-y-1 w-[48%]">
+                                        <li className="flex items-center gap-2 text-white">
+                                            {passwordCriteria.digit ? <FaCheckCircle className="text-green-400" /> : <FaTimesCircle className="text-red-400" />}
+                                            At least 1 number
+                                        </li>
+                                        <li className="flex items-center gap-2 text-white">
+                                            {passwordCriteria.special ? <FaCheckCircle className="text-green-400" /> : <FaTimesCircle className="text-red-400" />}
+                                            At least 1 special character
+                                        </li>
+                                    </ul>
                                 </div>
-                                <div className="mt-4 flex flex-col justify-between">
-                                    <div className="flex justify-between">
-                                        <label className="block text-white text-sm font-bold mb-2">
-                                            Password
-                                        </label>
-                                    </div>
+
+                            </div>
+
+                            <div className="mt-4">
+                                <label className="block text-white text-sm font-bold mb-2">Confirm Password</label>
+                                <div className="flex">
                                     <input
-                                        name="password"
-                                        value={userDetails.password}
+                                        name="confirmPassword"
+                                        value={confirmPassword}
                                         onChange={handleChange}
-                                        className={`text-white rounded-xl py-[0.6rem] px-4 block w-full focus:outline-none bg-[var(--input)]`}
-                                        type="password"
-                                        autoComplete="new-password" autoCorrect="off" spellCheck="false"
+                                        className="text-white rounded-l-xl py-[0.6rem] px-4 w-full focus:outline-none bg-[var(--input)]"
+                                        type={visible ? "text" : "password"}
                                         placeholder="********"
                                     />
-                                </div>
-                                <div className="mt-4 flex flex-col justify-between">
-                                    <div className="flex justify-between">
-                                        <label className="block text-white text-sm font-bold mb-2">
-                                            Confirm Password
-                                        </label>
-                                    </div>
-                                    <div className="flex">
-                                        <input
-                                            name="confirmPassword"
-                                            value={confirmPassword}
-                                            onChange={handleChange}
-                                            className={`text-white rounded-l-xl py-[0.6rem] px-4 block w-full focus:outline-none bg-[var(--input)]`}
-                                            type={visible ? "text" : "password"}
-                                            autoComplete="off" autoCorrect="off" spellCheck="false"
-                                            placeholder="********"
-                                        />
-                                        <button
-                                            type="button"
-                                            onClick={() => setVisible(!visible)}
-                                            className={`text-white rounded-r-xl py-[0.6rem] px-4 block focus:outline-none bg-[var(--input)]`}
-                                        >
-                                            {!visible ? <FaEye /> : <LuEyeClosed />}
-                                        </button>
-                                    </div>
-                                </div>
-                                <div className="mt-8">
                                     <button
-                                        onClick={onSubmit}
-                                        id="submitButton"
-                                        className={`flex justify-center text-white rounded-xl py-[0.6rem] px-4 block w-full focus:outline-none bg-[var(--buttons)]`}
-                                        disabled={loading}
+                                        type="button"
+                                        onClick={() => setVisible(!visible)}
+                                        className="text-white rounded-r-xl py-[0.6rem] px-4 bg-[var(--input)]"
                                     >
-                                        {loading ? (
-                                            <FaSpinner className="animate-spin mr-2" />
-                                        ) : (
-                                            "Sign Up"
-                                        )}
+                                        {!visible ? <FaEye /> : <LuEyeClosed />}
                                     </button>
                                 </div>
-                                <div className="flex items-center w-full text-center mt-4">
-                                  <div
-                                  className="text-xs text-gray-500 text-center w-full "
-                                  >
-                                  Already have an account?
-                                  <Link to={'/login'} id="submitButton" className={`hover:underline text-[var(--buttons)]`}> Sign In</Link>
-                                  </div>
-                              </div>
+                                {errors.confirmPassword && <p className="text-red-400 text-xs mt-1">{errors.confirmPassword}</p>}
+                            </div>
+
+                            <div className="mt-8">
+                                <button
+                                    onClick={onSubmit}
+                                    id="submitButton"
+                                    className="flex justify-center text-white rounded-xl py-[0.6rem] px-4 w-full bg-[var(--buttons)]"
+                                    disabled={loading}
+                                >
+                                    {loading ? <FaSpinner className="animate-spin mr-2" /> : "Sign Up"}
+                                </button>
+                            </div>
+
+                            <div className="flex justify-center mt-4 text-xs text-gray-400">
+                                Already have an account?
+                                <Link to="/login" className="ml-1 hover:underline text-[var(--buttons)]">Sign In</Link>
                             </div>
                         </div>
-                      </div>
-                      </div>
-                  </div>
-    </div>
-    )
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    );
 }
 
 export default SignUp;
