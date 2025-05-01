@@ -44,8 +44,22 @@ const getPulseComments = async(req,res) => {
     })
 }
 
+const likeComment = async(req,res) => {
+    const response = await commentService.likeComment(req.params.id,req.body.id);
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg : "Unable to like the comment",
+            error : response.error,
+        })
+    }
+    return res.status(StatusCodes.OK).send({
+        msg : "Successfully liked the comment",
+        commentDetails : response.comments
+    })
+}
 module.exports = {
     CreateComment,
     getCommentByPostId,
-    getPulseComments
+    getPulseComments,
+    likeComment
 }

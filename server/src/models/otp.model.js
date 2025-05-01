@@ -8,6 +8,10 @@ const optSchema = new Schema({
     otp : {
         type : String
     },
+    isVerified : {
+        type : Boolean , 
+        default : false
+    }
 })
 
 const otp = mongoose.model('otp',optSchema);

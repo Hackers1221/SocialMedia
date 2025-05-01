@@ -12,6 +12,13 @@ const jwt = require('jsonwebtoken')
 const sendotp = async(email) => {
     const response = {};
     try {
+        const userdata = await usermodel.findOne({
+            email
+        })
+        if(userdata){
+            response.error = "Email already in Use";
+            return response;
+        }
         const otps = await otpModel.deleteMany({
             email : email
         })

@@ -12,11 +12,21 @@ const {deleteImages, deleteVideos} = require("../../cloudConfig.js");
 const { response } = require('express');
 const { userSocketMap, getIO } = require('../../socket/socketInstance.js');
 const mongoose = require("mongoose");
+const otpModel = require('../models/otp.model.js')
 
 const CreateUser = async(data) => { 
     const response  = {};
 
     try {
+        const checkEmailVerification = await otpModel.find({email : data.email});
+        if(!checkEmailVerification){
+            response.error = "Email not verified";
+            return response;
+        }
+        if(!checkEmailVerification.isVerified){
+            response.error = "Email not verified";
+            return response;
+        }
         const userObject = {
             image: {
                 url: "https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-male-user-profile-vector-illustration-isolated-background-man-profile-sign-business-concept_157943-38764.jpg?semt=ais_hybrid",

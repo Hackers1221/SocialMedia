@@ -46,6 +46,25 @@ export const getPulseComments = createAsyncThunk('get/allComments', async() => {
     }
 })
 
+export const likeComment = createAsyncThunk('post/likeComment', async(data) => {
+    try {
+        const resp = {
+            id : data.id
+        }
+        const response = await axiosInstance.patch(`comment/like/${data._id}`,resp , {
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+        console.log(response);
+        if(response){
+            return response;
+        }
+    } catch (error) {
+        toast.error(error.message || "Failed to like post");
+    }
+})
+
 const commentSlice = createSlice({
     name : 'comment',
     initialState,
