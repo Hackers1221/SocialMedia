@@ -14,7 +14,7 @@ main()
   });
 
 async function main() {
-  await mongoose.connect("mongodb+srv://rounakkumar190504:GiEbVkpEioO5K1j0@socialmedia.qt7ge.mongodb.net/");
+  await mongoose.connect(Mongo_DB_URL);
 }
 
 const initDB = async () => {
