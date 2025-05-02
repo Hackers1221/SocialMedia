@@ -2,9 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 import { io } from "socket.io-client";
 import { updateMessages, setOnlineUsers } from "./chat.slice";
 import { addNotification, updateFollowingList } from "./auth.slice";
-import { updateGroupDetails, updateGroupMessages } from "./group.slice";
-import { addGroup } from "./group.slice";
+import { updateGroupDetails, updateGroupMessages, addGroup } from "./group.slice";
 
+// Use environment variable at the top
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 let socketInstance = null;
 
@@ -15,13 +16,13 @@ const initialState = {
 
 const socketSlice = createSlice({
   name: "socket",
-  initialState, 
+  initialState,
   reducers: {
     initSocket: (state, action) => {
       const { userId, dispatch } = action.payload;
 
       if (!socketInstance) {
-        socketInstance = io("https://ripple-backend-1ty8.onrender.com", {
+        socketInstance = io(BASE_URL, {
           transports: ["websocket"],
           autoConnect: false,
           query: { userId },
@@ -58,23 +59,24 @@ const socketSlice = createSlice({
         });
 
         socketInstance.on("groupCreated", (data) => {
-          dispatch(addGroup ({ groupData: data }));
-        })
+          dispatch(addGroup({ groupData: data }));
+        });
 
         socketInstance.on("receiveGroupMessage", (data) => {
           dispatch(updateGroupMessages({ message: data }));
         });
 
         socketInstance.on("updatedGroup", (data) => {
-          console.log (data);
-          dispatch(updateGroupDetails ({ groupData: data.updated, groupDetails: data.group }));
+          console.log(data);
+          dispatch(updateGroupDetails({ groupData: data.updated, groupDetails: data.group }));
         });
 
         socketInstance.on("group-leave", (data) => {
-          dispatch(updateGroupDetails ({ groupData: data.updated, groupDetails: data.group }));
+          dispatch(updateGroupDetails({ groupData: data.updated, groupDetails: data.group }));
         });
+
         socketInstance.on("group-delete", (data) => {
-          dispatch(updateGroupDetails ({ groupDetails: data.group }));
+          dispatch(updateGroupDetails({ groupDetails: data.group }));
         });
       }
 
