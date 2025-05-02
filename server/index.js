@@ -18,6 +18,15 @@ const groupRouter = require("./src/routes/group.routes");
 const notificationRouter = require("./src/routes/notification.routes");
 const server = http.createServer(app);
 
+
+const allowedOrigins = ['https://ripple-6qtx.onrender.com'];
+
+app.use(cors({
+    origin: allowedOrigins,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
+}));
+
 app.use(function (req, res, next) {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Credentials", "true");
@@ -49,9 +58,6 @@ app.use((err,req,res,next) => {
 })
 
 const allowedOrigins = ['https://ripple-6qtx.onrender.com'];
-
-app.use(cors());
-
 
 async function ConnectToDb(){
 
