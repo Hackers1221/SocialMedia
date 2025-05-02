@@ -1,4 +1,4 @@
-const ExpressError = require('../utils/Express.error');
+const ExpressError = require('../utils/express.error');
 const {userSchema} = require('../validators/schema');
 const User = require("../models/user.model");
 const { deleteImages, uploadSingleImage } = require('../../cloudConfig');
