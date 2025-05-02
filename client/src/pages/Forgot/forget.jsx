@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { forgetPass } from "../../redux/Slices/auth.slice";
-import { toast } from "react-hot-toast";
+import { toast } from "react-hot-toast"; 
 
 function ForgetPassword() {
     const navigate = useNavigate();
