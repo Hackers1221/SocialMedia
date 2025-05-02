@@ -1,7 +1,6 @@
 const express = require("express");
 const cors = require('cors');
 const app = express();
-const path = require('path');
 const bodyParser = require('body-parser');
 const userroutes = require('./src/routes/user.routes');
 const {Mongo_DB_URL, PORT} = require('./src/config/db.config');
@@ -18,15 +17,6 @@ const setupSocket = require("../server/socket/socket");
 const groupRouter = require("./src/routes/group.routes");
 const notificationRouter = require("./src/routes/notification.routes");
 const server = http.createServer(app);
-
-
-const allowedOrigins = ['https://ripple-6qtx.onrender.com'];
-
-app.use(cors({
-    origin: allowedOrigins,
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true
-}));
 
 app.use(function (req, res, next) {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -57,6 +47,8 @@ app.use((err,req,res,next) => {
         msg : message
     })
 })
+
+app.use(cors());
 
 async function ConnectToDb(){
 
