@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require('cors');
 const app = express();
+const path = require('path');
 const bodyParser = require('body-parser');
 const userroutes = require('./src/routes/user.routes');
 const {Mongo_DB_URL, PORT} = require('./src/config/db.config');
@@ -56,6 +57,16 @@ app.use((err,req,res,next) => {
         msg : message
     })
 })
+
+// Serve static files
+app.use(express.static(path.join(__dirname, 'client/build')));
+
+// Your API routes go here...
+
+// Catch-all for React Router
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+});
 
 async function ConnectToDb(){
 
