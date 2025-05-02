@@ -3,7 +3,7 @@ const cors = require('cors');
 const app = express();
 const bodyParser = require('body-parser');
 const userroutes = require('./src/routes/user.routes');
-const {Mongo_DB_URL} = require('./src/config/db.config');
+const {Mongo_DB_URL, PORT} = require('./src/config/db.config');
 const mongoose = require('mongoose');
 const postRoutes = require("./src/routes/posts.routes");
 const pulseRoutes = require("./src/routes/pulse.route");
@@ -68,7 +68,7 @@ ConnectToDb();
 setupSocket(server);
 
 
-server.listen(8080, () => {
-    console.log("listning to port 8080!");
+server.listen(PORT, () => {
+    console.log(`listning to port ${PORT}!`);
 })
 
