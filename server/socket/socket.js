@@ -4,13 +4,14 @@ const Group = require('../src/models/group.model');
 const User = require("../src/models/user.model");
 const { uploadFile, deleteImages } = require("../cloudConfig");
 const mongoose = require("mongoose");
+const { FRONT_URL } = require('../src/config/db.config');
 
 const { setIO, userSocketMap, onlineUsers } = require("./socketInstance"); // To set io globally
 
 const setupSocket = (server) => {
   const io = new Server(server, {
     cors: {
-      origin: "https://ripple-6qtx.onrender.com",
+      origin: FRONT_URL,
       methods: ["GET", "POST", "DELETE", "PUT"],
     },
   });
