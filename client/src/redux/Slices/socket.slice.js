@@ -21,7 +21,7 @@ const socketSlice = createSlice({
       const { userId, dispatch } = action.payload;
 
       if (!socketInstance) {
-        socketInstance = io("http://localhost:8080", {
+        socketInstance = io("https://ripple-backend-1ty8.onrender.com", {
           transports: ["websocket"],
           autoConnect: false,
           query: { userId },
