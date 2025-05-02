@@ -57,8 +57,6 @@ app.use((err,req,res,next) => {
     })
 })
 
-const allowedOrigins = ['https://ripple-6qtx.onrender.com'];
-
 async function ConnectToDb(){
 
     try {
