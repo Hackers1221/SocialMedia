@@ -30,14 +30,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.text());
 
-app.use('/ripple/auth',userroutes);
-app.use('/ripple/post',postRoutes);
-app.use('/ripple/pulse',pulseRoutes);
-app.use('/ripple/comment',commentRoutes);
-app.use('/ripple/verse',verseRoutes);
-app.use('/ripple/message',messageRoutes);
-app.use('/ripple/group',groupRoutes);
-app.use('/ripple/notification', notificationRouter);
+app.use('/auth',userroutes);
+app.use('/post',postRoutes);
+app.use('/pulse',pulseRoutes);
+app.use('/comment',commentRoutes);
+app.use('/verse',verseRoutes);
+app.use('/message',messageRoutes);
+app.use('/group',groupRoutes);
+app.use('/notification', notificationRouter);
 
 
 // Error handling middleware
@@ -50,11 +50,7 @@ app.use((err,req,res,next) => {
 
 const allowedOrigins = ['https://ripple-6qtx.onrender.com'];
 
-app.use(cors({
-    origin: allowedOrigins,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-    credentials: true
-}));
+app.use(cors());
 
 
 async function ConnectToDb(){
