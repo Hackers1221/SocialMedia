@@ -19,7 +19,6 @@ import VerseForm from "./VerseForm";
 import MoreOptions from "./MoreOptions";
 
 function Sidebar() {
-
     const authState = useSelector ((state) => state.auth);
 
     const [isOpen, setIsOpen] = useState(false);
@@ -111,9 +110,9 @@ function Sidebar() {
                     } transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:shadow-none border-r border-[var(--border)]`}
                     onClick={(e) => e.stopPropagation()} // Prevents click inside from closing
                 >
-                    <div className={`p-4 flex items-center`}>
-                        <div className={`text-2xl font-bold heading text-[var(--buttons)]`}>Drop</div>
-                        <div className={`text-3xl font-bold heading text-[var(--buttons)]`}>Chat</div>
+                    <div className={`p-4 flex items-end gap-2`}>
+                        <img src="../../Logo.png" className="w-[3.5rem] h-[2.5rem]"/>
+                        <div className={`text-2xl font-bold heading text-[var(--buttons)]`}>Ripple</div>
                     </div>
                     <div className="flex flex-col h-full justify-between overflow-y-auto overflow-x-hidden flex-grow">
                         <ul className="flex flex-col py-4 space-y-1">
