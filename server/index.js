@@ -59,13 +59,13 @@ app.use((err,req,res,next) => {
 })
 
 // Serve static files
-app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.static(path.join(__dirname, 'https://ripple-6qtx.onrender.com/build')));
 
 // Your API routes go here...
 
 // Catch-all for React Router
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+  res.sendFile(path.join(__dirname, 'https://ripple-6qtx.onrender.com/build', 'index.html'));
 });
 
 async function ConnectToDb(){
