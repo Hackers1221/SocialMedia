@@ -10,7 +10,7 @@ const { setIO, userSocketMap, onlineUsers } = require("./socketInstance"); // To
 const setupSocket = (server) => {
   const io = new Server(server, {
     cors: {
-      origin: "http://localhost:5173",
+      origin: "https://ripple-6qtx.onrender.com",
       methods: ["GET", "POST", "DELETE", "PUT"],
     },
   });
