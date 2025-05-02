@@ -13,7 +13,7 @@ function Pulse () {
     const dispatch = useDispatch();
     const location = useLocation();
     const start = location.state?.start || 0;
-    const source = location.state?.source || "postList";
+    const source = location.state?.source || "pulseList";
 
     const [followers, setFollowers] = useState ([]);
 
