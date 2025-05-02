@@ -7,9 +7,7 @@ import Store from './redux/store.js'
 
 import { SkeletonTheme } from 'react-loading-skeleton';
 import { ThemeProvider } from './ThemeContext.jsx'
-
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Toaster } from 'react-hot-toast'
 
 createRoot(document.getElementById('root')).render(
     <SkeletonTheme baseColor={`${_COLOR.border}`}>
@@ -17,7 +15,10 @@ createRoot(document.getElementById('root')).render(
       <Provider store={Store}>
         <ThemeProvider>
             <App/>
-            <ToastContainer position="bottom-right" autoClose={3000} hideProgressBar />
+            <Toaster
+            position="bottom-right"
+            reverseOrder={false}
+            />
         </ThemeProvider>
       </Provider>
     </BrowserRouter>

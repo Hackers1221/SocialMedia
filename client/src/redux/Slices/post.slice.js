@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../config/axiosInstance";
-import { toast } from 'react-toastify';
+import toast from "react-hot-toast";
 
 const initialState = {
     downloadedPosts: [],
