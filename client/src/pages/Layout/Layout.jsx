@@ -32,8 +32,8 @@ function Layout () {
     return (
         <div className={`min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-[var(--background)] text-gray-800`}>
             {!hideSidebar && <Sidebar />}
-            {!hideOthers && screenWidth >= 1480 && !hideSidebar && <Suggestions />}
-            <Outlet />
+            {authState?.isLoggedIn && !hideOthers && screenWidth >= 1480 && !hideSidebar && <Suggestions />}
+            {(hideSidebar || authState?.isLoggedIn) && <Outlet />}
         </div>
     )
 }
