@@ -47,7 +47,14 @@ app.use((err,req,res,next) => {
         msg : message
     })
 })
-app.use(cors());
+
+const allowedOrigins = ['https://ripple-6qtx.onrender.com'];
+
+app.use(cors({
+    origin: allowedOrigins,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    credentials: true
+}));
 
 
 async function ConnectToDb(){
