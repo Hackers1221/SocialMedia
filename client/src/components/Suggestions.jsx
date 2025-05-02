@@ -57,7 +57,7 @@ function Suggestions () {
     
         useEffect (() => {
             getFollowers ();
-        }, [authState.data.follower])
+        }, [authState?.data?.follower])
 
     useEffect (() => {
         setFollowers([]);
