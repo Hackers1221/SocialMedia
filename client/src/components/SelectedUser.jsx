@@ -29,7 +29,7 @@ function SelectedUser ({ isOpen, setOpen, followers, post }) {
 
         setOpen (!isOpen);
 
-        navigate ('/messenger');
+        navigate ('/message');
     }
 
     useEffect (() => {
