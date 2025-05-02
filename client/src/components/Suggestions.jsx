@@ -45,7 +45,7 @@ function Suggestions () {
             }
             // Set a timeout to wait before making the API call
             const delayDebounceFn = setTimeout(async () => {
-                try {
+                try {   
                     const response = await dispatch(searchUser (query));
                     setSearchResult(response.payload?.data?.userdata);
                 } catch (error) {

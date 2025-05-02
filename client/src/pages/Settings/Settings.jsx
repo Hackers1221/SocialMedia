@@ -16,7 +16,6 @@ const menuItems = [
 ];
 
 function Settings() {
-
   const {theme, toggleTheme} = useTheme ();
 
   const defalutImage = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
@@ -26,7 +25,6 @@ function Settings() {
   const navigate = useNavigate();
 
   // Delete related
-  const [deleting, setDeleting] = useState(false);
   const [isDeleteDialog, setIsdeleteDialog] = useState(false);
   const [isPrivate, setPrivate] = useState (authState.data?.isPrivate);
 
@@ -42,6 +40,7 @@ function Settings() {
     about: authState?.data?.about || ""
   });
   const [image, setImage] = useState(null);
+  
 
   function handleChange(e) {
     const { name, value } = e.target;

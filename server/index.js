@@ -30,14 +30,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.text());
 
-app.use('/social/auth',userroutes);
-app.use('/social/post',postRoutes);
-app.use('/social/pulse',pulseRoutes);
-app.use('/social/comment',commentRoutes);
-app.use('/social/verse',verseRoutes);
-app.use('/social/message',messageRoutes);
-app.use('/social/group',groupRoutes);
-app.use('/social/notification', notificationRouter);
+app.use('/ripple/auth',userroutes);
+app.use('/ripple/post',postRoutes);
+app.use('/ripple/pulse',pulseRoutes);
+app.use('/ripple/comment',commentRoutes);
+app.use('/ripple/verse',verseRoutes);
+app.use('/ripple/message',messageRoutes);
+app.use('/ripple/group',groupRoutes);
+app.use('/ripple/notification', notificationRouter);
 
 
 // Error handling middleware
