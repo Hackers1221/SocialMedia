@@ -2,7 +2,6 @@ import { X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux'
 import AddUser from "./AddUser";
-import toast from "react-hot-toast";
 import User from '../components/User'
 import { getUserById } from "../redux/Slices/auth.slice";
 
@@ -25,7 +24,7 @@ function UpdateGroup ({ isOpen, setOpen, setDelete }) {
     const [groupName, setGroupName] = useState (liveGroup?.name);
     const [imageUrl, setImageUrl] = useState (liveGroup?.image?.url);
     const [isDialogOpen, setDialogOpen] = useState (false);
-    const [query,SetQuery] = useState("");
+    const [query, setQuery] = useState("");
     const [queriedParticipants,setQueriedParticipants] = useState(liveGroup);
 
     const defaultImage = "https://t3.ftcdn.net/jpg/12/81/12/20/240_F_1281122039_wYCRIlTBPzTUzyh8KrPd87umoo52njyw.jpg";
@@ -42,7 +41,7 @@ function UpdateGroup ({ isOpen, setOpen, setDelete }) {
     }
 
     async function getNonParticipants () {
-        const memberIds = queriedParticipants.members?.map(member => member.userId);
+        const memberIds = liveGroup.members?.map(member => member.userId._id);
         let arr = authState.data?.follower?.filter(user => !memberIds.includes(user));
         const inactiveMembers = queriedParticipants.members
             .filter(member => !member.isActive)
@@ -162,7 +161,7 @@ function UpdateGroup ({ isOpen, setOpen, setDelete }) {
     
 
     const onChangeHandler = (e) => {
-        SetQuery(e.target.value);
+        setQuery(e.target.value);
     }
 
     return (
@@ -243,9 +242,9 @@ function UpdateGroup ({ isOpen, setOpen, setDelete }) {
                                 name = "query"
                                 value = {query}
                             />
-                            <button className={`text-[var(--text)] text-2xl h-full`}>
+                            {query && <button onClick={() => setQuery ("")} className={`text-[var(--text)] text-2xl h-full`}>
                                 <X />
-                            </button>
+                            </button>}
                         </div>
                         <div className="flex flex-col max-h-[20rem] overflow-y-auto">
                             {queriedParticipants.admins?.includes(authState.data._id) && <div 

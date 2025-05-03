@@ -18,6 +18,16 @@ const CreateUser = async(data) => {
     const response  = {};
 
     try {
+        let user = await User.findOne({ username: data.username });
+        if (user) {
+            response.error = "Username already exists";
+            return response;
+        }
+
+        if (!data.email) {
+            response.error = "Please start sign up again";
+            return response;
+        }
         // const checkEmailVerification = await otpModel.find({email : data.email});
         // if(!checkEmailVerification){
         //     response.error = "Email not verified";

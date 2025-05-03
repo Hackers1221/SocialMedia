@@ -14,6 +14,7 @@ const userSchema = new Schema({
     username: {
         type: String,
         required: [true, 'Name cannot be empty'],
+        unique: true
     },
     isPrivate : {
         type : Boolean,

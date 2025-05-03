@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../config/axiosInstance";
+import toast from "react-hot-toast";
 
 const initialState = {
     groupDetails: [],
@@ -15,7 +16,7 @@ export const getGroupByUserId = createAsyncThunk ('getGroupByUserId', async (id)
         })
         return response;
     } catch (error) {
-        console.log (error);
+        toast.error(error.response.data.error || "An error occurred!");
     }
 })
 
@@ -29,7 +30,7 @@ export const getGroupById = createAsyncThunk ('getGroupById', async (id) => {
         console.log(response);
         return response;
     } catch (error) {
-        console.log (error);
+        toast.error(error.response.data.error || "An error occurred!");
     }
 })
 
@@ -42,7 +43,7 @@ export const getRecentMessage = createAsyncThunk('getrecentGroupChats' , async(i
         })
         return response;
     } catch (error) {
-        console.log (error);
+        toast.error(error.response.data.error || "An error occurred!");
     }
 })
 

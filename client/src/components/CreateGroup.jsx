@@ -167,9 +167,9 @@ function CreateGroup ({ isOpen, setOpen }) {
                                 name = "query"
                                 value = {query}
                             />
-                            <button className={`text-[var(--text)] text-2xl h-full`}>
+                            {query && <button onClick={() => setQuery ("")} className={`text-[var(--text)] text-2xl h-full`}>
                                 <X />
-                            </button>
+                            </button>}
                         </div>
                         <div className="flex flex-col gap-4">
                             {queriedFollowers?.map ((user, key) => (

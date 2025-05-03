@@ -16,8 +16,8 @@ createRoot(document.getElementById('root')).render(
         <ThemeProvider>
             <App/>
             <Toaster
-            position="bottom-right"
-            reverseOrder={false}
+                position="top-right"
+                reverseOrder={false}
             />
         </ThemeProvider>
       </Provider>

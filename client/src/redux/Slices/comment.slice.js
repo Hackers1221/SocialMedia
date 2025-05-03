@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axiosInstance from "../../config/axiosInstance"
+import toast from "react-hot-toast"
 
 
 const initialState = {
@@ -15,7 +16,7 @@ export const CreateComment = createAsyncThunk('post/comment' , async(data) => {
         })
         return response;
     } catch (error) {
-        console.log(error);
+        toast.error(error.response.data.error || "An error occurred!");        
     }
 })
 
@@ -29,7 +30,7 @@ export const getCommentByPostId = createAsyncThunk('get/comment',async(id) => {
         })
         return response;
     } catch (error) {
-        console.log(error);
+        toast.error(error.response.data.error || "An error occurred!");
     }
 })
 
@@ -42,7 +43,7 @@ export const getPulseComments = createAsyncThunk('get/allComments', async() => {
         })
         return response;
     } catch (error) {
-        console.log(error);
+        toast.error(error.response.data.error || "An error occurred!");
     }
 })
 
@@ -61,7 +62,7 @@ export const likeComment = createAsyncThunk('post/likeComment', async(data) => {
             return response;
         }
     } catch (error) {
-        toast.error(error.message || "Failed to like post");
+        toast.error(error.response.data.error || "An error occurred!");
     }
 })
 

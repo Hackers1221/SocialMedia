@@ -13,6 +13,8 @@ function usePulse () {
             dispatch (getAllPulse ()); 
             dispatch(getSavedPulse (authState?.data?._id));
         }
+
+        if (location.pathname === '/saved' || location.pathname === '/explore') dispatch(getSavedPulse (authState?.data?._id));
     }
 
     useEffect (() => {

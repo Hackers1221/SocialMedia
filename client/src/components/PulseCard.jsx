@@ -90,11 +90,10 @@ export default function PulseCard({ pulse, followers }) {
         }));
 
         if (!response?.payload) {
-            toast.error('Pulse not added to saved pulse');
+            toast.error('Some error occured');
             return;
         }
 
-        toast.success('Pulse added to saved pulse');
         setSaved((prev) => !prev);
     }
 

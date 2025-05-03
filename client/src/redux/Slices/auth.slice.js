@@ -164,8 +164,7 @@ export const updateUser = createAsyncThunk('/user/update' , async(data) => {
         if(!response) toast.error('Something went wrong, try again');
         return response;
     } catch (error) {
-        console.log(error.response);
-        toast.error(error.response.data.msg);
+        toast.error(error.response.data.error);
     }
 })
 
@@ -180,8 +179,7 @@ export const deleteUser = createAsyncThunk('/user/delete', async (userId) => {
         else toast.success(response.data.msg);       
         return response;
     } catch (error) {
-        console.log(error.response);
-        toast.error(error.response?.data?.msg || 'An error occurred');
+        toast.error(error.response?.data?.error || 'An error occurred');
     }
 });
 
@@ -194,7 +192,7 @@ export const searchUser = createAsyncThunk('search/user',async(query) => {
         })
         return response;
     } catch (error) {
-        toast.error(error.response?.data?.msg || 'An error occurred');
+        toast.error(error.response?.data?.error || 'An error occurred');
     }
 });
 

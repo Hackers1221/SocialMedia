@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../config/axiosInstance";
+import toast from "react-hot-toast";
 
 const initialState = {};
 
@@ -17,7 +18,7 @@ export const deleteNonFR = createAsyncThunk('/notification/deleteNonFollowReques
         if (!response) toast.error('Something went wrong!');
         return;
     } catch (error) {
-        console.log(error.response);
+        toast.error(error.response.data.error || "An error occurred!");
     }
 });
 

@@ -17,7 +17,7 @@ export const getAllVerse = createAsyncThunk('verse/getAllVerse', async () => {
         });
         return response;
     } catch (error) {
-        toast.error(error.response?.data?.message || "Failed to fetch posts");
+        toast.error(error.response?.data?.error || "Failed to fetch verse");
     }
 });
 
@@ -30,8 +30,7 @@ export const createVerse = createAsyncThunk('verse/createVerse', async (verseDat
         });
         return response;
     } catch (error) {
-        console.log (error.response?.data?.message);
-        toast.error(error.response?.data?.message || "Failed to create post");
+        toast.error(error.response?.data?.error || "Failed to create verse");
     }
 });
 
@@ -46,7 +45,7 @@ export const updateVerse = createAsyncThunk('verse/updateVerse',async(id, verseD
             return response;
         }
     } catch (error) {
-        toast.error(error.response?.data?.message || "Failed to update post");
+        toast.error(error.response?.data?.error || "Failed to update verse");
     }
 })
 
@@ -64,7 +63,7 @@ export const likeVerse = createAsyncThunk('verse/likeVerse', async(data) => {
             return response;
         }
     } catch (error) {
-        toast.error(error.response?.data?.message || "Failed to update post");
+        toast.error(error.response?.data?.error || "Failed to like verse");
     }
 })
 
@@ -79,7 +78,7 @@ export const getVerseByUserId = createAsyncThunk('verse/getVerse' ,async(id) => 
             return response;
         }
     } catch (error) {
-        toast.error(error.response?.data?.message || "Failed to get post");
+        toast.error(error.response?.data?.error || "Failed to get verse");
     }
 })
 
@@ -94,7 +93,7 @@ export const getVerseById = createAsyncThunk('verse/getVerseById' ,async(id) => 
             return response;
         }
     } catch (error) {
-        toast.error(error.response?.data?.message || "Failed to get post");
+        toast.error(error.response?.data?.error || "Failed to get verse");
     }
 })
 
@@ -110,7 +109,7 @@ export const deleteVerse = createAsyncThunk('verse/delete' , async(data) => {
             return response;
         }
     } catch (error) {
-        console.log(error);
+        toast.error(error.response?.data?.error || "Failed to delete the verse");
     }
 })
 
