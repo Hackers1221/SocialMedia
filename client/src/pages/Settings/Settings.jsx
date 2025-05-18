@@ -1,12 +1,10 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updateUser, deleteUser, logout } from "../../redux/Slices/auth.slice";
+import { updateUser } from "../../redux/Slices/auth.slice";
 import ConfirmDeleteDialog from "../../components/ConfirmDeleteDialog";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useTheme } from "../../ThemeContext";
 import PrivacyButton from "../../components/PrivacyButton";
-import { disconnectSocket } from "../../redux/Slices/socket.slice";
 
 const menuItems = [
   { name: "General", key: "general" },
@@ -16,8 +14,6 @@ const menuItems = [
 ];
 
 function Settings() {
-  const {theme, toggleTheme} = useTheme ();
-
   const defalutImage = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
   const authState = useSelector((state) => state.auth);
   const [confirmPassword, setconfirmPassword] = useState("");
@@ -58,14 +54,6 @@ function Settings() {
     setImageUrl(URL.createObjectURL(uploadedFile));
     setImage(uploadedFile);
   };
-
-  async function onLogout () {
-    await dispatch (logout ());
-    await dispatch (disconnectSocket ());
-    navigate ("/login"); 
-    if (theme === 'dark') toggleTheme ();
-    return;
-  }
 
   const updateuser = async () => {
     const formData = new FormData();
@@ -152,7 +140,7 @@ function Settings() {
                 <img
                   src={imageUrl || userDetails?.image || defalutImage}
                   alt="Profile"
-                  className="w-20 h-20 rounded-full border"
+                  className="w-20 h-20 rounded-full border object-cover"
                 />
                 <div>
                   <input
@@ -289,19 +277,6 @@ function Settings() {
                 </button>
               </div>
             </div>
-            <div className={`mt-4 bg-transparent border border-[var(--buttons)] p-6 rounded-lg shadow-sm`}>
-              <h3 className={`text-lg font-medium text-[var(--text)] mb-2`}>End Session</h3>
-              <p className={`text-sm text-[var(--text)] mb-4`}>
-                Logging out will end your current session. Make sure to save any unsaved changes before proceeding.
-              </p>
-              <div className="flex justify-between items-center">
-                <button 
-                onClick={onLogout}
-                  className={`px-6 py-3 font-bold bg-transparent border border-[var(--buttons)] text-[var(--buttons)] rounded-full hover:bg-[var(--buttons)] hover:text-[var(--buttonText)] transition-all`}>
-                  Log Out
-                </button>
-              </div>
-            </div>
           </div>
         )}
 
@@ -313,8 +288,8 @@ function Settings() {
               <PrivacyButton isOn={isPrivate} onToggle={handleToggle}/>
             </div>
             <div className="flex flex-col gap-4 text-sm mt-4 p-4 text-[var(--text)]">
-              <p>When your account is public, your profile and posts can be seen by anyone, on or off DropChat, even if they don't have an DropChat account.</p>
-              <p>When your account is private, only the followers you approve can see what you share, including your photos or videos on hashtag and location pages, and your followers and following lists. Certain info on your profile, like your profile picture and username, is visible to everyone on and off DropChat.</p>
+              <p>When your account is public, your profile and posts can be seen by anyone, on or off Ripple, even if they don't have an Ripple account.</p>
+              <p>When your account is private, only the followers you approve can see what you share, including your photos or videos on hashtag and location pages, and your followers and following lists. Certain info on your profile, like your profile picture and username, is visible to everyone on and off Ripple.</p>
             </div>
           </div>
         )}

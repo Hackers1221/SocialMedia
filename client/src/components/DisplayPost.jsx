@@ -386,8 +386,8 @@ const DisplayPost = ({ open, setOpen, index, list, followers }) => {
           </div>
 
           <div className={`text-white text-sm ${commentState.comments.length === 1 ? "font-semibold" : ""}`}>
-  {commentState.comments.length} {commentState.comments.length === 1 ? "comment" : "comments"}
-</div>
+            {commentState.comments.length} {commentState.comments.length === 1 ? "comment" : "comments"}
+            </div>
 
 
           <div className="mt-2 flex w-full justify-between p-2 border-t">
@@ -395,11 +395,6 @@ const DisplayPost = ({ open, setOpen, index, list, followers }) => {
               <button className={`flex gap-2 items-center text-[var(--text)]`} onClick={toggleLike}>
                 {liked ? (<i className="text-red-600 fa-solid fa-heart"></i>) : <i className={`text-[var(--text)] fa-regular fa-heart`}></i>}
                 {liked ? (<h2 className="text-sm text-red-600 font-semibold">Liked</h2>) : (<h2 className="text-sm font-semibold">Like</h2>)}
-              </button>
-              <button className={`flex gap-2 items-center text-[var(--text)]`}>
-              {/* <i className="text-white fa-solid fa-comment"></i> */}
-                <i className={`text-[var(--text)] fa-regular fa-comment`}></i>
-                <h2 className="text-sm font-semibold">Comment</h2>
               </button>
               <button className={`flex gap-2 items-center`} onClick={() => setShare (true)}>
                 <i className={`text-[var(--text)] fa-regular fa-paper-plane`}></i>

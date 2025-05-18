@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { sendOtp, verifyOtp} from "../../redux/Slices/auth.slice";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import BlockBackNavigation from "../../components/BlockBackNavigation";
 
 function VerifyOtp() {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
@@ -110,14 +111,14 @@ function VerifyOtp() {
   return (
     <div className={`flex items-center justify-center h-screen w-full px-5 sm:px-0 bg-[url("https://images.stockcake.com/public/2/9/c/29cc0acd-d266-46bf-b9b8-b5330cd2918b_large/greenery-on-wood-stockcake.jpg")]  bg-no-repeat bg-cover bg-center`}>
       <div className={`flex items-center justify-center bg-[#131842] bg-opacity-[40%] backdrop-blur-lg backdrop-saturate-300 w-full h-full`}>
-                      <div className="flex justify-evenly w-[90%] h-[80%]">
+                    <div className="flex justify-evenly w-[90%] h-[80%]">
                       <div className="hidden md:flex flex-col justify-center text-[3rem] w-[40%] text-white font-bold leading-[1.2]">
                           <span>Be part of</span>
                           <span className={`text-[var(--buttons)]`}>something bigger by</span>
                           <span>joining today</span>
                       </div>
       
-                      <div className="flex flex-col items-center h-full justify-center w-[50%]">
+                      <div className="flex flex-col items-center h-full justify-center w-full md:w-[50%]">
                         <div className="flex steps gap-4 max-w-full">
                           <div className={`step step-info step-neutral`}>
                             <p className={`text-info text-xs`}>Email Entry</p>
@@ -150,7 +151,7 @@ function VerifyOtp() {
                                   value={digit}
                                   onChange={(e) => handleChange(index, e)}
                                   onKeyDown={(e) => handleKeyDown(index, e)}
-                                  className={`w-12 h-12 text-center text-xl font-bold border-2 border-[var(--buttons)] rounded-md focus:outline-none text-white bg-gray-800`}
+                                  className={`w-10 md:w-12 h-10 md:h-12 text-center text-xl font-bold border-2 border-[var(--buttons)] rounded-md focus:outline-none text-white bg-gray-800`}
                                   maxLength="1"
                                   inputMode="numeric"
                                   pattern="[0-9]*"

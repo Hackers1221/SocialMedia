@@ -11,7 +11,7 @@ function Avatar ({size, url, border}) {
   }
   let bord = ''
   if (border === "true") {
-    bord = 'border-4 border-white';
+    bord = 'border-2 border-white';
   }
   return (
     <div>

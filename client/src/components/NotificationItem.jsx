@@ -60,14 +60,14 @@ function NotificationItem({
       {sender.avatarUrl ? (
         <img src={sender.avatarUrl} alt={sender.username} className="w-full h-full object-cover" />
       ) : (
-        <div className="flex items-center justify-center h-full text-gray-500 text-lg font-semibold">
+        <div className="flex items-center justify-center h-full text-[var(--text)] text-lg font-semibold">
           {sender.username.charAt(0).toUpperCase()}
         </div>
       )}
     </div>
   );
   const getTime = () => (
-    <span className="absolute top-8 right-5 text-xs text-gray-400">{time} ago</span>
+    <span className="absolute top-8 right-5 text-xs text-[var(--text)]">{time} ago</span>
   );
 
   useEffect(() => {
@@ -82,10 +82,10 @@ function NotificationItem({
         {getTime()}
         {renderAvatar()}
         <div className="flex-1">
-          <p className="text-sm text-white">
-            <span className="font-semibold">{sender.username}</span> liked your {targetType}{" "}
-            {post && <span className="font-medium text-gray-400">"{post.caption}"</span>}
-            {pulse && <span className="font-medium text-gray-400">"{pulse.caption}"</span>}
+          <p className="text-sm">
+            <span className="font-semibold text-[var(--heading)]">{sender.username}</span> liked your {targetType}{" "}
+            {post && <span className="font-medium text-[var(--text)]">"{post.caption}"</span>}
+            {pulse && <span className="font-medium text-[var(--text)]">"{pulse.caption}"</span>}
           </p>
         </div>
       </div>
@@ -100,10 +100,10 @@ function NotificationItem({
         {getTime()}
         {renderAvatar()}
         <div className="flex-1">
-          <p className="text-sm text-white mb-1">
+          <p className="text-sm text-[var(--heading)] mb-1">
             <span className="font-semibold">{sender.username}</span> commented on your {targetType}
           </p>
-          <p className="text-sm text-gray-400 italic">"{commentText}"</p>
+          <p className="text-sm text-[var(--text)] italic">"{commentText}"</p>
         </div>
       </div>
     );
@@ -114,8 +114,8 @@ function NotificationItem({
       <div className="flex items-center gap-4 relative p-4 bg-[var(--card)] rounded-2xl shadow-md w-full">
         {renderAvatar()}
         <div className="flex-1">
-          <p className="text-sm font-medium text-white">{sender.username}</p>
-          <p className="text-xs text-gray-400">sent you a follow request</p>
+          <p className="text-sm font-medium text-[var(--heading)]">{sender.username}</p>
+          <p className="text-xs text-[var(--text)]">sent you a follow request</p>
         </div>
         <div className="flex gap-4 pr-3">
           <button

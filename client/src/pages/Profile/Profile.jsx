@@ -86,7 +86,7 @@ const Profile = () => {
         video.muted = true; // Prevents autoplay issues in some browsers
 
         video.addEventListener("loadedmetadata", () => {
-            video.currentTime = Math.min(15, video.duration / 2); // Seek to a valid frame
+            video.currentTime = Math.min(20, video.duration / 2); // Seek to a valid frame
         });
 
         video.addEventListener("seeked", () => {
@@ -110,11 +110,11 @@ const Profile = () => {
 
     useEffect (() => {
         pulseState.pulseList?.forEach ((pulse, index) => {
-            if (pulse.video) {
-                extractPulseThumbnail(pulse.video, index);
+            if (pulse?.video) {
+                extractPulseThumbnail(pulse?.video, index);
             }
         })
-    }, [pulseState.pulseList]);
+    }, [pulseState.pulseList, username]);
 
     function handlePulseClick (index) {
         navigate ('/pulse', {state : { start: index, source: 'pulseList'}});

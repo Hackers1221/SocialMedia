@@ -337,7 +337,7 @@ const Messenger = () => {
                     <Avatar url={chatState.recipient?.image?.url || defaultImage} size={'md'}/>
                   </div>
                   <div className="flex flex-col">
-                    {chatState.recipient?.name?.length > 0 && <Link to={`/profile/${chatState.recipient?.username}`} className="hover:underline">{chatState.recipient?.username}</Link>}
+                    {chatState.recipient?.name?.length > 0 && <Link to={`/profile/${chatState.recipient?.username}`} className="hover:underline">{chatState.recipient?.name}</Link>}
                       {chatState.recipient?.name?.length > 0 && chatState.onlineUsers?.includes(chatState.recipient?._id) && 
                         <div className="flex gap-2 items-center">
                           <div className="w-[0.4rem] h-[0.4rem] bg-green-400 rounded-full inline-block"></div>

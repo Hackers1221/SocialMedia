@@ -134,7 +134,7 @@ export default function PulseCard({ pulse, followers }) {
     }, []);
 
     return (
-        <div className="reel-container w-full h-full sm:w-96 md:h-[78vh] sm:h-[70vh] overflow-hidden rounded-xl shadow-lg flex justify-center relative bg-black">
+        <div className="reel-container w-full h-[95%] sm:w-96 md:h-[78vh] sm:h-[70vh] overflow-hidden rounded-xl shadow-lg flex-col justify-center relative bg-black">
             <SelectedUser isOpen={isOpen} setOpen={setOpen} followers={followers} post={pulse} />
 
             {!showComment && (
@@ -177,13 +177,13 @@ export default function PulseCard({ pulse, followers }) {
                         </div>
                     </div>
 
-                    <div className="absolute bottom-4 left-4 flex flex-col gap-2">
+                    <div className="absolute bottom-4 left-4 w-[80%] flex flex-col gap-2">
                         <div className="flex gap-2">
                             <Avatar url={pulse.user?.image?.url} size={'sm'} />
                             <span className="text-white font-semibold text-sm">{pulse.user?.username}</span>
                         </div>
                         <h2 className="text-white text-xs">
-                            {pulse?.caption}
+                            {pulse?.caption?.length > 75 ? `${pulse.caption.slice(0, 75)}...` : pulse?.caption}
                         </h2>
                     </div>
                 </div>

@@ -1,23 +1,26 @@
-import { useTheme } from "../ThemeContext";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleTheme } from "../redux/Slices/theme.slice";
 
-export default function ModeButton () {
+export default function ModeButton() {
+  const theme = useSelector((state) => state.theme.theme);
+  const dispatch = useDispatch();
 
-    const {theme, toggleTheme} = useTheme ();
-
-    return (
+  return (
     <button
-        onClick={toggleTheme}
-        className="w-16 h-8 rounded-full bg-white flex items-center transition duration-300 focus:outline-none shadow"
+      aria-label="Toggle dark/light mode"
+      onClick={() => dispatch(toggleTheme())}
+      className="w-12 h-6 rounded-full bg-white flex items-center p-1 cursor-pointer focus:outline-none shadow relative"
     >
-        <div
-        className={`w-8 h-full relative rounded-full transition duration-500 transform p-1 text-white flex justify-center items-center
-            ${theme == 'dark' ? "bg-gray-700 translate-x-full" : "bg-yellow-500 -translate-x-2"}`}>
-        {theme == 'dark' ? (
-            <i className="fa-solid fa-moon"></i>
+      <div
+        className={`w-5 h-5 rounded-full flex items-center justify-center text-white transition-transform duration-300 ease-in-out
+          ${theme === "dark" ? "translate-x-5" : "translate-x-0"}`}
+      >
+        {theme === "dark" ? (
+          <i className="fa-solid fa-moon text-black"></i>
         ) : (
-            <i className="fa-solid fa-sun"></i>
+          <i className="fa-solid fa-sun text-yellow-400"></i>
         )}
-        </div>
+      </div>
     </button>
-    );
+  );
 }

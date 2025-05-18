@@ -6,6 +6,8 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { login, signup } from "../../redux/Slices/auth.slice";
+import BlockBackNavigation from "../../components/BlockBackNavigation";
+import { setTheme } from "../../redux/Slices/theme.slice";
 
 function SignUp() {
     const dispatch = useDispatch();
@@ -32,6 +34,8 @@ function SignUp() {
         password: "",
         birth: ""
     });
+
+    console.log (userDetails);
 
     function handleChange(e) {
         const { name, value } = e.target;
@@ -100,7 +104,10 @@ function SignUp() {
             const signupRes = await dispatch(signup(userDetails));
             if (signupRes.payload) {
                 const signIn = await dispatch(login(userDetails));
-                if (signIn.payload) navigate('/', { replace: true });
+                if (signIn.payload) {
+                    navigate('/', { replace: true });
+                    dispatch (setTheme ("dark"));
+                }
             } else {
                 resetDetails();
             }
@@ -122,17 +129,18 @@ function SignUp() {
 
     return (
         <div className="fixed inset-0 bg-[url('https://images.stockcake.com/public/2/9/c/29cc0acd-d266-46bf-b9b8-b5330cd2918b_large/greenery-on-wood-stockcake.jpg')] bg-no-repeat bg-cover bg-center overflow-hidden">
+            <BlockBackNavigation />
             <div className="absolute inset-0 bg-[#131842] bg-opacity-40 backdrop-blur-lg backdrop-saturate-300 flex items-center justify-center">
                 <div className="flex flex-wrap justify-evenly items-center w-full max-w-[1200px] py-10 px-4 md:px-10">
 
                     <div className="hidden md:flex flex-col justify-start text-[2rem] lg:text-[3rem] w-full md:w-[45%] text-white font-bold leading-[1.2] mb-10 md:mb-0">
-                        <p className="text-[2rem] sm:text-[2.5rem] text-white text-left font-bold mt-2 border-b-2 border-white pb-2 mb-4">Welcome!</p>
+                        <p className="text-[2rem] sm:text-[2.5rem] text-white text-left font-bold mt-2 pb-2 mb-4">Welcome!</p>
                         <span className="text-[var(--buttons)] mb-2">Be part of</span>
                         <span className="text-[var(--buttons)] mb-2">something bigger by</span>
                         <span className="mb-4">joining today</span>
                     </div>
 
-                    <div className="flex flex-col items-center justify-center w-full md:w-[50%] px-4">
+                    <div className="flex flex-col items-center justify-center w-full md:w-[50%] px-2">
                         <div className="flex steps gap-2 sm:gap-4 flex-wrap justify-center">
                             <div className="step step-info step-neutral">
                                 <p className="text-info text-xs">Email Entry</p>
@@ -156,6 +164,7 @@ function SignUp() {
                                         className="text-white rounded-xl py-[0.6rem] px-4 w-full focus:outline-none bg-[var(--input)]"
                                         type="text"
                                         placeholder="Your name"
+                                        autoComplete="off"
                                     />
                                     {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
                                 </div>
@@ -168,6 +177,7 @@ function SignUp() {
                                         className="text-white rounded-xl py-[0.6rem] px-4 w-full focus:outline-none bg-[var(--input)]"
                                         type="text"
                                         placeholder="Your username"
+                                        autoComplete="off"
                                     />
                                     {errors.username && <p className="text-red-400 text-xs mt-1">{errors.username}</p>}
                                 </div>
@@ -186,6 +196,7 @@ function SignUp() {
                                     className="text-white rounded-xl py-[0.6rem] px-4 w-full focus:outline-none bg-[var(--input)]"
                                     type="password"
                                     placeholder="********"
+                                    autoComplete="off"
                                 />
                                 {errors.password && <p className="text-red-400 text-xs mt-1">{errors.password}</p>}
                                 <div className="flex justify-between mt-2">

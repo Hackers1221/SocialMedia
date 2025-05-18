@@ -5,6 +5,7 @@ import { LuEyeClosed } from "react-icons/lu";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../../redux/Slices/auth.slice";
+import { setTheme } from "../../redux/Slices/theme.slice";
 
 function LogIn () {
     const dispatch = useDispatch ();
@@ -75,7 +76,10 @@ function LogIn () {
 
         try {
             const res = await dispatch(login(userDetails));
-            if (res.payload) navigate('/', { replace: true });
+            if (res.payload) {
+                navigate('/', { replace: true });
+                dispatch (setTheme ("dark"))
+            }
             else resetDetails();
         } catch (error) {
             toast.error(error);

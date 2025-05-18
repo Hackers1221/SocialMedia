@@ -8,6 +8,7 @@ import chatSliceReducer from './Slices/chat.slice'
 import socketSliceReducer from "./Slices/socket.slice";
 import notificationSliceReducer from "./Slices/notification.slice"
 import groupSliceReducer from "./Slices/group.slice"
+import themeSliceReducer from './Slices/theme.slice'
 
 const Store = configureStore({
     reducer: {
@@ -19,7 +20,8 @@ const Store = configureStore({
         chat: chatSliceReducer,
         socket: socketSliceReducer,
         notification: notificationSliceReducer,
-        group: groupSliceReducer
+        group: groupSliceReducer,
+        theme: themeSliceReducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false}),
     devTools: true

@@ -9,7 +9,7 @@ function usePulse () {
     const dispatch = useDispatch ();
 
     function loadPulse () {
-        if(!pulseState?.downloadedPulse?.length) {
+        if(!pulseState?.downloadedPulse?.length || location.pathname === '/pulse') {
             dispatch (getAllPulse ()); 
             dispatch(getSavedPulse (authState?.data?._id));
         }

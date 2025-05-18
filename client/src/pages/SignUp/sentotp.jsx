@@ -55,7 +55,7 @@ function SendOtp() {
       <div
         className={`flex items-center justify-center bg-[#131842] bg-opacity-[40%] backdrop-blur-lg backdrop-saturate-300 w-full h-full`}
       >
-        <div className="flex justify-evenly w-[90%] h-[80%]">
+        <div className="flex justify-evenly w-full h-[80%]">
           <div className="hidden md:flex flex-col justify-center text-[3rem] w-[40%] text-white font-bold leading-[1.2]">
             <span>Be part of</span>
             <span className={`text-[var(--buttons)]`}>something bigger by</span>

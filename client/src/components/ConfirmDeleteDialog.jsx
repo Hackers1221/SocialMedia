@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteUser } from "../redux/Slices/auth.slice";
 import { useNavigate } from "react-router-dom";
+import { setTheme } from "../redux/Slices/theme.slice";
 
 export default function ConfirmDeleteDialog({ open, setOpen, type }) {
     const socket = useSelector ((state) => state.socket.socket);
@@ -22,7 +23,10 @@ export default function ConfirmDeleteDialog({ open, setOpen, type }) {
     const handleDeleteAccount = async () => {
         setDeleting(true);
         const deleted = await dispatch (deleteUser (authState?.data?._id));
-        if(deleted.payload) navigate("/signup");
+        if(deleted.payload) {
+            navigate("/signup");
+            dispatch (setTheme ("light"))
+        }
         setOpen(false); 
         setDeleting(false);
     }

@@ -55,9 +55,10 @@ function Suggestions () {
             return () => clearTimeout(delayDebounceFn);
         },[query])
     
-        useEffect (() => {
-            getFollowers ();
-        }, [authState?.data?.follower])
+    useEffect (() => {
+        setFollowers ([]);
+        getFollowers ();
+    }, [authState?.data?.follower])
 
     useEffect (() => {
         setFollowers([]);
@@ -82,9 +83,6 @@ function Suggestions () {
                             <X />
                         </button>}
                     </div>
-                    {/* {query?.length == 0 && <div className={`flex items-center space-x-2 text-[var(--text)] mt-2 mx-2 text-sm`}>
-                        Recent searches
-                    </div>} */}
                     <div>
                         {searchResult?.map((user, index) => (
                             <Link to={`/profile/${user?.username}`} key={index} className={`text-[var(--text)] mt-2 p-2 py-3 flex items-center space-x-2 hover:shadow-md hover:cursor-pointer bg-[var(--card)] hover:text-[var(--heading)]`}>

@@ -47,9 +47,7 @@ function PostPage() {
         }
     }
 
-    async function optionChange () {
-        const option = searchParams.get ("type") || "All";
-
+    async function optionChange (option) {
         if (option === "Liked") await dispatch ( filterPostsByLiked ({id : authState?.data?._id}));
         if (option === "Following") await dispatch( filterPostsByFollowing ({following : authState?.data?.following}));
         if (option === "All") await dispatch (getAllPosts ());
@@ -63,10 +61,11 @@ function PostPage() {
     const type = searchParams.get("type") || "All";
 
     useEffect (() => {
-        optionChange ();
+        optionChange (type);
     }, [type])
 
     useEffect (() => {
+        optionChange (type);
         getPosts ();
         getSavedPosts ();
         getDetails ();
