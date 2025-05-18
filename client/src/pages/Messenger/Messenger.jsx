@@ -192,11 +192,6 @@ const Messenger = () => {
       getRecent ();
     }, [chatState.messages]);
 
-    useEffect (() => {
-      if (activeTab !== 'groups') setSelected (chatState.recipient._id?.length > 0);
-      else setSelected (groupState.liveGroup.messages?.length > 0);
-    }, [activeTab, screenWidth, chatState.recipient, groupState.liveGroup._id, isSelected]);
-
     useEffect(() => {        
       const handleResize = () => setScreenWidth(window.innerWidth);
       window.addEventListener("resize", handleResize);
@@ -245,6 +240,8 @@ const Messenger = () => {
       document.addEventListener("mousedown", handleClickOutside);
       return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
+
+    console.log (isSelected);
 
   return (
     <div className={`fixed top-[4rem] md:top-0 md:left-[18rem] left-[1rem] w-[85%] h-[82vh] md:h-[100vh] flex flex-col flex-grow overflow-y-auto`}>
@@ -310,17 +307,17 @@ const Messenger = () => {
             <div className="flex flex-col">
               {activeTab === 'recent' && <div className="flex flex-col space-y-1 mt-4 h-full overflow-y-auto">
                 {recent?.length > 0 && recent?.map ((chat, index) => (
-                  <User chat={chat} key={index}/>
+                  <User chat={chat} key={index} setSelected={setSelected}/>
                 ))}
               </div>}
               {activeTab === 'groups' && <div className="flex flex-col space-y-1 mt-4 h-full overflow-y-auto">
                 {group?.map ((chat, index) => (
-                  <User chat={chat} type={'groups'} key={index}/>
+                  <User chat={chat} type={'groups'} key={index} setSelected={setSelected}/>
                 ))}
               </div>}
               {activeTab === 'followers' && <div className="flex flex-col space-y-1 mt-4 h-full overflow-y-auto">
                 {authState.data?.follower?.length > 0 && authState.data?.follower?.map ((user, index) => (
-                  <User chat={user} type={'follower'} key={index}/>
+                  <User chat={user} type={'follower'} key={index} setSelected={setSelected}/>
                 ))}
               </div>}
             </div>

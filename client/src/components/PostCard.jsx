@@ -3,21 +3,26 @@ import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { getUserById } from "../redux/Slices/auth.slice";
 import Avatar from "./Avatar";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DeletePost, getAllPosts, getPostById, likePost, updateSavedPost } from "../redux/Slices/post.slice";
 import DisplayPost from "./DisplayPost";
-import { getCommentByPostId } from "../redux/Slices/comment.slice";
+import { CreateComment, getCommentByPostId } from "../redux/Slices/comment.slice";
 import usePosts from "../hooks/usePosts";
 import LinkDetector from '../components/LinkDetector'
 import SelectedUser from "./SelectedUser";
+import { FaPaperPlane } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
+import Comment from "./Comment";
 
 function PostCard ({ post, index, list, followers }) {
     const authState = useSelector((state) => state.auth.data);
     const [postState] = usePosts();
 
+    const videoRefs = useRef ([]);
+
     const dispatch = useDispatch();
 
-    const { _id, likes, comments, interests, createdAt, userId, caption } = post;
+    const { _id, likes, interests, createdAt, userId, caption } = post;
     const imageData = post.image;
     const videoData = post.video;
 
@@ -25,13 +30,20 @@ function PostCard ({ post, index, list, followers }) {
     const [saved, setSaved] = useState(false);
     const [countLike, setCountLike] = useState(likes.length);
     const [images, setImages] = useState([]);
+    const [width, setWidth] = useState(window.innerWidth);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [isPlaying, setIsPlaying] = useState([false]);
+    const [showButton, setShowButton] = useState([true]);
+    const [showComment, setShowComment] = useState(false);
+    const [commentDescription, setCommentDescription] = useState("");
+    const [comments, setComments] = useState([]);
 
     // Delete related
     const [deleting, setDeleting] = useState(false);
 
     const [date, setDate] = useState("");
     const [isDialogOpen, setDialogOpen] = useState(false);
-    const [countComment, setCountComment] = useState(comments?.length);
+    const [countComment, setCountComment] = useState(post?.comments?.length);
     const [title, setTitle] = useState ();
     const [isShare, setShare] = useState (false);
     const [creator, setCreator] = useState({
@@ -43,6 +55,52 @@ function PostCard ({ post, index, list, followers }) {
         birth: ""
     });
     const [hashtags, setHashtags] = useState ("");
+
+    const totalItems = (post.image?.length || 0) + (post.video?.length || 0);
+
+    function goForward () {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % totalItems);
+    };
+
+    function goBack () {
+        setCurrentIndex((prevIndex) => (prevIndex - 1 + totalItems) % totalItems);
+    };
+
+    const togglePlay = (index) => {
+        videoRefs.current.forEach((video, i) => {
+          if (video && i !== index) {
+            video.pause();
+            setIsPlaying((prev) => ({
+              ...prev,
+              [i]: false,
+            }));
+          }
+        });
+      
+        const video = videoRefs.current[index];
+        if (!video) return;
+      
+        if (video.paused) {
+          video.play();
+          setIsPlaying((prev) => ({
+            ...prev,
+            [index]: true,
+          }));
+        } else {
+          video.pause();
+          setIsPlaying((prev) => ({
+            ...prev,
+            [index]: false,
+          }));
+        }
+      
+        setShowButton((prev) => ({
+          ...prev,
+          [index]: true,
+        }));
+      
+        resetHideButtonTimer(index);
+      };
 
     const toggleBookmark = async () => {
         const response = await dispatch(updateSavedPost({
@@ -130,10 +188,6 @@ function PostCard ({ post, index, list, followers }) {
         setCreator(response.payload?.data?.userdetails);
     }
 
-    const getComments = async () => {
-        await dispatch(getCommentByPostId(_id));
-    }
-
     const Deletepost = async () => {
         setDeleting(true);
         const resp = {
@@ -192,6 +246,35 @@ function PostCard ({ post, index, list, followers }) {
         setHashtags (temp);
     }
 
+    const postCommentHandler = async () => {
+        const data = {
+            description: commentDescription,
+            userId: authState._id,
+            postId: _id,
+            type: "post"
+        };
+        const response = await dispatch (CreateComment (data));
+        if (response.payload) {
+            setCommentDescription ("");
+            getComments ();
+            setCountComment (prev => prev + 1);
+        }
+    };
+
+    async function getComments() {
+        const res = await dispatch(getCommentByPostId (_id));
+        setComments (res.payload.data.commentDetails);
+    }
+
+    useEffect(() => {
+        const handleResize = () => setWidth(window.innerWidth);
+
+        window.addEventListener('resize', handleResize);
+
+        // Cleanup on unmount
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     useEffect(() => {
         setTitle (caption);
 
@@ -220,9 +303,11 @@ function PostCard ({ post, index, list, followers }) {
         if (likes.includes(authState._id)) {
             setLiked(true);
         } else setLiked(false);
-        setCountComment(comments.length);
+        setCountComment(post?.comments.length);
         setCountLike(likes.length);
     }, [post]);
+
+    // console.log (post);
 
     return (
         <div className={`mb-4 bg-[var(--card)] relative shadow-xl rounded-xl`} >
@@ -256,7 +341,6 @@ function PostCard ({ post, index, list, followers }) {
                         <i className={`text-[var(--text)] fa-solid fa-ellipsis`}></i>
                     </div>
                     <ul tabIndex={0} className={`dropdown-content menu bg-[var(--card)] rounded-md z-[1] w-52 p-4 gap-4 shadow-sm shadow-[var(--text)] text-[var(--buttons)]`}>
-                        <li onClick={() => setDialogOpen(true)} className="hover:cursor-pointer"><span>View Post</span></li>
                         <li className="hover:cursor-pointer"><span>Not Intrested</span></li>
                         {(authState._id === userId) && <li
                             className="hover:cursor-pointer text-red-400 flex flex-row justify-between"
@@ -273,8 +357,8 @@ function PostCard ({ post, index, list, followers }) {
             {title?.length > 0 && <LinkDetector title={title} type={'post'}></LinkDetector>}
             <p className="text-[var(--buttons)] px-4 mt-4 text-sm">{hashtags}</p>
 
-            <div className="flex gap-3 h-[25rem] my-4 px-4">
-                {images?.length > 0 && <div className={`relative ${images.length > 3 ? `w-[35%]` : images?.length > 2 ? `w-[33%]` : images?.length > 1 ? `w-[50%]` : `w-full`} rounded-lg h-full flex justify-center hover:cursor-pointer`} onClick={() => setDialogOpen(true)}>
+            {width > 530 ? <div className="flex justify-start gap-3 h-[25rem] my-4 px-4">
+                {images?.length > 0 && <div className={`relative ${images.length > 3 ? `w-[35%]` : images?.length > 2 ? `w-[33%]` : images?.length > 1 ? `w-[50%]` : `w-full`} rounded-lg h-full flex justify-center hover:cursor-pointer bg-black`} onClick={() => setDialogOpen(true)}>
                     <img
                         src={images[0]?.url}
                         alt="Main Image"
@@ -283,7 +367,7 @@ function PostCard ({ post, index, list, followers }) {
                     {images[0].filename === "video" && <i className="fa-solid fa-video absolute top-4 left-4 text-[var(--heading)] text-2xl"></i>}
                     {images[0].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-[var(--heading)] text-2xl"></i>}
                 </div>}
-                {images?.length > 1 && <div className={`relative ${images?.length > 3 ? `w-[35%]` : images?.length > 2 ? `w-[33%]` : `w-[50%]`} rounded-lg h-full flex items-center flex justify-center hover:cursor-pointer`} onClick={() => setDialogOpen(true)}>
+                {images?.length > 1 && <div className={`relative ${images?.length > 3 ? `w-[35%]` : images?.length > 2 ? `w-[33%]` : `w-[50%]`} rounded-lg h-full flex items-center flex justify-center hover:cursor-pointer bg-black`} onClick={() => setDialogOpen(true)}>
                     <img
                         src={images[1]?.url}
                         alt="Image 2"
@@ -322,7 +406,52 @@ function PostCard ({ post, index, list, followers }) {
                         )}
                     </div>}
                 </div>}
-            </div>
+            </div> :
+            <div className="relative flex justify-center items-center w-full h-[20rem] py-4 bg-black my-2">
+                <div className="carousel w-full h-full relative">
+                    {post.image?.map((img, idx) => (
+                        <div
+                            key={idx}
+                            className={`carousel-item w-full flex justify-center items-center relative ${idx === currentIndex ? 'block' : 'hidden'}`}
+                        >
+                        <img src={img.url} className="w-full h-full object-contain" alt="Post" />
+                        </div>
+                    ))}
+                    {post.video?.map((video, idx) => (
+                        <div
+                        key={idx + (post.image?.length || 0)}
+                        className={`carousel-item w-full flex justify-center relative ${idx + (post.image?.length || 0) === currentIndex ? 'block' : 'hidden'}`}
+                        onClick={() => togglePlay(idx)}
+                        >
+                        <video ref={(el) => (videoRefs.current[idx] = el)} loop className="w-full max-h-[40rem]">
+                            <source src={video.url} type="video/mp4" />
+                        </video>
+                        {showButton[idx] && (
+                            <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="bg-black bg-opacity-30 rounded-full w-16 h-16 flex items-center justify-center">
+                                {isPlaying[idx] ? (
+                                <i className="fa-solid fa-pause text-white"></i>
+                                ) : (
+                                <i className="fa-solid fa-play text-white"></i>
+                                )}
+                            </div>
+                            </div>
+                        )}
+                        </div>
+                    ))}
+                </div>
+                {currentIndex > 0 && (
+                    <div className="absolute left-2 top-[50%] bottom-[50%]">
+                        <i className="fa-solid fa-circle-chevron-left text-[var(--dropdown)] text-[1.5rem]" onClick={goBack}></i>
+                    </div>
+                )}
+                {currentIndex < totalItems - 1 && (
+                    <div className="absolute right-2 top-[50%] bottom-[50%]">
+                        <i className="fa-solid fa-circle-chevron-right text-[var(--dropdown)] text-[1.5rem]" onClick={goForward}></i>
+                    </div>
+                )}
+                {totalItems > 1 && <div className="absolute top-2 right-2 bg-black/70 text-white rounded-md text-xs w-max p-1">{currentIndex + 1} / {totalItems}</div>}
+          </div>}
             
             {(countLike - liked > 0 || countComment > 0) && <div className="mt-2 flex gap-2 w-full px-4 text-xs text-[var(--text)]">
                 {countLike - liked > 0 && <h2>
@@ -340,8 +469,9 @@ function PostCard ({ post, index, list, followers }) {
                         {liked ? (<h2 className="text-sm text-red-600 font-semibold">Liked</h2>) : (<h2 className="text-sm font-semibold">Like</h2>)}
                     </button>
                     <button className={`flex gap-2 items-center`} onClick={() => {
-                        getComments;
-                        setDialogOpen(true);
+                        getComments ();
+                        if (width >= 530) setDialogOpen(true);
+                        else setShowComment(true);
                     }}>
                         <i className={`text-[var(--text)] fa-regular fa-comment`}></i>
                         <h2 className="text-sm font-semibold">Comment</h2>
@@ -358,6 +488,53 @@ function PostCard ({ post, index, list, followers }) {
                     </button>
                 </div>
             </div>
+
+            {/* Comment View */}
+            <AnimatePresence>
+                {showComment && (
+                    <motion.div
+                        className="w-full h-full flex flex-col p-4 text-white absolute top-0 left-0 bg-[var(--card)]"
+                        initial={{ x: "100%" }}
+                        animate={{ x: 0 }}
+                        exit={{ x: "100%" }}
+                        transition={{ duration: 0.4, ease: "easeInOut" }}
+                    >
+                        <div className="w-full flex justify-start items-center gap-4">
+                            <i className="fa-solid fa-arrow-left hover:cursor-pointer" onClick={() => setShowComment(false)}></i>
+                            <h2>Comments</h2>
+                        </div>
+
+                        <div className="flex-1 flex flex-col w-full mt-4 overflow-y-auto scroll-smooth overscroll-contain max-h-[65vh]">
+                            {comments.length > 0 ? (
+                                comments.map((comment, idx) => (
+                                    <div key={idx}>
+                                        <Comment commentId={comment._id} avatar={comment.user?.image?.url} username={comment.user?.username} text={comment.description} time={comment.createdAt} />
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="text-center text-sm text-gray-500">No comments yet</div>
+                            )}
+                        </div>
+
+                        <div className="mt-auto flex items-center gap-2 relative">
+                            <Avatar url={authState?.image?.url} size={'md'}/>
+                            <div className="flex-1 relative">
+                                <input
+                                    type="text"
+                                    value={commentDescription}
+                                    className="w-full p-2 px-4 pr-10 rounded-full text-[var(--text)] border border-[var(--input)] bg-transparent font-normal outline-none focus:shadow-md"
+                                    placeholder="Write a comment..."
+                                    onChange={(e) => setCommentDescription(e.target.value)}
+                                />
+                                <FaPaperPlane
+                                    onClick={postCommentHandler}
+                                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--text)] cursor-pointer"
+                                />
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }

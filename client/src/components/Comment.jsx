@@ -10,6 +10,9 @@ const Comment = ({ commentId , username, text, time, avatar }) => {
   const authState = useSelector((state) => state.auth);
   const commentState = useSelector((state) => state.comment);
   const [isLiked , setisLiked] = useState();
+  const [timeDiff, setTimeDiff] = useState ("");
+
+
   const like = async() => {
     const response = await dispatch(likeComment(
       {
@@ -22,12 +25,62 @@ const Comment = ({ commentId , username, text, time, avatar }) => {
     }
   }
 
+    function getTimeDifference (dateString) {
+        const now = new Date();
+        const targetDate = new Date(dateString);
+
+        console.log (targetDate);
+
+        const nowUTC = Date.UTC(
+            now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),
+            now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()
+        );
+
+        const targetDateUTC = Date.UTC(
+            targetDate.getUTCFullYear(), targetDate.getUTCMonth(), targetDate.getUTCDate(),
+            targetDate.getUTCHours(), targetDate.getUTCMinutes(), targetDate.getUTCSeconds()
+        );
+
+        const diffInSeconds = Math.floor((nowUTC - targetDateUTC) / 1000);
+
+        if (diffInSeconds < 60) {
+            return `${diffInSeconds}s`;
+        }
+
+        const diffInMinutes = Math.floor(diffInSeconds / 60);
+        if (diffInMinutes < 60) {
+            return `${diffInMinutes}min`;
+        }
+
+        const diffInHours = Math.floor(diffInMinutes / 60);
+        if (diffInHours < 24) {
+            return `${diffInHours}h`;
+        }
+
+        const diffInDays = Math.floor(diffInHours / 24);
+        if (diffInDays < 30) {
+            return `${diffInDays}d`;
+        }
+
+        const diffInMonths = Math.floor(diffInDays / 30);
+        if (diffInMonths < 12) {
+            return `${diffInMonths}m`;
+        }
+
+        const diffInYears = Math.floor(diffInMonths / 12);
+        return `${diffInYears}y`;
+    }
+
   useEffect(() => {
+    setTimeDiff(getTimeDifference (time))
     const comment = commentState.comments.find((c) => c._id === commentId);
     if (comment) {
       setisLiked(comment.likes.includes(authState.data._id));
     }
   }, [commentState.comments, commentId, authState.data._id]);  
+
+  console.log (timeDiff)
+
     return (
       <div className="flex items-start space-x-3 p-2 text-white">
         {/* Profile Image */}
@@ -35,7 +88,7 @@ const Comment = ({ commentId , username, text, time, avatar }) => {
           <img
             src={avatar || defaultImage}
             alt="Profile"
-            className="w-8 h-8 rounded-full border border-pink-500"
+            className="w-8 h-8 rounded-full object-cover"
           />
         </div>
   
@@ -44,7 +97,7 @@ const Comment = ({ commentId , username, text, time, avatar }) => {
           <p className={`text-[var(--text)] text-sm font-semibold`}>
             <Link to={`/profile/${username}`} className={`hover:underline hover:text-[var(--buttons)] hover:cursor-pointer`}>{username}</Link> <span className={`text-sm text-[var(--text)] font-extralight`}>&nbsp; {text}</span>
           </p>
-          <p className="text-xs text-gray-400">{time} &nbsp; &nbsp;</p>
+          <p className="text-xs text-gray-400">{timeDiff} &nbsp; &nbsp;</p>
         </div>
   
         {/* Like Icon */}

@@ -82,10 +82,10 @@ function NotificationItem({
         {getTime()}
         {renderAvatar()}
         <div className="flex-1">
-          <p className="text-sm">
+          <p className="text-sm text-[var(--heading)]">
             <span className="font-semibold text-[var(--heading)]">{sender.username}</span> liked your {targetType}{" "}
-            {post && <span className="font-medium text-[var(--text)]">"{post.caption}"</span>}
-            {pulse && <span className="font-medium text-[var(--text)]">"{pulse.caption}"</span>}
+            {post && <span className="font-medium text-[var(--text)] w-[80%]">"{post.caption}"</span>}
+            {pulse && <span className="font-medium text-[var(--text)] w-[80%]">"{pulse.caption}"</span>}
           </p>
         </div>
       </div>
@@ -103,7 +103,7 @@ function NotificationItem({
           <p className="text-sm text-[var(--heading)] mb-1">
             <span className="font-semibold">{sender.username}</span> commented on your {targetType}
           </p>
-          <p className="text-sm text-[var(--text)] italic">"{commentText}"</p>
+          <p className="text-sm text-[var(--text)] italic  w-[80%]">"{commentText}"</p>
         </div>
       </div>
     );

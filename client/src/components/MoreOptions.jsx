@@ -40,7 +40,7 @@ function MoreOptions ({ open, setOpen }) {
     }, [open, setOpen]);
 
     return (
-        <div ref={dropUpRef} className="fixed top-[68%] left-[1%] bg-[var(--topic)] z-[50] w-[20rem] rounded-xl py-4">
+        <div ref={dropUpRef} className="fixed top-[68%] left-[2%] bg-[var(--topic)] z-[50] w-[20rem] rounded-xl py-4">
             <Link to="/settings" onClick={() => setOpen (!open)} className={`relative flex flex-row items-center h-11 hover:text-[var(--buttons)] pr-6 text-[var(--heading)]`}>
                 <IoIosSettings className="ml-4" />
                 <span className="ml-2 text-sm tracking-wide truncate">Settings</span>

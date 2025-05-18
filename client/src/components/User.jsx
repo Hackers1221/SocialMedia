@@ -4,7 +4,7 @@ import { getUserById } from "../redux/Slices/auth.slice";
 import { getMessages, setRecipient } from "../redux/Slices/chat.slice";
 import { getGroupById } from "../redux/Slices/group.slice";
 
-function User ({ chat, type, isAdmin, amAdmin }) {
+function User ({ chat, type, isAdmin, amAdmin, setSelected }) {
     const authState = useSelector ((state) => state.auth);
     const liveGroup = useSelector ((state) => state.group.liveGroup)
     const online = useSelector ((state) => state.chat.onlineUsers);
@@ -21,7 +21,6 @@ function User ({ chat, type, isAdmin, amAdmin }) {
 
 
     function getContent () {
-        // console.log ()
         const msg = chat.content.split (" ");
         if (msg[1] === "added") {
             const firstPerson = (authState.data?.username !== msg[0] ? msg[0] : "You");
@@ -33,7 +32,7 @@ function User ({ chat, type, isAdmin, amAdmin }) {
             setContent (firstPerson + " " + msg.slice(1).join(" "));
         }
     }
-
+    
     async function getChats () {
         if (type !== 'groups') {
             await dispatch (getMessages ( {
@@ -44,10 +43,11 @@ function User ({ chat, type, isAdmin, amAdmin }) {
         } else{
             await dispatch(getGroupById(chat.groupId));
         }
+        setSelected (true);
     }
  
     async function getUser () {
-        if(type=="group-info")return ;
+        if(type=="group-info") return ;
         const res = await dispatch (getUserById (chat));
         setUser (res.payload.data?.userdetails);
     }

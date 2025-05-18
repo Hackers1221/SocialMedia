@@ -385,9 +385,9 @@ const DisplayPost = ({ open, setOpen, index, list, followers }) => {
             )}
           </div>
 
-          <div className={`text-white text-sm ${commentState.comments.length === 1 ? "font-semibold" : ""}`}>
+          {commentState.comments.length > 0 && <div className={`text-white text-sm ${commentState.comments.length === 1 ? "font-semibold" : ""}`}>
             {commentState.comments.length} {commentState.comments.length === 1 ? "comment" : "comments"}
-            </div>
+          </div>}
 
 
           <div className="mt-2 flex w-full justify-between p-2 border-t">

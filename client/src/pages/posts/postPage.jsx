@@ -75,12 +75,12 @@ function PostPage() {
         <>
             <div className="fixed top-[4rem] md:top-[1rem]  md:left-[20rem] left-[1rem] w-[93%] md:w-[50%] h-[90vh] md:h-[97vh] flex flex-col flex-grow overflow-y-auto">
                 {/* Header */}
-                <h2 className={`text-[var(--heading)] font-bold text-[1.5rem]`}>Moments</h2>
+                {/* <h2 className={`text-[var(--heading)] font-bold text-[1.5rem]`}>Moments</h2> */}
                 
                 {/* Input Box */}
-                <div className={`w-full mb-4 rounded-md py-4`}>
+                {/* <div className={`w-full mb-4 rounded-md py-4`}>
                     <Stories />
-                </div>
+                </div> */}
 
                 <div className="flex justify-between items-center">
                     <h2 className={`text-[var(--heading)] font-bold text-[1.5rem]`}>Recent Post</h2>

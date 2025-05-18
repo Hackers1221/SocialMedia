@@ -1,10 +1,9 @@
 const { userSocketMap, getIO } = require('../../socket/socketInstance');
-const commentsModel = require('../models/comment.model');
+const Comment = require('../models/comment.model');
 const Notification = require('../models/notification.model');
 const postsModel = require('../models/posts.model');
 const Verse = require ('../models/verse.model')
 const Pulse = require ('../models/pulse.model');
-const { findByIdAndDelete, findByIdAndUpdate } = require('../models/otp.model');
 
 const CreateComment = async(data) => {
     const response = {};
@@ -15,7 +14,7 @@ const CreateComment = async(data) => {
             postId : data.postId,
             type: data.type
         }
-        const result = await commentsModel.create(commentsData);
+        const result = await Comment.create(commentsData);
         if(result){
             if (data.type === "post") {
                 const postsData = await postsModel.findById(data.postId);
@@ -92,7 +91,7 @@ const CreateComment = async(data) => {
 const getCommentByPostId = async(id) => {
     const response = {};
     try {
-        const commentsData = await commentsModel.find({postId : id}).populate("user");
+        const commentsData = await Comment.find({postId : id}).populate("user");
         response.comments = commentsData;
         return response;
 
@@ -105,7 +104,7 @@ const getCommentByPostId = async(id) => {
 const getPulseComments = async() => {
     const response = {};
     try {
-        const commentsData = await commentsModel.find({type : "pulse"}).populate("user");
+        const commentsData = await Comment.find({type : "pulse"}).populate("user");
         response.comments = commentsData;
         return response;
 
@@ -118,7 +117,7 @@ const getPulseComments = async() => {
 const likeComment = async (commentId, userId) => {
     const response = {};
     try {
-      const comment = await commentsModel.findById( commentId );
+      const comment = await Comment.findById( commentId );
       if (!comment) {
         response.error = "Comment not found";
         return response;
@@ -131,7 +130,7 @@ const likeComment = async (commentId, userId) => {
       } else {
         likesArray.push(userId);
       }
-      const updatedComment = await commentsModel.findByIdAndUpdate(
+      const updatedComment = await Comment.findByIdAndUpdate(
         comment._id,
         { likes: likesArray },
         { new: true }

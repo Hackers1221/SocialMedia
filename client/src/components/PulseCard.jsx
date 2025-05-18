@@ -178,7 +178,7 @@ export default function PulseCard({ pulse, followers }) {
                     </div>
 
                     <div className="absolute bottom-4 left-4 w-[80%] flex flex-col gap-2">
-                        <div className="flex gap-2">
+                        <div className="flex items-end gap-2">
                             <Avatar url={pulse.user?.image?.url} size={'sm'} />
                             <span className="text-white font-semibold text-sm">{pulse.user?.username}</span>
                         </div>
@@ -216,7 +216,7 @@ export default function PulseCard({ pulse, followers }) {
                             )}
                         </div>
 
-                        <div className="mt-auto flex items-center gap-3 p-2 relative">
+                        <div className="mt-auto flex items-center gap-2 relative">
                             <Avatar url={authState?.data?.image?.url} />
                             <div className="flex-1 relative">
                                 <input
