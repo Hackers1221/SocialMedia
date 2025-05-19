@@ -107,7 +107,7 @@ function LogIn () {
                 <div className="flex justify-evenly w-[90%] h-[80%]">
                     <div className="hidden md:flex flex-col justify-center text-[3rem] w-[40%] text-white font-bold leading-[1.2]">
                         <span>Moments become</span>
-                        <span className={`text-[var(--buttons)]`}>memories</span>
+                        <span className={`text-[#0077c0]`}>memories</span>
                         <span>— don't miss out!</span>
                     </div>
 
@@ -122,7 +122,7 @@ function LogIn () {
                                     name="email"
                                     value={userDetails.email}
                                     onChange={handleChange}
-                                    className={`text-white rounded-xl py-[0.6rem] px-4 block w-full focus:outline-none bg-[var(--input)]`}
+                                    className={`text-white rounded-xl py-[0.6rem] px-4 block w-full focus:outline-none bg-[#474E68]`}
                                     type="email"
                                     autoComplete="off"
                                     autoCorrect="off"
@@ -143,7 +143,7 @@ function LogIn () {
                                         name="password"
                                         value={userDetails.password}
                                         onChange={handleChange}
-                                        className={`text-white rounded-l-xl py-[0.6rem] px-4 block w-full focus:outline-none bg-[var(--input)]`}
+                                        className={`text-white rounded-l-xl py-[0.6rem] px-4 block w-full focus:outline-none bg-[#474E68]`}
                                         type={visible ? "text" : "password"}
                                         autoComplete="new-password"
                                         autoCorrect="off"
@@ -153,7 +153,7 @@ function LogIn () {
                                     <button
                                         type="button"
                                         onClick={() => setVisible(!visible)}
-                                        className={`flex items-center text-white px-4 block rounded-r-xl focus:outline-none bg-[var(--input)]`}
+                                        className={`flex items-center text-white px-4 block rounded-r-xl focus:outline-none bg-[#474E68]`}
                                     >
                                         {!visible ? <FaEye /> : <LuEyeClosed />}
                                     </button>
@@ -161,17 +161,17 @@ function LogIn () {
                                 {errors.password && <div className="text-xs text-red-500 mt-1">{errors.password}</div>}
                             </div>
                             <div className="mt-8">
-                                <button onClick={onSubmit} id="submitButton" className={`text-white font-bold py-[0.6rem] w-full rounded-2xl bg-[var(--buttons)]`}>
+                                <button onClick={onSubmit} id="submitButton" className={`text-white font-bold py-[0.6rem] w-full rounded-2xl bg-[#0077c0]`}>
                                     Log In
                                 </button>
                             </div>
                             <div className="mt-4 flex items-center w-full text-center">
                                 <div href="#" className="text-xs text-gray-500 capitalize text-center w-full">
                                     Don&apos;t have an account yet?
-                                    <Link to={'/signup'} className={`hover:underline text-[var(--buttons)]`}> Sign Up</Link>
+                                    <Link to={'/signup'} className={`hover:underline text-[#0077c0]`}> Sign Up</Link>
                                 </div>
                             </div>
-                            <div className={`text-xs text-center w-full hover:cursor-pointer hover:underline text-[var(--buttons)]`} onClick={forget}>
+                            <div className={`text-xs text-center w-full hover:cursor-pointer hover:underline text-[#0077c0]`} onClick={forget}>
                                 Forgot password?
                             </div>
                         </div>

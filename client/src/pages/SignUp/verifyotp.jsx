@@ -114,7 +114,7 @@ function VerifyOtp() {
                     <div className="flex justify-evenly w-[90%] h-[80%]">
                       <div className="hidden md:flex flex-col justify-center text-[3rem] w-[40%] text-white font-bold leading-[1.2]">
                           <span>Be part of</span>
-                          <span className={`text-[var(--buttons)]`}>something bigger by</span>
+                          <span className={`text-[#0077c0]`}>something bigger by</span>
                           <span>joining today</span>
                       </div>
       
@@ -151,7 +151,7 @@ function VerifyOtp() {
                                   value={digit}
                                   onChange={(e) => handleChange(index, e)}
                                   onKeyDown={(e) => handleKeyDown(index, e)}
-                                  className={`w-10 md:w-12 h-10 md:h-12 text-center text-xl font-bold border-2 border-[var(--buttons)] rounded-md focus:outline-none text-white bg-gray-800`}
+                                  className={`w-10 md:w-12 h-10 md:h-12 text-center text-xl font-bold border-2 border-[#0077c0] rounded-md focus:outline-none text-white bg-gray-800`}
                                   maxLength="1"
                                   inputMode="numeric"
                                   pattern="[0-9]*"
@@ -162,7 +162,7 @@ function VerifyOtp() {
 
                             {/* Verify Button */}
                             <button
-                              className={`mt-6 py-[0.6rem] w-full rounded-2xl text-white font-bold flex items-center justify-center bg-[var(--buttons)]`}
+                              className={`mt-6 py-[0.6rem] w-full rounded-2xl text-white font-bold flex items-center justify-center bg-[#0077c0]`}
                               onClick={submit}
                               disabled={loading || timer === 0}
                             >
@@ -175,7 +175,7 @@ function VerifyOtp() {
 
                             {/* Resend OTP Button */}
                             {canResend && (
-                              <button className={`mt-4 text-[var(--buttons)] hover:underline`} onClick={resendOtp}>
+                              <button className={`mt-4 text-[#0077c0] hover:underline`} onClick={resendOtp}>
                                 Resend OTP
                               </button>
                             )}

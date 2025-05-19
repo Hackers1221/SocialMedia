@@ -135,8 +135,8 @@ function SignUp() {
 
                     <div className="hidden md:flex flex-col justify-start text-[2rem] lg:text-[3rem] w-full md:w-[45%] text-white font-bold leading-[1.2] mb-10 md:mb-0">
                         <p className="text-[2rem] sm:text-[2.5rem] text-white text-left font-bold mt-2 pb-2 mb-4">Welcome!</p>
-                        <span className="text-[var(--buttons)] mb-2">Be part of</span>
-                        <span className="text-[var(--buttons)] mb-2">something bigger by</span>
+                        <span className="text-[#0077c0] mb-2">Be part of</span>
+                        <span className="text-[#0077c0] mb-2">something bigger by</span>
                         <span className="mb-4">joining today</span>
                     </div>
 
@@ -161,7 +161,7 @@ function SignUp() {
                                         name="name"
                                         value={userDetails.name}
                                         onChange={handleChange}
-                                        className="text-white rounded-xl py-[0.6rem] px-4 w-full focus:outline-none bg-[var(--input)]"
+                                        className="text-white rounded-xl py-[0.6rem] px-4 w-full focus:outline-none bg-[#474E68]"
                                         type="text"
                                         placeholder="Your name"
                                         autoComplete="off"
@@ -174,7 +174,7 @@ function SignUp() {
                                         name="username"
                                         value={userDetails.username}
                                         onChange={handleChange}
-                                        className="text-white rounded-xl py-[0.6rem] px-4 w-full focus:outline-none bg-[var(--input)]"
+                                        className="text-white rounded-xl py-[0.6rem] px-4 w-full focus:outline-none bg-[#474E68]"
                                         type="text"
                                         placeholder="Your username"
                                         autoComplete="off"
@@ -193,7 +193,7 @@ function SignUp() {
                                     name="password"
                                     value={userDetails.password}
                                     onChange={handleChange}
-                                    className="text-white rounded-xl py-[0.6rem] px-4 w-full focus:outline-none bg-[var(--input)]"
+                                    className="text-white rounded-xl py-[0.6rem] px-4 w-full focus:outline-none bg-[#474E68]"
                                     type="password"
                                     placeholder="********"
                                     autoComplete="off"
@@ -236,14 +236,14 @@ function SignUp() {
                                         name="confirmPassword"
                                         value={confirmPassword}
                                         onChange={handleChange}
-                                        className="text-white rounded-l-xl py-[0.6rem] px-4 w-full focus:outline-none bg-[var(--input)]"
+                                        className="text-white rounded-l-xl py-[0.6rem] px-4 w-full focus:outline-none bg-[#474E68]"
                                         type={visible ? "text" : "password"}
                                         placeholder="********"
                                     />
                                     <button
                                         type="button"
                                         onClick={() => setVisible(!visible)}
-                                        className="text-white rounded-r-xl py-[0.6rem] px-4 bg-[var(--input)]"
+                                        className="text-white rounded-r-xl py-[0.6rem] px-4 bg-[#474E68]"
                                     >
                                         {!visible ? <FaEye /> : <LuEyeClosed />}
                                     </button>
@@ -255,7 +255,7 @@ function SignUp() {
                                 <button
                                     onClick={onSubmit}
                                     id="submitButton"
-                                    className="flex justify-center text-white rounded-xl py-[0.6rem] px-4 w-full bg-[var(--buttons)]"
+                                    className="flex justify-center text-white rounded-xl py-[0.6rem] px-4 w-full bg-[#0077c0]"
                                     disabled={loading}
                                 >
                                     {loading ? <FaSpinner className="animate-spin mr-2" /> : "Sign Up"}
@@ -264,7 +264,7 @@ function SignUp() {
 
                             <div className="flex justify-center mt-4 text-xs text-gray-400">
                                 Already have an account?
-                                <Link to="/login" className="ml-1 hover:underline text-[var(--buttons)]">Sign In</Link>
+                                <Link to="/login" className="ml-1 hover:underline text-[#0077c0]">Sign In</Link>
                             </div>
                         </div>
                     </div>

@@ -58,7 +58,7 @@ function SendOtp() {
         <div className="flex justify-evenly w-full h-[80%]">
           <div className="hidden md:flex flex-col justify-center text-[3rem] w-[40%] text-white font-bold leading-[1.2]">
             <span>Be part of</span>
-            <span className={`text-[var(--buttons)]`}>something bigger by</span>
+            <span className={`text-[#0077c0]`}>something bigger by</span>
             <span>joining today</span>
           </div>
 
@@ -102,7 +102,7 @@ function SendOtp() {
                 <div className="mt-8">
                   <button
                     id="submitButton"
-                    className={`flex justify-center text-white font-bold py-[0.6rem] w-full rounded-2xl bg-[var(--buttons)]`}
+                    className={`flex justify-center text-white font-bold py-[0.6rem] w-full rounded-2xl bg-[#0077c0]`}
                     onClick={submit}
                     disabled={isLoading} // Disable button while loading
                   >
@@ -120,7 +120,7 @@ function SendOtp() {
                   <Link
                     to={"/login"}
                     id="submitButton"
-                    className={`hover:underline text-[var(--buttons)]`}
+                    className={`hover:underline text-[#0077c0]`}
                   >
                     {" "}
                     Sign In
