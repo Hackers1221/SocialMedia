@@ -25,7 +25,6 @@ export default function ConfirmDeleteDialog({ open, setOpen, type }) {
         const deleted = await dispatch (deleteUser (authState?.data?._id));
         if(deleted.payload) {
             navigate("/signup");
-            dispatch (setTheme ("light"))
         }
         setOpen(false); 
         setDeleting(false);

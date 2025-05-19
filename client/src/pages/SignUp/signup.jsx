@@ -35,8 +35,6 @@ function SignUp() {
         birth: ""
     });
 
-    console.log (userDetails);
-
     function handleChange(e) {
         const { name, value } = e.target;
         if (name !== "confirmPassword") {

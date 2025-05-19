@@ -19,7 +19,6 @@ function MoreOptions ({ open, setOpen }) {
         await dispatch (logout ());
         await dispatch (disconnectSocket ());
         navigate ("/login"); 
-        dispatch (setTheme ("light"))
         return;
       }
 
