@@ -23,5 +23,6 @@ userRoutes.get('/search/:q',validators.isUserAuthenticated,authcontroller.search
 userRoutes.get('/searchFollower',validators.isUserAuthenticated,authcontroller.searchFollower);
 userRoutes.get('/follower/:id',validators.isUserAuthenticated,authcontroller.getFollowerDetails);
 userRoutes.get('/usersByLimit', validators.isUserAuthenticated, authcontroller.getUserByLimit);
+userRoutes.get('/topUsers', validators.isUserAuthenticated, authcontroller.getTopUser);
 
 module.exports = userRoutes

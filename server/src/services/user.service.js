@@ -437,6 +437,31 @@ const getUserByLimit = async (userId, limit) => {
     }
 }
 
+const getTopUser = async () => {
+    const response = {};
+    try {
+        const topUsers = await User.find({})
+        .select('username follower image')
+        .lean()
+        .then(users => {
+            return users
+            .map(user => ({
+                _id: user._id,
+                username: user.username,
+                image: user.image,
+                followerCount: user.follower.length
+            }))
+            .sort((a, b) => b.followerCount - a.followerCount)
+            .slice(0, 10); // if only 3 users exist, returns 3
+        });
+        response.users = topUsers;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response;
+    }
+}
+
 module.exports = {
     CreateUser,
     ValidateUser,
@@ -449,6 +474,7 @@ module.exports = {
     getUserByLimit,
     followRequest,
     searchFollower,
-    getFollowerDetails
+    getFollowerDetails,
+    getTopUser
 }
 

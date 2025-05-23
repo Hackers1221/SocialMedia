@@ -8,7 +8,8 @@ const initialState = {
     token: localStorage.getItem("token") || "",
     isLoggedIn: localStorage.getItem("isLoggedIn") === "true",
     isRead: localStorage.getItem("isRead") === "true",
-    userList: []
+    userList: [],
+    topUsers: []
 };
 
 
@@ -108,6 +109,21 @@ export const getUserByLimit = createAsyncThunk('/auth/userByLimit', async (data)
                 userId: data.userId,
                 limit: data.limit
             },
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        });
+
+        if (!response) toast.error('Something went wrong, try again');
+        return response;
+    } catch (error) {
+        toast.error(error.response.data.error || "An error occurred!");
+    }
+});
+
+export const getTopUsers = createAsyncThunk('/auth/topUsers', async () => {     
+    try {
+        const response = await axiosInstance.get(`auth/topUsers`, {
             headers: {
                 'x-access-token': localStorage.getItem('token')
             }
@@ -307,6 +323,11 @@ const authSlice = createSlice({
         .addCase (getUserByLimit.fulfilled, (state, action) => {
             if (!action.payload) return;
             state.userList = action.payload.data?.users;
+        })
+        .addCase (getTopUsers.fulfilled, (state, action) => {
+            if (!action.payload) return;
+            console.log (action.payload);
+            state.topUsers = action.payload.data.users;
         })
     }
 });

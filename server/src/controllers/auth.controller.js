@@ -196,6 +196,20 @@ const getUserByLimit = async(req, res) => {
     })
 }
 
+const getTopUser = async (req, res) => {
+    const response = await userService.getTopUser ();
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            message : "Unable to fetch users",
+            error : response.error
+        })
+    }
+    return res.status(StatusCodes.OK).send({
+        message : "Successfully fetched users",
+        users : response.users
+    })
+}
+
 
 module.exports = {
     signup,
@@ -209,5 +223,6 @@ module.exports = {
     getUserByLimit,
     followRequest,
     searchFollower,
-    getFollowerDetails
+    getFollowerDetails,
+    getTopUser
 }

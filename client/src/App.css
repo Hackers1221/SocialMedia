@@ -13,3 +13,10 @@ body {
 .cursive-text {
   font-family: 'Courgette', cursive;
 }
+
+.number {
+  font-family: "Londrina Outline", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
