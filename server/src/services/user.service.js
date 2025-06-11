@@ -9,10 +9,8 @@ const Otp = require("../models/otp.model");
 const bcrypt = require('bcrypt');
 const mailer = require('../middlewares/mailer')
 const {deleteImages, deleteVideos} = require("../../cloudConfig.js");
-const { response } = require('express');
 const { userSocketMap, getIO } = require('../../socket/socketInstance.js');
 const mongoose = require("mongoose");
-const otpModel = require('../models/otp.model.js')
 
 const CreateUser = async(data) => { 
     const response  = {};
@@ -30,7 +28,7 @@ const CreateUser = async(data) => {
         }
         const userObject = {
             image: {
-                url: "https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-male-user-profile-vector-illustration-isolated-background-man-profile-sign-business-concept_157943-38764.jpg?semt=ais_hybrid",
+                url: "https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_1280.png",
                 filename :""  
             },
             name :  data.name,

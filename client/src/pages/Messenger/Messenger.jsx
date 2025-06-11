@@ -80,30 +80,7 @@ const Messenger = () => {
         setFiles([]);
       });
     }
-  };
-
-  const isDifferentDate = (dateString) => {
-    const inputDate = new Date(dateString);
-    const today = new Date();
-  
-    const isDifferent =
-      inputDate.getFullYear() !== today.getFullYear() ||
-      inputDate.getMonth() !== today.getMonth() ||
-      inputDate.getDate() !== today.getDate();
-  
-    if (isDifferent) {
-      const formattedToday = today.toLocaleDateString("en-GB", {
-        day: "numeric",
-        month: "long",
-        year: "numeric"
-      });
-
-      return formattedToday;
-    }
-  
-    return null;
-  };
-  
+  };  
 
   const sendGroupMessage = () => {
     if (groupMessage?.trim() || groupFiles?.length) {  
@@ -340,11 +317,7 @@ const Messenger = () => {
                         </div>}
                   </div>
                 </div>
-                <div className="flex items-center gap-8 mr-4">
-                  <i className="fa-solid fa-phone text-[var(--buttons)] hover:cursor-pointer"></i>
-                  <i className="fa-solid fa-video text-[var(--buttons)] hover:cursor-pointer"></i>
-                  <i className="fa-solid fa-ellipsis-vertical text-[var(--buttons)] hover:cursor-pointer"></i>
-                </div>
+                <i className="fa-solid fa-ellipsis-vertical text-[var(--buttons)] hover:cursor-pointer mr-4"></i>
               </div>
               <div className="p-4 h-full overflow-y-auto w-full mb-16" ref={chatContainerRef}>
                 {chatState.messages?.length > 0 && chatState?.messages.map ((message, key) => {
@@ -426,11 +399,7 @@ const Messenger = () => {
                     <h2 className="hover:cursor-pointer" onClick={() => setGroupUpdate(true)}>{groupState.liveGroup?.name}</h2>
                   </div>
                 </div>
-                <div className="flex items-center gap-8 mr-4">
-                  <i className="fa-solid fa-phone text-[var(--buttons)] hover:cursor-pointer"></i>
-                  <i className="fa-solid fa-video text-[var(--buttons)] hover:cursor-pointer"></i>
-                  <i className="fa-solid fa-ellipsis-vertical text-[var(--buttons)] hover:cursor-pointer"></i>
-                </div>
+                <i className="fa-solid fa-ellipsis-vertical text-[var(--buttons)] hover:cursor-pointer mr-4"></i>
               </div>
               <div className="p-4 h-full overflow-y-auto w-full mb-16" ref={chatContainerRef}>
                 {groupState.liveGroup?.messages?.length > 0 && groupState.liveGroup?.messages.map ((message, key) => (

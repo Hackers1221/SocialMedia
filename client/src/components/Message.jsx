@@ -99,7 +99,7 @@ function Message({ message }) {
                     </div>
                 )}
 
-                <div className={`${message.sender._id !== authState.data?._id ? `bg-[var(--background)]` : `bg-[var(--topic)]`} p-2 rounded-md inline-block max-w-[65%] w-fit`}>
+                <div className={`${message.sender._id !== authState.data?._id ? `bg-[var(--background)]` : `bg-[var(--topic)]`} p-2 rounded-md inline-block max-w-[75%] w-fit`}>
                     {message.isPost && <h2 className="w-full text-sm font-extralight italic">
                         <i className="fa-solid fa-arrows-turn-right mr-2"></i>
                         From posts
