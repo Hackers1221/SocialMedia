@@ -8,7 +8,6 @@ import Profile from "../pages/Profile/Profile";
 import Explore from "../pages/Explore/Explore";
 import Messenger from "../pages/Messenger/Messenger";
 import Pulse from "../pages/Pulse/Pulse";
-import DisplayStory from "../components/DisplayStory";
 import Settings from "../pages/Settings/Settings";
 import SendOtp from "../pages/SignUp/sentotp";
 import VerifyOtp from "../pages/SignUp/verifyotp";

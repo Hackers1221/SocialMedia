@@ -17,7 +17,6 @@ const CreatePulse = async (data) => {
             response.pulse = pulseResponse;
         }
     } catch (error) {
-        console.log(error);
         response.error = error.message;
     }
     return response;   
@@ -92,7 +91,6 @@ const likePulse = async(id, userId) => {
             { new: true } 
         );
 
-        console.log (updatedPulse);
 
         response.pulse = updatedPulse;
         return response;
@@ -186,7 +184,6 @@ const DeletePulse = async(id, userId) => {
 const savePulse = async(userId, id) => {
     const response = {};
     try {
-        console.log (userId, id);
         let userData = await User.findById(userId);
         if(!userData){
             response.error = "User not found";

@@ -29,8 +29,6 @@ const Comment = ({ commentId , username, text, time, avatar }) => {
         const now = new Date();
         const targetDate = new Date(dateString);
 
-        console.log (targetDate);
-
         const nowUTC = Date.UTC(
             now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),
             now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()
@@ -78,8 +76,6 @@ const Comment = ({ commentId , username, text, time, avatar }) => {
       setisLiked(comment.likes.includes(authState.data._id));
     }
   }, [commentState.comments, commentId, authState.data._id]);  
-
-  console.log (time)
 
     return (
       <div className="flex items-start space-x-3 p-2 text-white">

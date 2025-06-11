@@ -9,8 +9,7 @@ import PrivacyButton from "../../components/PrivacyButton";
 const menuItems = [
   { name: "General", key: "general" },
   { name: "Account", key: "account" },
-  { name: "Privacy", key: "privacy" },
-  { name: "Notifications", key: "notifications" }
+  { name: "Privacy", key: "privacy" }
 ];
 
 function Settings() {
@@ -18,7 +17,6 @@ function Settings() {
   const authState = useSelector((state) => state.auth);
   const [confirmPassword, setconfirmPassword] = useState("");
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   // Delete related
   const [isDeleteDialog, setIsdeleteDialog] = useState(false);
@@ -291,13 +289,6 @@ function Settings() {
               <p>When your account is public, your profile and posts can be seen by anyone, on or off Ripple, even if they don't have an Ripple account.</p>
               <p>When your account is private, only the followers you approve can see what you share, including your photos or videos on hashtag and location pages, and your followers and following lists. Certain info on your profile, like your profile picture and username, is visible to everyone on and off Ripple.</p>
             </div>
-          </div>
-        )}
-
-        {selectedOption === "notifications" && (
-          <div>
-            <h2 className="text-2xl font-semibold mb-4">Notification Settings</h2>
-            <p>Manage your notification preferences.</p>
           </div>
         )}
       </main>

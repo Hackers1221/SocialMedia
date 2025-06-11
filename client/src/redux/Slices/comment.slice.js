@@ -57,7 +57,6 @@ export const likeComment = createAsyncThunk('post/likeComment', async(data) => {
                 'x-access-token': localStorage.getItem('token')
             }
         })
-        console.log(response);
         if(response){
             return response;
         }

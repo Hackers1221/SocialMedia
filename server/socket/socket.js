@@ -37,7 +37,6 @@ const setupSocket = (server) => {
     
     const uploadedFiles = [];
 
-    console.log (message);
   
     // Upload files to Cloudinary
     for (const file of message?.files) {
@@ -256,7 +255,6 @@ const setupSocket = (server) => {
         }
 
         groupData.members.forEach(member => {
-          console.log (member.userId.toString());
           const socketId = userSocketMap.get(member.userId.toString());
           if (socketId) {
             io.to(socketId).emit('groupCreated', uploadData);
@@ -451,7 +449,6 @@ const setupSocket = (server) => {
 
         groupDetails.members.forEach(member => {
           const socketId = userSocketMap.get(member.userId._id.toString());
-          console.log (member.userId);
           if (socketId) {
             io.to(socketId).emit('updatedGroup', {updated: uploadData, group: groupDetails});
           }
@@ -515,7 +512,6 @@ const setupSocket = (server) => {
 
       const user = previousGroupDetails.members.find (member => member.userId.toString () === data.userId);
 
-      console.log (user, data);
 
       if (user.isActive) {
         const userDetails =  await User.findById(data.userId);
@@ -553,14 +549,9 @@ const setupSocket = (server) => {
 
     // follow accepted
     const followAccepted = ({ sender, recipient }) => {
-      console.log(`Follow accepted. Sender: ${sender}, Recipient: ${recipient}`);
-
       const senderSocketId = userSocketMap.get(sender.toString());;
-      console.log(userSocketMap);
-      console.log(senderSocketId);
       if (senderSocketId) {
           io.to(senderSocketId).emit('follow-accepted',  recipient);
-          console.log(`follow request from ${sender} to ${recipient} is approved`);
       }
     };
 
@@ -577,7 +568,6 @@ const setupSocket = (server) => {
         socket.on("disconnect", () => disconnect(socket));
 
         onlineUsers.set(socket.id, userId);
-        console.log ('onlineUsers', onlineUsers);
         io.emit('online-users', Array.from(onlineUsers.values()));
 
         socket.on("sendMessage", sendMessage);

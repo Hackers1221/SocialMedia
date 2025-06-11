@@ -58,7 +58,6 @@ export default function PostForm({ open, setOpen }) {
   }
 
   const handleEmojiClick = (emojiData) => {
-    console.log (emojiData.emoji);
     setCaption ((prev) => prev + emojiData.emoji);
   };
 

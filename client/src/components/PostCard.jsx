@@ -54,9 +54,28 @@ function PostCard ({ post, index, list, followers }) {
         email: "",
         birth: ""
     });
-    const [hashtags, setHashtags] = useState ("");
+    const [hashtags, setHashtags] = useState ([]);
 
     const totalItems = (post.image?.length || 0) + (post.video?.length || 0);
+
+    function sharePost () {
+        setShare (true)
+
+        // if (navigator.share) {
+        //     navigator.share({
+        //     title: post.title,
+        //     text: post.description,
+        //     url: `${window.location.origin}/post/${post._id}`,
+        //     })
+        //     .then(() => console.log('Post shared successfully'))
+        //     .catch((err) => console.error('Error sharing', err));
+        // } else {
+        //     // fallback for unsupported browsers
+        //     navigator.clipboard.writeText(`${window.location.origin}/post/${post._id}`);
+        //     alert("Link copied to clipboard!");
+        // }
+
+    }
 
     function goForward () {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % totalItems);
@@ -239,10 +258,12 @@ function PostCard ({ post, index, list, followers }) {
     };
 
     function getHashtags () {
+        if (!interests[0]) return;
+        
         let temp = interests[0]?.split (" ");
+        
         temp = temp?.map((hashtag) => hashtag.trim());
         temp = temp?.map((hashtag) => (hashtag.length > 0 ? "#" : "") + hashtag);
-        temp = temp?.join(" ");
         setHashtags (temp);
     }
 
@@ -307,7 +328,6 @@ function PostCard ({ post, index, list, followers }) {
         setCountLike(likes.length);
     }, [post]);
 
-    // console.log (post);
 
     return (
         <div className={`mb-4 bg-[var(--card)] relative shadow-xl rounded-xl`} >
@@ -355,7 +375,11 @@ function PostCard ({ post, index, list, followers }) {
                 </div>
             </div>
             {title?.length > 0 && <LinkDetector title={title} type={'post'}></LinkDetector>}
-            <p className="text-[var(--buttons)] px-4 mt-4 text-sm">{hashtags}</p>
+            <div className="flex gap-2 m-4">
+                {hashtags.length > 0 && hashtags.map ((hashtag) => (
+                    <p className="text-[var(--buttons)] text-xs rounded-full bg-[var(--background)] py-1 px-2">{hashtag}</p>
+                ))}
+            </div>
 
             {width > 530 ? <div className="flex justify-start gap-3 h-[25rem] my-4 px-4">
                 {images?.length > 0 && <div className={`relative ${images.length > 3 ? `w-[35%]` : images?.length > 2 ? `w-[33%]` : images?.length > 1 ? `w-[50%]` : `w-full`} rounded-lg h-full flex justify-center hover:cursor-pointer bg-black`} onClick={() => setDialogOpen(true)}>
@@ -476,7 +500,7 @@ function PostCard ({ post, index, list, followers }) {
                         <i className={`text-[var(--text)] fa-regular fa-comment`}></i>
                         <h2 className="text-sm font-semibold">Comment</h2>
                     </button>
-                    <button className={`flex gap-2 items-center`} onClick={() => setShare (true)}>
+                    <button className={`flex gap-2 items-center`} onClick={sharePost}>
                         <i className={`text-[var(--text)] fa-regular fa-paper-plane`}></i>
                         <h2 className="text-sm font-semibold">Share</h2>
                     </button>

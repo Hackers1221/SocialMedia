@@ -47,7 +47,6 @@ const SavedPost = () => {
     };
 
     const extractPulseThumbnail = (videoURL, index) => {
-        console.log (videoURL, "hey");
         const video = document.createElement("video");
         video.src = videoURL;
         video.crossOrigin = "anonymous"; // Prevents CORS issues

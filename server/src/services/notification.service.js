@@ -9,7 +9,6 @@ const deleteNonFR = async (userId) => {
             recipient: userId,
         });
         response.result = result;
-        console.log(`Deleted non-friend-request notifications for user ${userId}`);
         return response;
     } catch (err) {
         response.error = err.message;
@@ -28,7 +27,6 @@ const rejectFR = async ({sender, recipient}) => {
         });
 
         response.result = result;
-        console.log(`Rejected ${sender} follow-request notifications for user ${recipient}`);
         return response;
     } catch (err) {
         response.error = err.message;

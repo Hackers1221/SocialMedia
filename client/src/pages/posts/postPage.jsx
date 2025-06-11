@@ -72,8 +72,6 @@ function PostPage() {
         getTopUser ();
     }, [])
 
-    console.log (authState.topUsers);
-
     return (
         <>
             <div className="fixed top-[4rem] md:top-[1rem]  md:left-[20rem] left-[1rem] w-[93%] md:w-[50%] h-[90vh] md:h-[97vh] flex flex-col flex-grow overflow-y-auto">

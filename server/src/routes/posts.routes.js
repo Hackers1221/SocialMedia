@@ -16,6 +16,7 @@ postRoutes.get('/save/:id',validators.isUserAuthenticated,postController.getAllS
 postRoutes.delete('/:id',validators.isUserAuthenticated,postController.DeletePost);
 postRoutes.get('/:id',validators.isUserAuthenticated,postController.getPostById);
 postRoutes.get('/search/:q',validators.isUserAuthenticated,postController.searchPost);
+postRoutes.get('/explorePosts/:id',validators.isUserAuthenticated,postController.getExplorePost)
 
 
 module.exports = postRoutes

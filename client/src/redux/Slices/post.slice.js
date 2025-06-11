@@ -6,6 +6,7 @@ const initialState = {
     downloadedPosts: [],
     postList: [],
     savedList:[],
+    interestList: ""
 };
 
 export const getAllPosts = createAsyncThunk('posts/getAllPosts', async () => {
@@ -161,6 +162,21 @@ export const searchPost = createAsyncThunk('search.post',async(query) => {
     }
 })
 
+export const getExplorePost = createAsyncThunk('explorePost',async(id) => {
+    try {
+        const response = await axiosInstance.get(`post/explorePosts/${id}`,{
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            },
+        })
+        if(response){
+            return response;
+        }
+    } catch (error) {
+        toast.error(error.response?.data?.error || "Could not search for the post");
+    }
+})
+
 const PostSlice = createSlice({
     name: 'post',
     initialState,
@@ -179,6 +195,24 @@ const PostSlice = createSlice({
             const following = action.payload?.following;
             state.postList = JSON.parse(JSON.stringify(state.downloadedPosts)).filter((post) => following.includes(post.userId));
             state.postList = JSON.parse(JSON.stringify(state.postList));
+        },
+        filterPostByInterests: (state) => {
+            const interestTags = state.interestList.split(' ');
+
+            const allPosts = JSON.parse(JSON.stringify(state.downloadedPosts));
+
+            const matchingPosts = [];
+            const nonMatchingPosts = [];
+
+            for (const post of allPosts) {
+                const interestText = post.interests?.[0] || '';
+                const matches = interestTags.some(tag => interestText.includes(tag));
+
+                if (matches) matchingPosts.push(post);
+                else nonMatchingPosts.push(post);
+            }
+
+            state.postList = [...matchingPosts, ...nonMatchingPosts];
         }
     },
     extraReducers: (builder) => {
@@ -199,6 +233,10 @@ const PostSlice = createSlice({
             .addCase(getSavedPost.fulfilled,(state,action) => {
                 if(!action.payload?.data) return; 
                 state.savedList = action.payload?.data?.postDetails.reverse();
+            })
+            .addCase(getExplorePost.fulfilled,(state,action) => {
+                if(!action.payload?.data) return; 
+                state.interestList = action.payload.data?.interests;
             })
             .addCase (getPostById.fulfilled, (state, action) => {
                 if (!action.payload?.data) return;
@@ -221,6 +259,6 @@ const PostSlice = createSlice({
     }
 });
 
-export const { filterPostsByUser, filterPostsByLiked, filterPostsByFollowing } = PostSlice.actions;
+export const { filterPostsByUser, filterPostsByLiked, filterPostsByFollowing, filterPostByInterests } = PostSlice.actions;
 
 export default PostSlice.reducer;

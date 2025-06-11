@@ -241,8 +241,6 @@ const Messenger = () => {
       return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    console.log (isSelected);
-
   return (
     <div className={`fixed top-[4rem] md:top-0 md:left-[18rem] left-[1rem] w-[85%] h-[82vh] md:h-[100vh] flex flex-col flex-grow overflow-y-auto`}>
       {/* Left Sidebar */}

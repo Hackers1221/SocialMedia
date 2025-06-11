@@ -28,16 +28,6 @@ const CreateUser = async(data) => {
             response.error = "Please start sign up again";
             return response;
         }
-        // const checkEmailVerification = await otpModel.find({email : data.email});
-        // if(!checkEmailVerification){
-        //     response.error = "Email not verified";
-        //     return response;
-        // }
-        // console.log(checkEmailVerification);
-        // if(!checkEmailVerification.isVerified){
-        //     response.error = "Email not verified";
-        //     return response;
-        // }
         const userObject = {
             image: {
                 url: "https://img.freepik.com/premium-vector/avatar-profile-icon-flat-style-male-user-profile-vector-illustration-isolated-background-man-profile-sign-business-concept_157943-38764.jpg?semt=ais_hybrid",
@@ -55,7 +45,6 @@ const CreateUser = async(data) => {
         await mailer.sendWelcomeEmail(data.email); 
         return response;
     } catch (error) {
-        console.log("Error" , error);
         response.error = error.message;
         return response ; 
     }
@@ -88,7 +77,6 @@ const ValidateUser = async (data, password) => {
 
         return response;
     } catch (error) {
-        console.log("Error", error);
         response.error = error.message;
         return response;
     }
@@ -107,7 +95,6 @@ const getuserByid = async(id) => {
         return response;
 
     } catch (error) {
-        console.log("Error" , error);
         response.error = error.message;
         return response ; 
     }
@@ -245,7 +232,6 @@ const getUserByUserName = async(name) => {
     }
 }
 const updateUser = async(newData) => {
-    console.log (newData);
     const response = {};
     try {
         const userData = await User.findById(newData.id);

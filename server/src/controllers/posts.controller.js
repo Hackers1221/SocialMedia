@@ -161,6 +161,20 @@ const searchPost = async(req,res) => {
     })
 }
 
+const getExplorePost = async(req,res) => {
+    const response = await postsService.getExplorePost(req.params.id);
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            message : "Unable to search for the posts",
+            error : response.error
+        })
+    }
+    return res.status(StatusCodes.OK).send({
+        message : "Successfully search for the posts",
+        interests : response.interests
+    })
+}
+
 
 module.exports = {
     createPost,
@@ -172,5 +186,6 @@ module.exports = {
     savePost,
     getAllSavedPost,
     DeletePost,
-    searchPost
+    searchPost,
+    getExplorePost
 }

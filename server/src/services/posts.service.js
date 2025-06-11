@@ -1,4 +1,4 @@
-const postsmodel = require('../models/posts.model');
+const Posts = require('../models/posts.model');
 const usermodel  = require('../models/user.model');
 const commentsModel = require('../models/comment.model');
 const Notification = require("../models/notification.model")
@@ -15,7 +15,7 @@ const CreatePost = async (data) => {
             userId: data.userId,
             caption: data.caption,
         };
-        const postresponse = await postsmodel.create(postObject);
+        const postresponse = await Posts.create(postObject);
         
         if (!postresponse) {
             response.error = "Post not created";
@@ -24,7 +24,6 @@ const CreatePost = async (data) => {
             response.post = postresponse;
         }
     } catch (error) {
-        console.log(error);
         response.error = error.message;
     }
     return response;  
@@ -33,7 +32,7 @@ const CreatePost = async (data) => {
 const getAllPosts = async () => {
     const response = {};
     try {
-        const allPosts = await postsmodel.find({});
+        const allPosts = await Posts.find({});
         
         if (!allPosts || allPosts.length === 0) {
             response.error = "No posts available";
@@ -52,7 +51,7 @@ const updatePost = async (postId, updatedData) => {
     const response = {};
     try {
 
-        const updatedPost = await postsmodel.findByIdAndUpdate(
+        const updatedPost = await Posts.findByIdAndUpdate(
             postId, 
             updatedData, 
             { new: true, runValidators: true } 
@@ -74,7 +73,7 @@ const updatePost = async (postId, updatedData) => {
 const likePost = async(id, userId) => {
     const response = {};
     try {
-        const post = await postsmodel.findById(id);
+        const post = await Posts.findById(id);
         if(!post){
             response.error = "Post not found";
             return response;
@@ -106,7 +105,7 @@ const likePost = async(id, userId) => {
                 }
             }
         }
-        const updatedPost = await postsmodel.findByIdAndUpdate(
+        const updatedPost = await Posts.findByIdAndUpdate(
             id,
             { likes: post.likes },
             { new: true } 
@@ -114,7 +113,6 @@ const likePost = async(id, userId) => {
         response.post = updatedPost;
         return response;
     } catch (error) {
-        console.log(error.message);
         response.error = error.message;
         return response;
     }
@@ -123,7 +121,7 @@ const likePost = async(id, userId) => {
 const getPostByUserId = async(id) => {
     const response = {};
     try {
-        const postdata = await postsmodel.find({userId : id });
+        const postdata = await Posts.find({userId : id });
         if(!postdata){
             response.error = "Post not found";
             return response;
@@ -139,7 +137,7 @@ const getPostByUserId = async(id) => {
 const getPostById = async(id) => {
     const response = {};
     try {
-        const postdata = await postsmodel.findById(id);
+        const postdata = await Posts.findById(id);
         if(!postdata){
             response.error = "Post not found";
             return response;
@@ -160,7 +158,7 @@ const getAllSavedPost = async(userId) => {
             response.error = "User not found";
             return response;
         }
-        const savedPostDetails = await postsmodel.find({ _id: { $in: userData.savedPost } });
+        const savedPostDetails = await Posts.find({ _id: { $in: userData.savedPost } });
         response.post = savedPostDetails;
         return response;
     } catch (error) {
@@ -188,7 +186,7 @@ const savePost = async(userId, id) => {
             {savedPost : userData.savedPost},
             {new  :true}
         )
-        const savedPostDetails = await postsmodel.find({ _id: { $in: updateuser.savedPost } });
+        const savedPostDetails = await Posts.find({ _id: { $in: updateuser.savedPost } });
         response.post = savedPostDetails;
         return response;
     } catch (error) {
@@ -200,7 +198,7 @@ const savePost = async(userId, id) => {
 const DeletePost = async(id,userId) => {
     const response = {};
     try {
-        const PostDetails = await postsmodel.findByIdAndDelete(id);
+        const PostDetails = await Posts.findByIdAndDelete(id);
 
         // Cloudinary post data delete
         let imageFilenames = [];
@@ -239,13 +237,33 @@ const DeletePost = async(id,userId) => {
 const searchPost = async(query) => {
     const response = {};
     try {
-        const posts = await postsmodel.find({
+        const posts = await Posts.find({
             $or: [
                 { caption: { $regex: query, $options: "i" } },
                 { interests : { $regex: query, $options: "i" } }
             ]
         });
         response.post = posts;
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response
+    }
+}
+
+const getExplorePost = async (userId) => {
+    const response = {};
+    try {
+        const posts = await Posts.find(
+            { likes: userId },           // Filter: only posts where liked array includes userId
+            { interests: 1, _id: 0 }     // Projection: only return the 'interests' field
+        );
+
+        const allInterests = posts
+            .flatMap(post => post.interests)                // flatten arrays
+            .join(' ');                                      // join into one string with spaces
+
+        response.interests = allInterests;
         return response;
     } catch (error) {
         response.error = error.message;
@@ -263,5 +281,6 @@ module.exports = {
     savePost,
     getAllSavedPost,
     DeletePost,
-    searchPost
+    searchPost,
+    getExplorePost
 };

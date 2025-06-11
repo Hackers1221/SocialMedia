@@ -291,7 +291,6 @@ const authSlice = createSlice({
         builder
         .addCase(login.fulfilled, (state, action) => {
             if(!action.payload) return;
-            console.log(action.payload.data);
             state.isLoggedIn = (action.payload.data?.token != undefined);
             state.data = action.payload.data?.userdata;
             state.token = action.payload.data?.token;
@@ -326,7 +325,6 @@ const authSlice = createSlice({
         })
         .addCase (getTopUsers.fulfilled, (state, action) => {
             if (!action.payload) return;
-            console.log (action.payload);
             state.topUsers = action.payload.data.users;
         })
     }

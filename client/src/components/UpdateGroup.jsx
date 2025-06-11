@@ -150,8 +150,6 @@ function UpdateGroup ({ isOpen, setOpen, setDelete }) {
         const filteredMembers = liveGroup.members.filter(member =>
             member.userId?.name?.toLowerCase().includes(query.toLowerCase())
         );
-
-        console.log(liveGroup);
     
         setQueriedParticipants({
             ...liveGroup,

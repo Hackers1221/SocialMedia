@@ -27,7 +27,6 @@ export const getGroupById = createAsyncThunk ('getGroupById', async (id) => {
                 'x-access-token': localStorage.getItem('token')
             }
         })
-        console.log(response);
         return response;
     } catch (error) {
         toast.error(error.response.data.error || "An error occurred!");
@@ -60,7 +59,6 @@ const GroupSlice = createSlice({
         }
     },
     updateGroupMessages: (state, action) => {
-        console.log (state.liveGroup, action.payload.message);
         if (state.liveGroup._id === action.payload.message.groupId) state.liveGroup.messages = [...state.liveGroup.messages, action.payload.message];
 
         state.groupDetails = JSON.parse(JSON.stringify(
@@ -77,7 +75,6 @@ const GroupSlice = createSlice({
         ));    
     },
     updateGroupDetails: (state, action) => {
-        console.log (action.payload);
         if (!action.payload.groupData) state.liveGroup = {};
         else if (state.liveGroup._id === action.payload.groupData.group._id) {
             state.liveGroup = JSON.parse(JSON.stringify({
@@ -102,8 +99,6 @@ const GroupSlice = createSlice({
                         : group
                 )
             ));
-
-            console.log (flag);
 
             if (!flag) {
                 state.groupDetails = [action.payload.groupData, ...state.groupDetails];

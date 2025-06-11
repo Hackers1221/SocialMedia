@@ -152,10 +152,6 @@ const VerseSlice = createSlice({
                 if(!action.payload?.data)return; 
                 state.verseList = action.payload?.data?.verse?.reverse();
             })
-            .addCase (getVerseById.fulfilled, (state, action) => {
-                if (!action.payload?.data) return;
-                console.log (action.payload?.data);
-            })
     }
 });
 

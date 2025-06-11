@@ -36,7 +36,7 @@ export const rejectFR = createAsyncThunk('/notification/rejectFollowRequests', a
         if (!response) toast.error('Something went wrong!');
         return;
     } catch (error) {
-        console.log(error.response);
+        toast.error(error.response.data.error || "An error occurred!");
     }
 });
 
@@ -53,7 +53,7 @@ export const acceptFR = createAsyncThunk('/notification/acceptFollowRequests', a
         if (!response) toast.error('Something went wrong!');
         return response;
     } catch (error) {
-        console.log(error.response);
+        toast.error(error.response.data.error || "An error occurred!");
     }
 });
 

@@ -4,6 +4,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Suggestions from "../../components/Suggestions";
 import { useDispatch, useSelector } from "react-redux";
 import { initSocket } from '../../redux/Slices/socket.slice';
+import { getExplorePost } from "../../redux/Slices/post.slice";
 
 function Layout () {
     const authState = useSelector ((state) => state.auth);
@@ -19,6 +20,7 @@ function Layout () {
     useEffect(() => {
         if (authState?.data?._id) {
           dispatch(initSocket({ userId: authState.data._id, dispatch }));
+          dispatch (getExplorePost (authState.data?._id));
         }
     }, [authState.data?._id, dispatch]);
     

@@ -50,7 +50,6 @@ const socketSlice = createSlice({
         });
 
         socketInstance.on("notification", (data) => {
-          console.log("Received notification:", data);
           dispatch(addNotification(data));
         });
 
@@ -67,7 +66,6 @@ const socketSlice = createSlice({
         });
 
         socketInstance.on("updatedGroup", (data) => {
-          console.log(data);
           dispatch(updateGroupDetails({ groupData: data.updated, groupDetails: data.group }));
         });
 
