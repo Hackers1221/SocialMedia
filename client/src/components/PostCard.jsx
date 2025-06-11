@@ -37,6 +37,7 @@ function PostCard ({ post, index, list, followers }) {
     const [showComment, setShowComment] = useState(false);
     const [commentDescription, setCommentDescription] = useState("");
     const [comments, setComments] = useState([]);
+    // const [width, setWidth] = useState(window.innerWidth);
 
     // Delete related
     const [deleting, setDeleting] = useState(false);
@@ -289,6 +290,12 @@ function PostCard ({ post, index, list, followers }) {
 
     useEffect(() => {
         const handleResize = () => setWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    useEffect(() => {
+        const handleResize = () => setWidth(window.innerWidth);
 
         window.addEventListener('resize', handleResize);
 
@@ -375,10 +382,12 @@ function PostCard ({ post, index, list, followers }) {
                 </div>
             </div>
             {title?.length > 0 && <LinkDetector title={title} type={'post'}></LinkDetector>}
-            <div className="flex gap-2 m-4">
-                {hashtags.length > 0 && hashtags.map ((hashtag) => (
-                    <p className="text-[var(--buttons)] text-xs rounded-full bg-[var(--background)] py-1 px-2">{hashtag}</p>
-                ))}
+            <div className="px-4">
+                <div className="w-full flex flex-wrap gap-1 mt-4">
+                    {hashtags.length > 0 && hashtags.map ((hashtag) => (
+                        <p className="text-[var(--buttons)] text-xs rounded-full bg-[var(--background)] py-1 px-2">{hashtag}</p>
+                    ))}
+                </div>
             </div>
 
             {width > 530 ? <div className="flex justify-start gap-3 h-[25rem] my-4 px-4">
@@ -490,7 +499,13 @@ function PostCard ({ post, index, list, followers }) {
                 <div className="flex gap-4">
                     <button className={`flex gap-2 items-center`} onClick={toggleLike}>
                         {liked ? (<i className={`text-red-600 fa-solid fa-heart`}></i>) : <i className={`text-[var(--text)] fa-regular fa-heart`}></i>}
-                        {liked ? (<h2 className="text-sm text-red-600 font-semibold">Liked</h2>) : (<h2 className="text-sm font-semibold">Like</h2>)}
+                        {width > 440 && (
+                            liked ? (
+                                <h2 className="text-sm text-red-600 font-semibold">Liked</h2>
+                            ) : (
+                                <h2 className="text-sm font-semibold">Like</h2>
+                            )
+                        )}
                     </button>
                     <button className={`flex gap-2 items-center`} onClick={() => {
                         getComments ();
@@ -498,17 +513,17 @@ function PostCard ({ post, index, list, followers }) {
                         else setShowComment(true);
                     }}>
                         <i className={`text-[var(--text)] fa-regular fa-comment`}></i>
-                        <h2 className="text-sm font-semibold">Comment</h2>
+                        {width > 440 && <h2 className="text-sm font-semibold">Comment</h2>}
                     </button>
                     <button className={`flex gap-2 items-center`} onClick={sharePost}>
                         <i className={`text-[var(--text)] fa-regular fa-paper-plane`}></i>
-                        <h2 className="text-sm font-semibold">Share</h2>
+                        {width > 440 && <h2 className="text-sm font-semibold">Share</h2>}
                     </button>
                 </div>
                 <div className="flex">
                     <button className={`flex gap-2 items-center`} onClick={toggleBookmark}>
                         {saved ? <i className={`text-[var(--buttons)] fa-solid fa-bookmark`}></i> : <i className={`fa-regular fa-bookmark`}></i>}
-                        {saved ? (<h2 className={`text-sm text-[var(--buttons)] font-semibold`}>Saved</h2>) : (<h2 className="text-sm font-semibold">Save</h2>)}
+                        {width > 440 && (saved ? (<h2 className={`text-sm text-[var(--buttons)] font-semibold`}>Saved</h2>) : (<h2 className="text-sm font-semibold">Save</h2>))}
                     </button>
                 </div>
             </div>

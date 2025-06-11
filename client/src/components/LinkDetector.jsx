@@ -36,7 +36,7 @@ function LinkDetector ({ title, type }) {
             {title?.toString().length > len && (
                 <span
                     onClick={toggleReadability}
-                    className="text-[var(--buttons)] font-bold hover:cursor-pointer"
+                    className="text-[var(--buttons)] font-bold hover:cursor-pointer text-xs"
                 >
                     {check ? ' Show Less' : '... Read More'}
                 </span>

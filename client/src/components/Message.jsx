@@ -100,6 +100,10 @@ function Message({ message }) {
                 )}
 
                 <div className={`${message.sender._id !== authState.data?._id ? `bg-[var(--background)]` : `bg-[var(--topic)]`} p-2 rounded-md inline-block max-w-[65%] w-fit`}>
+                    {message.isPost && <h2 className="w-full text-sm font-extralight italic">
+                        <i className="fa-solid fa-arrows-turn-right mr-2"></i>
+                        From posts
+                    </h2>}
                     <div className="flex flex-col">
                     {(message.groupId.length > 0 && message.sender?._id !== authState.data?._id) && <Link to={`/profile/${message.sender?.username}`} className="text-[10px] font-extralight hover:underline">{message.sender?.username}</Link>}
                         {/* File previews */}
