@@ -89,17 +89,17 @@ function Message({ message }) {
     return (
         <div className={`flex ${baseMessage ? `justify-center` : message.sender._id !== authState.data?._id ? `justify-start` : `justify-end`} items-start gap-4 mt-2 w-full`}>
             <ImagePreview isOpen={isOpen} setOpen={setOpen} url={selectedImage}/>
-            {baseMessage && <div className="flex items-center px-2 py-1 w-max bg-black/10 rounded-md">
+            {baseMessage && <div className="flex items-center px-2 py-1 w-max bg-[var(--card)] rounded-md">
                     <h2 className="text-xs font-extralight">{content}</h2>
                 </div>}
-           {!baseMessage && <div className={`flex items-end gap-2 w-[50%] ${message.sender._id !== authState.data?._id ? `justify-start` : `justify-end`}`}>
+           {!baseMessage && <div className={`flex items-end gap-2 w-[80%] ${message.sender._id !== authState.data?._id ? `justify-start` : `justify-end`}`}>
                 {message.sender._id !== authState.data?._id && (
                     <div className="flex w-8 items-start">
                         <img className="h-8 w-8 rounded-full object-cover" src={message?.sender?.image?.url} />
                     </div>
                 )}
 
-                <div className={`${message.sender._id !== authState.data?._id ? `bg-[var(--background)]` : `bg-green-900 text-white`} p-2 rounded-md inline-block max-w-[75%] w-fit`}>
+                <div className={`${message.sender._id !== authState.data?._id ? `bg-[var(--card)]` : `bg-green-900 text-white`} p-2 rounded-md inline-block max-w-[80%]`}>
                     {message.isPost && <h2 className="w-full text-sm font-extralight italic">
                         <i className="fa-solid fa-arrows-turn-right mr-2"></i>
                         From posts
@@ -150,10 +150,10 @@ function Message({ message }) {
                         {/* Text content */}
                         {message.content && (
                             <div className="flex items-end gap-4 w-full">
-                                <p className="text-sm break-words whitespace-pre-wrap overflow-wrap w-[90%]">
+                                <p className="text-xs sm:text-sm break-words whitespace-pre-wrap overflow-wrap w-full">
                                     {message.content}
                                 </p>
-                                <p className="text-[0.6rem] font-extralight text-right mt-1">
+                                <p className="text-[0.5rem] sm:text-[0.6rem] font-extralight text-right mt-1">
                                     {time}
                                 </p>
                             </div>

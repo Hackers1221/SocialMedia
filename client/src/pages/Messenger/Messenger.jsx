@@ -219,7 +219,7 @@ const Messenger = () => {
     }, []);
 
   return (
-    <div className={`fixed top-[4rem] md:top-0 md:left-[18rem] left-[1rem] w-[85%] h-[82vh] md:h-[100vh] flex flex-col flex-grow overflow-y-auto`}>
+    <div className={`fixed top-[4rem] md:top-0 md:left-[18rem] left-[1rem] w-[92%] h-[90vh] md:h-[100vh] flex flex-col flex-grow overflow-y-auto`}>
       {/* Left Sidebar */}
         <CreateGroup isOpen={groupCreate} setOpen={setGroupCreate}/>
         <UpdateGroup isOpen={groupUpdate} setOpen={setGroupUpdate} isDelete={isDialogOpen} setDelete={setDialogOpen}/>
@@ -297,9 +297,9 @@ const Messenger = () => {
               </div>}
             </div>
           </div>}
-          {(activeTab !== 'groups' && (screenWidth < 768 ? isSelected : true)) && <div className={`flex flex-col ${screenWidth < 768 ? `w-full` : `w-[73%]`} h-full border-l border-[var(--border)]`}>
-            {chatState.recipient?.name?.length > 0 ? <div className="relative flex flex-col text-[var(--heading)] bg-[var(--card)] h-full">
-              <div className="flex gap-4 justify-between items-center w-full bg-[var(--background)] p-4 ">
+          {(activeTab !== 'groups' && (screenWidth < 768 ? isSelected : true)) && <div className={`flex flex-col ${screenWidth < 768 ? `w-full` : `w-[67%]`} h-full border-l border-[var(--border)]`}>
+            {chatState.recipient?.name?.length > 0 ? <div className="relative flex flex-col text-[var(--heading)] bg-[var(--background)] h-full">
+              <div className="flex gap-4 justify-between items-center w-full bg-[var(--card)] p-4 ">
                 <div className="flex items-center gap-2 ">
                   {screenWidth < 768 && <i className="fa-solid fa-arrow-left" onClick={() => setSelected (false)}></i>}
                   <div onClick={() => {
@@ -327,7 +327,7 @@ const Messenger = () => {
               </div>
               <div className="absolute bottom-0 pb-4 flex flex-row items-center h-16 bg-[var(--card)] w-full px-4">
                 <div className="mt-auto flex flex-col items-center gap-3 p-2 relative w-full">
-                  <div className="flex flex-wrap items-center w-full p-2 px-4 rounded-full border border-[var(--input)] relative">
+                  <div className="flex items-center w-full p-2 px-4 rounded-full border border-[var(--input)] relative overflow-x-auto">
                     {/* File Upload Button */}
                     <label htmlFor="file-upload" className="cursor-pointer text-[var(--text)]">
                       <i className="fa-solid fa-paperclip text-sm"></i>
@@ -361,7 +361,7 @@ const Messenger = () => {
                     <input
                       type="text"
                       value={message}
-                      className="flex-1 bg-transparent text-[var(--text)] font-normal outline-none ml-4"
+                      className="flex-1 bg-transparent text-[var(--text)] font-normal outline-none ml-2 min-w-0"
                       placeholder="Write a message..."
                       onChange={(e) => setMessage(e.target.value)}
                       onKeyDown={(e) => {
@@ -374,7 +374,7 @@ const Messenger = () => {
                     <FaPaperPlane
                       onClick={sendMessage}
                       id="send"
-                      className="text-[var(--text)] cursor-pointer ml-3"
+                      className="text-[var(--text)] cursor-pointer text-[1rem] ml-2"
                     />
                   </div>
               </div>
@@ -384,8 +384,8 @@ const Messenger = () => {
               <h2>Select a user to start messaging</h2>
             </div>}
           </div>}
-          {(activeTab === 'groups' && (screenWidth < 768 ? isSelected : true)) && <div className={`flex flex-col ${screenWidth < 768 ? `w-full` : `w-[73%]`} h-full border-l border-[var(--border)]`}>
-            {groupState.liveGroup?._id?.length > 0 ? <div className="relative flex flex-col text-[var(--heading)] bg-[var(--card)] h-full">
+          {(activeTab === 'groups' && (screenWidth < 768 ? isSelected : true)) && <div className={`flex flex-col ${screenWidth < 768 ? `w-full` : `w-[67%]`} h-full border-l border-[var(--border)]`}>
+            {groupState.liveGroup?._id?.length > 0 ? <div className="relative flex flex-col text-[var(--heading)] bg-[var(--background)] h-full">
               <div className="flex gap-4 justify-between items-center w-full bg-[var(--topic)] p-2">
                 <div className="flex items-center gap-2">
                 {screenWidth < 768 && <i className="fa-solid fa-arrow-left" onClick={() => setSelected (false)}></i>}
@@ -443,7 +443,7 @@ const Messenger = () => {
                     <input
                       type="text"
                       value={groupMessage}
-                      className="flex-1 bg-transparent text-[var(--text)] font-normal outline-none ml-4"
+                      className="flex-1 bg-transparent text-[var(--text)] font-normal outline-none ml-4 min-w-0"
                       placeholder="Write a message..."
                       onChange={(e) => setGroupMessage(e.target.value)}
                       onKeyDown={(e) => {
@@ -456,7 +456,7 @@ const Messenger = () => {
                     <FaPaperPlane
                       onClick={sendGroupMessage}
                       id="send"
-                      className="text-[var(--text)] cursor-pointer ml-3"
+                      className="text-[var(--text)] cursor-pointer text-[1rem] ml-2"
                     />
                   </div> : 
                   <h2 className="text-xs">You are no longer a participant of this group</h2>}

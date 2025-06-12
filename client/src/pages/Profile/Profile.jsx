@@ -160,7 +160,7 @@ const Profile = () => {
   }, [authState.data.following, creator]);
 
   return (
-      <div className={`fixed top-[1rem] md:left-[20rem] left-[4rem] w-[85%] md:w-[50%] h-[97vh] flex flex-col flex-grow overflow-y-auto`}>
+      <div className={`fixed top-[4rem] md:top-[1rem] md:left-[20rem] left-[1rem] w-[92%] md:w-[50%] h-[97vh] flex flex-col flex-grow overflow-y-auto`}>
         {isLoading && <ProfileInfo />}
         <ImagePreview isOpen={isOpen} setOpen={setOpen} url={image}/>
         {!isLoading && <div className={`mb-4 w-full bg-[var(--card)] border border-[var(--border)]`}>
