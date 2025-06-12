@@ -16,7 +16,7 @@
     scrollbar-width: none;
 }
 
-:root {
+/* :root {
     --background: #0d1b2a;
     --topic: #415a77;
     --text: #D3D3D3;
@@ -28,11 +28,25 @@
     --border: #415a77;
     --buttonText: #000000;
     --heading: #FFFFFF;
-  }
+} */
+
+:root {
+    --background: #121212;
+    --topic: #1E1E1E;
+    --text: #B0B0B0;
+    --card: #1E1E1E;
+    --buttons: #60A5FA;
+    --input: #474E68;
+    --dropdown: #FFFFFF;
+    --buttonsHover: #29B6F6;
+    --border: #2C2C2C;
+    --buttonText: #FFFFFF;
+    --heading: #FFFFFF;
+}
 
 [data-theme="light"] {
     --background: #F2F0EF;
-    --topic: #B9D9EB;
+    --topic: #FFFFFF;
     --text: #2b2b2b;
     --card: #FFFFFF;
     --buttons: #0077c0;

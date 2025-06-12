@@ -116,9 +116,9 @@ function Sidebar() {
                     </div>
                     <div className="flex flex-col h-full justify-between overflow-y-auto overflow-x-hidden flex-grow">
                         <ul className="flex flex-col py-4 space-y-1">
-                            <li className="px-5 border-t">
+                            <li className="px-5">
                                 <div className="flex flex-row items-center h-8">
-                                    <div className={`text-sm font-bold text-[var(--text)]`}>Discover</div>
+                                    <div className={`pb-1 text-sm font-bold text-[var(--heading)] border-b-2 border-[var(--buttons)]`}>Discover</div>
                                 </div>
                             </li>
                             <li onClick={() => {setIsOpen(false); setMenuOpen(false); setSelected('Feed')}}>
@@ -145,9 +145,9 @@ function Sidebar() {
                                     <span className="ml-2 text-sm tracking-wide truncate">Verse</span>
                                 </Link>
                             </li>
-                            <li className="px-5 border-t">
+                            <li className="px-5">
                                 <div className="flex flex-row items-center h-8">
-                                    <div className={`text-sm font-bold text-[var(--text)]`}>Interact</div>
+                                    <div className={`pb-1 text-sm font-bold text-[var(--heading)] border-b-2 border-[var(--buttons)]`}>Interact</div>
                                 </div>
                             </li>
                             <li onClick={() => {setIsOpen(false); setMenuOpen(false); setSelected('Messages')}}>
@@ -169,9 +169,9 @@ function Sidebar() {
                                     {authState?.isRead == false && authState?.notifications?.length > 0 && <span className="w-2.5 h-2.5 ml-auto rounded-full bg-red-500 inline-block" />                                    }
                                 </Link>
                             </li>
-                            <li className="px-5 border-t">
+                            <li className="px-5">
                                 <div className="flex flex-row items-center h-8">
-                                    <div className={`text-sm font-bold text-[var(--text)]`}>Manage</div>
+                                    <div className={`pb-1 text-sm font-bold text-[var(--heading)] border-b-2 border-[var(--buttons)]`}>Manage</div>
                                 </div>
                             </li>
                             <li onClick={() => setIsOpen(false)}>

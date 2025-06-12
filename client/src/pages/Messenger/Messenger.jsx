@@ -299,8 +299,8 @@ const Messenger = () => {
           </div>}
           {(activeTab !== 'groups' && (screenWidth < 768 ? isSelected : true)) && <div className={`flex flex-col ${screenWidth < 768 ? `w-full` : `w-[73%]`} h-full border-l border-[var(--border)]`}>
             {chatState.recipient?.name?.length > 0 ? <div className="relative flex flex-col text-[var(--heading)] bg-[var(--card)] h-full">
-              <div className="flex gap-4 justify-between items-center w-full bg-[var(--topic)] p-2">
-                <div className="flex items-center gap-2">
+              <div className="flex gap-4 justify-between items-center w-full bg-[var(--background)] p-4 ">
+                <div className="flex items-center gap-2 ">
                   {screenWidth < 768 && <i className="fa-solid fa-arrow-left" onClick={() => setSelected (false)}></i>}
                   <div onClick={() => {
                     setSelectedImage (chatState.recipient?.image?.url);
@@ -327,7 +327,7 @@ const Messenger = () => {
               </div>
               <div className="absolute bottom-0 pb-4 flex flex-row items-center h-16 bg-[var(--card)] w-full px-4">
                 <div className="mt-auto flex flex-col items-center gap-3 p-2 relative w-full">
-                  <div className="flex items-center w-full p-2 px-4 rounded-full border border-[var(--input)] relative">
+                  <div className="flex flex-wrap items-center w-full p-2 px-4 rounded-full border border-[var(--input)] relative">
                     {/* File Upload Button */}
                     <label htmlFor="file-upload" className="cursor-pointer text-[var(--text)]">
                       <i className="fa-solid fa-paperclip text-sm"></i>

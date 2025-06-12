@@ -154,31 +154,31 @@ function PostCard ({ post, index, list, followers }) {
         const diffInSeconds = Math.floor((nowUTC - targetDateUTC) / 1000);
 
         if (diffInSeconds < 60) {
-            return `${diffInSeconds}s`;
+            return `${diffInSeconds}s ago`;
         }
 
         const diffInMinutes = Math.floor(diffInSeconds / 60);
         if (diffInMinutes < 60) {
-            return `${diffInMinutes}min`;
+            return `${diffInMinutes}min ago`;
         }
 
         const diffInHours = Math.floor(diffInMinutes / 60);
         if (diffInHours < 24) {
-            return `${diffInHours}h`;
+            return `${diffInHours}h ago`;
         }
 
         const diffInDays = Math.floor(diffInHours / 24);
         if (diffInDays < 30) {
-            return `${diffInDays}d`;
+            return `${diffInDays}d ago`;
         }
 
         const diffInMonths = Math.floor(diffInDays / 30);
         if (diffInMonths < 12) {
-            return `${diffInMonths}m`;
+            return `${diffInMonths}m ago`;
         }
 
         const diffInYears = Math.floor(diffInMonths / 12);
-        return `${diffInYears}y`;
+        return `${diffInYears}y ago`;
     }
 
     const toggleLike = async () => {
@@ -337,31 +337,32 @@ function PostCard ({ post, index, list, followers }) {
 
 
     return (
-        <div className={`mb-4 bg-[var(--card)] relative shadow-xl rounded-xl`} >
+        <div className={`mb-4 bg-[var(--card)] relative shadow-xl rounded-md`} >
             <DisplayPost open={isDialogOpen} setOpen={setDialogOpen} index={index} list={list} />
             <SelectedUser isOpen={isShare} setOpen={setShare} followers={followers} post={post}/>
 
-            <div className="flex justify-between bg-[var(--topic)] rounded-t-xl p-[0.3rem] px-4">
+            <div className="flex justify-between bg-[var(--topic)] rounded-t-xl p-[0.5rem] px-4">
                 <div className="flex items-center gap-2">
                     <div className="flex items-center">
                         <Link to={`/profile/${creator?.username}`}>
                             <span className="cursor-pointer">
-                                <Avatar url={creator?.image?.url || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} size={'sm'} />
+                                <Avatar url={creator?.image?.url || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} size={'md'} />
                             </span>
                         </Link>
                     </div>
-                    <div className="flex gap-1 items-center">
-                        <div>
-                            <Link to={`/profile/${creator?.username}`}>
-                                <span className={`mr-1 text-sm font-semibold cursor-pointer hover:underline hover:text-[var(--buttons)] text-[var(--heading)]`}>
-                                    {creator?.username}
-                                </span>
-                            </Link>
+                    <Link to={`/profile/${creator?.username}`} className="flex gap-4 items-end">
+                        <div className="flex flex-col gap-0">
+                            <div className={`text-sm font-semibold text-[var(--heading)]`}>
+                                {creator?.name}
+                            </div>
+                            <div className={`flex gap-1 text-xs font-extralight text-[var(--heading)]`}>
+                                @{creator?.username}
+                                <p className={`flex text-[var(--heading)] text-xs font-extralight gap-1 italic`}>
+                                    <span>•</span> {date}
+                                </p>
+                            </div>
                         </div>
-                        <p className={`flex text-[var(--heading)] text-xs font-extralight gap-1`}>
-                            <span>•</span>{date}
-                        </p>
-                    </div>
+                    </Link>
                 </div>
                 <div className="dropdown dropdown-end">
                     <div tabIndex={0} role="button" className="m-1">
@@ -391,31 +392,31 @@ function PostCard ({ post, index, list, followers }) {
             </div>
 
             {width > 530 ? <div className="flex justify-start gap-3 h-[25rem] my-4 px-4">
-                {images?.length > 0 && <div className={`relative ${images.length > 3 ? `w-[35%]` : images?.length > 2 ? `w-[33%]` : images?.length > 1 ? `w-[50%]` : `w-full`} rounded-lg h-full flex justify-center hover:cursor-pointer bg-black`} onClick={() => setDialogOpen(true)}>
+                {images?.length > 0 && <div className={`relative ${images.length > 3 ? `w-[35%]` : images?.length > 2 ? `w-[33%]` : images?.length > 1 ? `w-[50%]` : `w-full`} h-full flex justify-center hover:cursor-pointer bg-black`} onClick={() => setDialogOpen(true)}>
                     <img
                         src={images[0]?.url}
                         alt="Main Image"
-                        className="object-cover h-full rounded-2xl"
+                        className="object-cover h-full"
                     />
                     {images[0].filename === "video" && <i className="fa-solid fa-video absolute top-4 left-4 text-[var(--heading)] text-2xl"></i>}
                     {images[0].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-[var(--heading)] text-2xl"></i>}
                 </div>}
-                {images?.length > 1 && <div className={`relative ${images?.length > 3 ? `w-[35%]` : images?.length > 2 ? `w-[33%]` : `w-[50%]`} rounded-lg h-full flex items-center flex justify-center hover:cursor-pointer bg-black`} onClick={() => setDialogOpen(true)}>
+                {images?.length > 1 && <div className={`relative ${images?.length > 3 ? `w-[35%]` : images?.length > 2 ? `w-[33%]` : `w-[50%]`} h-full flex items-center flex justify-center hover:cursor-pointer bg-black`} onClick={() => setDialogOpen(true)}>
                     <img
                         src={images[1]?.url}
                         alt="Image 2"
-                        className="object-cover h-full rounded-2xl"
+                        className="object-cover h-full"
                     />
                     {images[1].filename === "video" && <i className="fa-solid fa-video absolute top-4 left-4 text-[var(--heading)] text-2xl"></i>}
                     {images[1].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-[var(--heading)] text-2xl"></i>}
                 </div>}
 
                 {images?.length > 2 && <div className={`flex flex-col gap-2 ${images?.length > 3 ? `w-[25%]` : `w-[33%]`}`}>
-                    <div className={` relative ${images?.length == 3 ? `h-full` : `h-[49%]`} rounded-lg flex justify-center hover:cursor-pointer`} onClick={() => setDialogOpen(true)}>
+                    <div className={` relative ${images?.length == 3 ? `h-full` : `h-[49%]`} flex justify-center hover:cursor-pointer`} onClick={() => setDialogOpen(true)}>
                         <img
                             src={images[2]?.url}
                             alt="Image 3"
-                            className="object-cover h-full rounded-2xl"
+                            className="object-cover h-full"
                         />
                         {images[2].filename === "video" && <i className="fa-solid fa-video absolute top-4 left-4 text-[var(--heading)] text-2xl"></i>}
                         {images[2].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-[var(--heading)] text-2xl"></i>}
@@ -425,7 +426,7 @@ function PostCard ({ post, index, list, followers }) {
                             <img
                                 src={images[3]?.url}
                                 alt="Image 4"
-                                className="object-cover h-full rounded-2xl"
+                                className="object-cover h-full"
                             />
                             {images[3].filename === "video" && <i className="fa-solid fa-video absolute top-4 left-4 text-[var(--heading)] text-2xl"></i>}
                             {images[3].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-[var(--heading)] text-2xl"></i>}

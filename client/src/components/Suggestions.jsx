@@ -102,7 +102,7 @@ function Suggestions () {
                 </div>
             </div>
 
-            {check == 0 && authState.userList?.length > 0 && <div className={`ml-8 text-[var(--text)] text-xl rounded-xl bg-[var(--card)] shadow-lg mt-8`}>
+            {/* {check == 0 && authState.userList?.length > 0 && <div className={`ml-8 text-[var(--text)] text-xl rounded-xl bg-[var(--card)] shadow-lg mt-8`}>
                 <div className={`flex justify-between items-center border-b bg-[var(--topic)] rounded-t-xl p-2`}>
                     <h2 className="font-bold text-sm text-[var(--heading)]">Friend Suggestions</h2>
                 </div>
@@ -117,11 +117,11 @@ function Suggestions () {
                         </div>
                     </Link>
                 ))}
-            </div>}
+            </div>} */}
 
-            {check == 0 && followers?.length > 0 && <div className={`ml-8 text-[var(--text)] text-xl rounded-xl bg-[var(--card)] mt-8 shadow-lg`}>
-                <div className={`flex justify-between items-center border-b bg-[var(--topic)] rounded-t-xl p-2`}>
-                    <h2 className="font-bold text-sm text-[var(--heading)]">Your followers</h2>
+            {check == 0 && followers?.length > 0 && <div className={`ml-8 text-[var(--text)] text-xl rounded-md bg-[var(--card)] mt-8 shadow-lg px-2`}>
+                <div className={`flex justify-between items-center bg-[var(--topic)] rounded-t-xl p-2`}>
+                    <h2 className="pb-1 font-bold text-sm text-[var(--heading)] border-b-2 border-[var(--buttons)]">Who's Following You</h2>
                 </div>
                 {followers?.map ((user, key) => (
                     <div key={key} className={`flex mt-2 gap-2 p-2 py-3 items-center border-b ${key === followers?.length - 1 ? 'border-transparent' : 'border-[var(--border)]'} hover:cursor-pointer hover:shadow-md hover:text-[var(--heading)]`}>

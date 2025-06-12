@@ -177,21 +177,21 @@ const Profile = () => {
                   {!check ? (
                     follow ? (
                       <button
-                        className="mt-2 px-4 py-2 border rounded-full bg-[var(--buttons)] text-[var(--card)]"
+                        className="mt-2 px-4 py-2 rounded-full bg-[var(--buttons)] text-[var(--buttonText)]"
                         onClick={toggleFollow}
                       >
                         Following
                       </button>
                     ) : creator?.isPrivate ? (
                       <button
-                        className={`mt-2 px-4 py-2 border rounded-full bg-[var(--buttons)] text-[var(--card)] ${pending ? "text-blue-500" : ""}`}
+                        className={`mt-2 px-4 py-2 rounded-full bg-[var(--buttons)] text-[var(--buttonText)] ${pending ? "text-blue-500" : ""}`}
                         onClick={toggleFollowRequest}
                       >
                         {pending ? "Requested" : "Follow"}
                       </button>
                     ) : (
                       <button
-                        className="mt-2 px-4 py-2 border rounded-full bg-[var(--buttons)] text-red-400"
+                        className="mt-2 px-4 py-2 rounded-full bg-[var(--buttons)] text-[var(--buttonText)]"
                         onClick={toggleFollow}
                       >
                         Follow
