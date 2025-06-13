@@ -65,7 +65,7 @@ function Announcement ({_id, userImage, userName, announcementText, createdAt}) 
                 <div className="break-words justify-between text-sm mb-3 text-[var(--text)] whitespace-pre-wrap w-[90%] mt-2">
                     {announcementText}
                 </div>
-                <div className="dropdown dropdown-end">
+                {authState.data?.username == userName && <div className="dropdown dropdown-end">
                     <div tabIndex={0} role="button">
                         <i className={`text-[var(--text)] fa-solid fa-ellipsis text-sm`}></i>
                     </div>
@@ -77,7 +77,7 @@ function Announcement ({_id, userImage, userName, announcementText, createdAt}) 
                         </li>
                         }
                     </ul>
-                </div>
+                </div>}
             </div>
             <div className="flex justify-between items-center">
                 <Link to={`/profile/${userName}`} className="flex items-center gap-2">
