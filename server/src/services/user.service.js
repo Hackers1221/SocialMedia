@@ -10,6 +10,7 @@ const mailer = require('../middlewares/mailer')
 const {deleteImages, deleteVideos} = require("../../cloudConfig.js");
 const { userSocketMap, getIO } = require('../../socket/socketInstance.js');
 const mongoose = require("mongoose");
+const Announcement = require ('../models/announcement.model.js')
 
 const CreateUser = async(data) => { 
     const response  = {};
@@ -329,6 +330,7 @@ const deleteUser = async(id) => {
         // Delete user's posts & pulses
         await Post.deleteMany({ userId: id });
         await Pulse.deleteMany({ userId: id });
+        await Announcement.deleteMany({ user: id });
 
 
         // Remove OTP data (if any)

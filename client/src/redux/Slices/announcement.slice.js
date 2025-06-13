@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import axiosInstance from "../../config/axiosInstance";
 
 const initialState = {
-    downloadedAnnonuncement: [],
+    downloadedAnnouncement: [],
     announcementList: [],
     savedList:[],
 };
@@ -153,28 +153,28 @@ const AnnouncementSlice = createSlice({
         builder
             .addCase(getAllAnonuncement.fulfilled, (state, action) => {
                 if (!action.payload?.data) return;
-                state.downloadedAnnonuncement = action.payload?.data?.announcement?.Announcement?.reverse();
-                state.announcementList = state.downloadedAnnonuncement;
+                state.downloadedAnnouncement = action.payload?.data?.announcement?.Announcement?.reverse();
+                state.announcementList = state.downloadedAnnouncement;
             })
             .addCase(createAnnouncement.fulfilled, (state, action) => {
                 if (!action.payload?.data) return;
                 const newAnnouncement = action.payload?.data?.announcement?.announcement;
-                if (state.downloadedAnnonuncement?.length > 0) state.downloadedAnnonuncement = [newAnnouncement, ...state.downloadedAnnonuncement];
-                else state.downloadedAnnonuncement = [newAnnouncement];
+                if (state.downloadedAnnouncement?.length > 0) state.downloadedAnnouncement = [newAnnouncement, ...state.downloadedAnnouncement];
+                else state.downloadedAnnouncement = [newAnnouncement];
             })
             .addCase(deleteAnnouncement.fulfilled, (state, action) => {
                 if (!action.payload.data) return;
-                state.downloadedAnnonuncement = state.downloadedAnnonuncement.filter ((announcement) => announcement._id != action.payload.data?.announcement._id);
+                state.downloadedAnnouncement = state.downloadedAnnouncement.filter ((announcement) => announcement._id != action.payload.data?.announcement._id);
             })
             .addCase (congratulate.fulfilled, (state, action) => {
                 if (!action.payload.data) return;
-                state.downloadedAnnonuncement = state.downloadedAnnonuncement.map (announcement =>
+                state.downloadedAnnouncement = state.downloadedAnnouncement.map (announcement =>
                     announcement._id === action.payload.data?.announcement?._id ? action.payload.data?.announcement : announcement
                 );
             })
             .addCase (sorrify.fulfilled, (state, action) => {
                 if (!action.payload.data) return;
-                state.downloadedAnnonuncement = state.downloadedAnnonuncement.map (announcement =>
+                state.downloadedAnnouncement = state.downloadedAnnouncement.map (announcement =>
                     announcement._id === action.payload.data?.announcement?._id ? action.payload.data?.announcement : announcement
                 );
             })

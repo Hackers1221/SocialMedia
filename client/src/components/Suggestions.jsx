@@ -103,7 +103,7 @@ function Suggestions () {
                         {searchResult?.map((user, index) => (
                             <Link to={`/profile/${user?.username}`} key={index} className={`text-[var(--text)] mt-2 p-2 py-3 flex items-center space-x-2 hover:shadow-md hover:cursor-pointer bg-[var(--card)] hover:text-[var(--heading)]`}>
                                 {user.image?.url ? 
-                                    <Avatar url = {user.image?.url} size={'md'}/> : 
+                                    <Avatar id={user._id} url = {user.image?.url} size={'md'}/> : 
                                     <RxAvatar />
                                     }
                                 <div>
@@ -130,10 +130,10 @@ function Suggestions () {
                         +
                     </button>
                 </div>
-                {announcementState.downloadedAnnonuncement?.length > 0 ? (
+                {announcementState.downloadedAnnouncement?.length > 0 ? (
                     <AnimatePresence initial={false}>
-                        {announcementState.downloadedAnnonuncement
-                        ?.slice(0, seeFullAnnouncements ? announcementState.downloadedAnnonuncement.length : 3)
+                        {announcementState.downloadedAnnouncement
+                        ?.slice(0, seeFullAnnouncements ? announcementState.downloadedAnnouncement.length : 3)
                         .map((announcement, key) => (
                             <motion.div
                             key={announcement._id}
@@ -158,7 +158,7 @@ function Suggestions () {
                     <h2 className="italic font-extraligt text-sm w-full text-center py-2">No announcements</h2>
                     )}
 
-                    {announcementState.downloadedAnnonuncement?.length > 3 && (
+                    {announcementState.downloadedAnnouncement?.length > 3 && (
                     <h2
                         className="p-2 w-full text-xs text-center text-[var(--heading)] font-extralight cursor-pointer"
                         onClick={() => setSeeFullAnnouncements(!seeFullAnnouncements)}
@@ -195,7 +195,7 @@ function Suggestions () {
                         .slice(0, seeFullFollowers ? followers.length : 3)
                         .map((user, key) => (
                         <motion.div
-                            key={user._id}
+                            key={user?._id}
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: "auto" }}
                             exit={{ opacity: 0, height: 0 }}
@@ -204,7 +204,7 @@ function Suggestions () {
                             key === followers?.length - 1 ? "border-transparent" : "border-[var(--border)]"
                             } hover:cursor-pointer hover:shadow-md hover:text-[var(--heading)]`}
                         >
-                            <Avatar url={user?.image?.url} size={"md"} />
+                            <Avatar id={user?._id} url={user?.image?.url} size={"md"} />
                             <div className="flex justify-between w-full">
                             <Link to={`/profile/${user?.username}`} className="w-full">
                                 <h2 className="text-sm">{user?.name}</h2>

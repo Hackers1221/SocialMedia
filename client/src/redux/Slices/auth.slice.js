@@ -192,7 +192,7 @@ export const deleteUser = createAsyncThunk('/user/delete', async (userId) => {
             }
         });
         if (!response) toast.error('Something went wrong, try again');
-        else toast.success(response.data.msg);       
+        else toast.success("Successfully deleted your account");       
         return response;
     } catch (error) {
         toast.error(error.response?.data?.error || 'An error occurred');

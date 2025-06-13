@@ -346,7 +346,7 @@ function PostCard ({ post, index, list, followers }) {
                     <div className="flex items-center">
                         <Link to={`/profile/${creator?.username}`}>
                             <span className="cursor-pointer">
-                                <Avatar url={creator?.image?.url || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} size={'md'} />
+                                <Avatar id={creator?._id} url={creator?.image?.url || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"} size={'md'} />
                             </span>
                         </Link>
                     </div>
@@ -557,7 +557,7 @@ function PostCard ({ post, index, list, followers }) {
                         </div>
 
                         <div className="mt-auto flex items-center gap-2 relative">
-                            <Avatar url={authState?.image?.url} size={'md'}/>
+                            <Avatar id={authState?._id} url={authState?.image?.url} size={'md'}/>
                             <div className="flex-1 relative">
                                 <input
                                     type="text"

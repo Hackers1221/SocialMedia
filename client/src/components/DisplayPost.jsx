@@ -306,7 +306,7 @@ const DisplayPost = ({ open, setOpen, index, list, followers }) => {
         {/* Left Half */}
         <div className="w-1/2 px-4 flex relative items-center bg-black">
           <div className={`absolute top-0 left-0 flex items-center gap-3 mb-4 z-[100] bg-[var(--card)] px-4 py-2`}>
-            <Avatar url={creator?.image?.url} size={"md"}/>
+            <Avatar url={creator?.image?.url} id={creator?._id} size={"md"}/>
             <div>
               <Link to={`/profile/${creator?.username}`}>
                   <span className={`mr-1 text-sm font-semibold cursor-pointer hover:underline hover:text-[var(--buttons)] text-[var(--text)]`}>
@@ -409,7 +409,7 @@ const DisplayPost = ({ open, setOpen, index, list, followers }) => {
             </div>
           </div>
           <div className="mt-auto flex items-center gap-3 p-2 relative">
-            <Avatar url={authState?.data?.image?.url} />
+            <Avatar url={authState?.data?.image?.url} id={authState.data?._id}/>
             <div className="flex-1 relative">
               <input
                 type="text"

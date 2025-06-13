@@ -98,7 +98,7 @@ function Sidebar() {
                 <Link 
                     to={`/profile/${authState?.data?.username}`}
                     className="fixed top-0 right-0 md:hidden p-4">
-                        <Avatar url={authState.data?.image?.url} size={'md'}/>
+                        <Avatar id={authState.data?._id} url={authState.data?.image?.url} size={'md'}/>
                 </Link>
 
                 <div
@@ -182,7 +182,7 @@ function Sidebar() {
                         <ul className="flex flex-col py-4 space-y-1">
                             {screenWidth > 768 && <li onClick={() => {setIsOpen(false); setMenuOpen(false); setSelected('Profile')}}>
                                 <Link to={`/profile/${authState?.data?.username}`} className={`relative border-l-4 hover:border-[var(--buttons)] flex flex-row items-center h-11 hover:text-[var(--buttons)] hover:shadow-md font-semibold border-l-4 pl-4 ${selected === 'Profile' ? `border-[var(--buttons)] text-[var(--buttons)] shadow-md` : `border-transparent text-[var(--text)]`}`}>
-                                    <Avatar url={authState?.data?.image?.url} size={"sm"}/>
+                                    <Avatar id={authState.data?._id} url={authState?.data?.image?.url} size={"sm"}/>
                                     <span className="ml-2 text-sm tracking-wide truncate">{authState.data?.username}</span>
                                 </Link>
                             </li>}
