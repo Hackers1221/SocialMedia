@@ -72,31 +72,37 @@ const getAll = async (userId) => {
 //     }
 // };
 
-// const likeVerse = async(id,userId) => {
-//     const response = {};
-//     try {
-//         const likesArray = await Verse.findById(id);
-//         if(!likesArray){
-//             response.error = "Verse not found";
-//             return response;
-//         }
-//         if(likesArray.likes.includes(userId)){
-//             likesArray.likes = likesArray.likes.filter((ids) => ids!=userId);
-//         }else{
-//             likesArray.likes.push(userId);
-//         }
-//         const updatedVerse = await Verse.findByIdAndUpdate(
-//             id,
-//             { likes: likesArray.likes },
-//             { new: true } 
-//         );
-//         response.verse = updatedVerse;
-//         return response;
-//     } catch (error) {
-//         response.error = error.message;
-//         return response;
-//     }
-// }
+const congratulate = async(id, userId) => {
+    const response = {};
+    try {
+        const res = await Announcement.updateOne(
+            { _id: id },
+            { $push: { congratulations: userId } }
+        );
+
+        response.announcement = await Announcement.findById (id).populate("user", "image name username");
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response;
+    }
+}
+
+const sorrify = async(id, userId) => {
+    const response = {};
+    try {
+        const res = await Announcement.updateOne(
+            { _id: id },
+            { $push: { sorry: userId } }
+        );
+
+        response.announcement = await Announcement.findById (id).populate("user", "image name username");
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response;
+    }
+}
 
 // const getVerseByUserId = async(id) => {
 //     const response = {};
@@ -153,6 +159,5 @@ const deleteAnnouncement = async(id) => {
 }
 
 module.exports = {
-    create, getAll, deleteAnnouncement
-    // updateVerse, getVerseByUserId, likeVerse, deleteVerse, getVerseById
+    create, getAll, deleteAnnouncement, congratulate, sorrify
 };

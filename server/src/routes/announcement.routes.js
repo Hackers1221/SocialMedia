@@ -6,7 +6,8 @@ const validators = require('../validators/authenticate.user')
 announcementRoutes.post('/announcement', validators.isUserAuthenticated, announcementController.createAnnouncement);
 announcementRoutes.get('/announcement/:userId',validators.isUserAuthenticated, announcementController.getAllAnnouncement);
 // verseRoutes.patch('/verse/:id',validators.isUserAuthenticated,verseController.updateVerse)
-// verseRoutes.patch('/like/:id',validators.isUserAuthenticated,verseController.likeVerse);
+announcementRoutes.patch('/congratulate/:id',validators.isUserAuthenticated,announcementController.congratulate);
+announcementRoutes.patch('/sorrify/:id',validators.isUserAuthenticated,announcementController.sorrify);
 // verseRoutes.get('/verse/:id',validators.isUserAuthenticated,verseController.getVerseByUserId);
 // verseRoutes.patch('/save/:id',validators.isUserAuthenticated,verseController.savePost);
 // verseRoutes.get('/save/:id',validators.isUserAuthenticated,verseController.getAllSavedPost);

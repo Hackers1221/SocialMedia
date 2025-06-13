@@ -1,14 +1,35 @@
 import { useEffect, useState } from "react";
 import Avatar from "./Avatar";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
+import { congratulate, sorrify } from "../redux/Slices/announcement.slice";
 
-function Announcement ({_id, userImage, userName, announcementText, createdAt}) {
+function Announcement ({_id, userImage, userName, announcementText, createdAt, congratulation, sorry}) {
     const authState = useSelector ((state) => state.auth);
+
+    const dispatch = useDispatch ();
 
     const [time, setTime] = useState ();
     const [isOpen, setOpen] = useState (false);
+
+    async function handleCongratulate () {
+        if (userName == authState.data?.username) return;
+        if (congratulation.includes (authState.data?._id)) return;
+        const res = await dispatch (congratulate ({
+            _id,
+            id: authState.data?._id
+        }))
+    }
+
+    async function handleSorrify () {
+        if (userName == authState.data?.username) return;
+        if (sorry.includes (authState.data?._id)) return;
+        const res = await dispatch (sorrify ({
+            _id,
+            id: authState.data?._id
+        }))
+    }
 
     function getTimeDifference(dateString) {
         const now = new Date();
@@ -80,10 +101,26 @@ function Announcement ({_id, userImage, userName, announcementText, createdAt}) 
                 </div>}
             </div>
             <div className="flex justify-between items-center">
-                <Link to={`/profile/${userName}`} className="flex items-center gap-2">
-                    <Avatar url={userImage.url} size={'sm'}/>
-                    <h2 className="text-xs font-semibold">{userName}</h2>
-                </Link>
+                <div className="flex items-center gap-2">
+                    {/* <Avatar url={userImage.url} size={'sm'}/> */}
+                    <Link to={`/profile/${userName}`} className="text-xs font-extralight">@{userName}</Link>
+                    <div className="flex items-center gap-2">
+                        <div 
+                            title="Congratulate" 
+                            className="flex justify-center items-center px-1 hover:bg-[var(--background)] rounded-md hover:cursor-pointer"
+                            onClick={handleCongratulate}>
+                            <h2>👏</h2>
+                            <h2 className="text-xs">{congratulation?.length}</h2>
+                        </div>
+                        <div 
+                            title="Feeling sorry" 
+                            className="flex justify-center items-center px-1 hover:bg-[var(--background)] rounded-md  hover:cursor-pointer"
+                            onClick={handleSorrify}>
+                            <h2>😢</h2>
+                            <h2 className="text-xs">{sorry?.length}</h2>
+                        </div>
+                    </div>
+                </div>
                 <h2 className="text-xs">{time}</h2>
             </div>
         </div>

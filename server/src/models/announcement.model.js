@@ -2,7 +2,11 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const announcementSchema = new Schema({
-    likes: {
+    congratulations: {
+        type: [String],
+        default: []
+    },
+    sorry: {
         type: [String],
         default: []
     },

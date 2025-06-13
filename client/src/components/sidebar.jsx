@@ -93,11 +93,13 @@ function Sidebar() {
                             }}
                         />
                     )}
-                    <Link to={`/profile/${authState?.data?.username}`}>
-                        <Avatar url={authState.data?.image?.url} size={'md'}/>
-                    </Link>
                 </div>
                 
+                <Link 
+                    to={`/profile/${authState?.data?.username}`}
+                    className="fixed top-0 right-0 md:hidden p-4">
+                        <Avatar url={authState.data?.image?.url} size={'md'}/>
+                </Link>
 
                 <div
                     id="sidebar"

@@ -50,23 +50,41 @@ export const createAnnouncement = createAsyncThunk('announcement/createAnounceme
 //     }
 // })
 
-// export const likeVerse = createAsyncThunk('verse/likeVerse', async(data) => {
-//     try {
-//         const resp = {
-//             id : data.id
-//         }
-//         const response = await axiosInstance.patch(`verse/like/${data._id}`, resp , {
-//             headers: {
-//                 'x-access-token': localStorage.getItem('token')
-//             }
-//         })
-//         if(response){
-//             return response;
-//         }
-//     } catch (error) {
-//         toast.error(error.response?.data?.error || "Failed to like verse");
-//     }
-// })
+export const congratulate = createAsyncThunk('announcement/congratulate', async(data) => {
+    try {
+        const resp = {
+            id : data.id
+        }
+        const response = await axiosInstance.patch(`announcement/congratulate/${data._id}`, resp , {
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+        if(response){
+            return response;
+        }
+    } catch (error) {
+        toast.error(error.response?.data?.error || "Failed to congratulate announcement");
+    }
+})
+
+export const sorrify = createAsyncThunk('announcement/sorrify', async(data) => {
+    try {
+        const resp = {
+            id : data.id
+        }
+        const response = await axiosInstance.patch(`announcement/sorrify/${data._id}`, resp , {
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            }
+        })
+        if(response){
+            return response;
+        }
+    } catch (error) {
+        toast.error(error.response?.data?.error || "Failed to sorrify announcement");
+    }
+})
 
 // export const getVerseByUserId = createAsyncThunk('verse/getVerse' ,async(id) => {
 //     try {
@@ -147,6 +165,18 @@ const AnnouncementSlice = createSlice({
             .addCase(deleteAnnouncement.fulfilled, (state, action) => {
                 if (!action.payload.data) return;
                 state.downloadedAnnonuncement = state.downloadedAnnonuncement.filter ((announcement) => announcement._id != action.payload.data?.announcement._id);
+            })
+            .addCase (congratulate.fulfilled, (state, action) => {
+                if (!action.payload.data) return;
+                state.downloadedAnnonuncement = state.downloadedAnnonuncement.map (announcement =>
+                    announcement._id === action.payload.data?.announcement?._id ? action.payload.data?.announcement : announcement
+                );
+            })
+            .addCase (sorrify.fulfilled, (state, action) => {
+                if (!action.payload.data) return;
+                state.downloadedAnnonuncement = state.downloadedAnnonuncement.map (announcement =>
+                    announcement._id === action.payload.data?.announcement?._id ? action.payload.data?.announcement : announcement
+                );
             })
             // .addCase(updateVerse.fulfilled, (state, action) => {
             //     if (!action.payload?.data) return;

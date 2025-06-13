@@ -148,6 +148,8 @@ function Suggestions () {
                                 userName={announcement.user.username}
                                 announcementText={announcement.text}
                                 createdAt={announcement.createdAt}
+                                congratulation={announcement.congratulations}
+                                sorry={announcement.sorry}
                             />
                             </motion.div>
                         ))}

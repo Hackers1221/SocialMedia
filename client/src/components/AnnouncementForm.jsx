@@ -14,6 +14,7 @@ export default function AnnouncementForm ({ open, setOpen }) {
 
     const [showPicker, setShowPicker] = useState(false);
     const [text, setText] = useState ();
+    const [left, setLeft] = useState (150);
 
 
     const create = async () => {
@@ -25,6 +26,13 @@ export default function AnnouncementForm ({ open, setOpen }) {
         if (res.payload) {
             setText (""); setOpen (false);
         }
+    };
+
+    const handleTextChange = (e) => {
+        let input = e.target.value.slice(0, 150); // Limit to 250 characters
+        input = input.charAt(0).toUpperCase() + input.slice(1); // Capitalize first letter
+        setText(input);
+        setLeft(150 - input.length);
     };
 
     const handleEmojiClick = (emojiData) => {
@@ -59,7 +67,7 @@ export default function AnnouncementForm ({ open, setOpen }) {
                 </DialogTitle>
 
                 {/* Caption Input */}
-                <div className="relative w-full flex gap-4 rounded-lg bg-gray-200 mt-4 items-start p-4">
+                <div className="relative w-full flex flex-col gap-4 rounded-lg bg-gray-200 mt-4 items-start p-4">
                     {/* <i
                         onClick={() => setShowPicker((prev) => !prev)}
                         className="mt-1 fa-regular fa-face-smile hover:cursor-pointer text-xl"
@@ -71,8 +79,9 @@ export default function AnnouncementForm ({ open, setOpen }) {
                         placeholder="Start announcement..."
                         value={text}
                         name="text"
-                        onChange={(e) => setText (e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1))}
+                        onChange={handleTextChange}
                     />
+                    <h2 className="text-sm">Characters {left}/150</h2>
                 </div>
 
                 <h2 className="w-full text-left text-sm italic">*Your announcement will be removed after 24 hours</h2>

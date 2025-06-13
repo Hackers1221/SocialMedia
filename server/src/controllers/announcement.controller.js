@@ -2,7 +2,6 @@ const { StatusCodes } = require('http-status-codes');
 const announcementService = require ('../services/announcement.service')
 
 const createAnnouncement = async (req, res) => {
-    console.log (req.body)
     const response = await announcementService.create (req.body);
 
     if(response?.error){
@@ -46,19 +45,33 @@ const getAllAnnouncement = async(req, res) => {
 //     })
 // }
 
-// const likeVerse = async(req, res) => {
-//     const response = await verseService.likeVerse (req.params.id, req.body.id)
-//     if(response.error){
-//         return res.status(StatusCodes.BAD_REQUEST).send({
-//             msg : "Unable to update the Post",
-//             error : response.error
-//         })
-//     }
-//     return res.status(StatusCodes.OK).send({
-//         msg : "Successfully updated the post",
-//         verse : response.post
-//     })
-// }
+const congratulate = async(req, res) => {
+    const response = await announcementService.congratulate (req.params.id, req.body.id)
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg : "Unable to update the announcement",
+            error : response.error
+        })
+    }
+    return res.status(StatusCodes.OK).send({
+        msg : "Successfully updated the announcement",
+        announcement : response.announcement
+    })
+}
+
+const sorrify = async(req, res) => {
+    const response = await announcementService.sorrify (req.params.id, req.body.id)
+    if(response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            msg : "Unable to update the announcement",
+            error : response.error
+        })
+    }
+    return res.status(StatusCodes.OK).send({
+        msg : "Successfully updated the announcement",
+        announcement : response.announcement
+    })
+}
 
 // const getVerseByUserId = async(req,res) => {
 //     const response = await verseService.getVerseByUserId (req.params.id);
@@ -104,6 +117,6 @@ const deleteAnnouncement = async(req,res) => {
 }
 
 module.exports = {
-    createAnnouncement, getAllAnnouncement, deleteAnnouncement
+    createAnnouncement, getAllAnnouncement, deleteAnnouncement, congratulate, sorrify
     // likeVerse, getVerseByUserId, updateVerse, getVerseById, deleteVerse
 }
