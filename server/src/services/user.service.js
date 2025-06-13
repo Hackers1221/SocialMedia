@@ -3,7 +3,6 @@ const User = require('../models/user.model')
 const Notification = require('../models/notification.model.js')
 const Pulse = require("../models/pulse.model");
 const Post = require("../models/posts.model");
-const Verse = require ('../models/verse.model.js')
 const Comment = require("../models/comment.model")
 const Otp = require("../models/otp.model");
 const bcrypt = require('bcrypt');
@@ -280,7 +279,6 @@ const deleteUser = async(id) => {
         // Remove user likes from posts, pulses and comments
         await Post.updateMany({ likes: id }, { $pull: { likes: id } });
         await Pulse.updateMany({ likes: id }, { $pull: { likes: id } });
-        await Verse.updateMany({ likes: id }, { $pull: { likes: id } });
         await Comment.updateMany({ likes: id }, { $pull: { likes: id } });
 
         // Find all comments made by the user
@@ -292,8 +290,6 @@ const deleteUser = async(id) => {
         // Remove user's comments from pulse
         await Pulse.updateMany({ comments: id }, { $pull: { comments: id } });
 
-        // Remove user's comments from verse
-        await Verse.updateMany({ comments: id }, { $pull: { comments: id } });
 
         // Delete the user's comments
         await Comment.deleteMany({ user: id });
@@ -333,7 +329,6 @@ const deleteUser = async(id) => {
         // Delete user's posts & pulses
         await Post.deleteMany({ userId: id });
         await Pulse.deleteMany({ userId: id });
-        await Verse.deleteMany({ userId: id });
 
 
         // Remove OTP data (if any)

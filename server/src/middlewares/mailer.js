@@ -3,10 +3,10 @@ require("dotenv").config();
 
 const EMAIL = process.env.EMAIL;
 const PASS = process.env.PASS;
+const FRONT_URL = process.env.FRONT_URL
 const url = "https://res.cloudinary.com/dnaznkzoy/image/upload/v1747573794/Logo_cmltv7.png"
-const webpage = "http://localhost:5173/"
-const resetLink = "http://localhost:5173/resetpass"
-const login = "http://localhost:5173/login"
+const resetLink = `${FRONT_URL}/resetpass`
+const login = `${FRONT_URL}/login`
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -74,7 +74,7 @@ const sendWelcomeEmail = async (email) => {
         </p>
 
         <div style="margin-top: 20px;">
-            <a href="${webpage}" 
+            <a href="${FRONT_URL}" 
               style="display: inline-block; background-color: #023e8a; color: #fff; text-decoration: none; 
                       padding: 10px 20px; border-radius: 5px; font-weight: bold;">
                 Get started
@@ -114,7 +114,7 @@ const forgetPasswordLink = async (email,token) => {
         </p>
 
         <div style="margin-top: 20px;">
-            <a href="http://localhost:5173/resetpass?token=${token}" 
+            <a href="${FRONT_URL}/resetpass?token=${token}" 
               style="display: inline-block; background-color: #023e8a; color: #fff; text-decoration: none; 
                       padding: 10px 20px; border-radius: 5px; font-weight: bold;">
                 Reset Password
@@ -166,7 +166,7 @@ The Ripple Team
 
         <p style="font-size: 14px; color: #777;">
             However, if you did not request this change, please 
-            <a href="http://localhost:5173/forgetpass" style="color: #023e8a; text-decoration: none; font-weight: bold;">reset your password</a> 
+            <a href="${FRONT_URL}/forgetpass" style="color: #023e8a; text-decoration: none; font-weight: bold;">reset your password</a> 
             immediately or contact our support team.
         </p>
 
@@ -185,11 +185,65 @@ The Ripple Team
   }
 };
 
+const announcementAddedEmail = async (fromUser, toUser) => {
+  try {
+    const mailOptions = {
+      from: `"Ripple" <${EMAIL}>`,
+      to: toUser.email,
+      subject: "An announcement has been added - Ripple",
+      text: `Hello,
+
+        ${fromUser.name} has just posted a new announcement. Stay connected and check it out to stay updated.
+
+        If you recognize this activity, no further action is needed.
+
+        If you believe this is unusual or you no longer wish to receive such notifications, you can update your preferences in your account settings.
+
+        Stay engaged,
+        The Ripple Team
+        `,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 500px; margin: auto; border: 1px solid #ddd; padding: 20px; border-radius: 10px; box-shadow: 2px 2px 10px rgba(0,0,0,0.1); text-align: center; background-color: #f9f9f9;">
+            <h2 style="color: #023e8a;">New Announcement from someone you follow</h2>
+            
+            <p style="font-size: 16px; color: #555;">
+            <strong>${fromUser.name}</strong> has just posted a new announcement on Ripple.
+            </p>
+
+
+            <p style="font-size: 14px; color: #777;">
+            If you recognize this activity, no further action is needed.
+            </p>
+
+            <p style="font-size: 14px; color: #777;">
+            If you no longer want to receive such notifications, you can update your preferences in your account settings
+            </p>
+
+            <a href=${FRONT_URL} style="display: inline-block; margin-top: 20px; padding: 10px 20px; background-color: #023e8a; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
+            View Announcement
+            </a>
+
+            <p style="font-size: 12px; color: #999; margin-top: 20px;">
+            Stay connected, <br> The Ripple Team
+            </p>
+        </div>
+        `,
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    return { success: true, messageId: info.messageId };
+  } catch (error) {
+    console.log("Error sending password changed confirmation email:", error);
+    return { success: false, error: error.message };
+  }
+};
+
 
 
 module.exports = {
     sendOtp,
     sendWelcomeEmail,
     forgetPasswordLink,
-    passwordChangedEmail
+    passwordChangedEmail,
+    announcementAddedEmail
 };

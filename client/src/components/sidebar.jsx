@@ -15,7 +15,6 @@ import { logout, markAsRead, searchUser } from "../redux/Slices/auth.slice";
 import { deleteNonFR } from "../redux/Slices/notification.slice";
 import { IoMdPulse } from "react-icons/io";
 import Avatar from "./Avatar";
-import VerseForm from "./VerseForm";
 import MoreOptions from "./MoreOptions";
 
 function Sidebar() {
@@ -24,7 +23,6 @@ function Sidebar() {
     const [isOpen, setIsOpen] = useState(false);
     const [isPostForm, setIsPostForm] = useState(false);
     const [isPulseForm, setIsPulseForm] = useState(false);
-    const [isVerseForm, setIsVerseForm] = useState (false);
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const [selected, setSelected] = useState ('Feed');
@@ -76,20 +74,15 @@ function Sidebar() {
                     setDialogOpen(false); 
                     setIsPulseForm(true); 
                 }} 
-                onAddVerse={() => {
-                    setDialogOpen(false);
-                    setIsVerseForm (true);
-                }}
             />
             <PostForm open={isPostForm} setOpen={setIsPostForm}/>
             <PulseForm open={isPulseForm} setOpen={setIsPulseForm} />
-            <VerseForm open={isVerseForm} setOpen={setIsVerseForm} />
 
             <MoreOptions open={menuOpen} setOpen={setMenuOpen}/>
 
-            <div className="fixed top-0 left-0 z-[10] md:z-0">
+            <div className="fixed top-0 left-0 w-full z-[10] md:z-0">
                 {/* Wrapper to avoid misclicks */}
-                <div className="relative z-10 md:hidden p-4">
+                <div className="relative z-10 md:hidden p-4 flex w-full justify-between">
                     {!isOpen && (
                         <GiHamburgerMenu
                             id="menu-toggle"
@@ -100,6 +93,9 @@ function Sidebar() {
                             }}
                         />
                     )}
+                    <Link to={`/profile/${authState?.data?.username}`}>
+                        <Avatar url={authState.data?.image?.url} size={'md'}/>
+                    </Link>
                 </div>
                 
 
@@ -137,12 +133,6 @@ function Sidebar() {
                             <Link to="/pulse" className={`relative border-l-4 hover:border-[var(--buttons)] flex flex-row items-center h-11 hover:text-[var(--buttons)] hover:shadow-md font-semibold border-l-4 pr-6 ${selected === 'Pulse' ? `border-[var(--buttons)] text-[var(--buttons)] shadow-md` : `border-transparent text-[var(--text)]`}`}>
                                     <IoMdPulse className="ml-4"/>
                                     <span className="ml-2 text-sm tracking-wide truncate">Pulse</span>
-                                </Link>
-                            </li>
-                            <li onClick={() => {setIsOpen(false); setMenuOpen(false); setSelected('Verse')}}>
-                            <Link to="/verse" className={`relative border-l-4 hover:border-[var(--buttons)] flex flex-row items-center h-11 hover:text-[var(--buttons)] hover:shadow-md font-semibold border-l-4 pr-6 ${selected === 'Verse' ? `border-[var(--buttons)] text-[var(--buttons)] shadow-md` : `border-transparent text-[var(--text)]`}`}>
-                                    <i className="fa-regular fa-comments ml-4 text-sm"/>
-                                    <span className="ml-2 text-sm tracking-wide truncate">Verse</span>
                                 </Link>
                             </li>
                             <li className="px-5">
@@ -188,12 +178,12 @@ function Sidebar() {
                             </li>
                         </ul>
                         <ul className="flex flex-col py-4 space-y-1">
-                            <li onClick={() => {setIsOpen(false); setMenuOpen(false); setSelected('Profile')}}>
+                            {screenWidth > 768 && <li onClick={() => {setIsOpen(false); setMenuOpen(false); setSelected('Profile')}}>
                                 <Link to={`/profile/${authState?.data?.username}`} className={`relative border-l-4 hover:border-[var(--buttons)] flex flex-row items-center h-11 hover:text-[var(--buttons)] hover:shadow-md font-semibold border-l-4 pl-4 ${selected === 'Profile' ? `border-[var(--buttons)] text-[var(--buttons)] shadow-md` : `border-transparent text-[var(--text)]`}`}>
                                     <Avatar url={authState?.data?.image?.url} size={"sm"}/>
                                     <span className="ml-2 text-sm tracking-wide truncate">{authState.data?.username}</span>
                                 </Link>
-                            </li>
+                            </li>}
                             <li onClick={() => {setMenuOpen (!menuOpen); setSelected('More')}}>
                                 <div className={`relative border-l-4 hover:border-[var(--buttons)] hover:cursor-pointer flex flex-row items-center h-11 hover:text-[var(--buttons)] hover:shadow-md font-semibold border-l-4 pl-4 ${selected === 'More' ? `border-[var(--buttons)] text-[var(--buttons)] shadow-md` : `border-transparent text-[var(--text)]`}`}>
                                     <i className="fa-solid fa-bars text-[var(--buttons)]"></i>

@@ -13,7 +13,6 @@ import SendOtp from "../pages/SignUp/sentotp";
 import VerifyOtp from "../pages/SignUp/verifyotp";
 import ForgetPassword from "../pages/Forgot/Forget";
 import ResetPassword from "../pages/Forgot/reset";
-import VersePage from "../pages/Verse/VersePage";
 import Notification from "../pages/Notification/Notification"
 
 function MainRoutes() {
@@ -34,7 +33,6 @@ function MainRoutes() {
         <Route path="notification" element={<Notification />} />
         <Route path="pulse" element={<Pulse />} />
         <Route path="settings" element={<Settings />} />
-        <Route path="verse" element={<VersePage />} />
       </Route>
     </Routes>
   );

@@ -385,8 +385,8 @@ function PostCard ({ post, index, list, followers }) {
             {title?.length > 0 && <LinkDetector title={title} type={'post'}></LinkDetector>}
             <div className="px-4">
                 <div className="w-full flex flex-wrap gap-1 mt-4">
-                    {hashtags.length > 0 && hashtags.map ((hashtag) => (
-                        <p className="text-[var(--buttons)] text-xs rounded-full bg-[var(--background)] py-1 px-2">{hashtag}</p>
+                    {hashtags.length > 0 && hashtags.map ((hashtag, index) => (
+                        <p className="text-[var(--buttons)] text-xs rounded-full bg-[var(--background)] py-1 px-2" key={index}>{hashtag}</p>
                     ))}
                 </div>
             </div>

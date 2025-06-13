@@ -6,9 +6,10 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteUser } from "../redux/Slices/auth.slice";
 import { useNavigate } from "react-router-dom";
-import { setTheme } from "../redux/Slices/theme.slice";
+import { deleteAnnouncement } from "../redux/Slices/announcement.slice";
+import toast from "react-hot-toast";
 
-export default function ConfirmDeleteDialog({ open, setOpen, type }) {
+export default function ConfirmDeleteDialog({ open, setOpen, type, id }) {
     const socket = useSelector ((state) => state.socket.socket);
     const liveGroup = useSelector ((state) => state.group.liveGroup);
     const authState = useSelector ((state) => state.auth);
@@ -42,9 +43,22 @@ export default function ConfirmDeleteDialog({ open, setOpen, type }) {
         setDeleting(false);
     }
 
+    async function handleAnnouncementDelete () {
+        setDeleting(true);
+        try {
+            await dispatch (deleteAnnouncement (id));
+        } catch (error) {
+            toast.error (error.message)
+        } finally {
+            setOpen (false);
+            setDeleting (false);
+        }
+    }
+
     function onDelete () {
         if (type === "accountDelete") handleDeleteAccount ();
         if (type === "groupDelete") handleGroupDelete ();
+        if (type === "announcementDelete") handleAnnouncementDelete ();
     }
 
     useEffect (() => {
@@ -55,6 +69,10 @@ export default function ConfirmDeleteDialog({ open, setOpen, type }) {
         if (type === "groupDelete") {
             setMessage ("Are you sure you want to delete this group?");
             setWarning ("Deleting the group will remove it from your account, and you won’t be able to view or access its messages anymore. This action is permanent and cannot be undone.");
+        }
+        if (type === "announcementDelete") {
+            setMessage ("Are you sure you want to delete this announcement?");
+            setWarning ("Are you sure you want to delete this announcement? This action cannot be undone");
         }
     }, [type])
 

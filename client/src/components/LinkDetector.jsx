@@ -5,7 +5,6 @@ function LinkDetector ({ title, type }) {
     const [check, setCheck] = useState(false);
 
     let len = 200;
-    if (type === 'verse') len = 1000;
     if (type === 'displayPost') len = 300;
     if (type === 'pulse') len = 20;
 

@@ -2,7 +2,6 @@ const { userSocketMap, getIO } = require('../../socket/socketInstance');
 const Comment = require('../models/comment.model');
 const Notification = require('../models/notification.model');
 const postsModel = require('../models/posts.model');
-const Verse = require ('../models/verse.model')
 const Pulse = require ('../models/pulse.model');
 
 const CreateComment = async(data) => {
@@ -42,15 +41,6 @@ const CreateComment = async(data) => {
                 if (recipientSocketId) {
                     getIO().to(recipientSocketId).emit("notification", populatedNotification);
                 }
-            }
-            if (data.type === "verse") {
-                const verseData = await Verse.findById(data.postId);
-                verseData.comments.push(data.userId);
-                await Verse.findByIdAndUpdate(
-                    data.postId,
-                    {comments : verseData.comments },
-                    {new : true}
-                )
             }
             if (data.type === "pulse") {
                 const pulsedata = await Pulse.findById(data.postId);

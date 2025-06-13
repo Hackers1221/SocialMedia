@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 const postRoutes = require("./src/routes/posts.routes");
 const pulseRoutes = require("./src/routes/pulse.route");
 const commentRoutes = require('./src/routes/comments.routes');
-const verseRoutes = require ('./src/routes/verse.routes');
+const announcementRoutes = require ('./src/routes/announcement.routes');
 const messageRoutes = require('./src/routes/message.routes')
 const groupRoutes = require('./src/routes/group.routes')
 // server instance
@@ -34,7 +34,7 @@ app.use('/auth',userroutes);
 app.use('/post',postRoutes);
 app.use('/pulse',pulseRoutes);
 app.use('/comment',commentRoutes);
-app.use('/verse',verseRoutes);
+app.use('/announcement',announcementRoutes);
 app.use('/message',messageRoutes);
 app.use('/group',groupRoutes);
 app.use('/notification', notificationRouter);

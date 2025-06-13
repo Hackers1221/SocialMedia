@@ -10,8 +10,6 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import SkeletonPostCard from '../../components/SkeletonPostCard';
 import ProfileInfo from '../../components/ProfileInfo';
 import { IoMdPulse } from "react-icons/io";
-import useVerse from '../../hooks/useVerse';
-import VerseCard from '../../components/VerseCard'
 import { filterPostsByUser } from '../../redux/Slices/post.slice';
 import ImagePreview from '../../components/ImagePreview';
 import { getPulseByUserId } from '../../redux/Slices/pulse.slice';
@@ -20,7 +18,6 @@ import usePulse from '../../hooks/usePulse';
 const Profile = () => {
   const authState = useSelector ((state) => state.auth);
   const [postState] = usePosts ();
-  const [verseState] = useVerse ();
   const [pulseState] = usePulse ();
 
   const navigate = useNavigate ();
@@ -243,14 +240,14 @@ const Profile = () => {
               <h2 className='font-bold'>Pulse</h2>
             </div>
 
-            <div
+            {/* <div
               className={`flex gap-2 w-full justify-center py-4 px-4 items-center hover:cursor-pointer 
                           ${selected === 'Verse' ? `text-[var(--buttons)] bg-[var(--topic)]` : `text-[var(--text)]`}`}
               onClick={() => setSelected('Verse')}
             >
               <IoMdPulse className="mr-2" />
               <h2 className='font-bold'>Verse</h2>
-            </div>
+            </div> */}
           </div>
         </div>}
 
@@ -297,7 +294,7 @@ const Profile = () => {
                 </h2>
               ))}
 
-            {selected === "Verse" &&
+            {/* {selected === "Verse" &&
               (verseState?.verseList?.length > 0 ? (
                 <div>
                   {isLoading && <SkeletonPostCard />}
@@ -312,7 +309,7 @@ const Profile = () => {
                 <h2 className="w-full text-center font-extralight text-[var(--text)]">
                   No verse to show
                 </h2>
-              ))}
+              ))} */}
           </>
         )}
 

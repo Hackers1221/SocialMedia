@@ -5,7 +5,7 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import {useDispatch, useSelector} from 'react-redux'
-import { createPost, getAllPosts } from "../redux/Slices/post.slice";
+import { createPost } from "../redux/Slices/post.slice";
 import toast from "react-hot-toast";
 import EmojiPicker from "emoji-picker-react";
 
@@ -119,7 +119,7 @@ export default function PostForm({ open, setOpen }) {
 
       <div className="fixed inset-0 z-[9999] w-screen overflow-y-auto">
         <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
-          <DialogPanel className="relative transform overflow-hidden rounded-lg bg-white text-center shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl p-6">
+          <DialogPanel className="relative transform overflow-hidden rounded-lg bg-white text-center shadow-xl transition-all sm:my-8 w-[75%] md:w-[35%] p-6">
             {/* Title */}
             <DialogTitle as="h3" className="text-xl font-semibold text-gray-900 text-left">
               Create Post

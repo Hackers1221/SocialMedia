@@ -1,7 +1,7 @@
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from "@headlessui/react";
 import { IoMdPulse } from "react-icons/io";
 
-export default function PostDialog({ open, setOpen, onAddPost, onAddPulse, onAddVerse}) {
+export default function PostDialog({ open, setOpen, onAddPost, onAddPulse}) {
   return (
     <Dialog open={open} onClose={setOpen} className="relative z-[9999]">
       <DialogBackdrop
@@ -10,7 +10,7 @@ export default function PostDialog({ open, setOpen, onAddPost, onAddPulse, onAdd
       <div className="fixed inset-0 z-[9999] w-screen overflow-y-auto">
         <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0 ">
           <DialogPanel
-            className="relative transform overflow-hidden rounded-lg bg-[var(--card)] text-center shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-xl p-6"
+            className="relative transform overflow-hidden rounded-lg bg-[var(--card)] text-center shadow-xl transition-all sm:my-8 w-[75%] md:w-[35%] p-6"
           >
             {/* Centered Title with Icon */}
             <div className="px-4 pt-5 pb-4 sm:p-6 sm:pb-4 flex flex-col items-center">
@@ -37,15 +37,6 @@ export default function PostDialog({ open, setOpen, onAddPost, onAddPulse, onAdd
                 className="flex items-center w-full md:w-1/2  justify-center rounded-md px-4 py-3 text-sm font-semibold text-[var(--text)] ring-1 ring-gray-300 hover:ring-2"
               >
                 <IoMdPulse className="text-[var(--buttons)] text-lg mr-2"/> Add a pulse
-              </button>
-            </div>
-            <div className="px-4 sm:px-6">
-              <button
-                  type="button"
-                  onClick={onAddVerse}
-                  className="flex items-center w-full  justify-center rounded-md px-4 py-3 text-sm font-semibold text-[var(--text)] ring-1 ring-gray-300 hover:ring-2"
-                >
-                  <i className="fa-regular fa-comments mr-2 text-[var(--buttons)]"/> Add a verse
               </button>
             </div>
           </DialogPanel>
