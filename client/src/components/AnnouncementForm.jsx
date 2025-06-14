@@ -18,6 +18,7 @@ export default function AnnouncementForm ({ open, setOpen }) {
 
 
     const create = async () => {
+        if (!text.toString()?.trim ()) return;
         const res = await dispatch (createAnnouncement ({
             text,
             user: authState.data?._id
