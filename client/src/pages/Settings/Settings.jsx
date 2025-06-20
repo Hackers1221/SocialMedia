@@ -301,11 +301,11 @@ function Settings() {
         </main>
         </div> : 
 
-        <div className="fixed top-[3rem] md:top-[1rem] md:left-[20rem] left-[1rem] h-[90vh] md:h-[97vh] flex flex-grow overflow-y-auto">
+        <div className="fixed top-[3rem] md:top-[1rem] md:left-[20rem] left-[1rem] h-[90vh] w-[90vw] md:h-[97vh] flex flex-grow overflow-y-auto">
 
         {/* Settings Form */}
         <main className="flex-1 w-full bg-transparent">
-            <div className="w-screen mx-auto p-8 bg-transparent shadow-xl rounded-lg">
+            <div className="py-8 px-2 bg-transparent shadow-xl rounded-lg">
                 <h2 className={`text-3xl font-semibold text-[var(--heading)] mb-8`}>General Settings</h2>
 
                 {/* Profile Information */}
@@ -314,17 +314,17 @@ function Settings() {
                 <p className={`text-xs mb-4 text-[var(--text)]`}>
                     Update your profile details to keep your account up to date.
                 </p>
-                <div className="flex items-center gap-6">
+                <div className="flex items-center gap-4  overflow-x-hidden">
                     <img
-                    src={imageUrl || userDetails?.image || defalutImage}
-                    alt="Profile"
-                    className="w-20 h-20 rounded-full border object-cover"
+                        src={imageUrl || userDetails?.image || defalutImage}
+                        alt="Profile"
+                        className="w-20 h-20 rounded-full border object-cover"
                     />
                     <div>
                     <input
                         type="file"
                         accept="image/*"
-                        className={`px-4 py-2 border-[var(--border)] rounded-md text-sm text-[var(--text)] font-medium`}
+                        className={`px-2 py-2 border-[var(--border)] rounded-md text-sm text-[var(--text)] font-medium`}
                         onChange={handleImageChange}
                         encType= "multipart/form-data" 
                     />
