@@ -97,7 +97,7 @@ function Sidebar() {
                 
                 <Link 
                     to={`/profile/${authState?.data?.username}`}
-                    className="fixed top-0 right-0 md:hidden p-4">
+                    className="fixed top-0 right-0 md:hidden p-4 z-[100] hover:cursor-pointer">
                         <Avatar id={authState.data?._id} url={authState.data?.image?.url} size={'md'}/>
                 </Link>
 
