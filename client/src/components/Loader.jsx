@@ -1,15 +1,11 @@
-import React from 'react';
+import React from "react";
 
-function Loader() {
+const Loader = () => {
   return (
-    <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-transparent bg-opacity-75 backdrop-blur-sm">
-      <div className="relative flex space-x-2">
-        <div className="w-5 h-5 bg-blue-500 rounded-full animate-pulse delay-100"></div>
-        <div className="w-5 h-5 bg-blue-500 rounded-full animate-pulse delay-200"></div>
-        <div className="w-5 h-5 bg-blue-500 rounded-full animate-pulse delay-300"></div>
-      </div>
+    <div className="flex items-center justify-center h-full w-full">
+      <div className="w-10 h-10 border-4 border-[var(--border)] border-t-[var(--buttons)] rounded-full animate-spin" />
     </div>
   );
-}
+};
 
 export default Loader;
