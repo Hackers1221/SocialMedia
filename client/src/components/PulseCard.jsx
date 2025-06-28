@@ -25,6 +25,7 @@ export default function PulseCard({ pulse, followers }) {
     const [comments, setComments] = useState([]);
     const [isOpen, setOpen] = useState(false);
     const [saved, setSaved] = useState();
+    const [videoThumbnail, setVideoThumbnail] = useState ("");
 
     const videoRef = useRef(null);
     const timeoutRef = useRef(null);
@@ -79,6 +80,9 @@ export default function PulseCard({ pulse, followers }) {
     }
 
     const toggleBookmark = async () => {
+        extractThumbnail (pulse.video);
+        console.log (pulse);
+
         const response = await dispatch(updateSavedPulse({
             _id1: authState.data._id,
             id: pulse._id
@@ -89,7 +93,40 @@ export default function PulseCard({ pulse, followers }) {
             return;
         }
 
+        if (!saved) dispatch (showToast ({ message: 'Saved successfully!', type: 'save', image: videoThumbnail?.url }));
         setSaved((prev) => !prev);
+    };
+
+    const extractThumbnail = (videoURL) => {
+        const video = document.createElement("video");
+        video.src = videoURL;
+        video.crossOrigin = "anonymous";
+        video.preload = "metadata";
+        video.muted = true;
+
+        video.addEventListener("loadedmetadata", () => {
+            video.currentTime = Math.min(1, video.duration / 2);
+        });
+
+        video.addEventListener("seeked", () => {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            const element = { url: canvas.toDataURL("image/png"), filename: "video" };
+
+            setVideoThumbnail (element);
+        });
+
+        video.addEventListener("error", (e) => {
+            console.error("Error loading video:", e);
+        });
+
+        video.load();
     };
 
     useEffect(() => {

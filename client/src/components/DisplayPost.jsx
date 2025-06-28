@@ -11,6 +11,7 @@ import usePosts from "../hooks/usePosts";
 import { Link } from "react-router-dom";
 import LinkDetector from '../components/LinkDetector'
 import SelectedUser from "./SelectedUser";
+import { showToast } from "../redux/Slices/toast.slice";
 
 
 const DisplayPost = ({ open, setOpen, index, list, followers }) => {
@@ -46,6 +47,7 @@ const DisplayPost = ({ open, setOpen, index, list, followers }) => {
   const [showButton, setShowButton] = useState({});
   const [hashtags, setHashtags] = useState("");
   const [isShare, setShare] = useState(false);
+  const [videoThumbnail, setVideoThumbnail] = useState ("");
 
   const totalItems = (post?.image?.length || 0) + (post?.video?.length || 0);
 
@@ -125,6 +127,38 @@ const DisplayPost = ({ open, setOpen, index, list, followers }) => {
     }, 500);
   };
 
+  const extractThumbnail = (videoURL) => {
+        const video = document.createElement("video");
+        video.src = videoURL;
+        video.crossOrigin = "anonymous";
+        video.preload = "metadata";
+        video.muted = true;
+
+        video.addEventListener("loadedmetadata", () => {
+            video.currentTime = Math.min(5, video.duration / 2);
+        });
+
+        video.addEventListener("seeked", () => {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            const element = { url: canvas.toDataURL("image/png"), filename: "video" };
+
+            setVideoThumbnail (element);
+        });
+
+        video.addEventListener("error", (e) => {
+            console.error("Error loading video:", e);
+        });
+
+        video.load();
+    };
+
 
   const closeDialog = () => {
     setOpen(false);
@@ -140,22 +174,20 @@ const DisplayPost = ({ open, setOpen, index, list, followers }) => {
 
     if (!response.payload) return;
 
-    if (liked) {
-      setcountLike(countLike - 1);
-    } else {
-      setcountLike(countLike + 1);
-    }
     setLiked(!liked);
-    dispatch(getPostById(post?._id));
   };
 
   const toggleBookmark = async () => {
+    if (post.video[0]?.url) extractThumbnail (post.video[0]?.url);
+
     const response = await dispatch(updateSavedPost({
       _id1: authState.data?._id,
       id: post?._id
     }))
 
     if (!response?.payload) return;
+
+    if (!saved) dispatch (showToast ({ message: 'Saved successfully!', type: 'save', image: post.image[0]?.url || videoThumbnail?.url }));
     setSaved((prev) => !prev);
     await dispatch(getSavedPost(authState.data?._id));
   }
@@ -266,7 +298,7 @@ const DisplayPost = ({ open, setOpen, index, list, followers }) => {
 
   return (
     <>
-      {open && <div className="fixed left-0 top-0 inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-[20]"></div>}
+      {open && <div className="fixed left-0 top-0 inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-[2]"></div>}
       <dialog ref={dialogRef} className={`w-[60%] h-[90vh] bg-[var(--card)] rounded-lg shadow-xl p-2`}>
         <SelectedUser isOpen={isShare} setOpen={setShare} followers={followers} post={post} />
 

@@ -64,20 +64,20 @@ function Settings() {
         formData.append("about", userDetails.about);
 
         if (image) {
-        formData.append("image", image); // Append only if an image is selected
+            formData.append("image", image); // Append only if an image is selected
         }
         
         const response = await dispatch(updateUser(formData));
         if (response.payload) {
             dispatch (showToast ({ message: "Successfully updated your information!", type: 'success' }));
-        setUserDetails({
-            ...userDetails,
-            password: "",
-            curpassword: "",
-        })
-        setconfirmPassword("");
+            setUserDetails({
+                ...userDetails,
+                password: "",
+                curpassword: "",
+            })
+            setconfirmPassword("");
         } else {
-            dispatch (showToast ({ message: "Something went wrong!", type: 'error' }));
+            // dispatch (showToast ({ message: "Something went wrong!", type: 'error' }));
         }
     }
 
@@ -87,7 +87,7 @@ function Settings() {
         isPrivate: !isPrivate }));
     
         if (response.payload) {
-            dispatch (showToast ({ message: `Successfully set your account to ${isPrivate ? "public" : "private"}`, type: 'success' }));
+            dispatch (showToast ({ message: `Successfully set your account to ${isPrivate ? "public" : "private"}`, type: `${isPrivate ? "public" : "private"}`}));
             setPrivate(!isPrivate); 
         } else {
             dispatch (showToast ({ message: `Something went wrong!`, type: 'error' }));
@@ -456,7 +456,7 @@ function Settings() {
                 <h2 className="text-2xl font-semibold mb-4 text-[var(--heading)]">Privacy Settings</h2>
                 <div className="w-full flex justify-between items-center p-4 border border-[var(--input)] rounded-2xl">
                 <h2 className="text-[var(--text)]">Private Account</h2>
-                <PrivacyButton isOn={isPrivate} onToggle={handleToggle}/>
+                    <PrivacyButton isOn={isPrivate} onToggle={handleToggle}/>
                 </div>
                 <div className="flex flex-col gap-4 text-sm mt-4 p-4 text-[var(--text)]">
                 <p>When your account is public, your profile and posts can be seen by anyone, on or off Ripple, even if they don't have an Ripple account.</p>

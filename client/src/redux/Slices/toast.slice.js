@@ -13,6 +13,7 @@ const toastSlice = createSlice({
     showToast: (state, action) => {
       state.message = action.payload.message;
       state.type = action.payload.type || 'success';
+      state.image = action.payload.image || "";
       state.visible = true;
     },
     hideToast: (state) => {

@@ -120,7 +120,7 @@ function PostCard ({ post, index, list, followers }) {
             return;
         }
 
-        if (!saved) dispatch (showToast ({ message: 'Post saved successfully!', type: 'success' }));
+        if (!saved) dispatch (showToast ({ message: 'Saved successfully!', type: 'save', image: images[0].url }));
         setSaved((prev) => !prev);
     }
 
@@ -410,7 +410,7 @@ function PostCard ({ post, index, list, followers }) {
                             {images[3].filename !== "video" && <i className="fa-solid fa-image absolute top-4 left-4 text-[var(--heading)] text-2xl"></i>}
                         </div>
                         {images?.length > 4 && (
-                            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-2xl">
+                            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                                 <span className="text-white text-xl font-bold">
                                     +{images?.length - 4}
                                 </span>

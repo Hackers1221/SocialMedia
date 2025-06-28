@@ -219,7 +219,7 @@ const getUserByUserName = async(name) => {
     try {
         const userData = await User.findOne({username : name});
         if(!userData){
-            response.error = "User not found";
+            response.error = "User not found!";
             return response;
         }
         response.user = userData;
@@ -234,13 +234,13 @@ const updateUser = async(newData) => {
     try {
         const userData = await User.findById(newData.id);
         if (!userData) {
-            response.error = "User not found";
+            response.error = "User not found!";
             return response;
         }
         if(newData.curpassword){
             const result = bcrypt.compareSync(newData.curpassword, userData.password);
             if(!result){
-                response.error = "Current password does not match";
+                response.error = "Password entered is incorrect!";
                 return response;
             }
             newData.password = await bcrypt.hash(newData.password, 11);

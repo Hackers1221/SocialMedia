@@ -177,7 +177,7 @@ export const updateUser = createAsyncThunk('/user/update' , async(data, { dispat
                 'x-access-token': localStorage.getItem('token')
             }
         })
-        if(!response) dispatch (showToast ({ message: "Something went wrong, try again!", type: 'error' }));
+        
         return response;
     } catch (error) {
         dispatch (showToast ({ message: error.response.data.error || "An error occurred!", type: 'error' }));
