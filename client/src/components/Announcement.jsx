@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Avatar from "./Avatar";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import ConfirmDeleteDialog from "./ConfirmDeleteDialog";

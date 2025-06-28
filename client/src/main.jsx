@@ -6,17 +6,12 @@ import { Provider } from 'react-redux'
 import Store from './redux/store.js'
 
 import { SkeletonTheme } from 'react-loading-skeleton';
-import { Toaster } from 'react-hot-toast'
 
 createRoot(document.getElementById('root')).render(
     <SkeletonTheme baseColor={`${_COLOR.border}`}>
     <BrowserRouter>
       <Provider store={Store}>
         <App/>
-        <Toaster
-            position="top-right"
-            reverseOrder={false}
-        />
       </Provider>
     </BrowserRouter>
   </SkeletonTheme>

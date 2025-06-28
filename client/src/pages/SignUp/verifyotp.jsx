@@ -2,8 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { sendOtp, verifyOtp} from "../../redux/Slices/auth.slice";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
-import BlockBackNavigation from "../../components/BlockBackNavigation";
+import { showToast } from "../../redux/Slices/toast.slice";
 
 function VerifyOtp() {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
@@ -65,8 +64,8 @@ function VerifyOtp() {
   // Submit OTP
   const submit = async () => {
     if (timer === 0) {
-      toast.error("OTP expired! Please request a new one.");
-      return;
+        dispatch (showToast ({ message: "OTP expired! Please request a new one!", type: 'error' }));
+        return;
     }
 
     setLoading(true);
@@ -81,11 +80,10 @@ function VerifyOtp() {
       if (response.payload) {
         navigate("/register", { replace: true });
       } else {
-        toast.error("Invalid OTP. Please try again.");
+        dispatch (showToast ({ message: "Invalid OTP! Please try again!", type: 'error' }));
       }
     } catch (error) {
-      toast.error("Verification failed!");
-      console.error(error);
+        dispatch (showToast ({ message: "Verification failed!", type: 'error' }));
     }
     setLoading(false);
   };
@@ -95,14 +93,16 @@ function VerifyOtp() {
     try {
       setLoading(true); // Start loader
       const response = await dispatch(sendOtp({ email: localStorage.getItem("email") }));
-      toast.success("New OTP sent to your email!");
+
+      dispatch (showToast ({ message: "New OTP sent to your email!", type: 'success' }));
+      
       setOtp(["", "", "", "", "", ""]);
       setTimer(60); // Reset timer
       setCanResend(false);
       localStorage.setItem("otpTimer", 60);
       localStorage.setItem("otpStartTime", Date.now());
     } catch (error) {
-      toast.error("Failed to resend OTP.");
+      dispatch (showToast ({ message: "Failed to resend OTP!", type: 'error' }));
     } finally {
       setLoading(false); // Stop loader
     }

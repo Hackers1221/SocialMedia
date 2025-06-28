@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import toast from "react-hot-toast";
 import axiosInstance from "../../config/axiosInstance";
+import { showToast } from "./toast.slice";
 
 const initialState = {
     data: JSON.parse(localStorage.getItem("data")) || undefined,
@@ -13,96 +13,96 @@ const initialState = {
 };
 
 
-export const sendOtp = createAsyncThunk('/auth/sendotp',async(data) => {
+export const sendOtp = createAsyncThunk('/auth/sendotp',async(data, { dispatch }) => {
     try {
         const response = await axiosInstance.post("auth/sendotp",data);
-        if(!response) toast.error('Something went wrong, try again');
+        if(!response) dispatch (showToast ({ message: "Something went wrong, try again!", type: 'error' }));
         localStorage.setItem("email", data.email);
         return  response;
     } catch (error) {
-        toast.error(error.response.data.error || "An error occurred!");
+        dispatch (showToast ({ message: error.response.data.error || "An error occurred!", type: 'error' }));
     }
 });
 
-export const verifyOtp = createAsyncThunk('/auth/verifyotp',async(data) => {
+export const verifyOtp = createAsyncThunk('/auth/verifyotp',async(data, { dispatch }) =>  {
     try {
         const response = await axiosInstance.post("auth/verifyotp",data);
-        if(!response) toast.error('Something went wrong, try again');
+        if(!response) dispatch (showToast ({ message: "Something went wrong, try again!", type: 'error' }));
         return  response;
     } catch (error) {
-        toast.error(error.response.data.error || "An error occurred!");
+        dispatch (showToast ({ message: error.response.data.error || "An error occurred!", type: 'error' }));
     }
 });
 
-export const login = createAsyncThunk('/auth/login', async (data) => {    
+export const login = createAsyncThunk('/auth/login', async (data, { dispatch }) =>  {    
     try {
         const response = await axiosInstance.post("auth/signin", data);
-        if(!response) toast.error('Something went wrong, try again');
+        if(!response) dispatch (showToast ({ message: "Something went wrong, try again!", type: 'error' }));
         return  response;
     } catch (error) {
-        toast.error(error.response.data.error || "An error occurred!");
+        dispatch (showToast ({ message: error.response.data.error || "An error occurred!", type: 'error' }));
     }
 });
 
-export const signup = createAsyncThunk('/auth/signup', async (data) => {     
+export const signup = createAsyncThunk('/auth/signup', async (data, { dispatch }) =>  {     
     try {
         const response = await axiosInstance.post("auth/signup", data);
-        if(!response) toast.error('Something went wrong, try again');
+        if(!response) dispatch (showToast ({ message: "Something went wrong, try again!", type: 'error' }));
         return  response;
     } catch (error) {
-        toast.error(error.response.data.error || "An error occurred!");
+        dispatch (showToast ({ message: error.response.data.error || "An error occurred!", type: 'error' }));
     }
 });
 
-export const forgetPass = createAsyncThunk('auth/forget',async(data) => {
+export const forgetPass = createAsyncThunk('auth/forget',async(data, { dispatch }) =>  {
     try {
         const response = await axiosInstance.post('auth/forgetpass',data);
-        if(!response) toast.error('Something went wrong, try again');
+        if(!response) dispatch (showToast ({ message: "Something went wrong, try again!", type: 'error' }));
         return  response;
     } catch (error) {
-        toast.error(error.response.data.error || "An error occurred!");
+        dispatch (showToast ({ message: error.response.data.error || "An error occurred!", type: 'error' }));
     }
 })
 
-export const resetPass = createAsyncThunk('auth/reset',async(data) => {
+export const resetPass = createAsyncThunk('auth/reset',async(data, { dispatch }) =>  {
     try {
         const response = await axiosInstance.post(`auth/resetpass/${data.token}`,data);
-        if(!response) toast.error('Something went wrong, try again');
+        if(!response) dispatch (showToast ({ message: "Something went wrong, try again!", type: 'error' }));
         return  response;
     } catch (error) {
-        toast.error(error.response.data.error || "An error occurred!");
+        dispatch (showToast ({ message: error.response.data.error || "An error occurred!", type: 'error' }));
     }
 })
 
-export const getUserById = createAsyncThunk('/auth/user', async (id) => {     
+export const getUserById = createAsyncThunk('/auth/user', async (id, { dispatch }) =>  {     
     try {
         const response = await axiosInstance.get(`auth/users/${id}`, {
             headers: {
                 'x-access-token': localStorage.getItem('token')
             }
         });
-        if(!response) toast.error('Something went wrong, try again');
+        if(!response) dispatch (showToast ({ message: "Something went wrong, try again!", type: 'error' }));
         return  response;
     } catch (error) {
-        toast.error(error.response.data.error || "An error occurred!");
+        dispatch (showToast ({ message: error.response.data.error || "An error occurred!", type: 'error' }));
     }
 });
 
-export const getUserByUsername = createAsyncThunk('/auth/user', async (username) => {     
+export const getUserByUsername = createAsyncThunk('/auth/user', async (username, { dispatch }) =>  {     
     try {
         const response =  await axiosInstance.get(`auth/user/${username}`, {
             headers: {
                 'x-access-token': localStorage.getItem('token')
             }
         });
-        if(!response) toast.error('Something went wrong, try again');
+        if(!response) dispatch (showToast ({ message: "Something went wrong, try again!", type: 'error' }));
         return response;
     } catch (error) {
-        toast.error(error.response.data.error || "An error occurred!");
+        dispatch (showToast ({ message: error.response.data.error || "An error occurred!", type: 'error' }));
     }
 });
 
-export const getUserByLimit = createAsyncThunk('/auth/userByLimit', async (data) => {     
+export const getUserByLimit = createAsyncThunk('/auth/userByLimit', async (data, { dispatch }) =>  {     
     try {
         const response = await axiosInstance.get(`auth/usersByLimit`, {
             params: {
@@ -114,14 +114,14 @@ export const getUserByLimit = createAsyncThunk('/auth/userByLimit', async (data)
             }
         });
 
-        if (!response) toast.error('Something went wrong, try again');
+        if (!response) dispatch (showToast ({ message: "Something went wrong, try again!", type: 'error' }));
         return response;
     } catch (error) {
-        toast.error(error.response.data.error || "An error occurred!");
+        dispatch (showToast ({ message: error.response.data.error || "An error occurred!", type: 'error' }));
     }
 });
 
-export const getTopUsers = createAsyncThunk('/auth/topUsers', async () => {     
+export const getTopUsers = createAsyncThunk('/auth/topUsers', async (_, { dispatch }) =>  {     
     try {
         const response = await axiosInstance.get(`auth/topUsers`, {
             headers: {
@@ -129,14 +129,14 @@ export const getTopUsers = createAsyncThunk('/auth/topUsers', async () => {
             }
         });
 
-        if (!response) toast.error('Something went wrong, try again');
+        if (!response) dispatch (showToast ({ message: "Something went wrong, try again!", type: 'error' }));
         return response;
     } catch (error) {
-        toast.error(error.response.data.error || "An error occurred!");
+        dispatch (showToast ({ message: error.response.data.error || "An error occurred!", type: 'error' }));
     }
 });
 
-export const followRequest = createAsyncThunk('/auth/followRequest' , async(data) => {
+export const followRequest = createAsyncThunk('/auth/followRequest' , async(data, { dispatch }) =>  {
     try {
         const resp = {
             id : data.id
@@ -146,14 +146,14 @@ export const followRequest = createAsyncThunk('/auth/followRequest' , async(data
                 'x-access-token': localStorage.getItem('token')
             }
         })
-        if(!response) toast.error('Something went wrong, try again');
+        if(!response) dispatch (showToast ({ message: "Something went wrong, try again!", type: 'error' }));
         return response;
     } catch (error) {
-        toast.error(error.response.data.error || "An error occurred!");
+        dispatch (showToast ({ message: error.response.data.error || "An error occurred!", type: 'error' }));
     }
 });
 
-export const followUser = createAsyncThunk('/auth/follow' , async(data) => {
+export const followUser = createAsyncThunk('/auth/follow' , async(data, { dispatch }) =>  {
     try {
         const resp = {
             id : data.id
@@ -163,43 +163,42 @@ export const followUser = createAsyncThunk('/auth/follow' , async(data) => {
                 'x-access-token': localStorage.getItem('token')
             }
         })
-        if(!response) toast.error('Something went wrong, try again');
+        if(!response) dispatch (showToast ({ message: "Something went wrong, try again!", type: 'error' }));
         return response;
     } catch (error) {
-        toast.error(error.response.data.error || "An error occurred!");
+        dispatch (showToast ({ message: error.response.data.error || "An error occurred!", type: 'error' }));
     }
 })
 
-export const updateUser = createAsyncThunk('/user/update' , async(data) => {
+export const updateUser = createAsyncThunk('/user/update' , async(data, { dispatch }) =>  {
     try {
         const response = await axiosInstance.patch("auth", data, {
             headers: {
                 'x-access-token': localStorage.getItem('token')
             }
         })
-        if(!response) toast.error('Something went wrong, try again');
+        if(!response) dispatch (showToast ({ message: "Something went wrong, try again!", type: 'error' }));
         return response;
     } catch (error) {
-        toast.error(error.response.data.error);
+        dispatch (showToast ({ message: error.response.data.error || "An error occurred!", type: 'error' }));
     }
 })
 
-export const deleteUser = createAsyncThunk('/user/delete', async (userId) => {
+export const deleteUser = createAsyncThunk('/user/delete', async (userId, { dispatch }) =>  {
     try {
         const response = await axiosInstance.delete(`auth/${userId}`, {
             headers: {
                 'x-access-token': localStorage.getItem('token')
             }
         });
-        if (!response) toast.error('Something went wrong, try again');
-        else toast.success("Successfully deleted your account");       
+        if (!response) dispatch (showToast ({ message: "Something went wrong, try again!", type: 'error' }));   
         return response;
     } catch (error) {
-        toast.error(error.response?.data?.error || 'An error occurred');
+        dispatch (showToast ({ message: error.response.data.error || "An error occurred!", type: 'error' }));
     }
 });
 
-export const searchUser = createAsyncThunk('search/user',async(query) => {
+export const searchUser = createAsyncThunk('search/user',async(query, { dispatch }) =>  {
     try {
         const response = await axiosInstance.get(`auth/search/${query}` ,{
             headers: {
@@ -208,11 +207,11 @@ export const searchUser = createAsyncThunk('search/user',async(query) => {
         })
         return response;
     } catch (error) {
-        toast.error(error.response?.data?.error || 'An error occurred');
+        dispatch (showToast ({ message: error.response.data.error || "An error occurred!", type: 'error' }));
     }
 });
 
-export const searchFollower = createAsyncThunk('searchFollower',async(data) => {
+export const searchFollower = createAsyncThunk('searchFollower',async(data, { dispatch }) =>  {
     try {
         const response = await axiosInstance.get('auth/searchFollower' , {
             params: data,
@@ -222,11 +221,11 @@ export const searchFollower = createAsyncThunk('searchFollower',async(data) => {
         })
         return response;
     } catch (error) {
-        toast.error(error.response.data.error || "An error occurred!");
+        dispatch (showToast ({ message: error.response.data.error || "An error occurred!", type: 'error' }));
     }
 })
 
-export const getFollowerDetails = createAsyncThunk('followerDetails' ,async(id) => {
+export const getFollowerDetails = createAsyncThunk('followerDetails' ,async(id, { dispatch }) =>  {
     try {
         const response = await axiosInstance.get(`auth/follower/${id}`,{
             headers: {
@@ -235,7 +234,7 @@ export const getFollowerDetails = createAsyncThunk('followerDetails' ,async(id) 
         })
         return response;
     } catch (error) {
-        toast.error(error.response.data.error || "An error occurred!");
+        dispatch (showToast ({ message: error.response.data.error || "An error occurred!", type: 'error' }));
     }
 })
 
@@ -269,10 +268,10 @@ const authSlice = createSlice({
                 (notif) => notif._id === action.payload._id
             );
             if (!exists) {
-                toast("New notification", {
-                    icon: "🔔",
-                    duration: 1000,
-                });
+                // toast("New notification", {
+                //     icon: "🔔",
+                //     duration: 1000,
+                // });
                 state.isRead = false;
                 state.notifications.unshift(action.payload);
                 localStorage.setItem("notifications", JSON.stringify(state.notifications));

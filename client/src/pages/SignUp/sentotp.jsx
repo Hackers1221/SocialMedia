@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { sendOtp } from "../../redux/Slices/auth.slice";
-import toast from "react-hot-toast";
 
 function SendOtp() {
   const [email, setEmail] = useState("");

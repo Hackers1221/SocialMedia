@@ -8,7 +8,7 @@ import Comment from "./Comment";
 import { motion, AnimatePresence } from "framer-motion";
 import SelectedUser from "./SelectedUser";
 import usePulse from "../hooks/usePulse";
-import toast from "react-hot-toast";
+import { showToast } from "../redux/Slices/toast.slice";
 
 export default function PulseCard({ pulse, followers }) {
     const authState = useSelector((state) => state.auth);
@@ -85,7 +85,7 @@ export default function PulseCard({ pulse, followers }) {
         }));
 
         if (!response?.payload) {
-            toast.error('Some error occured');
+            dispatch (showToast ({ message: 'Something went wrong!', type: 'error' }));
             return;
         }
 

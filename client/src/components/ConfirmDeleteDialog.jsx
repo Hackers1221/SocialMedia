@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteUser } from "../redux/Slices/auth.slice";
 import { useNavigate } from "react-router-dom";
 import { deleteAnnouncement } from "../redux/Slices/announcement.slice";
-import toast from "react-hot-toast";
+import { showToast } from "../redux/Slices/toast.slice";
 
 export default function ConfirmDeleteDialog({ open, setOpen, type, id }) {
     const socket = useSelector ((state) => state.socket.socket);
@@ -48,7 +48,7 @@ export default function ConfirmDeleteDialog({ open, setOpen, type, id }) {
         try {
             await dispatch (deleteAnnouncement (id));
         } catch (error) {
-            toast.error (error.message)
+            dispatch (showToast ({ message: error.message, type: 'error' }));
         } finally {
             setOpen (false);
             setDeleting (false);

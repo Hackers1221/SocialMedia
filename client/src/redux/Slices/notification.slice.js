@@ -1,13 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../config/axiosInstance";
-import toast from "react-hot-toast";
+import { showToast } from "./toast.slice";
 
 const initialState = {};
 
 // Reducers for delete Notifications
 
 // 1) Non follow request notification
-export const deleteNonFR = createAsyncThunk('/notification/deleteNonFollowRequests', async (userId) => {
+export const deleteNonFR = createAsyncThunk('/notification/deleteNonFollowRequests', async (userId, { dispatch }) => {
     if(!userId) return;
     try {
         const response = await axiosInstance.delete(`notification/non-follow/${userId}`, {
@@ -15,15 +15,15 @@ export const deleteNonFR = createAsyncThunk('/notification/deleteNonFollowReques
                 'x-access-token': localStorage.getItem('token')
             }
         });
-        if (!response) toast.error('Something went wrong!');
+        if (!response) dispatch (showToast ({ message: "Something went wrong!", type: 'error' }));
         return;
     } catch (error) {
-        toast.error(error.response.data.error || "An error occurred!");
+        dispatch (showToast ({ message: error.response.data.error || "An error occurred!", type: 'error' }));
     }
 });
 
 // 2) Reject follow request
-export const rejectFR = createAsyncThunk('/notification/rejectFollowRequests', async ({ sender, recipient }) => {
+export const rejectFR = createAsyncThunk('/notification/rejectFollowRequests', async ({ sender, recipient}, { dispatch }) => {
     if (!sender || !recipient) return;
     try {
         const response = await axiosInstance.delete(`notification/follow`, {
@@ -33,16 +33,16 @@ export const rejectFR = createAsyncThunk('/notification/rejectFollowRequests', a
             }
         });
 
-        if (!response) toast.error('Something went wrong!');
+        if (!response) dispatch (showToast ({ message: "Something went wrong!", type: 'error' }));
         return;
     } catch (error) {
-        toast.error(error.response.data.error || "An error occurred!");
+        dispatch (showToast ({ message: error.response.data.error || "An error occurred!", type: 'error' }));
     }
 });
 
 
 // 2) Accept follow request
-export const acceptFR = createAsyncThunk('/notification/acceptFollowRequests', async ({sender, recipient}) => {
+export const acceptFR = createAsyncThunk('/notification/acceptFollowRequests', async ({sender, recipient}, { dispatch }) => {
     if(!sender || !recipient) return;
     try {
         const response = await axiosInstance.post(`notification/follow`, {sender, recipient}, {
@@ -50,10 +50,10 @@ export const acceptFR = createAsyncThunk('/notification/acceptFollowRequests', a
                 'x-access-token': localStorage.getItem('token')
             }
         });
-        if (!response) toast.error('Something went wrong!');
+        if (!response) dispatch (showToast ({ message: "Something went wrong!", type: 'error' }));
         return response;
     } catch (error) {
-        toast.error(error.response.data.error || "An error occurred!");
+        dispatch (showToast ({ message: error.response.data.error || "An error occurred!", type: 'error' }));
     }
 });
 

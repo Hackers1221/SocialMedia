@@ -9,6 +9,7 @@ import socketSliceReducer from "./Slices/socket.slice";
 import notificationSliceReducer from "./Slices/notification.slice"
 import groupSliceReducer from "./Slices/group.slice"
 import themeSliceReducer from './Slices/theme.slice'
+import toastSliceReducer from './Slices/toast.slice'
 
 const Store = configureStore({
     reducer: {
@@ -21,7 +22,8 @@ const Store = configureStore({
         socket: socketSliceReducer,
         notification: notificationSliceReducer,
         group: groupSliceReducer,
-        theme: themeSliceReducer
+        theme: themeSliceReducer,
+        toast: toastSliceReducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false}),
     devTools: true

@@ -2,11 +2,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import PostCard from "../../components/PostCard";
 import { useEffect, useState } from "react";
 import { filterPostsByFollowing, filterPostsByLiked, getAllPosts, getSavedPost } from "../../redux/Slices/post.slice";
-import toast from "react-hot-toast";
 import SkeletonPostCard from "../../components/SkeletonPostCard";
 import { getFollowerDetails, getTopUsers } from "../../redux/Slices/auth.slice";
 import { Link, useSearchParams } from "react-router-dom";
-import Avatar from '../../components/Avatar';
+import { showToast } from '../../redux/Slices/toast.slice';
 
 function PostPage() {
     const authState = useSelector ((state) => state.auth);
@@ -25,8 +24,8 @@ function PostPage() {
         setIsLoading(true);
         try {
             await dispatch(getSavedPost (authState?.data?._id));
-        } catch {
-            toast.error ("Something went wrong");
+        } catch (error) {
+            dispatch (showToast ({ message: error.message, type: 'error' }));
         } finally {
             setIsLoading(false);
         }
@@ -36,8 +35,8 @@ function PostPage() {
         setIsLoading(true);
         try {
             await dispatch (getAllPosts ());
-        } catch {
-            toast.error ("Something went wrong");
+        } catch (error) {
+            dispatch (showToast ({ message: error.message, type: 'error' }));
         } finally {
             setIsLoading(false);
         }

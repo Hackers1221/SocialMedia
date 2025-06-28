@@ -1,4 +1,3 @@
-import toast from "react-hot-toast";
 import { useCallback, useEffect, useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { LuEyeClosed } from "react-icons/lu";
@@ -6,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../../redux/Slices/auth.slice";
 import { setTheme } from "../../redux/Slices/theme.slice";
+import { showToast } from "../../redux/Slices/toast.slice";
 
 function LogIn () {
     const dispatch = useDispatch ();
@@ -82,7 +82,7 @@ function LogIn () {
             }
             else resetDetails();
         } catch (error) {
-            toast.error(error);
+            dispatch (showToast ({ message: error.message, type: 'error' }));
         }
     };
 

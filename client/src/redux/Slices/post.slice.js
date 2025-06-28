@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../config/axiosInstance";
-import toast from "react-hot-toast";
+import { showToast } from "./toast.slice";
 
 const initialState = {
     downloadedPosts: [],
@@ -9,33 +9,37 @@ const initialState = {
     interestList: ""
 };
 
-export const getAllPosts = createAsyncThunk('posts/getAllPosts', async () => {
+export const getAllPosts = createAsyncThunk('posts/getAllPosts', async (_, { dispatch }) => {
     try {
         const response = await axiosInstance.get('post/posts', {
             headers: {
                 'x-access-token': localStorage.getItem('token')
             }
         });
+
         return response;
     } catch (error) {
-        toast.error(error.response?.data?.error || "Failed to fetch posts");
+        dispatch (showToast ({ message: error.response.data.error || "Failed to fetch posts!", type: 'error' }));
     }
 });
 
-export const createPost = createAsyncThunk('post/createPost', async (postData) => {
+export const createPost = createAsyncThunk('post/createPost', async (postData, { dispatch, rejectWithValue }) => {
     try {
         const response = await axiosInstance.post('post/posts', postData, {
             headers: {
                 'x-access-token': localStorage.getItem('token')
             }
         });
+
+        dispatch (showToast ({ message: 'Post created successfully!', type: 'success' }));
         return response;
     } catch (error) {
-        toast.error(error.response?.data?.error || "Failed to create post");
+        dispatch(showToast({ message: 'Post creation failed!', type: 'error' }));
+        return rejectWithValue (error.response?.data?.error);
     }
 });
 
-export const updatePost = createAsyncThunk('post/updatePost',async(id,postdata) => {
+export const updatePost = createAsyncThunk('post/updatePost',async(id,postdata, { dispatch }) => {
     try {
         const response = await axiosInstance.patch(`post/posts/${id}`, postdata , {
             headers: {
@@ -46,11 +50,11 @@ export const updatePost = createAsyncThunk('post/updatePost',async(id,postdata) 
             return response;
         }
     } catch (error) {
-        toast.error(error.response?.data?.error || "Failed to update post");
+        dispatch (showToast ({ message: error.response.data.error || "Failed to update post!", type: 'error' }));
     }
 })
 
-export const likePost = createAsyncThunk('post/likePost', async(data) => {
+export const likePost = createAsyncThunk('post/likePost', async(data, { dispatch }) => {
     try {
         const resp = {
             id : data.id
@@ -64,11 +68,11 @@ export const likePost = createAsyncThunk('post/likePost', async(data) => {
             return response;
         }
     } catch (error) {
-        toast.error(error.response?.data?.error || "Failed to update post");
+        dispatch (showToast ({ message: error.response.data.error || "Failed to update post!", type: 'error' }));
     }
 })
 
-export const getPostByUserId = createAsyncThunk('post/getpost' ,async(id) => {
+export const getPostByUserId = createAsyncThunk('post/getpost' ,async(id, { dispatch }) => {
     try {
         const response = await axiosInstance.get(`post/posts/${id}`, { 
             headers: {
@@ -79,11 +83,11 @@ export const getPostByUserId = createAsyncThunk('post/getpost' ,async(id) => {
             return response;
         }
     } catch (error) {
-        toast.error(error.response?.data?.error || "Failed to get post");
+        dispatch (showToast ({ message: error.response.data.error || "Failed to get post!", type: 'error' }));
     }
 })
 
-export const getPostById = createAsyncThunk('post/getpostnyId' ,async(id) => {
+export const getPostById = createAsyncThunk('post/getpostnyId' ,async(id, { dispatch }) => {
     try {
         const response = await axiosInstance.get(`post/${id}`, { 
             headers: {
@@ -94,11 +98,11 @@ export const getPostById = createAsyncThunk('post/getpostnyId' ,async(id) => {
             return response;
         }
     } catch (error) {
-        toast.error(error.response?.data?.error || "Failed to get post");
+        dispatch (showToast ({ message: error.response.data.error || "Failed to get post!", type: 'error' }));
     }
 })
 
-export const getSavedPost = createAsyncThunk('post/getSavedPost' , async(id) => {
+export const getSavedPost = createAsyncThunk('post/getSavedPost' , async(id, { dispatch }) => {
     try {
         const response = await axiosInstance.get(`post/save/${id}`, {
             headers: {
@@ -109,11 +113,11 @@ export const getSavedPost = createAsyncThunk('post/getSavedPost' , async(id) => 
             return response;
         }
     } catch (error) {
-        toast.error(error.response?.data?.error || "Failed to save post");
+        dispatch (showToast ({ message: error.response.data.error || "Failed to get saved posts!", type: 'error' }));
     }
 })
 
-export const updateSavedPost = createAsyncThunk('post/updatesavedPost', async(data) => {
+export const updateSavedPost = createAsyncThunk('post/updatesavedPost', async (data, { dispatch }) => {
     try {
         const resp = {
             id : data.id
@@ -123,15 +127,16 @@ export const updateSavedPost = createAsyncThunk('post/updatesavedPost', async(da
                 'x-access-token': localStorage.getItem('token')
             }
         })
+
         if(response){
             return response;
         }
     } catch (error) {
-        toast.error(error.response?.data?.error || "Failed to update post");
+        dispatch (showToast ({ message: error.response.data.error || "Failed to update posts!", type: 'error' }));
     }
 })
 
-export const DeletePost = createAsyncThunk('post/delete' , async(data) => {
+export const DeletePost = createAsyncThunk('post/delete' , async(data, { dispatch }) => {
     try {        
         const response = axiosInstance.delete(`post/${data.postId}`, {
             headers: {
@@ -143,11 +148,11 @@ export const DeletePost = createAsyncThunk('post/delete' , async(data) => {
             return response;
         }
     } catch (error) {
-        toast.error(error.response?.data?.error || "Could not delete the post");
+        dispatch (showToast ({ message: error.response.data.error || "Failed to delete the post!", type: 'error' }));
     }
 })
 
-export const searchPost = createAsyncThunk('search.post',async(query) => {
+export const searchPost = createAsyncThunk('search.post',async(query, { dispatch }) => {
     try {
         const response = await axiosInstance.get(`post/search/${query}`,{
             headers: {
@@ -158,11 +163,11 @@ export const searchPost = createAsyncThunk('search.post',async(query) => {
             return response;
         }
     } catch (error) {
-        toast.error(error.response?.data?.error || "Could not search for the post");
+        dispatch (showToast ({ message: error.response.data.error || "Failed to search for post!", type: 'error' }));
     }
 })
 
-export const getExplorePost = createAsyncThunk('explorePost',async(id) => {
+export const getExplorePost = createAsyncThunk('explorePost',async(id, { dispatch }) => {
     try {
         const response = await axiosInstance.get(`post/explorePosts/${id}`,{
             headers: {
@@ -173,7 +178,7 @@ export const getExplorePost = createAsyncThunk('explorePost',async(id) => {
             return response;
         }
     } catch (error) {
-        toast.error(error.response?.data?.error || "Could not search for the post");
+        dispatch (showToast ({ message: error.response.data.error || "Failed to search for the post!", type: 'error' }));
     }
 })
 

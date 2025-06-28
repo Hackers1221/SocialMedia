@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from "@headlessui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { createPulse } from "../redux/Slices/pulse.slice";
-import toast from "react-hot-toast";
+import { showToast } from "../redux/Slices/toast.slice";
 
 export default function PulseForm({ open, setOpen }) {
   const [video, setVideo] = useState(null);
@@ -13,7 +13,7 @@ export default function PulseForm({ open, setOpen }) {
 
   const Createpulse = async () => {
     if(!video) {
-      return toast.error("Video can't be empty!");
+      return dispatch (showToast ({ message: "Video can't be empty", type: 'error' }));
     }
     const formData = new FormData();
     formData.append("caption", caption);
@@ -23,12 +23,13 @@ export default function PulseForm({ open, setOpen }) {
 
     const response = await dispatch(createPulse(formData));
     if (!response) {
-      toast.error("Something went wrong!");
+      dispatch (showToast ({ message: 'Something went wrong!', type: 'error' }));
     } else {
       setVideo(null);
       setCaption("");
       setInterests("");
-      toast.success("Pulse created successfully!");
+
+      dispatch (showToast ({ message: 'Post created successfully!', type: 'error' }));
       setOpen(false);
     }
   };

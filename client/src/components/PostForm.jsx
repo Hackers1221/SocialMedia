@@ -6,8 +6,8 @@ import "swiper/css";
 import "swiper/css/navigation";
 import {useDispatch, useSelector} from 'react-redux'
 import { createPost } from "../redux/Slices/post.slice";
-import toast from "react-hot-toast";
 import EmojiPicker from "emoji-picker-react";
+import { showToast } from "../redux/Slices/toast.slice";
 
 export default function PostForm({ open, setOpen }) {
   const [image, setImage] = useState([]);
@@ -29,16 +29,17 @@ export default function PostForm({ open, setOpen }) {
     formData.append("caption", caption);
     formData.append("interests", interests);
     formData.append("userId", authState._id);  
-    const response = await dispatch(createPost(formData));
+    const response = await dispatch (createPost (formData));
     
     if (!response) {
-      toast.error("Something went wrong!");
+      dispatch (showToast ({ message: 'Something went wrong!', type: 'error' }));
     } else {
       setImage([]);
       setVideo([]);
       setCaption("");
       setInterests("");
-      toast.success("Post created successfully!");
+
+      dispatch (showToast ({ message: 'Post created successfully!', type: 'success' }));
       setOpen(false);
     }
   };

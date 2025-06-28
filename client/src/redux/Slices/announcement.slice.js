@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import toast from "react-hot-toast";
 import axiosInstance from "../../config/axiosInstance";
+import { showToast } from "./toast.slice";
 
 const initialState = {
     downloadedAnnouncement: [],
@@ -8,7 +8,7 @@ const initialState = {
     savedList:[],
 };
 
-export const getAllAnonuncement = createAsyncThunk('announcement/getAllAnouncement', async (id) => {
+export const getAllAnonuncement = createAsyncThunk('announcement/getAllAnouncement', async (id, { dispatch }) => {
     try {
         const response = await axiosInstance.get(`announcement/announcement/${id}`, {
             headers: {
@@ -17,11 +17,11 @@ export const getAllAnonuncement = createAsyncThunk('announcement/getAllAnounceme
         });
         return response;
     } catch (error) {
-        toast.error(error.response?.data?.error || "Failed to fetch announcement");
+        dispatch (showToast ({ message: error.response?.data?.error || "Failed to fetch announcement", type: 'error' }));
     }
 });
 
-export const createAnnouncement = createAsyncThunk('announcement/createAnouncement', async (data) => {
+export const createAnnouncement = createAsyncThunk('announcement/createAnouncement', async (data, { dispatch }) => {
     try {
         console.log (data);
         const response = await axiosInstance.post('announcement/announcement', data, {
@@ -31,7 +31,7 @@ export const createAnnouncement = createAsyncThunk('announcement/createAnounceme
         });
         return response;
     } catch (error) {
-        toast.error(error.response?.data?.error || "Failed to create announcement");
+        dispatch (showToast ({ message: error.response?.data?.error || "Failed to create announcement", type: 'error' }));
     }
 });
 
@@ -50,7 +50,7 @@ export const createAnnouncement = createAsyncThunk('announcement/createAnounceme
 //     }
 // })
 
-export const congratulate = createAsyncThunk('announcement/congratulate', async(data) => {
+export const congratulate = createAsyncThunk('announcement/congratulate', async(data, { dispatch }) => {
     try {
         const resp = {
             id : data.id
@@ -64,11 +64,11 @@ export const congratulate = createAsyncThunk('announcement/congratulate', async(
             return response;
         }
     } catch (error) {
-        toast.error(error.response?.data?.error || "Failed to congratulate announcement");
+        dispatch (showToast ({ message: error.response?.data?.error || "Failed to congratulate!", type: 'error' }));
     }
 })
 
-export const sorrify = createAsyncThunk('announcement/sorrify', async(data) => {
+export const sorrify = createAsyncThunk('announcement/sorrify', async(data, { dispatch }) => {
     try {
         const resp = {
             id : data.id
@@ -82,7 +82,7 @@ export const sorrify = createAsyncThunk('announcement/sorrify', async(data) => {
             return response;
         }
     } catch (error) {
-        toast.error(error.response?.data?.error || "Failed to sorrify announcement");
+        dispatch (showToast ({ message: error.response?.data?.error || "Failed to sorrify announcement!", type: 'error' }));
     }
 })
 
@@ -125,7 +125,7 @@ export const deleteAnnouncement = createAsyncThunk('announcement/delete' , async
         })
         if(response) return response;
     } catch (error) {
-        toast.error(error.response?.data?.error || "Failed to delete the announcement");
+        dispatch (showToast ({ message: error.response?.data?.error || "Failed to delete announcement!", type: 'error' }));
     }
 })
 

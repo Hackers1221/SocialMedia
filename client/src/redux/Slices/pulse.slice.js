@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import toast from "react-hot-toast";
 import axiosInstance from "../../config/axiosInstance";
+import { showToast } from "./toast.slice";
 
 const initialState = {
     downloadedPulse: [],
@@ -8,7 +8,7 @@ const initialState = {
     savedList: []
 };
 
-export const getAllPulse = createAsyncThunk('posts/getAllPulse', async () => {
+export const getAllPulse = createAsyncThunk('posts/getAllPulse', async (_, { dispatch }) => {
     try {
         const response = await axiosInstance.get('pulse', {
             headers: {
@@ -17,11 +17,11 @@ export const getAllPulse = createAsyncThunk('posts/getAllPulse', async () => {
         });
         return response;
     } catch (error) {
-        toast.error(error.response?.data?.error || "Failed to fetch pulses");
+        dispatch (showToast ({ message: error.response.data.error || "Failed to fetch pulses!", type: 'error' }));
     }
 });
 
-export const createPulse = createAsyncThunk('post/createPulse', async (pulseData) => {
+export const createPulse = createAsyncThunk('post/createPulse', async (pulseData, { dispatch }) => {
     try {
         const response = await axiosInstance.post('pulse', pulseData, {
             headers: {
@@ -30,11 +30,11 @@ export const createPulse = createAsyncThunk('post/createPulse', async (pulseData
         });
         return response;
     } catch (error) {
-        toast.error(error.response?.data?.error || "Failed to create pulse");
+        dispatch (showToast ({ message: error.response.data.error || "Failed to create post!", type: 'error' }));
     }
 });
 
-export const likePulse = createAsyncThunk('pulse/likePulse', async(data) => {
+export const likePulse = createAsyncThunk('pulse/likePulse', async(data, { dispatch }) => {
     try {
         const resp = {
             id : data.id
@@ -48,11 +48,11 @@ export const likePulse = createAsyncThunk('pulse/likePulse', async(data) => {
             return response;
         }
     } catch (error) {
-        toast.error(error.response?.data?.error || "Failed to update post");
+        dispatch (showToast ({ message: error.response.data.error || "Failed to like pulse!", type: 'error' }));
     }
 })
 
-export const getPulseByUserId = createAsyncThunk('pulse/getPulse' ,async(id) => {
+export const getPulseByUserId = createAsyncThunk('pulse/getPulse' ,async(id, { dispatch }) => {
     try {
         const response = await axiosInstance.get(`pulse/pulse/${id}`, { 
             headers: {
@@ -63,11 +63,11 @@ export const getPulseByUserId = createAsyncThunk('pulse/getPulse' ,async(id) => 
             return response;
         }
     } catch (error) {
-        toast.error(error.response?.data?.error || "Failed to get post");
+        dispatch (showToast ({ message: error.response.data.error || "Failed to get pulse!", type: 'error' }));
     }
 })
 
-export const getSavedPulse = createAsyncThunk('pulse/getSavedPulse' , async(id) => {
+export const getSavedPulse = createAsyncThunk('pulse/getSavedPulse' , async(id, { dispatch }) => {
     try {
         const response = await axiosInstance.get(`pulse/save/${id}`, {
             headers: {
@@ -78,11 +78,11 @@ export const getSavedPulse = createAsyncThunk('pulse/getSavedPulse' , async(id) 
             return response;
         }
     } catch (error) {
-        toast.error(error.response?.data?.error);
+        dispatch (showToast ({ message: error.response.data.error || "Failed to get saved pulse!", type: 'error' }));
     }
 })
 
-export const updateSavedPulse = createAsyncThunk('pulse/updateSavedPulse', async(data) => {
+export const updateSavedPulse = createAsyncThunk('pulse/updateSavedPulse', async(data, { dispatch }) => {
     try {
         const resp = {
             id : data.id
@@ -96,7 +96,7 @@ export const updateSavedPulse = createAsyncThunk('pulse/updateSavedPulse', async
             return response;
         }
     } catch (error) {
-        toast.error(error.response?.data?.error || "Failed to save post");
+        dispatch (showToast ({ message: error.response.data.error || "Failed to get saved pulse!", type: 'error' }));
     }
 })
 

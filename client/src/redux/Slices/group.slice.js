@@ -1,13 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../config/axiosInstance";
-import toast from "react-hot-toast";
+import { showToast } from "./toast.slice";
 
 const initialState = {
     groupDetails: [],
     liveGroup: {}
 };
 
-export const getGroupByUserId = createAsyncThunk ('getGroupByUserId', async (id) => {
+export const getGroupByUserId = createAsyncThunk ('getGroupByUserId', async (id, { dispatch }) => {
     try {
         const response = await axiosInstance.get (`/group/by-user/${id}`, {
             headers: {
@@ -16,11 +16,11 @@ export const getGroupByUserId = createAsyncThunk ('getGroupByUserId', async (id)
         })
         return response;
     } catch (error) {
-        toast.error(error.response.data.error || "An error occurred!");
+        dispatch (showToast ({ message: error.response.data.error || "An error occurred!", type: 'error' }));
     }
 })
 
-export const getGroupById = createAsyncThunk ('getGroupById', async (id) => {
+export const getGroupById = createAsyncThunk ('getGroupById', async (id, { dispatch }) => {
     try {
         const response = await axiosInstance.get (`/group/by-id/${id}`, {
             headers: {
@@ -29,11 +29,11 @@ export const getGroupById = createAsyncThunk ('getGroupById', async (id) => {
         })
         return response;
     } catch (error) {
-        toast.error(error.response.data.error || "An error occurred!");
+        dispatch (showToast ({ message: error.response.data.error || "An error occurred!", type: 'error' }));
     }
 })
 
-export const getRecentMessage = createAsyncThunk('getrecentGroupChats' , async(id) => {
+export const getRecentMessage = createAsyncThunk('getrecentGroupChats' , async(id, { dispatch }) => {
     try {
         const response = await axiosInstance.get(`/group/recent/${id}` , {
             headers: {
@@ -42,7 +42,7 @@ export const getRecentMessage = createAsyncThunk('getrecentGroupChats' , async(i
         })
         return response;
     } catch (error) {
-        toast.error(error.response.data.error || "An error occurred!");
+        dispatch (showToast ({ message: error.response.data.error || "An error occurred!", type: 'error' }));
     }
 })
 

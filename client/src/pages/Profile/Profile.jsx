@@ -4,7 +4,6 @@ import Avatar from '../../components/Avatar';
 import PostCard from '../../components/PostCard';
 import usePosts from '../../hooks/usePosts';
 import { followRequest, followUser, getFollowerDetails, getUserByUsername } from '../../redux/Slices/auth.slice';
-import toast from 'react-hot-toast';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import 'react-loading-skeleton/dist/skeleton.css'
 import SkeletonPostCard from '../../components/SkeletonPostCard';
@@ -14,6 +13,7 @@ import { filterPostsByUser } from '../../redux/Slices/post.slice';
 import ImagePreview from '../../components/ImagePreview';
 import { getPulseByUserId } from '../../redux/Slices/pulse.slice';
 import usePulse from '../../hooks/usePulse';
+import { showToast } from '../../redux/Slices/toast.slice';
 
 const Profile = () => {
   const authState = useSelector ((state) => state.auth);
@@ -124,7 +124,7 @@ const Profile = () => {
     dispatch(getUserByUsername(username))
       .then((user) => {
         if (!user.payload) {
-          toast.error("Something went wrong");
+            dispatch (showToast ({ message: "Something went wrong!", type: 'error' }));
         } else {
           const userData = user.payload?.data?.userDetails;
           getPosts(userData?._id);
@@ -141,8 +141,7 @@ const Profile = () => {
         }
       })
       .catch((error) => {
-        console.error("Error fetching user data:", error);
-        toast.error("Failed to fetch user data");
+        dispatch (showToast ({ message: error.message, type: 'error' }));
       })
       .finally(() => {
         setIsLoading(false);

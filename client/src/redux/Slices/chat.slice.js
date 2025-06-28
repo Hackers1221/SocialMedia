@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../config/axiosInstance";
-import toast from "react-hot-toast";
+import { showToast } from "./toast.slice";
 
 const initialState = {
   messages: [],
@@ -10,7 +10,7 @@ const initialState = {
   recentMessages: []
 };
 
-export const getMessages = createAsyncThunk ('getMessage', async (data) => {
+export const getMessages = createAsyncThunk ('getMessage', async (data, { dispatch }) => {
   try {
     const response = await axiosInstance.get (`message`, {
       params: {
@@ -23,11 +23,11 @@ export const getMessages = createAsyncThunk ('getMessage', async (data) => {
     })
     return response;
   } catch (error) {
-    toast.error(error.response.data.error || "An error occurred!");
+    dispatch (showToast ({ message: error.response.data.error || "An error occurred!", type: 'error' }));
   }
 })
 
-export const getRecentMessages = createAsyncThunk ('getRecentMessage', async (id) => {
+export const getRecentMessages = createAsyncThunk ('getRecentMessage', async (id, { dispatch }) => {
   try {
     const response = await axiosInstance.get (`message/${id}`, {
       headers: {
@@ -35,7 +35,7 @@ export const getRecentMessages = createAsyncThunk ('getRecentMessage', async (id
       }})
       return response;
   } catch (error) {
-    toast.error(error.response.data.error || "An error occurred!");
+    dispatch (showToast ({ message: error.response.data.error || "An error occurred!", type: 'error' }));
   }
 })
 

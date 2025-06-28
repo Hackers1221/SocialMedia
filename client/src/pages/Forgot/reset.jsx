@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { resetPass } from "../../redux/Slices/auth.slice";
+import { showToast } from "../../redux/Slices/toast.slice";
 
 function ResetPassword() {
     const navigate = useNavigate();
@@ -20,11 +20,11 @@ function ResetPassword() {
 
     const resetPassword = async () => {
         if (!password || !confirmPassword) {
-            toast.error("Both fields are required!");
+            dispatch (showToast ({ message: 'Both the fields are required!', type: 'error' }));
             return;
         }
         if (password !== confirmPassword) {
-            toast.error("Passwords do not match!");
+            dispatch (showToast ({ message: 'Passwords do not match!', type: 'error' }));
             return;
         }
         try {
@@ -35,17 +35,19 @@ function ResetPassword() {
                 token : searchParams.get("token")
             }))
             if(response.payload){
-                toast.success("Password reset successful!");
+                dispatch (showToast ({ message: 'Password reset was successful', type: 'success' }));
+
                 setConfirmPassword("");
                 setPassword("");
                 navigate("/login");
             }else{
                 setConfirmPassword("");
                 setPassword("");
-                toast.error("Unable to reset the password , Pls try again");
+
+                dispatch (showToast ({ message: 'Unable to reset the password! Please try again!', type: 'error' }));
             }
         } catch (error) {
-            toast.error("Unable to reset the password , Pls try again");
+            dispatch (showToast ({ message: 'Unable to reset the password! Please try again!', type: 'error' }));
         } finally {
             setLoading(false);
         }

@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../../redux/Slices/auth.slice";
 import ConfirmDeleteDialog from "../../components/ConfirmDeleteDialog";
-import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import PrivacyButton from "../../components/PrivacyButton";
+import { showToast } from "../../redux/Slices/toast.slice";
 
 const menuItems = [
   { name: "General", key: "general" },
@@ -70,7 +69,7 @@ function Settings() {
         
         const response = await dispatch(updateUser(formData));
         if (response.payload) {
-        toast.success("Successfully updated your information");
+            dispatch (showToast ({ message: "Successfully updated your information!", type: 'success' }));
         setUserDetails({
             ...userDetails,
             password: "",
@@ -78,7 +77,7 @@ function Settings() {
         })
         setconfirmPassword("");
         } else {
-        toast.error("Something went wrong");
+            dispatch (showToast ({ message: "Something went wrong!", type: 'error' }));
         }
     }
 
@@ -88,10 +87,10 @@ function Settings() {
         isPrivate: !isPrivate }));
     
         if (response.payload) {
-        toast.success(`Successfully set your account to ${isPrivate ? "public" : "private"}`);
-        setPrivate(!isPrivate); 
+            dispatch (showToast ({ message: `Successfully set your account to ${isPrivate ? "public" : "private"}`, type: 'success' }));
+            setPrivate(!isPrivate); 
         } else {
-        toast.error("Something went wrong");
+            dispatch (showToast ({ message: `Something went wrong!`, type: 'error' }));
         }
     }
 

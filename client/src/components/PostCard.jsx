@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import toast from "react-hot-toast";
 import { getUserById } from "../redux/Slices/auth.slice";
 import Avatar from "./Avatar";
 import { useEffect, useRef, useState } from "react";
@@ -13,6 +12,7 @@ import SelectedUser from "./SelectedUser";
 import { FaPaperPlane } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import Comment from "./Comment";
+import { showToast } from "../redux/Slices/toast.slice";
 
 function PostCard ({ post, index, list, followers }) {
     const authState = useSelector((state) => state.auth.data);
@@ -61,21 +61,6 @@ function PostCard ({ post, index, list, followers }) {
 
     function sharePost () {
         setShare (true)
-
-        // if (navigator.share) {
-        //     navigator.share({
-        //     title: post.title,
-        //     text: post.description,
-        //     url: `${window.location.origin}/post/${post._id}`,
-        //     })
-        //     .then(() => console.log('Post shared successfully'))
-        //     .catch((err) => console.error('Error sharing', err));
-        // } else {
-        //     // fallback for unsupported browsers
-        //     navigator.clipboard.writeText(`${window.location.origin}/post/${post._id}`);
-        //     alert("Link copied to clipboard!");
-        // }
-
     }
 
     function goForward () {
@@ -129,11 +114,13 @@ function PostCard ({ post, index, list, followers }) {
         }));
 
         if (!response?.payload) {
-            toast.error('Post not added to saved posts');
+            if (!saved) dispatch (showToast ({ message: 'Post could not be saved!', type: 'error' }));
+            else dispatch (showToast ({ message: 'Post could not be removed from saved!', type: 'error' }));
+
             return;
         }
 
-        toast.success('Post added to saved posts');
+        if (!saved) dispatch (showToast ({ message: 'Post saved successfully!', type: 'success' }));
         setSaved((prev) => !prev);
     }
 
@@ -202,7 +189,7 @@ function PostCard ({ post, index, list, followers }) {
         if (!userId) return;
         const response = await dispatch(getUserById(userId));
         if (!response) {
-            toast.error("Something went Wrong!");
+            dispatch (showToast ({ message: 'Something went wrong!', type: 'error' }));
         }
 
         setCreator(response.payload?.data?.userdetails);
@@ -219,9 +206,9 @@ function PostCard ({ post, index, list, followers }) {
         const response = await dispatch(DeletePost(resp));
         if (response.payload) {
             await dispatch(getAllPosts());
-            toast.success("Deleted successfully");
+            dispatch (showToast ({ message: 'Post was deleted successfully!', type: 'success' }));
         } else {
-            toast.error("Something went wrong");
+            dispatch (showToast ({ message: 'Something went wrong!', type: 'error' }));
         }
         setDeleting(false);
     }

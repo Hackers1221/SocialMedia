@@ -4,10 +4,10 @@ import { FaEye, FaSpinner, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { LuEyeClosed } from "react-icons/lu";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-hot-toast";
 import { login, signup } from "../../redux/Slices/auth.slice";
 import BlockBackNavigation from "../../components/BlockBackNavigation";
 import { setTheme } from "../../redux/Slices/theme.slice";
+import { showToast } from "../../redux/Slices/toast.slice";
 
 function SignUp() {
     const dispatch = useDispatch();
@@ -110,7 +110,7 @@ function SignUp() {
                 resetDetails();
             }
         } catch (error) {
-            toast.error(error.message);
+            dispatch (showToast ({ message: error.message, type: 'error' }));
         } finally {
             setLoading(false);
         }

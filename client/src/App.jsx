@@ -2,6 +2,7 @@ import './App.css'
 import MainRoutes from '../src/routing/mainRoutes'
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
+import Toast from './components/Toast';
 
 function App() {
     const theme = useSelector ((state) => state.theme.value);
@@ -13,6 +14,7 @@ function App() {
     return (
         <>
             <MainRoutes/>
+            <Toast />
         </>
     )
 }

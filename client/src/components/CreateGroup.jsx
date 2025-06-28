@@ -2,10 +2,10 @@ import { X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux'
 import AddUser from "./AddUser";
-import toast from "react-hot-toast";
 import User from '../components/User'
 import { FaSpinner } from "react-icons/fa";
 import { getFollowerDetails, searchFollower } from "../redux/Slices/auth.slice";
+import { showToast } from "../redux/Slices/toast.slice";
 
 function CreateGroup ({ isOpen, setOpen }) {
     if (!isOpen) return null;
@@ -44,7 +44,8 @@ function CreateGroup ({ isOpen, setOpen }) {
 
     function goNext () {
         if (members.length <= 2) {
-            toast.error ('Select atleast 2 members'); return;
+            dispatch (showToast ({ message: 'Select atleast 2 members!', type: 'error' }));
+            return;
         }
 
         setGroupEdit (true);
@@ -99,7 +100,7 @@ function CreateGroup ({ isOpen, setOpen }) {
               }
               
         } catch (error) {
-            toast.error ('Something went wrong');
+            dispatch (showToast ({ message: error.message, type: 'error' }));
         } finally {
             setLoading (false);
             close ();

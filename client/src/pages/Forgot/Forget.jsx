@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { forgetPass } from "../../redux/Slices/auth.slice";
-import { toast } from "react-hot-toast"; 
+import { showToast } from "../../redux/Slices/toast.slice";
 
 function ForgetPassword() {
     const navigate = useNavigate();
@@ -16,7 +16,7 @@ function ForgetPassword() {
 
     const forget = async () => {
         if (!email.trim()) {
-            toast.error("Email cannot be empty!");
+            dispatch (showToast ({ message: 'Email cannot be empty!', type: 'error' }));
             return;
         }
         try {
@@ -26,12 +26,12 @@ function ForgetPassword() {
             
             if (response.payload) {
                 localStorage.setItem("email",email);
-                toast.success("Reset link sent! Check your email.");
+                dispatch (showToast ({ message: 'Reset link sent to your email!', type: 'success' }));
             } else {
-                toast.error("Failed to send reset link. Check your email");
+                dispatch (showToast ({ message: 'Failed to send reset link. Check your email Id', type: 'error' }));
             }
         } catch (error) {
-            toast.error("Something went wrong.");
+            dispatch (showToast ({ message: 'Something went wrong!', type: 'success' }));
         } finally {
             setLoading(false);
         }
