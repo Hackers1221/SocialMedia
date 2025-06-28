@@ -44,7 +44,7 @@ const DisplayPost = ({ open, setOpen, index, list, followers }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState({});
   const [showButton, setShowButton] = useState({});
-  const [interest, setInterest] = useState("");
+  const [hashtags, setHashtags] = useState("");
   const [isShare, setShare] = useState(false);
 
   const totalItems = (post?.image?.length || 0) + (post?.video?.length || 0);
@@ -204,15 +204,6 @@ const DisplayPost = ({ open, setOpen, index, list, followers }) => {
     return `${diffInYears} year${diffInYears === 1 ? '' : 's'} ago`;
   }
 
-  function updateCaption() {
-    let hashtags = post?.interests[0]?.split(" ");
-    hashtags = hashtags?.map((hashtag) => hashtag.trim());
-    hashtags = hashtags?.map((hashtag) => (hashtag.length > 0 ? "#" : "") + hashtag);
-    hashtags = hashtags?.join(" ");
-    setInterest(hashtags);
-    setCaption((prev) => prev + " " + hashtags);
-  }
-
   function postForward() {
     setPostIndex((prev) => (prev + 1) % postsArray.length);
   }
@@ -220,6 +211,18 @@ const DisplayPost = ({ open, setOpen, index, list, followers }) => {
   function postBackward() {
     setPostIndex((prev) => (prev - 1 + postsArray.length) % postsArray.length);
   }
+
+  function getHashtags () {
+        if (!post.interests[0]) {
+            setHashtags ([]); return;
+        }
+        
+        let temp = post.interests[0]?.split (" ");
+        
+        temp = temp?.map((hashtag) => hashtag.trim());
+        temp = temp?.map((hashtag) => (hashtag.length > 0 ? "#" : "") + hashtag);
+        setHashtags (temp);
+    }
 
   useEffect(() => {
     if (post?.userId) {
@@ -237,10 +240,10 @@ const DisplayPost = ({ open, setOpen, index, list, followers }) => {
       setDate(getTimeDifference(post.createdAt));
       setLiked(post.likes?.includes(authState.data?._id));
       setSaved(postState.savedList?.some((p) => p._id === post._id));
-      const tags = post?.interests?.[0]?.split(" ").map((t) => `#${t.trim()}`);
-      setInterest(tags?.join(" ") || "");
+      
+      getHashtags ();
     }
-  }, [post, postState.savedList]);
+  }, [post?._id, postState.savedList]);
 
   useEffect(() => {
     const handleKeyPress = (event) => {
@@ -342,11 +345,15 @@ const DisplayPost = ({ open, setOpen, index, list, followers }) => {
 
             {/* Right Half */}
             <div className="w-1/2 flex flex-col p-4 border-l border-[var(--border)]">
-              {(post?.caption?.length > 0 || interest?.length > 0) && <LinkDetector title={post?.caption} type={'displayePost'} />}
-              {interest?.length > 0 && <div className={`text-[var(--text)] font-extralight mt-8 text-xs px-4 pb-4`}>
-                {interest}
-              </div>}
-              <div className={`flex-1 overflow-y-auto space-y-3 pt-2 ${(post?.caption?.length > 0 || interest?.length > 0) ? 'border-t' : ''} border-[var(--border)]`}>
+              {(post?.caption?.length > 0 || hashtags?.length > 0) && <LinkDetector title={post?.caption} type={'displayePost'} />}
+              <div className="px-4">
+                <div className={`w-full flex flex-wrap gap-1 ${post?.caption?.length > 0 ? "mt-4" : ""}`}>
+                    {hashtags.length > 0 && hashtags.map ((hashtag, index) => (
+                        <p className="text-[var(--buttons)] text-xs rounded-full bg-[var(--background)] py-1 px-2" key={index}>{hashtag}</p>
+                    ))}
+                </div>
+            </div>
+              <div className={`flex-1 overflow-y-auto space-y-1 pt-2 ${(post?.caption?.length > 0 || hashtags?.length > 0) ? 'border-t' : ''} border-[var(--border)]`}>
                 {commentState.comments.length > 0 ? (
                   commentState.comments.map((comment, idx) => (
                     <div key={idx}>
@@ -358,7 +365,7 @@ const DisplayPost = ({ open, setOpen, index, list, followers }) => {
                 )}
               </div>
 
-              {commentState.comments.length > 0 && <div className={`text-white text-sm ${commentState.comments.length === 1 ? "font-semibold" : ""}`}>
+              {commentState.comments.length > 0 && <div className={`text-white text-xs`}>
                 {commentState.comments.length} {commentState.comments.length === 1 ? "comment" : "comments"}
               </div>}
 

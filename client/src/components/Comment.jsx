@@ -77,6 +77,8 @@ const Comment = ({ commentId , username, text, time, avatar }) => {
     }
   }, [commentState.comments, commentId, authState.data._id]);  
 
+  console.log (time);
+
     return (
       <div className="flex items-start space-x-3 p-2 text-white">
         {/* Profile Image */}
@@ -90,8 +92,8 @@ const Comment = ({ commentId , username, text, time, avatar }) => {
   
         {/* Comment Content */}
         <div className="flex-1">
-          <p className={`text-[var(--text)] text-sm font-semibold`}>
-            <Link to={`/profile/${username}`} className={`hover:underline hover:text-[var(--buttons)] hover:cursor-pointer`}>{username}</Link> <span className={`text-sm text-[var(--text)] font-extralight`}>&nbsp; {text}</span>
+          <p className={`text-[var(--text)]`}>
+            <Link to={`/profile/${username}`} className={`text-sm hover:underline hover:text-[var(--buttons)] hover:cursor-pointer`}>{username}</Link> <span className={`text-xs text-[var(--text)] font-extralight`}>&nbsp; {text}</span>
           </p>
           <p className="text-xs text-gray-400">{timeDiff} &nbsp; &nbsp;</p>
         </div>

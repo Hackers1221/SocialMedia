@@ -208,7 +208,7 @@ export default function PulseCard({ pulse, followers }) {
                             {comments.length > 0 ? (
                                 comments.map((comment, idx) => (
                                     <div key={idx}>
-                                        <Comment commentId={comment._id} avatar={comment.user?.image?.url} username={comment.user?.username} text={comment.description} time={"10 h"} />
+                                        <Comment commentId={comment._id} avatar={comment.user?.image?.url} username={comment.user?.username} text={comment.description} time={comment.createdAt} />
                                     </div>
                                 ))
                             ) : (
