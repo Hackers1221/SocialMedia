@@ -27,7 +27,7 @@ const Toast = () => {
     <div
       className={`
         fixed bottom-5 left-1/2 transform -translate-x-1/2 flex justify-center items-center gap-2 z-[9999] px-4 py-2 rounded-lg text-black font-extralight shadow-md
-        border-2 transition-all duration-300 ease-in-out transform w-[min(max-content,80%)] md:w-max
+        border-2 transition-all duration-300 ease-in-out transform w-[min(max-content,90%)] md:w-max
         ${type !== 'error' ? 'bg-[#AFEEEE] border-[var(--buttons)]' : 'bg-red-200 border-red-700 text-red-700'}
         ${show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}
       `}
