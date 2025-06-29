@@ -5,6 +5,7 @@ import Suggestions from "../../components/Suggestions";
 import { useDispatch, useSelector } from "react-redux";
 import { initSocket } from '../../redux/Slices/socket.slice';
 import { getExplorePost } from "../../redux/Slices/post.slice";
+import { showToast } from "../../redux/Slices/toast.slice";
 
 function Layout () {
     const authState = useSelector ((state) => state.auth);
@@ -23,6 +24,12 @@ function Layout () {
           dispatch (getExplorePost (authState.data?._id));
         }
     }, [authState.data?._id, dispatch]);
+
+    useEffect (() => {
+        if (authState.newNotification) {
+            dispatch (showToast ({message: "New notification", type: "notification"}));
+        }
+    }, [authState.newNotification])
     
     // Handle screen resizing
     useEffect(() => {        

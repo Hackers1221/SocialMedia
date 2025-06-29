@@ -8,6 +8,7 @@ const initialState = {
     token: localStorage.getItem("token") || "",
     isLoggedIn: localStorage.getItem("isLoggedIn") === "true",
     isRead: localStorage.getItem("isRead") === "true",
+    newNotification: 0,
     userList: [],
     topUsers: []
 };
@@ -268,10 +269,7 @@ const authSlice = createSlice({
                 (notif) => notif._id === action.payload._id
             );
             if (!exists) {
-                // toast("New notification", {
-                //     icon: "🔔",
-                //     duration: 1000,
-                // });
+                state.newNotification = state.newNotification + 1;
                 state.isRead = false;
                 state.notifications.unshift(action.payload);
                 localStorage.setItem("notifications", JSON.stringify(state.notifications));
