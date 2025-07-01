@@ -134,8 +134,8 @@ export default function PostForm({ open, setOpen }) {
         <Dialog open={open} onClose={setOpen} className="relative z-[999]">
         <DialogBackdrop className="fixed inset-0 bg-gray-500/75 z-[998] transition-opacity" />
         <div className="fixed inset-0 z-[9999] w-screen overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
-            <DialogPanel className="relative transform overflow-visible rounded-lg bg-white text-center shadow-xl transition-all sm:my-8 w-[75%] md:w-[35%] p-6">
+            <div className="flex min-h-full items-center justify-center text-center sm:p-0">
+            <DialogPanel className="relative transform overflow-visible rounded-lg bg-white text-center shadow-xl transition-all sm:my-8 w-[95%] md:w-[35%] p-6">
                 {/* Title */}
                 <DialogTitle as="h3" className="text-xl font-semibold text-gray-900 text-left">
                 Create Post
@@ -145,31 +145,31 @@ export default function PostForm({ open, setOpen }) {
                 {image.length > 0 || video.length > 0 ? (
                 <div className="relative w-full">
                     <Swiper
-                    spaceBetween={10}
-                    slidesPerView={1}
-                    navigation={{ nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" }}
-                    modules={[Navigation]}
-                    className="mt-4 w-full h-64 md:h-80"
-                    >
-                    {[...image, ...video].map((file, index) => (
-                        <SwiperSlide key={index} className="relative flex items-center justify-center rounded-lg overflow-hidden">
-                        {file.type.startsWith("image") ? (
-                            <img src={URL.createObjectURL(file)} alt="Preview" className="w-full object-cover" />
-                        ) : (
-                            <video controls className="w-full h-full object-cover">
-                            <source src={URL.createObjectURL(file)} type={file.type} />
-                            </video>
-                        )}
-                        <button
-                            className="absolute top-3 right-3 bg-gray-700 w-10 h-10 text-white  rounded-[50%] shadow-md hover:bg-gray-500"
-                            onClick={() => handleDeleteFile(index, file.type.startsWith("image") ? "image" : "video")}
+                        spaceBetween={10}
+                        slidesPerView={1}
+                        navigation={{ nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" }}
+                        modules={[Navigation]}
+                        className="mt-4 w-full h-64 md:h-80"
                         >
-                            <i className ="fa-solid fa-trash"></i>
-                        </button>
-                        </SwiperSlide>
-                    ))}
-                    <div className="swiper-button-prev !text-white !w-8 !h-8 flex items-center justify-center shadow-lg"></div>
-                    <div className="swiper-button-next !text-white !w-8 !h-8 flex items-center justify-center shadow-lg"></div>
+                        {[...image, ...video].map((file, index) => (
+                            <SwiperSlide key={index} className="relative flex items-center justify-center rounded-lg overflow-hidden">
+                            {file.type.startsWith("image") ? (
+                                <img src={URL.createObjectURL(file)} alt="Preview" className="w-full object-cover" />
+                            ) : (
+                                <video controls className="w-full h-full object-cover">
+                                <source src={URL.createObjectURL(file)} type={file.type} />
+                                </video>
+                            )}
+                            <button
+                                className="absolute top-3 right-3 bg-gray-700 w-10 h-10 text-white  rounded-[50%] shadow-md hover:bg-gray-500"
+                                onClick={() => handleDeleteFile(index, file.type.startsWith("image") ? "image" : "video")}
+                            >
+                                <i className ="fa-solid fa-trash"></i>
+                            </button>
+                            </SwiperSlide>
+                        ))}
+                        <div className="swiper-button-prev !text-white !w-8 !h-8 flex items-center justify-center shadow-lg"></div>
+                        <div className="swiper-button-next !text-white !w-8 !h-8 flex items-center justify-center shadow-lg"></div>
                     </Swiper>
                 </div>
                 ) : (
@@ -191,14 +191,14 @@ export default function PostForm({ open, setOpen }) {
                 {(image.length > 0 || video.length > 0) && (
                 <div className="absolute top-4 right-7 flex gap-2">
                     <label className="bg-gray-400 text-white px-3 py-2 rounded-full shadow-lg cursor-pointer bg-gray-600  hover:bg-gray-800 transition flex items-center gap-2">
-                    <i className="fa-solid fa-image text-lg"></i>
-                    <span className="text-sm font-medium">Add Image</span>
-                    <input type="file" className="hidden" accept="image/*" encType= "multipart/form-data" onChange={(e) => handleFileChange(e, "image")} multiple />
+                        <i className="fa-solid fa-image text-lg"></i>
+                        <i className="fa-solid fa-plus"></i>
+                        <input type="file" className="hidden" accept="image/*" encType= "multipart/form-data" onChange={(e) => handleFileChange(e, "image")} multiple />
                     </label>
                     <label className="bg-gray-400 text-white px-3 py-2 rounded-full shadow-lg cursor-pointer bg-gray-600  hover:bg-gray-800 transition flex items-center gap-2">
-                    <i className="fa-solid fa-video text-lg"></i>
-                    <span className="text-sm font-medium">Add Video</span>
-                    <input type="file" className="hidden" accept="video/*" encType= "multipart/form-data" onChange={(e) => handleFileChange(e, "video")} multiple />
+                        <i className="fa-solid fa-video text-lg"></i>
+                        <i className="fa-solid fa-plus"></i>
+                        <input type="file" className="hidden" accept="video/*" encType= "multipart/form-data" onChange={(e) => handleFileChange(e, "video")} multiple />
                     </label>
                 </div>
                 )}

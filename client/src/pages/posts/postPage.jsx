@@ -7,6 +7,9 @@ import { getFollowerDetails, getTopUsers } from "../../redux/Slices/auth.slice";
 import { Link, useSearchParams } from "react-router-dom";
 import { showToast } from '../../redux/Slices/toast.slice';
 
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
+
 function PostPage() {
     const authState = useSelector ((state) => state.auth);
     const postState = useSelector ((state) => state.post);
@@ -43,7 +46,14 @@ function PostPage() {
     }
 
     async function getTopUser () {
-        await dispatch (getTopUsers ());
+        setIsLoading (true) ;
+        try {
+            await dispatch (getTopUsers ());
+        } catch (error) {
+            dispatch (showToast ({ message: error.message, type: 'error' }));
+        } finally {
+            setIsLoading (false);
+        }
     }
 
     async function optionChange (option) {
@@ -79,7 +89,12 @@ function PostPage() {
                     Top Personalities
                 </h2>
 
-                <div className="w-full mb-4 overflow-x-auto flex gap-4 snap-x snap-mandatory px-4 py-2 min-h-[10rem]">
+                {isLoading && <div className='flex gap-8 my-4'>
+                    <Skeleton height={120} width={100}/>
+                    <Skeleton height={120} width={100}/>
+                </div>}
+
+                {!isLoading && <div className="w-full mb-4 overflow-x-auto flex gap-4 snap-x snap-mandatory px-4 py-2 min-h-[10rem]">
                     {authState.topUsers.map((user, index) => (
                         <Link to={`/profile/${user?.username}`} key={user._id} className="relative flex-shrink-0 snap-start flex items-end gap-2 hover:cursor-pointer">
                             <h2 className="number text-[var(--heading)] text-[3rem] text-end">{index + 1}</h2>
@@ -100,7 +115,7 @@ function PostPage() {
                             </div>
                         </Link>
                     ))}
-                </div>
+                </div>}
 
 
 
