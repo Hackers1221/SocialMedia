@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { likePulse, updateSavedPulse } from "../redux/Slices/pulse.slice";
+import { deletePulse, likePulse, updateSavedPulse } from "../redux/Slices/pulse.slice";
 import Avatar from '../components/Avatar'
 import { FaPaperPlane } from "react-icons/fa";
 import { CreateComment, getCommentByPostId } from "../redux/Slices/comment.slice";
@@ -10,6 +10,7 @@ import SelectedUser from "./SelectedUser";
 import usePulse from "../hooks/usePulse";
 import { showToast } from "../redux/Slices/toast.slice";
 import LinkDetector from "./LinkDetector";
+import { Link } from "react-router-dom";
 
 export default function PulseCard({ pulse, followers }) {
     const authState = useSelector((state) => state.auth);
@@ -27,9 +28,17 @@ export default function PulseCard({ pulse, followers }) {
     const [isOpen, setOpen] = useState(false);
     const [saved, setSaved] = useState();
     const [videoThumbnail, setVideoThumbnail] = useState ("");
+    const [optionOpen, setOptionOpen] = useState (false);
 
     const videoRef = useRef(null);
     const timeoutRef = useRef(null);
+
+    const onDelete = async () => {
+        const res = await dispatch (deletePulse ({
+            pulseId: pulse._id,
+            userId: authState.data._id
+        }))
+    }
 
     const togglePlay = () => {
         if (videoRef.current) {
@@ -172,7 +181,7 @@ export default function PulseCard({ pulse, followers }) {
     }, []);
 
     return (
-        <div className="reel-container w-full h-[95%] sm:w-96 md:h-[78vh] sm:h-[70vh] overflow-hidden rounded-xl shadow-lg flex-col justify-center relative bg-black">
+        <div className="reel-container w-full h-[95%] sm:w-96 md:h-[78vh] sm:h-[70vh] overflow-y-hidden overflow-x-visible rounded-xl shadow-lg flex-col justify-center relative bg-black">
             <SelectedUser isOpen={isOpen} setOpen={setOpen} followers={followers} post={pulse} />
 
             {!showComment && (
@@ -191,7 +200,7 @@ export default function PulseCard({ pulse, followers }) {
                         </div>
                     )}
 
-                    <div className="absolute right-4 bottom-[1.5rem] flex flex-col gap-2">
+                    <div className="absolute right-4 bottom-[1.5rem] flex flex-col justify-center gap-2 ">
                         <button className="flex flex-col items-center justify-center gap-1 text-white px-2" onClick={handleLike}>
                             {liked ? (
                                 <i className="text-red-600 fa-solid fa-heart text-2xl"></i>
@@ -213,14 +222,21 @@ export default function PulseCard({ pulse, followers }) {
                         <div className="flex flex-col items-center justify-center text-white px-2">
                             <i className="fa-regular fa-paper-plane text-white text-xl p-3 hover:cursor-pointer" onClick={() => setOpen(true)}></i>
                         </div>
+
+                        {authState.data._id == pulse.user?._id && <div className="relative flex flex-col items-center justify-center text-white px-2">
+                            {optionOpen && <div className="absolute bottom-4 left-2 w-40 p-4 bg-[var(--card)] rounded-sm">
+                                <h2 className="text-sm hover:cursor-pointer" onClick={onDelete}>Delete</h2>
+                            </div>}
+                            <i className="fa-solid fa-ellipsis text-white hover:cursor-pointer" onClick={() => setOptionOpen ((prev) => !prev)}></i>
+                        </div>}
                     </div>
 
                     <div className="absolute bottom-4 left-4 w-[80%] flex flex-col gap-2">
-                        <div className="flex items-end gap-2">
+                        <Link to={`/profile/${pulse.user?.username}`} className="flex items-end gap-2">
                             <Avatar url={pulse.user?.image?.url} size={'sm'} />
-                            <span className="text-white font-semibold text-sm">{pulse.user?.username}</span>
-                        </div>
-                        <h2 className="text-white text-xs">
+                            <span className="text-white font-semibold text-sm hover:cursor-pointer hover:underline">{pulse.user?.username}</span>
+                        </Link>
+                        <h2 className="text-white">
                             {pulse?.caption?.length > 0 && <LinkDetector title={pulse.caption} type={'pulse'}></LinkDetector>}
                         </h2>
                     </div>

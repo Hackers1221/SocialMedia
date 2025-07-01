@@ -100,6 +100,20 @@ export const updateSavedPulse = createAsyncThunk('pulse/updateSavedPulse', async
     }
 })
 
+export const deletePulse = createAsyncThunk('pulse/delete' , async(data, { dispatch }) => {
+    try {        
+        const response = axiosInstance.delete(`pulse/${data.pulseId}`, {
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            },
+            data
+        })
+        if(response) return response;
+    } catch (error) {
+        dispatch (showToast ({ message: error.response.data.error || "Failed to delete the post!", type: 'error' }));
+    }
+})
+
 const PulseSlice = createSlice({
     name: 'pulse',
     initialState,
@@ -112,8 +126,7 @@ const PulseSlice = createSlice({
             })
             .addCase(createPulse.fulfilled, (state, action) => {
                 if (!action.payload?.data) return;
-                console.log (action.payload.data)
-                state.downloadedPulse = [action.payload?.data?.pulseData?.pulse, ...state.downloadedPulse];
+                state.downloadedPulse = [action.payload?.data?.pulsedata?.pulse, ...state.downloadedPulse];
                 state.pulseList = state.downloadedPulse;
             })
             .addCase(getSavedPulse.fulfilled,(state,action) => {
@@ -123,6 +136,12 @@ const PulseSlice = createSlice({
             .addCase(getPulseByUserId.fulfilled, (state, action) => {
                 if (!action.payload?.data) return;
                 state.pulseList = action.payload?.data?.pulseDetails?.reverse();
+            })
+            .addCase (deletePulse.fulfilled, (state, action) => {
+                if (!action.payload.data) return;
+
+                state.downloadedPulse = state.downloadedPulse.filter ((pulse) => pulse._id != action.payload.data.pulseDetails._id)
+                state.pulseList = state.downloadedPulse;
             })
     }
 });

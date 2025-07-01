@@ -86,15 +86,15 @@ const getAllSavedPulse = async(req, res) => {
 }
 
 const DeletePulse = async(req, res) => {
-    const response = await pulseService.DeletePulse(req.params.id, req.body.id);
+    const response = await pulseService.DeletePulse(req.params.id, req.body.userId);
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
-            message : "Unable to delete the  Pulse",
+            message : "Unable to delete the pulse",
             error : response.error
         })
     }
     return res.status(StatusCodes.OK).send({
-        message : "Successfully deleted the saved pulse",
+        message : "Successfully deleted the pulse",
         pulseDetails : response.pulse
     })
 }

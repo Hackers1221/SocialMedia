@@ -29,6 +29,13 @@ export default function PostForm({ open, setOpen }) {
             dispatch (showToast ({message: "Nothing to post!", type: "error"})); return;
         }
 
+        let isAllowed = true;
+        video?.forEach ((video) => {
+            if (video.size > 10 * 1024 * 1024) isAllowed = false;
+        });
+
+        if (!isAllowed) return dispatch (showToast ({ message: "Video size is greater than 10 MB", type: 'error' }));
+
         const formData = new FormData();
         
         image.forEach((file) => formData.append("image", file));

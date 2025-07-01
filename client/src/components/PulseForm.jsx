@@ -22,6 +22,10 @@ export default function PulseForm({ open, setOpen }) {
       return dispatch (showToast ({ message: "Pulse can't be empty", type: 'error' }));
     }
 
+    if (video.size > 10 * 1024 * 1024) {
+        return dispatch (showToast ({ message: "Video size is greater than 10 MB", type: 'error' }));
+    }
+
     const formData = new FormData();
     formData.append("caption", caption);
     formData.append("video", video);
@@ -29,14 +33,14 @@ export default function PulseForm({ open, setOpen }) {
     formData.append("user", authState._id);
 
     const response = await dispatch(createPulse(formData));
-    if (!response) {
+    if (!response.payload) {
       dispatch (showToast ({ message: 'Something went wrong!', type: 'error' }));
     } else {
       setVideo(null);
       setCaption("");
       setInterests("");
 
-      dispatch (showToast ({ message: 'Post created successfully!', type: 'success' }));
+      dispatch (showToast ({ message: 'Pulse created successfully!', type: 'success' }));
       setOpen(false);
     }
   };
@@ -89,6 +93,7 @@ export default function PulseForm({ open, setOpen }) {
     setVideo(null);
   };
 
+
   useEffect (() => {
         if (username) {
             setCaption (caption.slice(0, caption.lastIndexOf('@') + 1) + username);
@@ -97,8 +102,8 @@ export default function PulseForm({ open, setOpen }) {
     }, [username])
 
   return (
-    <Dialog open={open} onClose={setOpen} className="relative z-[9999]">
-      <DialogBackdrop className="fixed inset-0 bg-gray-500/75 z-[9998] transition-opacity" />
+    <Dialog open={open} onClose={setOpen} className="relative z-[999]">
+      <DialogBackdrop className="fixed inset-0 bg-gray-500/75 z-[998] transition-opacity" />
       <div className="fixed inset-0 z-[9999] w-screen overflow-y-auto">
         <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
           <DialogPanel className="relative transform overflow-visible rounded-lg bg-white text-center shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-xl p-6">
@@ -158,10 +163,7 @@ export default function PulseForm({ open, setOpen }) {
               </label>
               <button
                 type="button"
-                onClick={() => {
-                  setOpen(false);
-                  Createpulse();
-                }}
+                onClick={Createpulse}
                 className={`h-12 w-[20%] bg-[var(--buttons)] text-[var(--buttonText)] font-semibold rounded-3xl hover:bg-[var(--buttonsHover)] hover:text-white transition border border-[var(--border)]`}
               >
                 Post

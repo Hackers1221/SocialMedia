@@ -157,7 +157,7 @@ const DeletePulse = async(id, userId) => {
 
         // Cloudinary post data delete
         let videoFilenames = [];
-        videoFilenames = videoFilenames.concat(PostDetails.filename);
+        videoFilenames = videoFilenames.concat(PulseDetails.filename);
         try {
             if (videoFilenames.length) await deleteVideos(videoFilenames);
         } catch (cloudError) {
@@ -165,13 +165,15 @@ const DeletePulse = async(id, userId) => {
         }
         //----------------------------
 
+        console.log ("Check --------------->", PulseDetails);
+
         const deletecomments = await Comment.deleteMany({postId : id});
         const userDetails = await User.findById(userId);
-        let userDetailsSaved = userDetails.saved;
+        let userDetailsSaved = userDetails.savedPulse;
         userDetailsSaved = userDetailsSaved.filter((ids) => ids != id);
         const updateUser = await User.findByIdAndUpdate(
             userId,
-            {saved : userDetailsSaved}
+            {savedPulse : userDetailsSaved}
         )
         response.pulse = PulseDetails;
         return response;
