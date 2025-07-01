@@ -4,6 +4,7 @@ const commentsModel = require('../models/comment.model');
 const Notification = require("../models/notification.model")
 const { deleteImages, deleteVideos } = require('../../cloudConfig');
 const { userSocketMap, getIO } = require('../../socket/socketInstance'); 
+const User = require('../models/user.model');
 
 const CreatePost = async (data) => {
     const response = {};
@@ -15,13 +16,43 @@ const CreatePost = async (data) => {
             userId: data.userId,
             caption: data.caption,
         };
-        const postresponse = await Posts.create(postObject);
+        const post = await Posts.create(postObject);
         
-        if (!postresponse) {
+        if (!post) {
             response.error = "Post not created";
         } else {
             response.success = true;
-            response.post = postresponse;
+            response.post = post;
+
+            const users = [];
+            const matches = [...data.caption.matchAll(/(^|\s)@(\w+)/g)];
+
+            for (const match of matches) {
+                users.push(match[2]); // match[2] is the username without @
+            }
+
+            for (const username of users) {
+                const user = await User.findOne({ username });
+
+                if (user) {
+
+                    const notification = await Notification.create({
+                        sender: data.userId,
+                        recipient: user._id,
+                        type: "mention",
+                        targetType: "post",
+                        post: post._id,
+                    });
+
+                    const populatedNotification = await Notification.findById(notification._id)
+                    .populate("sender", "id username image")
+
+                    const recipientSocketId = userSocketMap.get (user._id.toString ());
+                    if (recipientSocketId) {
+                        getIO().to(recipientSocketId).emit("notification", populatedNotification);
+                    }
+                }
+            }
         }
     } catch (error) {
         response.error = error.message;
@@ -95,7 +126,7 @@ const likePost = async(id, userId) => {
 
                 // Immediately fetch the populated version
                 const populatedNotification = await Notification.findById(notification._id)
-                .populate("sender", "id username avatarUrl")
+                .populate("sender", "id username image")
                 .populate("post", "caption")
                 .populate("pulse", "caption");
 
@@ -198,7 +229,7 @@ const savePost = async(userId, id) => {
 const DeletePost = async(id,userId) => {
     const response = {};
     try {
-        const PostDetails = await Posts.findByIdAndDelete(id);
+        const PostDetails = await Posts.findById(id);
 
         // Cloudinary post data delete
         let imageFilenames = [];
@@ -219,13 +250,16 @@ const DeletePost = async(id,userId) => {
         //----------------------------
 
         const deletecomments = await commentsModel.deleteMany({postId : id});
+
         const userDetails = await usermodel.findById(userId);
-        let userDetailsSaved = userDetails.saved;
-        userDetailsSaved = userDetailsSaved.filter((ids) => ids!=id);
+        const userDetailsSaved = userDetails.savedPost.filter ((ids) => ids!=id);
         const updateUser = await usermodel.findByIdAndUpdate(
             userId,
-            {saved : userDetailsSaved}
+            {savedPost : userDetailsSaved}
         )
+
+        const post = await Posts.findByIdAndDelete(id);
+
         response.post = PostDetails;
         return response;
     } catch (error) {
@@ -260,16 +294,18 @@ const getExplorePost = async (userId) => {
         );
 
         const allInterests = posts
-            .flatMap(post => post.interests)                // flatten arrays
-            .join(' ');                                      // join into one string with spaces
+            .flatMap(post => post.interests || [])          // Flatten arrays, handle missing interests
+            .filter(str => str && str.trim() !== '')        // Remove empty strings or whitespace-only
+            .join(' ');                                     // Join with space
 
         response.interests = allInterests;
         return response;
     } catch (error) {
         response.error = error.message;
-        return response
+        return response;
     }
-}
+};
+
 
 module.exports = {
     CreatePost,

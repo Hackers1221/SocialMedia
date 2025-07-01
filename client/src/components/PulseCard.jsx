@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import SelectedUser from "./SelectedUser";
 import usePulse from "../hooks/usePulse";
 import { showToast } from "../redux/Slices/toast.slice";
+import LinkDetector from "./LinkDetector";
 
 export default function PulseCard({ pulse, followers }) {
     const authState = useSelector((state) => state.auth);
@@ -220,7 +221,7 @@ export default function PulseCard({ pulse, followers }) {
                             <span className="text-white font-semibold text-sm">{pulse.user?.username}</span>
                         </div>
                         <h2 className="text-white text-xs">
-                            {pulse?.caption?.length > 75 ? `${pulse.caption.slice(0, 75)}...` : pulse?.caption}
+                            {pulse?.caption?.length > 0 && <LinkDetector title={pulse.caption} type={'pulse'}></LinkDetector>}
                         </h2>
                     </div>
                 </div>

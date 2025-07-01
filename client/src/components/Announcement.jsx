@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
 import { congratulate, sorrify } from "../redux/Slices/announcement.slice";
+import LinkDetector from "./LinkDetector";
 
 function Announcement ({_id, userImage, userName, announcementText, createdAt, congratulation, sorry}) {
     const authState = useSelector ((state) => state.auth);
@@ -82,8 +83,8 @@ function Announcement ({_id, userImage, userName, announcementText, createdAt, c
         <div className="p-2 shadow-2xl w-full">
             <ConfirmDeleteDialog open={isOpen} setOpen={setOpen} type={"announcementDelete"} id={_id}/>
             <div className="flex justify-between items-start">
-                <div className="break-words justify-between text-sm mb-3 text-[var(--text)] whitespace-pre-wrap w-[90%] mt-2">
-                    {announcementText}
+                <div className="break-words justify-between text-sm mb-3 text-[var(--text)] whitespace-pre-wrap w-[90%]">
+                    <LinkDetector title={announcementText} type={'announcement'}></LinkDetector>
                 </div>
                 {authState.data?.username == userName && <div className="dropdown dropdown-end">
                     <div tabIndex={0} role="button">

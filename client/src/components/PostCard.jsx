@@ -19,6 +19,7 @@ function PostCard ({ post, index, list, followers }) {
     const [postState] = usePosts();
 
     const videoRefs = useRef ([]);
+    const triggerRef = useRef ();
 
     const dispatch = useDispatch();
 
@@ -207,6 +208,10 @@ function PostCard ({ post, index, list, followers }) {
         if (response.payload) {
             await dispatch(getAllPosts());
             dispatch (showToast ({ message: 'Post was deleted successfully!', type: 'success' }));
+
+            if (triggerRef.current) {
+                triggerRef.current.blur(); // closes the dropdown
+            }
         } else {
             dispatch (showToast ({ message: 'Something went wrong!', type: 'error' }));
         }
@@ -343,7 +348,7 @@ function PostCard ({ post, index, list, followers }) {
                     </Link>
                 </div>
                 <div className="dropdown dropdown-end">
-                    <div tabIndex={0} role="button" className="m-1">
+                    <div tabIndex={0} role="button" className="m-1" ref={triggerRef}>
                         <i className={`text-[var(--text)] fa-solid fa-ellipsis`}></i>
                     </div>
                     <ul tabIndex={0} className={`dropdown-content menu bg-[var(--card)] rounded-md z-[1] w-52 p-4 gap-4 shadow-sm shadow-[var(--text)] text-[var(--buttons)]`}>
@@ -360,7 +365,9 @@ function PostCard ({ post, index, list, followers }) {
                     </ul>
                 </div>
             </div>
-            {title?.length > 0 && <LinkDetector title={title} type={'post'}></LinkDetector>}
+            <div className="mt-4 px-4">
+                {title?.length > 0 && <LinkDetector title={title} type={'post'}></LinkDetector>}
+            </div>
             <div className="px-4">
                 <div className="w-full flex flex-wrap gap-1 mt-4">
                     {hashtags.length > 0 && hashtags.map ((hashtag, index) => (

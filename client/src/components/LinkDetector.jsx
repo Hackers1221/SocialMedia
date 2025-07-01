@@ -1,36 +1,50 @@
 import { useState } from 'react';
-import ReactLinkify from 'react-linkify';
 
-function LinkDetector ({ title, type }) {
+function LinkDetector({ title, type }) {
     const [check, setCheck] = useState(false);
 
     let len = 200;
     if (type === 'displayPost') len = 300;
-    if (type === 'pulse') len = 20;
+    if (type === 'pulse') len = 75;
 
-    function toggleReadability() {
-        setCheck(!check);
-    }
-
+    const toggleReadability = () => setCheck(!check);
     const displayedCaption = check ? title : title?.toString().slice(0, len);
 
-    return (
-        <div className="text-sm text-[var(--text)] px-4 mt-4 whitespace-pre-line">
-            <ReactLinkify
-                componentDecorator={(href, caption, key) => (
+    const parseText = (text) => {
+        const parts = text.split(/(\s+)/); // split into words + spaces
+        return parts.map((part, index) => {
+            if (/^https?:\/\/[^\s]+$/.test(part)) {
+                return (
                     <a
-                        key={key}
-                        href={href}
+                        key={index}
+                        href={part}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-[var(--buttons)] hover:underline"
                     >
-                        {caption}
+                        {part}
                     </a>
-                )}
-            >
-                {displayedCaption}
-            </ReactLinkify>
+                );
+            } else if (/^@[\w]+$/.test(part)) {
+                const username = part.slice(1);
+                return (
+                    <a
+                        key={index}
+                        href={`/profile/${username}`}
+                        className="text-[var(--buttons)] hover:font-semibold"
+                    >
+                        {part}
+                    </a>
+                );
+            } else {
+                return part;
+            }
+        });
+    };
+
+    return (
+        <div className="text-sm text-[var(--text)] whitespace-pre-line">
+            {parseText(displayedCaption)}
 
             {title?.toString().length > len && (
                 <span

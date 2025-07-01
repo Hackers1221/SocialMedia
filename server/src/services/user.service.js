@@ -60,7 +60,7 @@ const ValidateUser = async (data, password) => {
             }
         }
         let notif = await Notification.find({ recipient: res._id })
-            .populate("sender", "id username avatarUrl")
+            .populate("sender", "id username image")
             .populate("post", "caption")       
             .populate("pulse", "caption");
 
@@ -133,7 +133,7 @@ const followRequest = async(userId , followingId) => {
                 });
                 // Immediately fetch the populated version
                 const populatedNotification = await Notification.findById(notification._id)
-                .populate("sender", "id username avatarUrl")
+                .populate("sender", "id username image")
                 .populate("post", "caption")
                 .populate("pulse", "caption");
 

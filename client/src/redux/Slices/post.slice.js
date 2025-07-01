@@ -210,7 +210,7 @@ const PostSlice = createSlice({
             const nonMatchingPosts = [];
 
             for (const post of allPosts) {
-                const interestText = post.interests?.[0] || '';
+                const interestText = post.interests[0] || '';
                 const matches = interestTags.some(tag => interestText.includes(tag));
 
                 if (matches) matchingPosts.push(post);

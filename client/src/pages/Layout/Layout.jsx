@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import Sidebar from "../../components/sidebar";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import Suggestions from "../../components/Suggestions";
 import { useDispatch, useSelector } from "react-redux";
 import { initSocket } from '../../redux/Slices/socket.slice';
 import { getExplorePost } from "../../redux/Slices/post.slice";
 import { showToast } from "../../redux/Slices/toast.slice";
+import RightPanel from "../../components/RIghtPanel";
 
 function Layout () {
     const authState = useSelector ((state) => state.auth);
@@ -41,7 +41,7 @@ function Layout () {
     return (
         <div className={`min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-[var(--background)] text-gray-800`}>
             {!hideSidebar && <Sidebar />}
-            {authState?.isLoggedIn && !hideOthers && screenWidth >= 1480 && !hideSidebar && <Suggestions />}
+            {authState?.isLoggedIn && !hideOthers && screenWidth >= 1480 && !hideSidebar && <RightPanel />}
             {(hideSidebar || authState?.isLoggedIn) && <Outlet />}
         </div>
     )

@@ -112,6 +112,7 @@ const PulseSlice = createSlice({
             })
             .addCase(createPulse.fulfilled, (state, action) => {
                 if (!action.payload?.data) return;
+                console.log (action.payload.data)
                 state.downloadedPulse = [action.payload?.data?.pulseData?.pulse, ...state.downloadedPulse];
                 state.pulseList = state.downloadedPulse;
             })

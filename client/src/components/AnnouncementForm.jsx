@@ -3,6 +3,7 @@ import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from "@headlessui/re
 import {useDispatch, useSelector} from 'react-redux'
 import EmojiPicker from "emoji-picker-react";
 import { createAnnouncement } from './../redux/Slices/announcement.slice'
+import Suggestions from "./Suggestions";
 
 export default function AnnouncementForm ({ open, setOpen }) {
     const authState = useSelector((state) => state.auth);
@@ -14,6 +15,9 @@ export default function AnnouncementForm ({ open, setOpen }) {
     const [showPicker, setShowPicker] = useState(false);
     const [text, setText] = useState ();
     const [left, setLeft] = useState (150);
+    const [username, setUsername] = useState ("");
+    const [query, setQuery] = useState ("");
+    const [showSuggestions, setShowSuggestions] = useState (false);
 
 
     const create = async () => {
@@ -30,7 +34,19 @@ export default function AnnouncementForm ({ open, setOpen }) {
 
     const handleTextChange = (e) => {
         let input = e.target.value.slice(0, 150); // Limit to 250 characters
-        input = input.charAt(0).toUpperCase() + input.slice(1); // Capitalize first letter
+        if (input.charAt(0) != '@') input = input.charAt(0).toUpperCase() + input.slice(1); // Capitalize first letter
+
+        const match = input.match(/(^|\s)@(\w*)$/); // match text after the last "@"
+        if (match) {
+            if (match[2].trim().length >= 1) {
+                setQuery (match[2]);
+                setShowSuggestions(true);
+            }
+        } 
+        else {
+            setShowSuggestions(false);
+        }
+
         setText(input);
         setLeft(150 - input.length);
     };
@@ -38,6 +54,13 @@ export default function AnnouncementForm ({ open, setOpen }) {
     const handleEmojiClick = (emojiData) => {
         setCaption ((prev) => prev + emojiData.emoji);
     };
+
+    useEffect (() => {
+        if (username) {
+            setText (text.slice(0, text.lastIndexOf('@') + 1) + username);
+            setUsername ("");
+        }
+    }, [username])
 
     useEffect (() => {
         const handleClickOutside = (e) => {
@@ -60,7 +83,7 @@ export default function AnnouncementForm ({ open, setOpen }) {
 
         <div className="fixed inset-0 z-[9999] w-screen overflow-y-auto">
             <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
-            <DialogPanel className="relative transform overflow-hidden rounded-lg bg-white text-center shadow-xl transition-all sm:my-8 w-[75%] md:w-[35%] p-6">
+            <DialogPanel className="relative transform overflow-visible rounded-lg bg-white text-center shadow-xl transition-all sm:my-8 w-[75%] md:w-[35%] p-6">
                 {/* Title */}
                 <DialogTitle as="h3" className="text-xl font-semibold text-gray-900 text-left">
                     Create Announcement
@@ -72,6 +95,12 @@ export default function AnnouncementForm ({ open, setOpen }) {
                         onClick={() => setShowPicker((prev) => !prev)}
                         className="mt-1 fa-regular fa-face-smile hover:cursor-pointer text-xl"
                     ></i> */}
+
+                    {showSuggestions && (
+                        <div className="absolute bottom-[10rem] left-0 z-[99999]">
+                            <Suggestions query={query} setUsername={setUsername} showSuggestions={showSuggestions} setShowSuggestions={setShowSuggestions}/>
+                        </div>
+                    )}
 
                     <textarea
                         className="bg-transparent text-black w-full resize-none focus:outline-none"

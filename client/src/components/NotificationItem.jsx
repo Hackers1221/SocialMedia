@@ -59,8 +59,8 @@ function NotificationItem({
 
   const renderAvatar = () => (
     <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-100 flex-shrink-0">
-      {sender.avatarUrl ? (
-        <img src={sender.avatarUrl} alt={sender.username} className="w-full h-full object-cover" />
+      {sender.image?.url ? (
+        <img src={sender.image.url} alt={sender.username} className="w-full h-full object-cover" />
       ) : (
         <div className="flex items-center justify-center h-full text-[var(--text)] text-lg font-semibold">
           {sender.username.charAt(0).toUpperCase()}
@@ -88,6 +88,22 @@ function NotificationItem({
             <span className="font-semibold text-[var(--heading)]">{sender.username}</span> liked your {targetType}{" "}
             {post && <span className="font-medium text-[var(--text)] w-[80%]">"{post.caption}"</span>}
             {pulse && <span className="font-medium text-[var(--text)] w-[80%]">"{pulse.caption}"</span>}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (type === "mention") {
+    return (
+      <div
+        className="flex items-center gap-4 relative p-4 bg-[var(--card)] rounded-2xl shadow-sm hover:shadow-md cursor-pointer transition w-full"
+      >
+        {getTime()}
+        {renderAvatar()}
+        <div className="flex-1">
+          <p className="text-sm text-[var(--heading)]">
+            <span className="font-semibold text-[var(--heading)]">{sender.username}</span> mentioned you in a recent {targetType}{" "}
           </p>
         </div>
       </div>

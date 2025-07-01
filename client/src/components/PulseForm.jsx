@@ -1,20 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from "@headlessui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { createPulse } from "../redux/Slices/pulse.slice";
 import { showToast } from "../redux/Slices/toast.slice";
+import Suggestions from "./Suggestions";
 
 export default function PulseForm({ open, setOpen }) {
   const [video, setVideo] = useState(null);
   const [caption, setCaption] = useState("");
   const [interests, setInterests] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState (false);
+    const [username, setUsername] = useState ("");
+    const [query, setQuery] = useState ("");
+
   const authState = useSelector((state) => state.auth.data);
+
   const dispatch = useDispatch();
 
   const Createpulse = async () => {
     if(!video) {
-      return dispatch (showToast ({ message: "Video can't be empty", type: 'error' }));
+      return dispatch (showToast ({ message: "Pulse can't be empty", type: 'error' }));
     }
+
     const formData = new FormData();
     formData.append("caption", caption);
     formData.append("video", video);
@@ -29,7 +36,7 @@ export default function PulseForm({ open, setOpen }) {
       setCaption("");
       setInterests("");
 
-      dispatch (showToast ({ message: 'Post created successfully!', type: 'error' }));
+      dispatch (showToast ({ message: 'Post created successfully!', type: 'success' }));
       setOpen(false);
     }
   };
@@ -53,6 +60,26 @@ export default function PulseForm({ open, setOpen }) {
     }
   };
 
+  const handleChange = (e) => {
+    const {name, value} = e.target;
+
+    if (name === 'caption') {
+        const match = value.match(/(^|\s)@(\w*)$/); // match text after the last "@"
+        if (match) {
+            if (match[2].trim().length >= 1) {
+                setQuery (match[2]);
+                setShowSuggestions(true);
+            }
+        } 
+        else {
+            setShowSuggestions(false);
+        }
+
+        setCaption (value);      
+    }
+    else setInterests (value);
+  }
+
   const handleFileChange = (event) => {
     const uploadedFile = event.target.files[0];
     setVideo(uploadedFile);
@@ -62,12 +89,19 @@ export default function PulseForm({ open, setOpen }) {
     setVideo(null);
   };
 
+  useEffect (() => {
+        if (username) {
+            setCaption (caption.slice(0, caption.lastIndexOf('@') + 1) + username);
+            setUsername ("");
+        }
+    }, [username])
+
   return (
     <Dialog open={open} onClose={setOpen} className="relative z-[9999]">
       <DialogBackdrop className="fixed inset-0 bg-gray-500/75 z-[9998] transition-opacity" />
       <div className="fixed inset-0 z-[9999] w-screen overflow-y-auto">
         <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
-          <DialogPanel className="relative transform overflow-hidden rounded-lg bg-white text-center shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-xl p-6">
+          <DialogPanel className="relative transform overflow-visible rounded-lg bg-white text-center shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-xl p-6">
             <DialogTitle as="h3" className="text-xl font-semibold text-gray-900 text-left">
               Create Pulse
             </DialogTitle>
@@ -94,13 +128,20 @@ export default function PulseForm({ open, setOpen }) {
               </div>
             )}
 
+            {showSuggestions && (
+                <div className="absolute bottom-[11rem] left-5 z-[99999]">
+                    <Suggestions query={query} setUsername={setUsername} showSuggestions={showSuggestions} setShowSuggestions={setShowSuggestions}/>
+                </div>
+            )}
+
             <textarea
               className="mt-4 bg-gray-200 text-black w-full p-3 border rounded-lg focus:ring focus:ring-gray-300 resize-none"
               rows="2"
               placeholder="Write a caption..."
+              name="caption"
               value={caption}
               onKeyDown={handleKeyDown}
-              onChange={(e) => setCaption(e.target.value)}
+              onChange={handleChange}
             ></textarea>
 
             <div className="flex justify-between items-center mt-4">
@@ -108,10 +149,11 @@ export default function PulseForm({ open, setOpen }) {
                 <i className="fa-solid fa-hashtag text-gray-800 text-lg"></i>
                 <input 
                   type="text"
+                  name="interests"
                   value={interests}
                   className="bg-transparent outline-none text-gray-700 w-full focus:outline-none"
                   placeholder="Add hashtags Ex: games, sports"
-                  onChange={(e) => setInterests(e.target.value)}
+                  onChange={handleChange}
                 />
               </label>
               <button
