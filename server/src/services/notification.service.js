@@ -5,7 +5,7 @@ const deleteNonFR = async (userId) => {
     const response = {};
     try {
         const result = await Notification.deleteMany({
-            type: { $in: ["like", "comment"] },
+            type: { $in: ["like", "comment", "mention"] },
             recipient: userId,
         });
         response.result = result;

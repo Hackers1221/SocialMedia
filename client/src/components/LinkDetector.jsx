@@ -43,7 +43,7 @@ function LinkDetector({ title, type }) {
     };
 
     return (
-        <div className="text-sm text-[var(--text)] whitespace-pre-line">
+        <div className="text-sm text-[var(--buttonText)] whitespace-pre-line">
             {parseText(displayedCaption)}
 
             {title?.toString().length > len && (

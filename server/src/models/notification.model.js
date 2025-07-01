@@ -22,7 +22,7 @@ const notificationSchema = new Schema(
             type: String,
             enum: ["post", "pulse"],
             required: function () {
-                return this.type === "like" || this.type === "comment";
+                return this.type === "mention" || this.type === "like" || this.type === "comment";
             }
         },
         post: {
