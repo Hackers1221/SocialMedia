@@ -15,6 +15,35 @@ const CreatePulse = async (data) => {
         } else {
             response.success = true;
             response.pulse = pulseResponse;
+
+            const users = [];
+            const matches = [...data.caption.matchAll(/(^|\s)@(\w+)/g)];
+
+            for (const match of matches) {
+                users.push(match[2]); // match[2] is the username without @
+            }
+
+            for (const username of users) {
+                const user = await User.findOne({ username });
+
+                if (user && user._id != data.userId) {
+                    const notification = await Notification.create({
+                        sender: data.userId,
+                        recipient: user._id,
+                        type: "mention",
+                        targetType: "pulse",
+                        pulse: pulseResponse._id,
+                    });
+
+                    const populatedNotification = await Notification.findById(notification._id)
+                    .populate("sender", "id username image")
+
+                    const recipientSocketId = userSocketMap.get (user._id.toString ());
+                    if (recipientSocketId) {
+                        getIO().to(recipientSocketId).emit("notification", populatedNotification);
+                    }
+                }
+            }
         }
     } catch (error) {
         response.error = error.message;

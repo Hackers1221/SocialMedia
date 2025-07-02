@@ -34,7 +34,7 @@ const CreatePost = async (data) => {
             for (const username of users) {
                 const user = await User.findOne({ username });
 
-                if (user) {
+                if (user && user._id != data.userId) {
 
                     const notification = await Notification.create({
                         sender: data.userId,

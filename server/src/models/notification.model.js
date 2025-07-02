@@ -20,7 +20,7 @@ const notificationSchema = new Schema(
         },
         targetType: {
             type: String,
-            enum: ["post", "pulse"],
+            enum: ["post", "pulse", "announcement"],
             required: function () {
                 return this.type === "mention" || this.type === "like" || this.type === "comment";
             }
@@ -37,6 +37,13 @@ const notificationSchema = new Schema(
             ref: "Pulse",
             required: function () {
                 return this.targetType === "pulse";
+            }
+        },
+        announcement: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Pulse",
+            required: function () {
+                return this.targetType === "announcement";
             }
         },
         commentText: {

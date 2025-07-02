@@ -6,8 +6,6 @@ function NotificationItem({
   onDecline,
 }) {
 
-    console.log (Item);
-
   const {type, sender, recipient, targetType, post, pulse, commentText, timestamp} = Item;
   const [time, setTime] = useState("");
 

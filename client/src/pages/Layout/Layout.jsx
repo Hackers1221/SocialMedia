@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { initSocket } from '../../redux/Slices/socket.slice';
 import { getExplorePost } from "../../redux/Slices/post.slice";
 import { showToast } from "../../redux/Slices/toast.slice";
-import RightPanel from "../../components/RIghtPanel";
+import RightPanel from "../../components/RightPanel";
 
 function Layout () {
     const authState = useSelector ((state) => state.auth);

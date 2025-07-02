@@ -211,16 +211,16 @@ export default function PulseCard({ pulse, followers }) {
                             <span className="text-base font-medium">{countLike}</span>
                         </button>
 
-                        <button className="flex flex-col items-center justify-center gap-1 text-white px-2">
+                        <button className="flex flex-col items-center justify-center gap-1 text-white px-2  z-[99]">
                             <i className="fa-regular fa-comment text-white text-2xl" onClick={() => setShowComment(true)}></i>
                             <span className="text-base font-medium">{comments?.filter(comment => comment.postId === pulse._id)?.length}</span>
                         </button>
 
-                        <div className="flex flex-col items-center justify-center gap-1 text-white px-2 hover:cursor-pointer" onClick={toggleBookmark}>
+                        <div className="flex flex-col items-center justify-center gap-1 text-white px-2 hover:cursor-pointer z-[99]" onClick={toggleBookmark}>
                             {saved ? <i className="fa-solid fa-bookmark text-xl p-3 text-[var(--buttons)]"></i> : <i className="fa-regular fa-bookmark text-xl p-3"></i>}
                         </div>
 
-                        <div className="flex flex-col items-center justify-center text-white px-2">
+                        <div className="flex flex-col items-center justify-center text-white px-2 z-[99]">
                             <i className="fa-regular fa-paper-plane text-white text-xl p-3 hover:cursor-pointer" onClick={() => setOpen(true)}></i>
                         </div>
 
@@ -238,7 +238,7 @@ export default function PulseCard({ pulse, followers }) {
 
                         <Link to={`/profile/${pulse.user?.username}`} className="flex items-end gap-2">
                             <Avatar url={pulse.user?.image?.url} size={'sm'} />
-                            <span className="text-white font-semibold text-sm hover:cursor-pointer hover:underline">{pulse.user?.username}</span>
+                            <span className="text-white font-semibold text-sm hover:cursor-pointer hover:underline hover:text-[var(--buttons)]">{pulse.user?.username}</span>
                         </Link>
                         <h2 className="text-white z-[2]">
                             {pulse?.caption?.length > 0 && <LinkDetector title={pulse.caption} type={'pulse'}></LinkDetector>}

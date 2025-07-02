@@ -1,7 +1,8 @@
 const Announcement = require ("../models/announcement.model")
 const User = require ("../models/user.model")
 const mailerMiddleware = require ('../middlewares/mailer');
-// const Comments = require('../models/comment.model');
+const Notification = require("../models/notification.model");
+const { userSocketMap, getIO } = require('../../socket/socketInstance'); 
 
 const create = async (data) => {
     const response = {};
@@ -19,6 +20,36 @@ const create = async (data) => {
         } else {
             response.success = true;
             response.announcement = res;
+
+            const users = [];
+            const matches = [...data.text.matchAll(/(^|\s)@(\w+)/g)];
+
+            for (const match of matches) {
+                users.push(match[2]); // match[2] is the username without @
+            }
+
+            for (const username of users) {
+                const user = await User.findOne({ username });
+
+                if (user && user._id != data.user) {
+
+                    const notification = await Notification.create({
+                        sender: data.user,
+                        recipient: user._id,
+                        type: "mention",
+                        targetType: "announcement",
+                        announcement: res._id,
+                    });
+
+                    const populatedNotification = await Notification.findById(notification._id)
+                    .populate("sender", "id username image")
+
+                    const recipientSocketId = userSocketMap.get (user._id.toString ());
+                    if (recipientSocketId) {
+                        getIO().to(recipientSocketId).emit("notification", populatedNotification);
+                    }
+                }
+            }
         }
     } catch (error) {
         response.error = error.message;
@@ -32,13 +63,13 @@ const getAll = async (userId) => {
     try {
         const currentUser = await User.findById(userId);
 
-        const idsToMatch = [...currentUser.follower, userId];
+        const idsToMatch = [...currentUser.following, userId];
 
         const announcements = await Announcement.find({ user: { $in: idsToMatch } })
         .populate("user", "image name username")
         
         if (!announcements || announcements.length === 0) {
-            response.success = "No Verses available";
+            response.success = "No announcements available";
         } else {
             response.success = true;
             response.Announcement = announcements;
@@ -48,29 +79,6 @@ const getAll = async (userId) => {
     }
     return response;  
 };
-
-// const updateVerse = async (VerseId, updatedData) => {
-//     const response = {};
-//     try {
-
-//         const updatedVerse = await Verse.findByIdAndUpdate(
-//             VerseId, 
-//             updatedData, 
-//             { new: true, runValidators: true } 
-//         );
-
-//         if (!updatedVerse) {
-//             response.error = "Verse not found";
-//             return response;
-//         }
-        
-//         response.Verse = updatedVerse;
-//         return response;
-//     } catch (error) {
-//         response.error = error.message;
-//         return response;
-//     }
-// };
 
 const congratulate = async(id, userId) => {
     const response = {};
@@ -103,46 +111,6 @@ const sorrify = async(id, userId) => {
         return response;
     }
 }
-
-// const getVerseByUserId = async(id) => {
-//     const response = {};
-//     try {
-//         const verseData = await Verse.find({userId : id });
-//         if(!verseData){
-//             response.error = "Verse not found";
-//             return response;
-//         }
-//         response.verse = verseData;
-//         return response;
-//     } catch (error) {
-//         response.error = error.message;
-//         return response
-//     }
-// }
-
-// const getVerseById = async(id) => {
-//     const response = {};
-//     try {
-//         const verseData = await Verse.findById(id);
-//         if(!verseData){
-//             response.error = "Verse not found";
-//             return response;
-//         }
-//         response.verse = verseData;
-//         return response;
-//     } catch (error) {
-//         response.error = error.message;
-//         return response
-//     }
-// }
-
-// const getAllSavedPost = async(userId) => {
-
-// }
-
-// const savePost = async(userId, id) => {
-
-// }
 
 const deleteAnnouncement = async(id) => {
     const response = {};
