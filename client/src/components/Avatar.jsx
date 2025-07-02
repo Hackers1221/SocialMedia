@@ -21,17 +21,6 @@ function Avatar ({size, url, border, id}) {
 
     return (
         <div className="flex items-center justify-center">
-        {announcementState.downloadedAnnouncement?.some(announcement => announcement.user._id === id) ? (
-            <div className="relative hover:cursor-pointer bg-gradient-to-tr from-sky-500 via-blue-500 to-purple-500 p-[2px] rounded-full">
-            <div className="bg-white p-[2px] rounded-full">
-                <img
-                src={url}
-                alt=""
-                className={`object-cover rounded-full ${dimension} ${bord}`}
-                />
-            </div>
-            </div>
-        ) : (
             <div className="relative hover:cursor-pointer">
             <img
                 src={url}
@@ -39,7 +28,6 @@ function Avatar ({size, url, border, id}) {
                 className={`object-cover rounded-full ${dimension} ${bord}`}
             />
             </div>
-        )}
         </div>
     );
 }
