@@ -77,8 +77,6 @@ const Comment = ({ commentId , username, text, time, avatar }) => {
     }
   }, [commentState.comments, commentId, authState.data._id]);  
 
-  console.log (time);
-
     return (
       <div className="flex items-start space-x-3 p-2 text-white">
         {/* Profile Image */}

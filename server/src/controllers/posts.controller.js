@@ -92,7 +92,7 @@ const getPostByUserId = async(req,res) => {
 }
 
 const getPostById= async(req,res) => {
-    const response = await postsService.getPostById(req.params.id);
+    const response = await postsService.getPostById (req.params.id);
     if(response.error){
         return res.status(StatusCodes.BAD_REQUEST).send({
             message : "Unable to fetch the post",
@@ -175,6 +175,20 @@ const getExplorePost = async(req,res) => {
     })
 }
 
+const getRelatedPosts = async (req,res) => {
+    const response = await postsService.getRelatedPosts (req.params.id);
+    if (response.error){
+        return res.status(StatusCodes.BAD_REQUEST).send({
+            message : "Unable to search for the posts",
+            error : response.error
+        })
+    }
+    return res.status(StatusCodes.OK).send({
+        message : "Successfully search for the posts",
+        posts : response.posts
+    })
+}
+
 
 module.exports = {
     createPost,
@@ -187,5 +201,6 @@ module.exports = {
     getAllSavedPost,
     DeletePost,
     searchPost,
-    getExplorePost
+    getExplorePost,
+    getRelatedPosts
 }

@@ -1,9 +1,6 @@
 import { useSelector} from 'react-redux'
 
-function Avatar ({size, url, border, id}) {
-    const announcementState = useSelector ((state) => state.announcement);
-
-
+function Avatar ({size, url, border}) {
     let dimension = 'w-12 h-12';
     if (size === 'lg') {
         dimension = 'w-20 h-20 md:w-32 md:h-32';

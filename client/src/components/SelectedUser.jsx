@@ -1,18 +1,25 @@
 import { X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AddUser from "./AddUser";
 import { useNavigate } from 'react-router-dom';
+import { getUserById } from "../redux/Slices/auth.slice";
+import { showToast } from "../redux/Slices/toast.slice";
+import Loader from "./Loader";
 
-function SelectedUser ({ isOpen, setOpen, followers, post }) {
+function SelectedUser ({ isOpen, setOpen, post }) {
     const socket = useSelector ((state) => state.socket.socket);
+    const authState = useSelector ((state) => state.auth);
 
     const dialogRef = useRef (null);
     const navigate = useNavigate ();
+    const dispatch = useDispatch ();
 
+    const [followers, setFollowers] = useState ([]);
     const [selectedUsers, setSelectedUsers] = useState ([]);
+    const [isLoading, setLoading] = useState (false);
 
-    function sendPulse () {
+    function share () {
         selectedUsers.map ((user) => {
             const payload = {
                 sender: user.addedBy,
@@ -32,7 +39,46 @@ function SelectedUser ({ isOpen, setOpen, followers, post }) {
         navigate ('/message');
     }
 
+    const copyLink = async () => {
+        try {
+            const postLink = `${window.location.origin}/posts/${post._id}`
+            await navigator.clipboard.writeText(postLink);
+            dispatch (showToast ({
+                message: "Link copied to clipboard!",
+                type: "success",
+            }));
+        } catch (error) {
+            dispatch (showToast ({
+                message: "Failed to copy link",
+                type: "error",
+            }));
+        }
+    };
+
+    async function getFollowerDetails () {
+        setLoading (true);
+        try {
+            const promises = authState.data.follower?.map((userId) =>
+                dispatch (getUserById (userId))
+            );
+            const results = await Promise.all (promises);
+        
+            const newUsers = results
+                .map((res) => res?.payload?.data?.userdetails)
+                .filter(Boolean); // Filter out failed/null responses
+        
+            setFollowers (newUsers);
+        } catch (error) {
+            setLoading (false);
+            dispatch (showToast ({ message: "Could not load your followers", type: "error" }));
+        } finally {
+            setLoading (false);
+        }
+    }
+
     useEffect (() => {
+        if (isOpen) getFollowerDetails ();
+
         if (isOpen && dialogRef.current) {
             dialogRef.current.showModal();
         }
@@ -62,12 +108,19 @@ function SelectedUser ({ isOpen, setOpen, followers, post }) {
                             <X />
                         </button>
                     </div>
-                    {followers?.length > 0 ? followers?.map ((user, key) => (
+                    {isLoading ? <Loader /> : followers?.length > 0 ? followers?.map ((user, key) => (
                         <AddUser userId={user._id} image={user.image} username={user.username} members={selectedUsers} setMembers={setSelectedUsers} key={key}/>
                     )) : <h2>No user to send</h2>}
 
-                    <div onClick={sendPulse} className="absolute bottom-4 w-full flex justify-center items-center rounded-md py-2 hover:cursor-pointer">
-                        <h2 className="text-black font-bold text-[var(--buttonText)] bg-[var(--buttons)] p-2 rounded-md w-[60%] text-center">Send</h2>
+                    <div className="absolute bottom-4 w-[93%] flex justify-evenly items-center gap-2">
+                        <div onClick={copyLink} className="w-full flex justify-center items-center rounded-md py-2 hover:cursor-pointer">
+                            
+                            <h2 className="text-black font-bold text-[var(--buttonText)] bg-[var(--buttons)] p-2 rounded-md w-full text-center">
+                                <i className="fa-solid fa-link mr-2"></i> Copy Link</h2>
+                        </div>
+                        <div onClick={share} className="w-full flex justify-center items-center rounded-md py-2 hover:cursor-pointer">
+                            <h2 className="text-black font-bold text-[var(--buttonText)] bg-[var(--buttons)] p-2 rounded-md w-full text-center">Send</h2>
+                        </div>
                     </div>
                 </div>
             </dialog>

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getUserById } from "../redux/Slices/auth.slice";
 import Avatar from "./Avatar";
 import { useEffect, useRef, useState } from "react";
@@ -21,9 +21,12 @@ function PostCard ({ post, index, list, followers }) {
     const videoRefs = useRef ([]);
     const triggerRef = useRef ();
 
-    const dispatch = useDispatch();
+    const dispatch = useDispatch ();
+    const navigate = useNavigate ();
+    const location = useLocation ();
 
     const { _id, likes, interests, createdAt, userId, caption } = post;
+
     const imageData = post.image;
     const videoData = post.video;
 
@@ -38,7 +41,6 @@ function PostCard ({ post, index, list, followers }) {
     const [showComment, setShowComment] = useState(false);
     const [commentDescription, setCommentDescription] = useState("");
     const [comments, setComments] = useState([]);
-    // const [width, setWidth] = useState(window.innerWidth);
 
     // Delete related
     const [deleting, setDeleting] = useState(false);
@@ -280,6 +282,22 @@ function PostCard ({ post, index, list, followers }) {
         setComments (res.payload.data.commentDetails);
     }
 
+    const handleCopy = async () => {
+        try {
+            const postLink = `${window.location.origin}/posts/${post._id}`
+            await navigator.clipboard.writeText(postLink);
+            dispatch (showToast ({
+                message: "Link copied to clipboard!",
+                type: "success",
+            }));
+        } catch (error) {
+            dispatch (showToast ({
+                message: "Failed to copy link",
+                type: "error",
+            }));
+        }
+    };
+
     useEffect(() => {
         const handleResize = () => setWidth(window.innerWidth);
         window.addEventListener('resize', handleResize);
@@ -309,7 +327,9 @@ function PostCard ({ post, index, list, followers }) {
     }, [postState?.savedList]);
 
     useEffect(() => {
-        getUser(userId);
+        if (userId?._id) setCreator (userId);
+        else getUser(userId);
+
         setDate(getTimeDifference(createdAt));
         if (likes.includes(authState._id)) {
             setLiked(true);
@@ -321,8 +341,8 @@ function PostCard ({ post, index, list, followers }) {
 
     return (
         <div className={`mb-4 bg-[var(--card)] relative shadow-xl rounded-md`} >
-            <DisplayPost open={isDialogOpen} setOpen={setDialogOpen} index={index} list={list} />
-            <SelectedUser isOpen={isShare} setOpen={setShare} followers={followers} post={post}/>
+            {/* <DisplayPost open={isDialogOpen} setOpen={setDialogOpen} index={index} list={list} /> */}
+            <SelectedUser isOpen={isShare} setOpen={setShare} post={post}/>
 
             <div className="flex justify-between bg-[var(--topic)] rounded-t-xl p-[0.5rem] px-4">
                 <div className="flex items-center gap-2">
@@ -352,7 +372,7 @@ function PostCard ({ post, index, list, followers }) {
                         <i className={`text-[var(--text)] fa-solid fa-ellipsis`}></i>
                     </div>
                     <ul tabIndex={0} className={`dropdown-content menu bg-[var(--card)] rounded-md z-[1] w-52 p-4 gap-4 shadow-sm shadow-[var(--text)] text-[var(--buttons)]`}>
-                        <li className="hover:cursor-pointer"><span>Not Intrested</span></li>
+                        <li onClick={handleCopy} className="hover:cursor-pointer"><span>Copy Link</span></li>
                         {(authState._id === userId) && <li
                             className="hover:cursor-pointer text-red-400 flex flex-row justify-between"
                             onClick={Deletepost}>
@@ -376,7 +396,7 @@ function PostCard ({ post, index, list, followers }) {
                 </div>
             </div>
 
-            {width > 530 ? <div className="flex justify-start gap-3 h-[25rem] my-4 px-4">
+            {width > 530 ? <Link to={`/posts/${post._id}`} state={{ backgroundLocation: location }} className="flex justify-start gap-3 h-[25rem] my-4 px-4">
                 {images?.length > 0 && <div className={`relative ${images.length > 3 ? `w-[35%]` : images?.length > 2 ? `w-[33%]` : images?.length > 1 ? `w-[50%]` : `w-full`} h-full flex justify-center hover:cursor-pointer bg-black`} onClick={() => setDialogOpen(true)}>
                     <img
                         src={images[0]?.url}
@@ -425,8 +445,8 @@ function PostCard ({ post, index, list, followers }) {
                         )}
                     </div>}
                 </div>}
-            </div> :
-            <div className="relative flex justify-center items-center w-full h-[20rem] py-4 bg-black my-2">
+            </Link> :
+            <Link to={`/posts/${post._id}`} state={{ backgroundLocation: location }} className="relative flex justify-center items-center w-full h-[20rem] py-4 bg-black my-2">
                 <div className="carousel w-full h-full relative">
                     {post.image?.map((img, idx) => (
                         <div
@@ -470,7 +490,7 @@ function PostCard ({ post, index, list, followers }) {
                     </div>
                 )}
                 {totalItems > 1 && <div className="absolute top-2 right-2 bg-black/70 text-white rounded-md text-xs w-max p-1">{currentIndex + 1} / {totalItems}</div>}
-          </div>}
+          </Link>}
             
             {(countLike - liked > 0 || countComment > 0) && <div className="mt-2 flex gap-2 w-full px-4 text-xs text-[var(--text)]">
                 {countLike - liked > 0 && <h2>

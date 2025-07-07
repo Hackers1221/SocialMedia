@@ -238,15 +238,6 @@ const Profile = () => {
               <IoMdPulse className="mr-2" />
               <h2 className='font-bold'>Pulse</h2>
             </div>
-
-            {/* <div
-              className={`flex gap-2 w-full justify-center py-4 px-4 items-center hover:cursor-pointer 
-                          ${selected === 'Verse' ? `text-[var(--buttons)] bg-[var(--topic)]` : `text-[var(--text)]`}`}
-              onClick={() => setSelected('Verse')}
-            >
-              <IoMdPulse className="mr-2" />
-              <h2 className='font-bold'>Verse</h2>
-            </div> */}
           </div>
         </div>}
 
@@ -278,7 +269,7 @@ const Profile = () => {
                   <div className="w-full h-screen columns-2 sm:columns-3 md:columns-4">
                     {!isLoading &&
                       pulseState?.pulseList?.map((pulse, index) => (
-                        <div key={index} className="h-[20rem] flex flex-col justify-center rounded-lg hover:cursor-pointer" onClick={() => handlePulseClick (index)}>
+                        <div key={index} className="h-[18rem] flex flex-col justify-center rounded-lg hover:cursor-pointer" onClick={() => handlePulseClick (index)}>
                             <img
                                 src={pulseThumbnails[index]}
                                 className="rounded-lg shadow-md h-full w-full"
@@ -289,26 +280,9 @@ const Profile = () => {
                 </div>
               ) : (
                 <h2 className="w-full text-center font-extralight text-[var(--text)]">
-                  No posts to show
+                  No pulse to show
                 </h2>
               ))}
-
-            {/* {selected === "Verse" &&
-              (verseState?.verseList?.length > 0 ? (
-                <div>
-                  {isLoading && <SkeletonPostCard />}
-                  <div className="w-full h-screen">
-                    {!isLoading &&
-                      verseState?.verseList?.map((verse, key) => (
-                        <VerseCard verse={verse} key={key} />
-                      ))}
-                  </div>
-                </div>
-              ) : (
-                <h2 className="w-full text-center font-extralight text-[var(--text)]">
-                  No verse to show
-                </h2>
-              ))} */}
           </>
         )}
 

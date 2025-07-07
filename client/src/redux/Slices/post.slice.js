@@ -6,6 +6,7 @@ const initialState = {
     downloadedPosts: [],
     postList: [],
     savedList:[],
+    relatedPosts: [],
     interestList: ""
 };
 
@@ -87,7 +88,7 @@ export const getPostByUserId = createAsyncThunk('post/getpost' ,async(id, { disp
     }
 })
 
-export const getPostById = createAsyncThunk('post/getpostnyId' ,async(id, { dispatch }) => {
+export const getPostById = createAsyncThunk('post/getpostById' ,async(id, { dispatch }) => {
     try {
         const response = await axiosInstance.get(`post/${id}`, { 
             headers: {
@@ -182,6 +183,19 @@ export const getExplorePost = createAsyncThunk('explorePost',async(id, { dispatc
     }
 })
 
+export const getRelatedPosts = createAsyncThunk('relatedPost',async (id, { dispatch }) => {
+    try {
+        const response = await axiosInstance.get(`post/relatedPost/${id}`,{
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            },
+        })
+        if (response) return response;
+    } catch (error) {
+        dispatch (showToast ({ message: error.response.data.error || "Failed to get the posts!", type: 'error' }));
+    }
+})
+
 const PostSlice = createSlice({
     name: 'post',
     initialState,
@@ -218,6 +232,9 @@ const PostSlice = createSlice({
             }
 
             state.postList = [...matchingPosts, ...nonMatchingPosts];
+        },
+        clearRelatedPosts: (state) => {
+            state.relatedPosts = [];
         }
     },
     extraReducers: (builder) => {
@@ -261,9 +278,13 @@ const PostSlice = createSlice({
                     state.postList[index] = action.payload.data.postDetails;
                 }
             })
+            .addCase (getRelatedPosts.fulfilled, (state, action) => {
+                if (!action.payload.data) return;
+                state.relatedPosts = action.payload.data.posts;
+            })
     }
 });
 
-export const { filterPostsByUser, filterPostsByLiked, filterPostsByFollowing, filterPostByInterests } = PostSlice.actions;
+export const { filterPostsByUser, filterPostsByLiked, filterPostsByFollowing, filterPostByInterests, clearRelatedPosts } = PostSlice.actions;
 
 export default PostSlice.reducer;

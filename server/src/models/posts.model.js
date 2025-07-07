@@ -29,7 +29,8 @@ const postSchema = new Schema({
         required : true
     },
     userId : {
-        type : String,
+        type : mongoose.Schema.Types.ObjectId,
+        ref: "Users",
         required : true
     },
     createdAt: {

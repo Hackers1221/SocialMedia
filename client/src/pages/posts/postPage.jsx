@@ -3,7 +3,7 @@ import PostCard from "../../components/PostCard";
 import { useEffect, useState } from "react";
 import { filterPostsByFollowing, filterPostsByLiked, getAllPosts, getSavedPost } from "../../redux/Slices/post.slice";
 import SkeletonPostCard from "../../components/SkeletonPostCard";
-import { getFollowerDetails, getTopUsers } from "../../redux/Slices/auth.slice";
+import { getTopUsers } from "../../redux/Slices/auth.slice";
 import { Link, useSearchParams } from "react-router-dom";
 import { showToast } from '../../redux/Slices/toast.slice';
 
@@ -18,7 +18,6 @@ function PostPage() {
 
     const [isLoading, setIsLoading] = useState (false);
     const [selected, setSelected] = useState ("All");
-    const [followers, setFollowers] = useState ([]);
     const [searchParams, setSearchParams] = useSearchParams ();
 
     const options = ["All", "Following", "Liked"]
@@ -62,11 +61,6 @@ function PostPage() {
         if (option === "All") await dispatch (getAllPosts ());
     }
 
-    const getDetails = async() => {
-        const response = await dispatch(getFollowerDetails (authState.data._id));
-        setFollowers(response.payload?.data?.userdata);
-    }
-
     const type = searchParams.get("type") || "All";
 
     useEffect (() => {
@@ -77,7 +71,6 @@ function PostPage() {
         optionChange (type);
         getPosts ();
         getSavedPosts ();
-        getDetails ();
         getTopUser ();
     }, [])
 
@@ -138,7 +131,7 @@ function PostPage() {
                 {!isLoading && <div className="pt-4 w-full h-screen">
                     {postState?.postList?.length > 0 ? postState?.postList?.map((post, index) => (
                         <div key={index}>
-                            <PostCard post={post} index={index + 1} list={"postList"} followers={followers}/>
+                            <PostCard post={post} index={index + 1}/>
                         </div>
                     )) : <h2 className={`w-full text-center font-extralight text-[var(--text)]`}>No posts to show</h2>}
                 </div>}

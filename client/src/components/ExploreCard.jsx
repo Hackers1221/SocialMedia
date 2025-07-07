@@ -1,16 +1,24 @@
 import { useState } from "react";
 import DisplayPost from "./DisplayPost";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function ExploreCard ({ post, postThumbnail, video, index, list, followers }) {
+    const location = useLocation ();
+    const navigate = useNavigate ();
 
     const [isOpen, setOpen] = useState (false);
 
     const tempCaption = post?.caption?.length < 100 ? post?.caption : post?.caption?.toString().slice(0, 100) + " ...";
 
+    function openPost () {
+        navigate(`/posts/${post._id}`, { state: { backgroundLocation: location.pathname } });
+    }
+
+
     return (
         <>
-            <DisplayPost open={isOpen} setOpen={setOpen} index={index} list={list} followers={followers}/>
-            <div className="relative w-full h-max rounded-xl bg-[var(--card)] mb-4 break-inside-avoid shadow-xl hover:shadow-2xl hover:cursor-pointer" onClick={() => setOpen(true)}>
+            {/* <DisplayPost open={isOpen} setOpen={setOpen} index={index} list={list} followers={followers}/> */}
+            <div onClick={openPost} className="relative w-full h-max rounded-xl bg-[var(--card)] mb-4 break-inside-avoid shadow-xl hover:shadow-2xl hover:cursor-pointer">
                 <img 
                     src={postThumbnail}
                     className={`w-full rounded-t-xl object-cover`}

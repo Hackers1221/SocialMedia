@@ -168,7 +168,7 @@ const getPostByUserId = async(id) => {
 const getPostById = async(id) => {
     const response = {};
     try {
-        const postdata = await Posts.findById(id);
+        const postdata = await Posts.findById(id).populate("userId", "id username name image");
         if(!postdata){
             response.error = "Post not found";
             return response;
@@ -306,6 +306,51 @@ const getExplorePost = async (userId) => {
     }
 };
 
+async function getRelatedPosts (postId) {
+    const response = {};
+    try {
+        const originalPost = await Posts.findById(postId);
+        if (!originalPost) {
+            response.error = "Post not found"; return;
+        }
+
+        // Collect interest keywords from original post
+        const keywordSet = new Set();
+        originalPost.interests[0].split (" ").forEach (word => keywordSet.add (word.toLowerCase()));
+
+        const keywords = Array.from (keywordSet); // e.g., ["nature", "film"]
+        const keywordRegex = keywords.join ("|"); // e.g., "nature|film"
+
+        // 1. Find similar interest posts
+        const similarPosts = await Posts.find({
+        _id: { $ne: postId },
+        interest: {
+            $elemMatch: {
+                $regex: keywordRegex,
+                $options: "i"
+            }
+        }
+        }).select("_id");
+
+        const similarIds = similarPosts.map (post => post._id.toString ());
+
+        // 2. Find remaining posts
+        const otherPosts = await Posts.find({
+            _id: { $nin: [postId, ...similarIds] }
+        }).select("_id");
+
+        const otherIds = otherPosts.map (post => post._id.toString ());
+
+        // 3. Return combined list of IDs
+        response.posts = [postId, ...similarIds, ...otherIds];
+        return response;
+    } catch (error) {
+        response.error = error.message;
+        return response;
+    }
+}
+
+
 
 module.exports = {
     CreatePost,
@@ -318,5 +363,6 @@ module.exports = {
     getAllSavedPost,
     DeletePost,
     searchPost,
-    getExplorePost
+    getExplorePost,
+    getRelatedPosts
 };
