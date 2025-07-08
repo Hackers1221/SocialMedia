@@ -30,13 +30,17 @@ function Pulse () {
 
     // Scroll to initial pulse if pulseId exists
     useEffect(() => {
-        if (pulseId && array.length > 0) {
-            const index = array.findIndex(p => p._id === pulseId);
-            if (index >= 0 && cardRefs.current[index]) {
-                cardRefs.current[index].scrollIntoView({ behavior: "instant", block: "start" });
-            }
+    if (pulseId && array.length > 0) {
+        const index = array.findIndex(p => p._id === pulseId);
+
+        if (index >= 0 && cardRefs.current[index]) {
+            cardRefs.current[index].scrollIntoView({ behavior: "instant", block: "start" });
+        } else {
+            navigate (-1);
+            dispatch (showToast ({ type: "error", message: "Pulse no longer exists!" }));
         }
-    }, [pulseId, array]);
+    }
+}, [pulseId, array, dispatch]);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -46,8 +50,7 @@ function Pulse () {
                         const index = Number(entry.target.dataset.index);
                         const pulse = array[index];
                         if (pulse && pulse._id !== pulseId) {
-                            navigate (-1);
-                            dispatch (showToast ({ message: "The pulse no longer exists!" , type: "error"}));
+                            navigate(`/pulse/${pulse._id}`);
                         }
                     }
                 }
