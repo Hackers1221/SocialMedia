@@ -279,7 +279,7 @@ const PostSlice = createSlice({
                 }
             })
             .addCase (getRelatedPosts.fulfilled, (state, action) => {
-                if (!action.payload.data) return;
+                if (!action.payload?.data) return;
                 state.relatedPosts = action.payload.data.posts;
             })
     }

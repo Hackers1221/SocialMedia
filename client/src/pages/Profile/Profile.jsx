@@ -83,7 +83,7 @@ const Profile = () => {
         video.muted = true; // Prevents autoplay issues in some browsers
 
         video.addEventListener("loadedmetadata", () => {
-            video.currentTime = Math.min(20, video.duration / 2); // Seek to a valid frame
+            video.currentTime = Math.min(1, video.duration / 2); // Seek to a valid frame
         });
 
         video.addEventListener("seeked", () => {
@@ -269,7 +269,7 @@ const Profile = () => {
                   <div className="w-full h-screen columns-2 sm:columns-3 md:columns-4">
                     {!isLoading &&
                       pulseState?.pulseList?.map((pulse, index) => (
-                        <div key={index} className="h-[18rem] flex flex-col justify-center rounded-lg hover:cursor-pointer" onClick={() => handlePulseClick (index)}>
+                        <div key={index} className="h-[18rem] flex flex-col justify-center rounded-lg hover:cursor-pointer" onClick={() => navigate (`/pulse/${pulse._id}`, {state: {source: "postList"}})}>
                             <img
                                 src={pulseThumbnails[index]}
                                 className="rounded-lg shadow-md h-full w-full"

@@ -26,9 +26,15 @@ const messageSchema = new Schema({
         type : String,
         default : ""
     },
-    isPost: {
-        type: Boolean,
-        default: false
+    targetType: {
+        type: String,
+        required: true
+    },
+    postId: {
+        type: String,
+        required: function () {
+            return this.targetType !== "message";
+        }
     },
     messageType : {
         type : Boolean,

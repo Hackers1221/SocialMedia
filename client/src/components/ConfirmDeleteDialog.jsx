@@ -8,8 +8,10 @@ import { deleteUser } from "../redux/Slices/auth.slice";
 import { useNavigate } from "react-router-dom";
 import { deleteAnnouncement } from "../redux/Slices/announcement.slice";
 import { showToast } from "../redux/Slices/toast.slice";
+import { DeletePost, getAllPosts } from "../redux/Slices/post.slice";
+import { deletePulse } from "../redux/Slices/pulse.slice";
 
-export default function ConfirmDeleteDialog({ open, setOpen, type, id }) {
+export default function ConfirmDeleteDialog({ open, setOpen, type, id, data }) {
     const socket = useSelector ((state) => state.socket.socket);
     const liveGroup = useSelector ((state) => state.group.liveGroup);
     const authState = useSelector ((state) => state.auth);
@@ -49,6 +51,34 @@ export default function ConfirmDeleteDialog({ open, setOpen, type, id }) {
             await dispatch (deleteAnnouncement (id));
         } catch (error) {
             dispatch (showToast ({ message: error.message, type: 'error' }));
+            setDeleting (false);
+        } finally {
+            setOpen (false);
+            setDeleting (false);
+        }
+    }
+
+    async function handlePostDelete () {
+        setDeleting(true);
+        try {
+            await dispatch (DeletePost (data));
+        } catch (error) {
+            await dispatch (getAllPosts ());
+            dispatch (showToast ({ message: error.message, type: 'error' }));
+            setDeleting (false);
+        } finally {
+            setOpen (false);
+            setDeleting (false);
+        }
+    }
+
+    async function handlePulseDelete () {
+        setDeleting(true);
+        try {
+            await dispatch (deletePulse (data));
+        } catch (error) {
+            dispatch (showToast ({ message: error.message, type: 'error' }));
+            setDeleting (false);
         } finally {
             setOpen (false);
             setDeleting (false);
@@ -59,6 +89,8 @@ export default function ConfirmDeleteDialog({ open, setOpen, type, id }) {
         if (type === "accountDelete") handleDeleteAccount ();
         if (type === "groupDelete") handleGroupDelete ();
         if (type === "announcementDelete") handleAnnouncementDelete ();
+        if (type === "postDelete") handlePostDelete ();
+        if (type === "pulseDelete") handlePulseDelete ();
     }
 
     useEffect (() => {
@@ -73,6 +105,14 @@ export default function ConfirmDeleteDialog({ open, setOpen, type, id }) {
         if (type === "announcementDelete") {
             setMessage ("Are you sure you want to delete this announcement?");
             setWarning ("Are you sure you want to delete this announcement? This action cannot be undone");
+        }
+        if (type === "postDelete") {
+            setMessage("Are you sure you want to delete this post?");
+            setWarning("Are you sure you want to delete this post? This action cannot be undone");
+        }
+        if (type === "pulseDelete") {
+            setMessage("Are you sure you want to delete this pulse?");
+            setWarning("Are you sure you want to delete this pulse? This action cannot be undone");
         }
     }, [type])
 

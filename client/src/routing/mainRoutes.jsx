@@ -25,7 +25,7 @@ function MainRoutes() {
 
   const [width, setWidth] = useState (window.innerWidth);
 
-  // 👇 Keeps track of the page we were on when navigating to /posts/:id
+  // 👇 Keeps track of the page we were on when navigating to /post/:id
   const backgroundLocation = state?.backgroundLocation || location;
 
     useEffect (() => {
@@ -38,28 +38,28 @@ function MainRoutes() {
     <>
         <Routes location={width > 1000 ? backgroundLocation : location}>
             <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="signup" element={<SendOtp />} />
-            <Route path="verifyotp" element={<VerifyOtp />} />
-            <Route path="forgetpass" element={<ForgetPassword />} />
-            <Route path="resetpass" element={<ResetPassword />} />
-            <Route path="register" element={<SignUp />} />
-            <Route path="login" element={<LogIn />} />
-            <Route path="saved" element={<SavedPost />} />
-            <Route path="profile/:username" element={<Profile />} />
-            <Route path="explore" element={<Explore />} />
-            <Route path="message" element={<Messenger />} />
-            <Route path="notification" element={<Notification />} />
-            <Route path="pulse" element={<Pulse />} />
-            <Route path="settings" element={<Settings />} />
-            <Route path="posts/:postId" element={<PostDisplay />} />
+                <Route index element={<Home />} />
+                <Route path="signup" element={<SendOtp />} />
+                <Route path="verifyotp" element={<VerifyOtp />} />
+                <Route path="forgetpass" element={<ForgetPassword />} />
+                <Route path="resetpass" element={<ResetPassword />} />
+                <Route path="register" element={<SignUp />} />
+                <Route path="login" element={<LogIn />} />
+                <Route path="saved" element={<SavedPost />} />
+                <Route path="profile/:username" element={<Profile />} />
+                <Route path="explore" element={<Explore />} />
+                <Route path="message" element={<Messenger />} />
+                <Route path="notification" element={<Notification />} />
+                <Route path="pulse/:pulseId" element={<Pulse />} />
+                <Route path="settings" element={<Settings />} />
+                <Route path="post/:postId" element={<PostDisplay />} />
             </Route>
       </Routes>
 
       {/* Modal overlay only for desktop */}
       {state?.backgroundLocation && width > 1000 && (
         <Routes>
-          <Route path="/posts/:postId" element={<DisplayPost />} />
+          <Route path="/post/:postId" element={<DisplayPost />} />
         </Routes>
       )}
     </>

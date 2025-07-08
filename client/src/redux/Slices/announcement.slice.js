@@ -23,7 +23,6 @@ export const getAllAnonuncement = createAsyncThunk('announcement/getAllAnounceme
 
 export const createAnnouncement = createAsyncThunk('announcement/createAnouncement', async (data, { dispatch }) => {
     try {
-        console.log (data);
         const response = await axiosInstance.post('announcement/announcement', data, {
             headers: {
                 'x-access-token': localStorage.getItem('token')

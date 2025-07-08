@@ -262,6 +262,7 @@ const DisplayPost = () => {
 
             setPost (res.payload.data.postDetails);
         } catch (error) {
+            navigate (-1);
             dispatch (showToast ({ message: "Could not load post", type: "error"}));
         } finally {
             setLoading (false);
@@ -270,7 +271,7 @@ const DisplayPost = () => {
 
     useEffect (() => {
         if (postList?.length > 0 && postList[postIndex] && postList[postIndex] != postId) {
-            navigate(`/posts/${postList[postIndex]}`, { state: { backgroundLocation } });
+            navigate(`/post/${postList[postIndex]}`, { state: { backgroundLocation } });
         }
     }, [postIndex])
 
@@ -320,8 +321,7 @@ const DisplayPost = () => {
         <>
         {post && <div className="fixed left-0 top-0 inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-[2]"></div>}
         <dialog ref={dialogRef} className={`w-[60%] h-[90vh] bg-[var(--card)] rounded-lg shadow-xl p-2`}>
-            <SelectedUser isOpen={isShare} setOpen={setShare} post={post} />
-
+            <SelectedUser isOpen={isShare} setOpen={setShare} post={post} target={"post"}/>
             <div className="fixed right-8 top-1/2 bottom-1/2 z-[50] hover:cursor-pointer" onClick={postForward} title="Next post">
             <i className="fa-solid fa-circle-chevron-right text-[var(--dropdown)] text-[2rem]"></i>
             </div>

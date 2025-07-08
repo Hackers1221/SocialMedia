@@ -80,7 +80,7 @@ const setupSocket = (server) => {
         recipient: message.recipient,
         content: formattedDate,
         files: [],
-        isPost: message.isPost,
+        targetType: "message",
         messageType: true
       });
   
@@ -93,7 +93,7 @@ const setupSocket = (server) => {
       }
     }
 
-    if (message.isPost) {
+    if (message.targetType !== "message") {
         const parts = message.content.filename?.split('.') || message.content.image[0]?.filename?.split('.') || message.content.video[0]?.filename?.split('.');
         const extension = parts.pop();
         const base = parts.join('.');
@@ -110,14 +110,15 @@ const setupSocket = (server) => {
             });
         }
 
-        message.content = message.content.caption || ""
+        message.content = "";
     }
   
     // 3. Create the actual message
     const createdMessage = await Message.create({
         sender: message.sender,
         recipient: message.recipient,
-        isPost: message.isPost,
+        targetType: message.targetType,
+        postId: message.postId,
         content: message.content,
         messageType: false,
         files: uploadedFiles

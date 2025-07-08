@@ -139,7 +139,7 @@ const SavedPost = () => {
       {activeTab == "pulse" && (pulseState.savedList?.length > 0 ? <div className="w-full mt-4">
         <div className="columns-2 sm:columns-3 md:columns-4 gap-3 overflow-y-auto">
             {pulseState.savedList?.map((pulse, index) => (
-                <div key={index} className="h-[18rem] flex flex-col justify-center rounded-lg hover:cursor-pointer" onClick={() => handlePulseClick (index)}>
+                <div key={index} className="h-[18rem] flex flex-col justify-center rounded-lg hover:cursor-pointer" onClick={() => navigate (`/pulse/${pulse._id}`, {state: {source: "savedList"}})}>
                     <img
                         src={pulseThumbnails[index]}
                         className="rounded-lg shadow-md h-full w-full"

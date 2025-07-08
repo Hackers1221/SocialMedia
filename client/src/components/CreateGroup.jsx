@@ -128,6 +128,10 @@ function CreateGroup ({ isOpen, setOpen }) {
         setQueriedFollowers(response.payload?.data?.userdata);
     }
 
+    function onClose () {
+        setOpen (!open);
+    }
+
     useEffect(() => {
         getDetails();
     },[])
@@ -153,8 +157,7 @@ function CreateGroup ({ isOpen, setOpen }) {
     return (
         <>
             {isOpen && <div className="fixed left-0 top-0 inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-[20]"></div>}
-            <dialog ref={dialogRef} className="w-[30%] h-[80%] bg-[var(--background)]">
-                <button onClick={close} className={`fixed top-5 right-6 w-max h-max text-white font-bold text-xl focus:outline-none hover:cursor-pointer z-[500]`}>✕</button>
+            <dialog ref={dialogRef} className="relative w-[95%] md:w-[40%] h-[80%] bg-[var(--background)]">
                 {!groupEdit && <div className="relative flex justify-center h-full w-full">
                     <div className="p-4 w-full">
                         <h2 className="font-bold text-md">Create group</h2>
@@ -178,11 +181,16 @@ function CreateGroup ({ isOpen, setOpen }) {
                             ))}
                         </div>
                     </div>
-                    <div onClick={goNext} className="absolute bottom-4 bg-[var(--buttons)] w-[80%] flex justify-center items-center rounded-md py-2 hover:cursor-pointer">
-                        <h2 className="text-black font-bold text-[var(--buttonText)]">Next</h2>
+                    <div className="absolute bottom-4 flex justify-evenly gap-4 w-full h-[2.5rem] px-4">
+                        <div onClick={close} className=" bg-[var(--buttons)] w-full flex justify-center items-center rounded-md py-2 hover:cursor-pointer">
+                            <h2 className="text-black font-bold text-[var(--buttonText)] p-2 rounded-md w-full text-center">Cancel</h2>
+                        </div>
+                        <div onClick={goNext} className="bg-[var(--buttons)] w-full flex justify-center items-center rounded-md py-2 hover:cursor-pointer">
+                            <h2 className="text-black font-bold text-[var(--buttonText)]">Next</h2>
+                        </div>
                     </div>
                 </div>}
-                {groupEdit && <div className="relative h-full w-full p-4">
+                {groupEdit && <div className="h-full w-full p-4">
                     <div className="w-full flex justify-start items-center">
                         <i className="fa-solid fa-arrow-left hover:cursor-pointer" onClick={goBack}></i>
                     </div>
@@ -223,12 +231,17 @@ function CreateGroup ({ isOpen, setOpen }) {
                             <User chat={user.id} type={'follower'} key={index}/>
                         ))}
                     </div>
-                    <div onClick={submit} className="absolute bottom-4 bg-[var(--buttons)] w-[90%] flex justify-center items-center rounded-md py-2 hover:cursor-pointer">
-                        <h2 className="text-black font-bold text-[var(--buttonText)]">{loading ? (
-                            <FaSpinner className="animate-spin mr-2" />
-                        ) : (
-                            "Submit"
-                        )}</h2>
+                    <div className="absolute bottom-4 flex justify-evenly gap-4 w-[95%] h-[2.5rem] px-4">
+                        <div onClick={close} className=" bg-[var(--buttons)] w-full flex justify-center items-center rounded-md py-2 hover:cursor-pointer">
+                            <h2 className="text-black font-bold text-[var(--buttonText)] p-2 rounded-md w-full text-center">Cancel</h2>
+                        </div>
+                        <div onClick={submit} className="bg-[var(--buttons)] w-full flex justify-center items-center rounded-md py-2 hover:cursor-pointer">
+                            <h2 className="text-black font-bold text-[var(--buttonText)] p-2 rounded-md w-full text-center">{loading ? (
+                                <FaSpinner className="animate-spin mr-2" />
+                            ) : (
+                                "Submit"
+                            )}</h2>
+                        </div>
                     </div>
                 </div>}
             </dialog>

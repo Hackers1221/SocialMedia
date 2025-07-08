@@ -11,8 +11,9 @@ import usePulse from "../hooks/usePulse";
 import { showToast } from "../redux/Slices/toast.slice";
 import LinkDetector from "./LinkDetector";
 import { Link } from "react-router-dom";
+import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
 
-export default function PulseCard({ pulse, followers }) {
+export default function PulseCard({ pulse }) {
     const authState = useSelector((state) => state.auth);
     const [pulseState] = usePulse();
 
@@ -29,16 +30,10 @@ export default function PulseCard({ pulse, followers }) {
     const [saved, setSaved] = useState();
     const [videoThumbnail, setVideoThumbnail] = useState ("");
     const [optionOpen, setOptionOpen] = useState (false);
+    const [isDeleteDialog, setIsdeleteDialog] = useState (false);
 
     const videoRef = useRef(null);
     const timeoutRef = useRef(null);
-
-    const onDelete = async () => {
-        const res = await dispatch (deletePulse ({
-            pulseId: pulse._id,
-            userId: authState.data._id
-        }))
-    }
 
     const togglePlay = () => {
         if (videoRef.current) {
@@ -91,7 +86,6 @@ export default function PulseCard({ pulse, followers }) {
 
     const toggleBookmark = async () => {
         extractThumbnail (pulse.video);
-        console.log (pulse);
 
         const response = await dispatch(updateSavedPulse({
             _id1: authState.data._id,
@@ -181,13 +175,21 @@ export default function PulseCard({ pulse, followers }) {
     }, []);
 
     return (
-        <div className="reel-container w-full h-[95%] sm:w-96 md:h-[78vh] sm:h-[70vh] overflow-hidden overflow-x-visible rounded-xl shadow-lg flex-col justify-center relative bg-black">
-            <SelectedUser isOpen={isOpen} setOpen={setOpen} followers={followers} post={pulse} />
+        <div className="reel-container w-full h-[95%] sm:w-96 md:h-[78vh] sm:h-[70vh] overflow-hidden rounded-xl shadow-lg flex-col justify-center relative bg-black">
+            <SelectedUser isOpen={isOpen} setOpen={setOpen} post={pulse} target={"pulse"}/>
+            <ConfirmDeleteDialog
+                open={isDeleteDialog} 
+                setOpen={setIsdeleteDialog} 
+                type={"pulseDelete"}
+                data={{
+                    pulseId: pulse._id,
+                    userId: authState.data._id
+                }}
+            />
 
             {!showComment && (
                 <div onClick={togglePlay}>
                     <video ref={videoRef} className="w-max bg-black" src={pulse.video} loop></video>
-                    {/* <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-black to-transparent pointer-events-none"></div> */}
 
                     {showButton && (
                         <div className="absolute inset-0 flex items-center justify-center">
@@ -224,9 +226,9 @@ export default function PulseCard({ pulse, followers }) {
                             <i className="fa-regular fa-paper-plane text-white text-xl p-3 hover:cursor-pointer" onClick={() => setOpen(true)}></i>
                         </div>
 
-                        {authState.data._id == pulse.user?._id && <div className="relative overflow-x-visible flex flex-col items-center justify-center text-white px-2 z-[50]">
+                        {authState.data._id == pulse.user?._id && <div className="relative overflow-x-visible flex flex-col items-center justify-center text-white px-2 z-[100]">
                             {optionOpen && <div className="absolute bottom-4 right-4 w-40 p-4 bg-[var(--card)] rounded-sm shadow-lg">
-                                <h2 className="text-sm hover:cursor-pointer" onClick={onDelete}>Delete</h2>
+                                <h2 className="text-sm hover:cursor-pointer" onClick={() => setIsdeleteDialog (true)}>Delete</h2>
                             </div>}
                             <i className="fa-solid fa-ellipsis text-white hover:cursor-pointer" onClick={() => setOptionOpen ((prev) => !prev)}></i>
                         </div>}

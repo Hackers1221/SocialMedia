@@ -29,7 +29,7 @@ function Notification() {
 
   return (
     <div className={`fixed top-[4rem] md:top-[1rem]  md:left-[20rem] left-[1rem] w-[93%] md:w-[50%] h-[90vh] md:h-[97vh] flex flex-col flex-grow overflow-y-auto`}>
-      <div className="max-w-5xl w-full flex flex-col space-y-4">
+      <div className="max-w-5xl w-full flex flex-col gap-2">
         {/* Header */}
         <h2 className={`text-[var(--text)] heading text-[2rem] mb-4`}>Notifications</h2>
 
@@ -41,7 +41,7 @@ function Notification() {
                   onDecline={() => handleFollowDecline(Item)}
                 />
             </div>
-        )) : <h2 className={`w-full text-center font-extralight text-[var(--text)]`}>No Notifications for you!</h2>}
+        )) : <h2 className={`w-full text-center font-extralight text-[var(--text)]`}>No notifications for you!</h2>}
       </div>
     </div>
   );

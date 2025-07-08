@@ -127,8 +127,6 @@ const likePost = async(id, userId) => {
                 // Immediately fetch the populated version
                 const populatedNotification = await Notification.findById(notification._id)
                 .populate("sender", "id username image")
-                .populate("post", "caption")
-                .populate("pulse", "caption");
 
                 const recipientSocketId = userSocketMap.get(post.userId.toString());
                 if (recipientSocketId) {
@@ -311,7 +309,7 @@ async function getRelatedPosts (postId) {
     try {
         const originalPost = await Posts.findById(postId);
         if (!originalPost) {
-            response.error = "Post not found"; return;
+            response.error = "Post not found"; return response;
         }
 
         // Collect interest keywords from original post

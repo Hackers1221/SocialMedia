@@ -103,7 +103,7 @@ const likePulse = async(id, userId) => {
 
                 // Immediately fetch the populated version
                 const populatedNotification = await Notification.findById(notification._id)
-                .populate("sender", "id username avatarUrl")
+                .populate("sender", "id username image")
                 .populate("post", "caption")
                 .populate("pulse", "caption");
 
@@ -193,8 +193,6 @@ const DeletePulse = async(id, userId) => {
             console.log("Error deleting media:", cloudError);
         }
         //----------------------------
-
-        console.log ("Check --------------->", PulseDetails);
 
         const deletecomments = await Comment.deleteMany({postId : id});
         const userDetails = await User.findById(userId);

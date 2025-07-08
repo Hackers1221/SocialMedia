@@ -7,7 +7,7 @@ import { getUserById } from "../redux/Slices/auth.slice";
 import { showToast } from "../redux/Slices/toast.slice";
 import Loader from "./Loader";
 
-function SelectedUser ({ isOpen, setOpen, post }) {
+function SelectedUser ({ isOpen, setOpen, post, target }) {
     const socket = useSelector ((state) => state.socket.socket);
     const authState = useSelector ((state) => state.auth);
 
@@ -25,7 +25,8 @@ function SelectedUser ({ isOpen, setOpen, post }) {
                 sender: user.addedBy,
                 recipient: user.id,
                 content: post,
-                isPost: true,
+                targetType: target,
+                postId: post._id,
                 files: []
             };
 
@@ -41,7 +42,7 @@ function SelectedUser ({ isOpen, setOpen, post }) {
 
     const copyLink = async () => {
         try {
-            const postLink = `${window.location.origin}/posts/${post._id}`
+            const postLink = `${window.location.origin}/${target}/${post._id}`
             await navigator.clipboard.writeText(postLink);
             dispatch (showToast ({
                 message: "Link copied to clipboard!",
@@ -91,8 +92,7 @@ function SelectedUser ({ isOpen, setOpen, post }) {
     return (
         <>
             {isOpen && <div className="fixed left-0 top-0 inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-10"></div>}
-            <dialog ref={dialogRef} className="w-[30%] h-[80%] bg-[var(--background)] py-4 z-10">
-                <button onClick={() => setOpen (!isOpen)} className={`fixed top-5 right-6 w-max h-max text-white font-bold text-xl focus:outline-none hover:cursor-pointer z-[10]`}>✕</button>
+            <dialog ref={dialogRef} className="w-[95%] md:w-[40%] h-[80%] bg-[var(--background)] py-4 z-10">
                 <div className="relative flex flex-col gap-2 px-4 h-full">
                     <div className={`flex items-center w-full rounded-md px-2 my-4 shadow-md border border-[var(--input)]`}>
                         <i className="fa-solid fa-magnifying-glass text-[var(--heading)]"></i>
@@ -112,7 +112,7 @@ function SelectedUser ({ isOpen, setOpen, post }) {
                         <AddUser userId={user._id} image={user.image} username={user.username} members={selectedUsers} setMembers={setSelectedUsers} key={key}/>
                     )) : <h2>No user to send</h2>}
 
-                    <div className="absolute bottom-4 w-[93%] flex justify-evenly items-center gap-2">
+                    <div className="absolute bottom-[4rem] w-[93%] flex justify-evenly items-center gap-2">
                         <div onClick={copyLink} className="w-full flex justify-center items-center rounded-md py-2 hover:cursor-pointer">
                             
                             <h2 className="text-black font-bold text-[var(--buttonText)] bg-[var(--buttons)] p-2 rounded-md w-full text-center">
@@ -121,6 +121,9 @@ function SelectedUser ({ isOpen, setOpen, post }) {
                         <div onClick={share} className="w-full flex justify-center items-center rounded-md py-2 hover:cursor-pointer">
                             <h2 className="text-black font-bold text-[var(--buttonText)] bg-[var(--buttons)] p-2 rounded-md w-full text-center">Send</h2>
                         </div>
+                    </div>
+                    <div onClick={() => setOpen (!open)} className="absolute bottom-4 w-[93%] flex justify-center items-center rounded-md py-2 hover:cursor-pointer">
+                        <h2 className="text-black font-bold text-[var(--buttonText)] bg-[var(--buttons)] p-2 rounded-md w-full text-center">Cancel</h2>
                     </div>
                 </div>
             </dialog>

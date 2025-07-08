@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import ImagePreview from "./ImagePreview";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 function Message({ message }) {
     const authState = useSelector((state) => state.auth);
+
+    const navigate = useNavigate ();
+    const location = useLocation ();
 
     const [time, setTime] = useState();
     const [selectedImage, setSelectedImage] = useState ('');
@@ -13,9 +16,6 @@ function Message({ message }) {
     const baseMessage = message.messageType;
 
     const [content, setContent] = useState ("");
-
-    
-
 
     function getTime() {
         const date = new Date(message?.createdAt);
@@ -26,8 +26,22 @@ function Message({ message }) {
     }
 
     function openImage (url) {
+        if (message.targetType !== "message") {
+            if (message.targetType === "post") navigate(`/${message.targetType}/${message.postId}`, { state: { backgroundLocation: location.pathname } });
+            else navigate(`/${message.targetType}/${message.postId}`);
+            return;
+        }
         setSelectedImage (url);
         setOpen (true);
+    }
+
+    function onFileClick (url) {
+        if (message.targetType !== "message") {
+            navigate(`/${message.targetType}/${message.postId}`);
+            return;
+        }
+
+        window.open(url, "_blank");
     }
 
     function getContent () {
@@ -99,11 +113,11 @@ function Message({ message }) {
                     </div>
                 )}
 
-                <div className={`${message.sender._id !== authState.data?._id ? `bg-[var(--card)]` : `bg-green-900 text-white`} p-2 rounded-md inline-block max-w-[80%]`}>
-                    {message.isPost && <h2 className="w-full text-sm font-extralight italic">
-                        <i className="fa-solid fa-arrows-turn-right mr-2"></i>
-                        From posts
-                    </h2>}
+                <div className={`${message.sender._id !== authState.data?._id ? `bg-[var(--card)]` : `bg-[#528fd9] text-white`} rounded-md inline-block p-2 ${message.targetType !== "message" ? "w-[50%] md:w-[40%]": "max-w-[80%]"}`}>
+                    {message.targetType !== "message" && <div className="text-xs font-semibold italic">
+                        View
+                        {message.targetType === "pulse" ? " pulse" : " post"}
+                    </div>}
                     <div className="flex flex-col">
                     {(message.groupId.length > 0 && message.sender?._id !== authState.data?._id) && <Link to={`/profile/${message.sender?.username}`} className="text-[10px] font-extralight hover:underline">{message.sender?.username}</Link>}
                         {/* File previews */}
@@ -128,20 +142,20 @@ function Message({ message }) {
                                         />
                                     ) : isDocument 
                                     ? (
-                                        <a key={index} href={file.url} target='_blank' className="flex gap-4 items-center bg-[var(--card)] p-2">
+                                        <div key={index} onClick={() => onFileClick (file.url)} className="flex gap-4 items-center bg-[var(--card)] p-2">
                                             <i className="fa-solid fa-file"></i>
                                             <h2 className="text-sm">{file.name.slice(0,30) + (file.name.length > 30 ? " ..." : "")}</h2>
-                                        </a>
+                                        </div>
                                     ) 
                                     : (
-                                        <a key={index} href={file.url} target="_blank" className="relative">
+                                        <div key={index} onClick={() => onFileClick (file.url)} className="relative">
                                             <i className="fa-solid fa-play absolute top-[50%] bottom-[50%] right-[50%] left-[50%]"></i>
                                             <img
                                                 src={videoThumbnails[file.url]}
                                                 alt={file.name}
                                                 className="w-full max-h-96 rounded-md object-cover hover:cursor-pointer"
                                             />
-                                        </a>
+                                        </div>
                                     );
                                 })}
                             </div>

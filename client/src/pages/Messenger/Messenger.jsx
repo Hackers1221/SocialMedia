@@ -69,6 +69,7 @@ const Messenger = () => {
           sender: authState.data?._id,
           recipient: chatState.recipient?._id,
           content: message.trim(),
+          targetType: "message",
           files: encodedFiles, // array of base64 files
         };
   
@@ -101,6 +102,7 @@ const Messenger = () => {
           sender: authState.data?._id,
           recipient: groupState.liveGroup?.members,
           content: groupMessage.trim(),
+          targetType: "message",
           files: encodedFiles, // array of base64 files
         };
   

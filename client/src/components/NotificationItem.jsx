@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 function NotificationItem({
   Item,
@@ -6,8 +7,16 @@ function NotificationItem({
   onDecline,
 }) {
 
+    const navigate = useNavigate ();
+    const location = useLocation ();
+
   const {type, sender, recipient, targetType, post, pulse, commentText, timestamp} = Item;
   const [time, setTime] = useState("");
+
+    function openPost () {
+        if (targetType === "post") navigate(`/post/${post._id}`, { state: { backgroundLocation: location.pathname } });
+        if (targetType === "pulse") navigkate(`/pulse/${pulse._id}`);
+    }
 
   // converting time in words
   function getTimeDifference(dateString) {
@@ -54,9 +63,8 @@ function NotificationItem({
     return `${diffInYears}y`;
   }
 
-
   const renderAvatar = () => (
-    <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-100 flex-shrink-0">
+    <div className="w-8 h-8 rounded-full overflow-hidden bg-gray-100 flex-shrink-0">
       {sender.image?.url ? (
         <img src={sender.image.url} alt={sender.username} className="w-full h-full object-cover" />
       ) : (
@@ -67,7 +75,7 @@ function NotificationItem({
     </div>
   );
   const getTime = () => (
-    <span className="absolute top-8 right-5 text-xs text-[var(--text)]">{time} ago</span>
+    <span className="absolute right-5 text-xs text-[var(--text)]">{time} ago</span>
   );
 
   useEffect(() => {
@@ -77,15 +85,17 @@ function NotificationItem({
   if (type === "like") {
     return (
       <div
-        className="flex items-center gap-4 relative p-4 bg-[var(--card)] rounded-2xl shadow-sm hover:shadow-md cursor-pointer transition w-full"
+        onClick={openPost}
+        className="flex items-center gap-4 relative p-4 bg-[var(--card)] rounded-md shadow-sm hover:shadow-md cursor-pointer transition w-full"
       >
         {getTime()}
         {renderAvatar()}
         <div className="flex-1">
           <p className="text-sm text-[var(--heading)]">
-            <span className="font-semibold text-[var(--heading)]">{sender.username}</span> liked your {targetType}{" "}
-            {post && <span className="font-medium text-[var(--text)] w-[80%]">"{post.caption}"</span>}
-            {pulse && <span className="font-medium text-[var(--text)] w-[80%]">"{pulse.caption}"</span>}
+            <Link 
+                to={`/profile/${sender.username}`} 
+                onClick={(e) => e.stopPropagation ()} 
+                className="font-semibold text-[var(--heading)] hover:underline">{sender.username}</Link> liked your {targetType}{" "}
           </p>
         </div>
       </div>
@@ -95,13 +105,18 @@ function NotificationItem({
   if (type === "mention") {
     return (
       <div
+        onClick={openPost}
         className="flex items-center gap-4 relative p-4 bg-[var(--card)] rounded-2xl shadow-sm hover:shadow-md cursor-pointer transition w-full"
       >
         {getTime()}
         {renderAvatar()}
         <div className="flex-1">
           <p className="text-sm text-[var(--heading)]">
-            <span className="font-semibold text-[var(--heading)]">{sender.username}</span> mentioned you in a recent {targetType}{" "}
+            <Link 
+                to={`/profile/${sender.username}`} 
+                onClick={(e) => e.stopPropagation ()} 
+                className="font-semibold text-[var(--heading)]">{sender.username}
+            </Link> mentioned you in a recent {targetType}{" "}
           </p>
         </div>
       </div>
@@ -111,13 +126,17 @@ function NotificationItem({
   if (type === "comment") {
     return (
       <div
+        onClick={openPost}
         className="flex items-start gap-4 relative p-4 bg-[var(--card)] rounded-2xl shadow-sm hover:shadow-md cursor-pointer transition w-full"
       >
         {getTime()}
         {renderAvatar()}
         <div className="flex-1">
           <p className="text-sm text-[var(--heading)] mb-1">
-            <span className="font-semibold">{sender.username}</span> commented on your {targetType}
+            <Link 
+                to={`/profile/${sender.username}`} 
+                onClick={(e) => e.stopPropagation ()} 
+                className="font-semibold text-[var(--heading)] hover:underline">{sender.username}</Link> commented on your {targetType}
           </p>
           <p className="text-sm text-[var(--text)] italic  w-[80%]">"{commentText}"</p>
         </div>

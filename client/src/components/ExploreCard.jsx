@@ -11,7 +11,7 @@ function ExploreCard ({ post, postThumbnail, video, index, list, followers }) {
     const tempCaption = post?.caption?.length < 100 ? post?.caption : post?.caption?.toString().slice(0, 100) + " ...";
 
     function openPost () {
-        navigate(`/posts/${post._id}`, { state: { backgroundLocation: location.pathname } });
+        navigate(`/post/${post._id}`, { state: { backgroundLocation: location.pathname } });
     }
 
 

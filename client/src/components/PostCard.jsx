@@ -13,6 +13,7 @@ import { FaPaperPlane } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import Comment from "./Comment";
 import { showToast } from "../redux/Slices/toast.slice";
+import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
 
 function PostCard ({ post, index, list, followers }) {
     const authState = useSelector((state) => state.auth.data);
@@ -42,9 +43,6 @@ function PostCard ({ post, index, list, followers }) {
     const [commentDescription, setCommentDescription] = useState("");
     const [comments, setComments] = useState([]);
 
-    // Delete related
-    const [deleting, setDeleting] = useState(false);
-
     const [date, setDate] = useState("");
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [countComment, setCountComment] = useState(post?.comments?.length);
@@ -59,6 +57,7 @@ function PostCard ({ post, index, list, followers }) {
         birth: ""
     });
     const [hashtags, setHashtags] = useState ([]);
+    const [isDeleteDialog, setIsdeleteDialog] = useState (false);
 
     const totalItems = (post.image?.length || 0) + (post.video?.length || 0);
 
@@ -198,28 +197,6 @@ function PostCard ({ post, index, list, followers }) {
         setCreator(response.payload?.data?.userdetails);
     }
 
-    const Deletepost = async () => {
-        setDeleting(true);
-        const resp = {
-            postId: _id,
-            userId: {
-                id: userId
-            }
-        }
-        const response = await dispatch(DeletePost(resp));
-        if (response.payload) {
-            await dispatch(getAllPosts());
-            dispatch (showToast ({ message: 'Post was deleted successfully!', type: 'success' }));
-
-            if (triggerRef.current) {
-                triggerRef.current.blur(); // closes the dropdown
-            }
-        } else {
-            dispatch (showToast ({ message: 'Something went wrong!', type: 'error' }));
-        }
-        setDeleting(false);
-    }
-
     const extractThumbnail = (videoURL) => {
         const video = document.createElement("video");
         video.src = videoURL;
@@ -341,8 +318,18 @@ function PostCard ({ post, index, list, followers }) {
 
     return (
         <div className={`mb-4 bg-[var(--card)] relative shadow-xl rounded-md`} >
-            {/* <DisplayPost open={isDialogOpen} setOpen={setDialogOpen} index={index} list={list} /> */}
-            <SelectedUser isOpen={isShare} setOpen={setShare} post={post}/>
+            <SelectedUser isOpen={isShare} setOpen={setShare} target={"post"} post={post}/>
+            <ConfirmDeleteDialog
+                open={isDeleteDialog} 
+                setOpen={setIsdeleteDialog} 
+                type={"postDelete"}
+                data={{
+                    postId: _id,
+                    userId: {
+                        id: userId
+                    }
+                }}
+            />
 
             <div className="flex justify-between bg-[var(--topic)] rounded-t-xl p-[0.5rem] px-4">
                 <div className="flex items-center gap-2">
@@ -368,18 +355,15 @@ function PostCard ({ post, index, list, followers }) {
                     </Link>
                 </div>
                 <div className="dropdown dropdown-end">
-                    <div tabIndex={0} role="button" className="m-1" ref={triggerRef}>
+                    <div tabIndex={0} role="button" className="m-1">
                         <i className={`text-[var(--text)] fa-solid fa-ellipsis`}></i>
                     </div>
-                    <ul tabIndex={0} className={`dropdown-content menu bg-[var(--card)] rounded-md z-[1] w-52 p-4 gap-4 shadow-sm shadow-[var(--text)] text-[var(--buttons)]`}>
+                    <ul tabIndex={0} className={`dropdown-content menu bg-[var(--background)] rounded-md z-[1] w-52 p-4 gap-4 text-[var(--buttons)]`}>
                         <li onClick={handleCopy} className="hover:cursor-pointer"><span>Copy Link</span></li>
                         {(authState._id === userId) && <li
-                            className="hover:cursor-pointer text-red-400 flex flex-row justify-between"
-                            onClick={Deletepost}>
+                            className="hover:cursor-pointer text-red-400"
+                            onClick={() => setIsdeleteDialog (true)}>
                             <span>Delete</span>
-                            {deleting && (
-                                <i className={`fa-solid fa-spinner animate-spin text-lg text-[var(--text)]`}></i>
-                            )}
                         </li>
                         }
                     </ul>
@@ -396,7 +380,7 @@ function PostCard ({ post, index, list, followers }) {
                 </div>
             </div>
 
-            {width > 530 ? <Link to={`/posts/${post._id}`} state={{ backgroundLocation: location }} className="flex justify-start gap-3 h-[25rem] my-4 px-4">
+            {width > 530 ? <Link to={`/post/${post._id}`} state={{ backgroundLocation: location }} className="flex justify-start gap-3 h-[25rem] my-4 px-4">
                 {images?.length > 0 && <div className={`relative ${images.length > 3 ? `w-[35%]` : images?.length > 2 ? `w-[33%]` : images?.length > 1 ? `w-[50%]` : `w-full`} h-full flex justify-center hover:cursor-pointer bg-black`} onClick={() => setDialogOpen(true)}>
                     <img
                         src={images[0]?.url}
@@ -446,7 +430,7 @@ function PostCard ({ post, index, list, followers }) {
                     </div>}
                 </div>}
             </Link> :
-            <Link to={`/posts/${post._id}`} state={{ backgroundLocation: location }} className="relative flex justify-center items-center w-full h-[20rem] py-4 bg-black my-2">
+            <Link to={`/post/${post._id}`} state={{ backgroundLocation: location }} className="relative flex justify-center items-center w-full h-[20rem] py-4 bg-black my-2">
                 <div className="carousel w-full h-full relative">
                     {post.image?.map((img, idx) => (
                         <div
