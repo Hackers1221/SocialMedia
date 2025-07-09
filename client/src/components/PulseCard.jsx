@@ -1,24 +1,35 @@
+// Core React hooks
 import { useState, useEffect, useRef } from "react";
+// Redux hooks and actions
 import { useDispatch, useSelector } from "react-redux";
 import { deletePulse, likePulse, updateSavedPulse } from "../redux/Slices/pulse.slice";
-import Avatar from '../components/Avatar'
-import { FaPaperPlane } from "react-icons/fa";
 import { CreateComment, getCommentByPostId } from "../redux/Slices/comment.slice";
-import Comment from "./Comment";
-import { motion, AnimatePresence } from "framer-motion";
-import SelectedUser from "./SelectedUser";
-import usePulse from "../hooks/usePulse";
 import { showToast } from "../redux/Slices/toast.slice";
+
+// UI components
+import Avatar from '../components/Avatar';
+import Comment from "./Comment";
+import SelectedUser from "./SelectedUser";
 import LinkDetector from "./LinkDetector";
-import { Link } from "react-router-dom";
 import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
 
+// Routing
+import { Link } from "react-router-dom";
+
+// Animation
+import { motion, AnimatePresence } from "framer-motion";
+
+// Custom hooks
+import usePulse from "../hooks/usePulse";
+
+// Main PulseCard component
 export default function PulseCard({ pulse }) {
     const authState = useSelector((state) => state.auth);
     const [pulseState] = usePulse();
 
     const dispatch = useDispatch();
 
+    // State variables
     const [isPlaying, setIsPlaying] = useState(true);
     const [liked, setLiked] = useState(false);
     const [showButton, setShowButton] = useState(true);
@@ -28,13 +39,15 @@ export default function PulseCard({ pulse }) {
     const [comments, setComments] = useState([]);
     const [isOpen, setOpen] = useState(false);
     const [saved, setSaved] = useState();
-    const [videoThumbnail, setVideoThumbnail] = useState ("");
-    const [optionOpen, setOptionOpen] = useState (false);
-    const [isDeleteDialog, setIsdeleteDialog] = useState (false);
+    const [videoThumbnail, setVideoThumbnail] = useState("");
+    const [optionOpen, setOptionOpen] = useState(false);
+    const [isDeleteDialog, setIsdeleteDialog] = useState(false);
 
+    // Refs for video and timeout
     const videoRef = useRef(null);
     const timeoutRef = useRef(null);
 
+    // Play or pause video
     const togglePlay = () => {
         if (videoRef.current) {
             if (isPlaying) {
@@ -48,11 +61,13 @@ export default function PulseCard({ pulse }) {
         }
     };
 
+    // Auto-hide play/pause button
     const resetHideButtonTimer = () => {
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
         timeoutRef.current = setTimeout(() => setShowButton(false), 1000);
     };
 
+    // Like/unlike pulse
     const handleLike = async (event) => {
         event.stopPropagation();
         const response = await dispatch(likePulse({
@@ -65,6 +80,7 @@ export default function PulseCard({ pulse }) {
         setLiked(!liked);
     };
 
+    // Create a new comment
     const pulseCommentHandler = async () => {
         const data = {
             description: commentDescription,
@@ -79,13 +95,15 @@ export default function PulseCard({ pulse }) {
         }
     };
 
+    // Fetch comments for this pulse
     async function getComments() {
         const res = await dispatch(getCommentByPostId(pulse?._id));
         setComments(res.payload.data.commentDetails);
     }
 
+    // Save/unsave pulse
     const toggleBookmark = async () => {
-        extractThumbnail (pulse.video);
+        extractThumbnail(pulse.video);
 
         const response = await dispatch(updateSavedPulse({
             _id1: authState.data._id,
@@ -93,14 +111,17 @@ export default function PulseCard({ pulse }) {
         }));
 
         if (!response?.payload) {
-            dispatch (showToast ({ message: 'Something went wrong!', type: 'error' }));
+            dispatch(showToast({ message: 'Something went wrong!', type: 'error' }));
             return;
         }
 
-        if (!saved) dispatch (showToast ({ message: 'Saved successfully!', type: 'save', image: videoThumbnail?.url }));
+        if (!saved) {
+            dispatch(showToast({ message: 'Saved successfully!', type: 'save', image: videoThumbnail?.url }));
+        }
         setSaved((prev) => !prev);
     };
 
+    // Extract video thumbnail
     const extractThumbnail = (videoURL) => {
         const video = document.createElement("video");
         video.src = videoURL;
@@ -122,8 +143,7 @@ export default function PulseCard({ pulse }) {
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
             const element = { url: canvas.toDataURL("image/png"), filename: "video" };
-
-            setVideoThumbnail (element);
+            setVideoThumbnail(element);
         });
 
         video.addEventListener("error", (e) => {
@@ -133,6 +153,18 @@ export default function PulseCard({ pulse }) {
         video.load();
     };
 
+    // Copy pulse link to clipboard
+    const handleCopy = async () => {
+        try {
+            const postLink = `${window.location.origin}/pulse/${pulse._id}`;
+            await navigator.clipboard.writeText(postLink);
+            dispatch(showToast({ message: "Link copied to clipboard!", type: "success" }));
+        } catch (error) {
+            dispatch(showToast({ message: "Failed to copy link", type: "error" }));
+        }
+    };
+
+    // Initialize saved state and fetch comments
     useEffect(() => {
         setSaved(pulseState?.savedList?.find((item) => pulse._id === item._id));
     }, [pulseState?.savedList]);
@@ -141,6 +173,7 @@ export default function PulseCard({ pulse }) {
         getComments();
     }, [pulse._id]);
 
+    // Auto-play/pause video based on visibility
     useEffect(() => {
         if (pulse?.likes.includes(authState.data?._id)) {
             setLiked(true);
@@ -176,10 +209,13 @@ export default function PulseCard({ pulse }) {
 
     return (
         <div className="reel-container w-full h-[95%] sm:w-96 md:h-[78vh] sm:h-[70vh] overflow-hidden rounded-xl shadow-lg flex-col justify-center relative bg-black">
-            <SelectedUser isOpen={isOpen} setOpen={setOpen} post={pulse} target={"pulse"}/>
+            {/* Share modal */}
+            <SelectedUser isOpen={isOpen} setOpen={setOpen} post={pulse} target={"pulse"} />
+
+            {/* Delete confirmation dialog */}
             <ConfirmDeleteDialog
-                open={isDeleteDialog} 
-                setOpen={setIsdeleteDialog} 
+                open={isDeleteDialog}
+                setOpen={setIsdeleteDialog}
                 type={"pulseDelete"}
                 data={{
                     pulseId: pulse._id,
@@ -187,10 +223,12 @@ export default function PulseCard({ pulse }) {
                 }}
             />
 
+            {/* Video view */}
             {!showComment && (
                 <div onClick={togglePlay}>
                     <video ref={videoRef} className="w-max bg-black" src={pulse.video} loop></video>
 
+                    {/* Play/pause button overlay */}
                     {showButton && (
                         <div className="absolute inset-0 flex items-center justify-center">
                             <div className="bg-black bg-opacity-30 rounded-full w-16 h-16 flex items-center justify-center">
@@ -203,7 +241,9 @@ export default function PulseCard({ pulse }) {
                         </div>
                     )}
 
+                    {/* Action buttons */}
                     <div className="absolute right-4 bottom-[1.5rem] flex flex-col justify-center gap-2">
+                        {/* Like button */}
                         <button className="flex flex-col items-center justify-center gap-1 text-white px-2" onClick={handleLike}>
                             {liked ? (
                                 <i className="text-red-600 fa-solid fa-heart text-2xl"></i>
@@ -213,43 +253,57 @@ export default function PulseCard({ pulse }) {
                             <span className="text-base font-medium">{countLike}</span>
                         </button>
 
-                        <button className="flex flex-col items-center justify-center gap-1 text-white px-2  z-[99]">
+                        {/* Comment button */}
+                        <button className="flex flex-col items-center justify-center gap-1 text-white px-2 z-[99]">
                             <i className="fa-regular fa-comment text-white text-2xl" onClick={() => setShowComment(true)}></i>
-                            <span className="text-base font-medium">{comments?.filter(comment => comment.postId === pulse._id)?.length}</span>
+                            <span className="text-base font-medium">
+                                {comments?.filter(comment => comment.postId === pulse._id)?.length}
+                            </span>
                         </button>
 
+                        {/* Bookmark button */}
                         <div className="flex flex-col items-center justify-center gap-1 text-white px-2 hover:cursor-pointer z-[99]" onClick={toggleBookmark}>
-                            {saved ? <i className="fa-solid fa-bookmark text-xl p-3 text-[var(--buttons)]"></i> : <i className="fa-regular fa-bookmark text-xl p-3"></i>}
+                            {saved ? (
+                                <i className="fa-solid fa-bookmark text-xl p-3 text-[var(--buttons)]"></i>
+                            ) : (
+                                <i className="fa-regular fa-bookmark text-xl p-3"></i>
+                            )}
                         </div>
 
+                        {/* Share button */}
                         <div className="flex flex-col items-center justify-center text-white px-2 z-[99]">
                             <i className="fa-regular fa-paper-plane text-white text-xl p-3 hover:cursor-pointer" onClick={() => setOpen(true)}></i>
                         </div>
 
-                        {authState.data._id == pulse.user?._id && <div className="relative overflow-x-visible flex flex-col items-center justify-center text-white px-2 z-[100]">
-                            {optionOpen && <div className="absolute bottom-4 right-4 w-40 p-4 bg-[var(--card)] rounded-sm shadow-lg">
-                                <h2 className="text-sm hover:cursor-pointer" onClick={() => setIsdeleteDialog (true)}>Delete</h2>
-                            </div>}
-                            <i className="fa-solid fa-ellipsis text-white hover:cursor-pointer" onClick={() => setOptionOpen ((prev) => !prev)}></i>
-                        </div>}
+                        {/* Options menu */}
+                        <div className="relative overflow-x-visible flex flex-col items-center justify-center text-white px-2 z-[100]">
+                            {optionOpen && (
+                                <div className="absolute bottom-4 right-4 flex flex-col gap-2 w-40 p-4 bg-[var(--card)] rounded-sm shadow-lg">
+                                    {authState.data._id == pulse.user?._id && (
+                                        <h2 className="text-sm hover:cursor-pointer text-red-600" onClick={() => setIsdeleteDialog(true)}>Delete</h2>
+                                    )}
+                                    <h2 className="text-sm hover:cursor-pointer" onClick={handleCopy}>Copy Link</h2>
+                                </div>
+                            )}
+                            <i className="fa-solid fa-ellipsis text-white hover:cursor-pointer" onClick={() => setOptionOpen(prev => !prev)}></i>
+                        </div>
                     </div>
 
+                    {/* Caption and user info */}
                     <div className="absolute bottom-4 left-4 w-[80%] flex flex-col gap-2">
                         <div className="absolute bottom-[-2rem] left-[-2rem] w-screen h-full bg-gradient-to-t from-black/70 via-black/50 via-black/30 to-transparent pointer-events-none"></div>
-
-
                         <Link to={`/profile/${pulse.user?.username}`} className="flex items-end gap-2">
                             <Avatar url={pulse.user?.image?.url} size={'sm'} />
                             <span className="text-white font-semibold text-sm hover:cursor-pointer hover:underline hover:text-[var(--buttons)]">{pulse.user?.username}</span>
                         </Link>
                         <h2 className="text-white z-[2]">
-                            {pulse?.caption?.length > 0 && <LinkDetector title={pulse.caption} type={'pulse'}></LinkDetector>}
+                            {pulse?.caption?.length > 0 && <LinkDetector title={pulse.caption} type={'pulse'} />}
                         </h2>
                     </div>
                 </div>
             )}
 
-            {/* Comment View */}
+            {/* Comment panel (sliding in from right) */}
             <AnimatePresence>
                 {showComment && (
                     <motion.div
@@ -259,16 +313,24 @@ export default function PulseCard({ pulse }) {
                         exit={{ x: "100%" }}
                         transition={{ duration: 0.4, ease: "easeInOut" }}
                     >
+                        {/* Header */}
                         <div className="w-full flex justify-start items-center gap-4">
                             <i className="fa-solid fa-arrow-left hover:cursor-pointer" onClick={() => setShowComment(false)}></i>
                             <h2>Comments</h2>
                         </div>
 
+                        {/* Comment list */}
                         <div className="flex-1 flex flex-col w-full mt-4 overflow-y-auto scroll-smooth overscroll-contain max-h-[65vh]">
                             {comments.length > 0 ? (
                                 comments.map((comment, idx) => (
                                     <div key={idx}>
-                                        <Comment commentId={comment._id} avatar={comment.user?.image?.url} username={comment.user?.username} text={comment.description} time={comment.createdAt} />
+                                        <Comment
+                                            commentId={comment._id}
+                                            avatar={comment.user?.image?.url}
+                                            username={comment.user?.username}
+                                            text={comment.description}
+                                            time={comment.createdAt}
+                                        />
                                     </div>
                                 ))
                             ) : (
@@ -276,6 +338,7 @@ export default function PulseCard({ pulse }) {
                             )}
                         </div>
 
+                        {/* Comment input */}
                         <div className="mt-auto flex items-center gap-2 relative">
                             <Avatar url={authState?.data?.image?.url} />
                             <div className="flex-1 relative">

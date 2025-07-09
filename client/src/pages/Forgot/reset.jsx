@@ -54,12 +54,12 @@ function ResetPassword() {
     };
 
     return (
-        <div className="flex items-center justify-center h-screen w-full px-5 sm:px-0" style={{ backgroundColor: _COLOR.light }}>
-            <div className="flex rounded-lg shadow-lg border overflow-hidden max-w-md w-full" style={{ backgroundColor: _COLOR.lightest }}>
+        <div className="flex items-center justify-center h-screen w-full px-5 sm:px-0 bg-[var(--background)]">
+            <div className="flex rounded-lg shadow-lg overflow-hidden max-w-md w-full bg-[var(--card)]">
                 <div className="w-full p-8">
-                    <p className="text-xl text-gray-600 text-center">Reset Password</p>
+                    <p className="text-xl text-gray-600 text-center text-[var(--buttons)] font-bold">Reset Password</p>
                     <div className="mt-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2">
+                        <label className="block text-[var(--text)] text-sm font-bold mb-2">
                             New Password
                         </label>
                         <input
@@ -75,7 +75,7 @@ function ResetPassword() {
                         />
                     </div>
                     <div className="mt-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2">
+                        <label className="block text-[var(--text)] text-sm font-bold mb-2">
                             Confirm Password
                         </label>
                         <input
@@ -90,25 +90,24 @@ function ResetPassword() {
                             required
                         />
                     </div>
-                    <div className="mt-8">
+                    <div className="mt-8 border rounded-md hover:bg-[var(--background)]">
                         <button
-                            className="text-white font-bold py-2 px-4 w-full rounded flex items-center justify-center"
-                            style={{ backgroundColor: _COLOR.dark }}
+                            className="text-[var(--buttons)] font-bold py-2 px-4 w-full rounded flex items-center justify-center"
                             onClick={resetPassword}
                             disabled={loading}
                         >
                             {loading ? (
                                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                             ) : (
-                                "Reset Password"
+                                "Reset"
                             )}
                         </button>
                     </div>
                     <div
-                        className="mt-4 text-center text-xs text-gray-800 capitalize hover:cursor-pointer hover:underline hover:font-bold"
+                        className="mt-4 text-center text-xs text-[var(--buttons)] hover:cursor-pointer hover:underline hover:font-bold"
                         onClick={() => navigate("/login")}
                     >
-                        Back to Login
+                        Back to login
                     </div>
                 </div>
             </div>

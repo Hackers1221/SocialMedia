@@ -40,6 +40,12 @@ function SelectedUser ({ isOpen, setOpen, post, target }) {
         navigate ('/message');
     }
 
+    const handleWhatsAppShare = () => {
+        const postLink = `${window.location.origin}/${target}/${post._id}`
+        const url = `https://wa.me/?text=${encodeURIComponent("Check this out: " + postLink)}`;
+        window.open(url, "_blank");
+    };
+
     const copyLink = async () => {
         try {
             const postLink = `${window.location.origin}/${target}/${post._id}`
@@ -114,16 +120,19 @@ function SelectedUser ({ isOpen, setOpen, post, target }) {
 
                     <div className="absolute bottom-[4rem] w-[93%] flex justify-evenly items-center gap-2">
                         <div onClick={copyLink} className="w-full flex justify-center items-center rounded-md py-2 hover:cursor-pointer">
-                            
-                            <h2 className="text-black font-bold text-[var(--buttonText)] bg-[var(--buttons)] p-2 rounded-md w-full text-center">
+                            <h2 className="text-sm text-black font-bold text-[var(--buttonText)] bg-[var(--buttons)] p-2 rounded-md w-full text-center">
                                 <i className="fa-solid fa-link mr-2"></i> Copy Link</h2>
                         </div>
+                        <div onClick={handleWhatsAppShare} className="w-full flex justify-center items-center rounded-md py-2 hover:cursor-pointer">
+                            <h2 className="text-black text-sm font-bold text-[var(--buttonText)] bg-[var(--buttons)] p-2 rounded-md w-full text-center">
+                                <i className="fa-brands fa-whatsapp"></i> Send via Whatsapp</h2>
+                        </div>
                         <div onClick={share} className="w-full flex justify-center items-center rounded-md py-2 hover:cursor-pointer">
-                            <h2 className="text-black font-bold text-[var(--buttonText)] bg-[var(--buttons)] p-2 rounded-md w-full text-center">Send</h2>
+                            <h2 className="text-black text-sm font-bold text-[var(--buttonText)] bg-[var(--buttons)] p-2 rounded-md w-full text-center">Send</h2>
                         </div>
                     </div>
                     <div onClick={() => setOpen (!open)} className="absolute bottom-4 w-[93%] flex justify-center items-center rounded-md py-2 hover:cursor-pointer">
-                        <h2 className="text-black font-bold text-[var(--buttonText)] bg-[var(--buttons)] p-2 rounded-md w-full text-center">Cancel</h2>
+                        <h2 className="text-black text-sm font-bold text-[var(--buttonText)] bg-[var(--buttons)] p-2 rounded-md w-full text-center">Cancel</h2>
                     </div>
                 </div>
             </dialog>
