@@ -191,7 +191,7 @@ function Sidebar() {
                             {screenWidth > 768 && <li onClick={() => {setIsOpen(false); setMenuOpen(false); setSelected('Profile')}}>
                                 <Link to={`/profile/${authState?.data?.username}`} className={`relative border-l-4 hover:border-[var(--buttons)] flex flex-row items-center h-11 hover:text-[var(--buttons)] hover:shadow-md font-semibold border-l-4 pl-4 ${location.pathname === '/profile' ? `border-[var(--buttons)] text-[var(--buttons)] shadow-md` : `border-transparent text-[var(--text)]`}`}>
                                     <Avatar id={authState.data?._id} url={authState?.data?.image?.url} size={"sm"}/>
-                                    <span className="ml-2 text-sm tracking-wide truncate">{authState.data?.username}</span>
+                                    <span className="ml-2 text-sm tracking-wide truncate">{authState.data?.name}</span>
                                 </Link>
                             </li>}
                             <li onClick={() => {setMenuOpen (!menuOpen); setSelected('More')}}>

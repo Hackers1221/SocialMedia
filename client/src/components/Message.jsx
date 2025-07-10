@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ImagePreview from "./ImagePreview";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
@@ -13,6 +13,7 @@ function Message({ message }) {
     const [selectedImage, setSelectedImage] = useState ('');
     const [isOpen, setOpen] = useState (false);
     const [videoThumbnails, setVideoThumbnails] = useState({});
+
     const baseMessage = message.messageType;
 
     const [content, setContent] = useState ("");
@@ -58,6 +59,7 @@ function Message({ message }) {
             setContent (firstPerson + " " + msg.slice(1).join(" "));
         }
     }
+
 
     useEffect(() => {
         message.files?.forEach((file) => {
@@ -136,7 +138,7 @@ function Message({ message }) {
                                         <img
                                             key={index}
                                             src={file.url}
-                                            alt={file.filename}
+                                            alt={`The ${message.targetType} could not be loaded`}
                                             className="max-w-full max-h-48 rounded-md object-cover hover:cursor-pointer"
                                             onClick={() => openImage (file.url)}
                                         />
@@ -152,7 +154,7 @@ function Message({ message }) {
                                             <i className="fa-solid fa-play absolute top-[50%] bottom-[50%] right-[50%] left-[50%]"></i>
                                             <img
                                                 src={videoThumbnails[file.url]}
-                                                alt={file.name}
+                                                alt={`The ${message.targetType} could not be loaded`}
                                                 className="w-full max-h-96 rounded-md object-cover hover:cursor-pointer"
                                             />
                                         </div>

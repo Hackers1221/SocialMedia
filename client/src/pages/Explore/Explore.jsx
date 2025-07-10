@@ -95,7 +95,7 @@ const Explore = () => {
         <>
         <div className={`fixed top-[4rem] md:top-[1rem]  md:left-[20rem] left-[1rem] w-[93%] md:w-[50%] h-[90vh] md:h-[97vh] flex flex-col flex-grow overflow-y-auto`}>
         <div className="max-w-5xl w-full">
-        <h2 className={`text-[var(--text)] heading text-[2rem] mb-4`}>Explore</h2>
+        <h2 className={`text-[var(--heading)] heading text-[2rem] mb-4`}>Explore</h2>
         <div className={`flex items-center border border-[var(--input)] rounded-md px-2 shadow-md w-full mb-6`}>
             <input
                 type="text"

@@ -41,22 +41,22 @@ function SelectedUser ({ isOpen, setOpen, post, target }) {
     }
 
     const handleWhatsAppShare = () => {
-        const postLink = `${window.location.origin}/${target}/${post._id}`
+        const postLink = `See this Ripple post ${window.location.origin}/${target}/${post._id}`
         const url = `https://wa.me/?text=${encodeURIComponent(postLink)}`;
         window.open(url, "_blank");
     };
 
     const sendEmail = () => {
         const subject = "Check out this post";
-        const body = `I found this post interesting: ${window.location.origin}/${target}/${post._id}`;
+        const body = `See this Ripple post : ${window.location.origin}/${target}/${post._id}`;
         window.open(`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
     };
 
 
-    const shareToFacebook = () => {
-        const postLink = `${window.location.origin}/${target}/${post._id}`
-        window.open(
-            `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(postLink)}`,
+    const shareToTwitter = () => {
+        const postLink = `See this Ripple post ${window.location.origin}/${target}/${post._id}`
+        window.open (
+            `https://www.x.com/intent/post?text=${encodeURIComponent(postLink)}`,
             "_blank"
         );
     };
@@ -198,26 +198,26 @@ function SelectedUser ({ isOpen, setOpen, post, target }) {
                         </div>
 
                         <div
-                        onClick={shareToFacebook}
+                        onClick={shareToTwitter}
                         className="w-full flex flex-col justify-center items-center gap-2 rounded-md py-2 hover:cursor-pointer"
                         >
                         <div className="w-14 h-14 rounded-full p-4 bg-[var(--card)] flex items-center justify-center">
-                            <i className="fa-brands fa-facebook"></i>
+                            <i className="fa-brands fa-x-twitter"></i>
                         </div>
-                        <h2 className="text-sm text-[var(--heading)] w-full text-center">Facebook</h2>
+                        <h2 className="text-sm text-[var(--heading)] w-full text-center">X</h2>
                         </div>
 
                     </div>
 
                     {/* Send Button */}
-                    <div
+                    {selectedUsers?.length > 0 && <div
                         onClick={share}
                         className="w-full flex justify-center items-center rounded-md py-2 hover:cursor-pointer"
                     >
                         <h2 className="text-sm font-bold text-[var(--buttonText)] bg-[var(--buttons)] p-2 rounded-md w-full text-center">
                         Send
                         </h2>
-                    </div>
+                    </div>}
                 </div>
             </div>
             </dialog>
