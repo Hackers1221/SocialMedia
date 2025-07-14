@@ -35,7 +35,7 @@ function Sidebar() {
     const location = useLocation ();
 
     function openPulse () {
-        const pulse = pulseState.pulseList?.[0];
+        const pulse = pulseState.downloadedPulse?.[0];
         navigate(`/pulse/${pulse._id}`);
     }
 

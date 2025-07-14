@@ -306,12 +306,13 @@ const DisplayPost = () => {
     }, [postList.length]);
 
     useEffect(() => {
-        if (postId && dialogRef.current && !dialogRef.current.open) {
-            dialogRef.current.showModal();
-        } else {
-            dialogRef.current?.close();
+        if (postId && dialogRef.current) {
+            if (!dialogRef.current.open) {
+                dialogRef.current.showModal();
+            }
         }
     }, [postId]);
+
 
     return (
         <>
@@ -448,7 +449,7 @@ const DisplayPost = () => {
                             )}
 
                             {/* Hashtags */}
-                            <div className="px-4">
+                            <div className="pb-2">
                                 <div className={`w-full flex flex-wrap gap-1 ${post?.caption?.length > 0 ? "mt-4" : ""}`}>
                                     {hashtags.length > 0 &&
                                         hashtags.map((hashtag, index) => (

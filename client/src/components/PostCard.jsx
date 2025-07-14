@@ -65,7 +65,10 @@ function PostCard({ post }) {
 
     // Creator info fallback
     const [creator, setCreator] = useState({
-        image: "https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_1280.png",
+        image: {
+            url: "https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_1280.png",
+            filename: ""
+        },
         name: "",
         username: "",
         password: "",
@@ -344,7 +347,7 @@ function PostCard({ post }) {
                             <span className="cursor-pointer">
                                 <Avatar
                                     id={creator?._id}
-                                    url={creator?.image?.url || "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png"}
+                                    url={creator?.image?.url}
                                     size={'md'}
                                 />
                             </span>
