@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 // Redux hooks and actions
 import { useDispatch, useSelector } from "react-redux";
-import { deletePulse, likePulse, updateSavedPulse } from "../redux/Slices/pulse.slice";
+import { likePulse, updateSavedPulse } from "../redux/Slices/pulse.slice";
 import { CreateComment, getCommentByPostId } from "../redux/Slices/comment.slice";
 import { showToast } from "../redux/Slices/toast.slice";
 
@@ -21,6 +21,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 // Custom hooks
 import usePulse from "../hooks/usePulse";
+import { FaPaperPlane } from "react-icons/fa";
 
 // Main PulseCard component
 export default function PulseCard({ pulse }) {
