@@ -115,7 +115,7 @@ function NotificationItem({
         return (
         <div
             onClick={openPost}
-            className="flex items-center gap-4 relative p-4 bg-[var(--card)] rounded-2xl shadow-sm hover:shadow-md cursor-pointer transition w-full"
+            className="flex items-center gap-4 relative p-4 bg-[var(--card)] rounded-md shadow-sm hover:shadow-md cursor-pointer transition w-full"
         >
             {getTime()}
             {renderAvatar()}
@@ -140,7 +140,7 @@ function NotificationItem({
         return (
         <div
             onClick={openPost}
-            className="flex items-start gap-4 relative p-4 bg-[var(--card)] rounded-2xl shadow-sm hover:shadow-md cursor-pointer transition w-full"
+            className="flex items-center gap-4 relative p-4 bg-[var(--card)] rounded-md shadow-sm hover:shadow-md cursor-pointer transition w-full"
         >
             {getTime()}
             {renderAvatar()}
@@ -153,9 +153,9 @@ function NotificationItem({
                 >
                 {sender.username}
                 </Link>{" "}
-                commented on your {targetType}
+                commented: 
+                <span className="font-extralight text-sm text-[var(--text)] w-[80%]"> {commentText}</span>
             </p>
-            <p className="text-sm text-[var(--text)] italic w-[80%]">"{commentText}"</p>
             </div>
         </div>
         );
@@ -167,8 +167,9 @@ function NotificationItem({
         <div className="flex items-center gap-4 relative p-4 bg-[var(--card)] rounded-2xl shadow-md w-full">
             {renderAvatar()}
             <div className="flex-1">
-            <p className="text-sm font-medium text-[var(--heading)]">{sender.username}</p>
-            <p className="text-xs text-[var(--text)]">sent you a follow request</p>
+            <p className="text-sm font-medium text-[var(--heading)]">{sender.username}
+                <span className="text-xs text-[var(--text)]"> sent you a follow request</span>
+            </p>
             </div>
             <div className="flex gap-4 pr-3">
             <button

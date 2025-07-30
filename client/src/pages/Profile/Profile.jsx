@@ -180,7 +180,7 @@ const Profile = () => {
                       </button>
                     ) : creator?.isPrivate ? (
                       <button
-                        className={`mt-2 px-4 py-2 rounded-full bg-[var(--buttons)] text-[var(--buttonText)] ${pending ? "text-blue-500" : ""}`}
+                        className={`mt-2 px-4 py-2 rounded-full ${pending ? "bg-transparent text-[var(--buttons)] border border-[var(--buttons)]" : "bg-[var(--buttons)] text-[var(--buttonText)]"}`}
                         onClick={toggleFollowRequest}
                       >
                         {pending ? "Requested" : "Follow"}

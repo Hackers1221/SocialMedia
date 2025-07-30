@@ -226,8 +226,14 @@ export default function PulseCard({ pulse }) {
 
             {/* Video view */}
             {!showComment && (
-                <div onClick={togglePlay} className="w-max">
-                    <video ref={videoRef} className="w-max bg-black" src={pulse.video} loop></video>
+                <div onClick={togglePlay} className="flex items-center w-full h-full">
+                    <video
+                        ref={videoRef}
+                        className="w-full max-w-max bg-black object-contain"
+                        src={pulse.video}
+                        loop
+                    ></video>
+
 
                     {/* Play/pause button overlay */}
                     {showButton && (
