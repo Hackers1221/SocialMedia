@@ -5,7 +5,6 @@ import { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { disconnectSocket } from "../redux/Slices/socket.slice";
 import { logout } from "../redux/Slices/auth.slice";
-import { setTheme } from "../redux/Slices/theme.slice";
 
 function MoreOptions ({ open, setOpen }) {
     if (!open) return null;

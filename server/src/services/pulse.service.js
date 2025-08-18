@@ -92,7 +92,7 @@ const likePulse = async(id, userId) => {
             pulse.likes.push(userId);
 
             // Notification 
-            if(userId !== pulse.user) {
+            if(userId != pulse.user) {
                 const notification = await Notification.create({
                     sender: userId,
                     recipient: pulse.user,
@@ -104,8 +104,6 @@ const likePulse = async(id, userId) => {
                 // Immediately fetch the populated version
                 const populatedNotification = await Notification.findById(notification._id)
                 .populate("sender", "id username image")
-                .populate("post", "caption")
-                .populate("pulse", "caption");
 
                 const recipientSocketId = userSocketMap.get(pulse.user.toString());
                 if (recipientSocketId) {

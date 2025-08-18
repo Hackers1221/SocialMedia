@@ -9,10 +9,10 @@ import { SkeletonTheme } from 'react-loading-skeleton';
 
 createRoot(document.getElementById('root')).render(
     <SkeletonTheme baseColor={`${_COLOR.border}`}>
-    <BrowserRouter>
-      <Provider store={Store}>
-        <App/>
-      </Provider>
-    </BrowserRouter>
-  </SkeletonTheme>
+        <BrowserRouter>
+            <Provider store={Store}>
+                <App/>
+            </Provider>
+        </BrowserRouter>
+    </SkeletonTheme>
 )

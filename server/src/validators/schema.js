@@ -33,7 +33,7 @@ module.exports.userSchema = Joi.object({
 
     password: Joi.string()
         .required()
-        .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]+$'))
+        .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&#])[A-Za-z\\d@$!%*?&#]+$'))
         .messages({
             "string.base": "Password must be a text value.",
             "string.empty": "Password cannot be empty.",

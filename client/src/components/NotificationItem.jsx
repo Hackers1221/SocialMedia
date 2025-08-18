@@ -25,7 +25,7 @@ function NotificationItem({
         if (targetType === "post")
         navigate(`/post/${post}`, { state: { backgroundLocation: location.pathname } });
         if (targetType === "pulse")
-        navigate(`/pulse/${pulse._id}`);
+        navigate(`/pulse/${pulse}`);
     }
 
     // Utility function to format time difference from timestamp to "x mins/hours ago"

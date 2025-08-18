@@ -16,20 +16,6 @@
     scrollbar-width: none;
 }
 
-/* :root {
-    --background: #0d1b2a;
-    --topic: #415a77;
-    --text: #D3D3D3;
-    --card: #1b263b;
-    --buttons: #FFFFFF;
-    --input: #474E68;
-    --dropdown: #FFFFFF;
-    --buttonsHover: #415a77;
-    --border: #415a77;
-    --buttonText: #000000;
-    --heading: #FFFFFF;
-} */
-
 :root {
     --background: #121212;
     --topic: #1E1E1E;

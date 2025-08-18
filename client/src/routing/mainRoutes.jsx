@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 
 import SignUp from "../pages/SignUp/signup";
@@ -16,7 +17,6 @@ import ForgetPassword from "../pages/Forgot/Forget";
 import ResetPassword from "../pages/Forgot/reset";
 import Notification from "../pages/Notification/Notification";
 import DisplayPost from "../components/DisplayPost";
-import { useEffect, useState } from "react";
 import PostDisplay from "../pages/SinglePost/PostDisplay";
 
 function MainRoutes() {

@@ -5,7 +5,6 @@ import { LuEyeClosed } from "react-icons/lu";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { login, signup } from "../../redux/Slices/auth.slice";
-import BlockBackNavigation from "../../components/BlockBackNavigation";
 import { setTheme } from "../../redux/Slices/theme.slice";
 import { showToast } from "../../redux/Slices/toast.slice";
 
@@ -127,7 +126,6 @@ function SignUp() {
 
     return (
         <div className="fixed inset-0 bg-[url('https://images.stockcake.com/public/2/9/c/29cc0acd-d266-46bf-b9b8-b5330cd2918b_large/greenery-on-wood-stockcake.jpg')] bg-no-repeat bg-cover bg-center overflow-hidden">
-            <BlockBackNavigation />
             <div className="absolute inset-0 bg-[#131842] bg-opacity-40 backdrop-blur-lg backdrop-saturate-300 flex items-center justify-center">
                 <div className="flex flex-wrap justify-evenly items-center w-full max-w-[1200px] py-10 px-4 md:px-10">
 

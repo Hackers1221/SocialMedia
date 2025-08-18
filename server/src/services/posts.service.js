@@ -115,7 +115,7 @@ const likePost = async(id, userId) => {
             post.likes.push(userId);
             
             // Notification 
-            if(userId !== post.userId) {
+            if(userId != post.userId) {
                 const notification = await Notification.create({
                     sender: userId,
                     recipient: post.userId,
