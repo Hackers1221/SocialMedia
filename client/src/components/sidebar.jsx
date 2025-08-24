@@ -116,8 +116,8 @@ function Sidebar() {
                     } transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:shadow-none border-r border-[var(--border)]`}
                     onClick={(e) => e.stopPropagation()} // Prevents click inside from closing
                 >
-                    <div className={`p-4 flex items-end gap-2`}>
-                        <img src="../../Logo.png" className="w-[3.5rem] h-[2.5rem]"/>
+                    <div className={`p-4 flex items-center gap-2`}>
+                        <img src="../../Logo.png" className="w-[3.5rem] h-[3.5rem] object-cover"/>
                         <div className={`text-2xl font-bold heading text-[var(--buttons)]`}>Ripple</div>
                     </div>
                     <div className="flex flex-col h-full justify-between overflow-y-auto overflow-x-hidden flex-grow">
