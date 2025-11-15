@@ -3,6 +3,7 @@ import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { likeComment } from '../redux/Slices/comment.slice';
+import { getTimeDifference } from "../utils/time";
 
 const Comment = ({ commentId , username, text, time, avatar }) => {
   const defaultImage = "https://cdn1.iconfinder.com/data/icons/website-internet/48/website_-_male_user-512.png";
@@ -24,50 +25,6 @@ const Comment = ({ commentId , username, text, time, avatar }) => {
       setisLiked(!isLiked);
     }
   }
-
-    function getTimeDifference (dateString) {
-        const now = new Date();
-        const targetDate = new Date(dateString);
-
-        const nowUTC = Date.UTC(
-            now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),
-            now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()
-        );
-
-        const targetDateUTC = Date.UTC(
-            targetDate.getUTCFullYear(), targetDate.getUTCMonth(), targetDate.getUTCDate(),
-            targetDate.getUTCHours(), targetDate.getUTCMinutes(), targetDate.getUTCSeconds()
-        );
-
-        const diffInSeconds = Math.floor((nowUTC - targetDateUTC) / 1000);
-
-        if (diffInSeconds < 60) {
-            return `${diffInSeconds}s`;
-        }
-
-        const diffInMinutes = Math.floor(diffInSeconds / 60);
-        if (diffInMinutes < 60) {
-            return `${diffInMinutes}min`;
-        }
-
-        const diffInHours = Math.floor(diffInMinutes / 60);
-        if (diffInHours < 24) {
-            return `${diffInHours}h`;
-        }
-
-        const diffInDays = Math.floor(diffInHours / 24);
-        if (diffInDays < 30) {
-            return `${diffInDays}d`;
-        }
-
-        const diffInMonths = Math.floor(diffInDays / 30);
-        if (diffInMonths < 12) {
-            return `${diffInMonths}m`;
-        }
-
-        const diffInYears = Math.floor(diffInMonths / 12);
-        return `${diffInYears}y`;
-    }
 
   useEffect(() => {
     setTimeDiff(getTimeDifference (time))

@@ -83,11 +83,11 @@ const Messenger = () => {
 
         Promise.all(readerPromises).then((encodedFiles) => {
             const payload = {
-            sender: authState.data?._id,
-            recipient: chatState.recipient?._id,
-            content: message.trim(),
-            targetType: "message",
-            files: encodedFiles,
+                sender: authState.data?._id,
+                recipient: chatState.recipient?._id,
+                content: message.trim(),
+                targetType: "message",
+                files: encodedFiles,
             };
             if (socket?.connected) socket.emit("sendMessage", payload);
             setMessage("");

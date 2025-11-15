@@ -32,6 +32,8 @@ import SelectedUser from "./SelectedUser";
 // Toast for notifications
 import { showToast } from "../redux/Slices/toast.slice";
 
+import { getTimeDifference } from "../utils/time";
+
 // Main DisplayPost component
 const DisplayPost = () => {
     // Get postId from URL parameters
@@ -209,33 +211,6 @@ const DisplayPost = () => {
         setSaved((prev) => !prev);
         await dispatch(getSavedPost(authState.data?._id));
     };
-
-    // Get human-readable time difference
-    function getTimeDifference(dateString) {
-        const now = new Date();
-        const targetDate = new Date(dateString);
-        const nowUTC = Date.UTC(
-            now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),
-            now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()
-        );
-        const targetDateUTC = Date.UTC(
-            targetDate.getUTCFullYear(), targetDate.getUTCMonth(), targetDate.getUTCDate(),
-            targetDate.getUTCHours(), targetDate.getUTCMinutes(), targetDate.getUTCSeconds()
-        );
-        const diffInSeconds = Math.floor((nowUTC - targetDateUTC) / 1000);
-
-        if (diffInSeconds < 60) return `${diffInSeconds} second${diffInSeconds === 1 ? '' : 's'} ago`;
-        const diffInMinutes = Math.floor(diffInSeconds / 60);
-        if (diffInMinutes < 60) return `${diffInMinutes} minute${diffInMinutes === 1 ? '' : 's'} ago`;
-        const diffInHours = Math.floor(diffInMinutes / 60);
-        if (diffInHours < 24) return `${diffInHours} hour${diffInHours === 1 ? '' : 's'} ago`;
-        const diffInDays = Math.floor(diffInHours / 24);
-        if (diffInDays < 30) return `${diffInDays} day${diffInDays === 1 ? '' : 's'} ago`;
-        const diffInMonths = Math.floor(diffInDays / 30);
-        if (diffInMonths < 12) return `${diffInMonths} month${diffInMonths === 1 ? '' : 's'} ago`;
-        const diffInYears = Math.floor(diffInMonths / 12);
-        return `${diffInYears} year${diffInYears === 1 ? '' : 's'} ago`;
-    }
 
     // Navigate to next/prev related post
     function postForward() {

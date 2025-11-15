@@ -25,6 +25,8 @@ import { FaPaperPlane } from "react-icons/fa";
 // Import motion components and animation helpers from Framer Motion for animations
 import { motion, AnimatePresence } from "framer-motion";
 
+import { getTimeDifference } from "../utils/time";
+
 function PostCard({ post }) {
     // Access the user data from the Redux store
     const authState = useSelector((state) => state.auth.data);
@@ -141,40 +143,6 @@ function PostCard({ post }) {
         if (!saved) dispatch(showToast({ message: 'Saved successfully!', type: 'save', image: images[0].url }));
         setSaved((prev) => !prev);
     };
-
-    // Get relative time from date
-    function getTimeDifference(dateString) {
-        const now = new Date();
-        const targetDate = new Date(dateString);
-
-        const nowUTC = Date.UTC(
-            now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),
-            now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()
-        );
-
-        const targetDateUTC = Date.UTC(
-            targetDate.getUTCFullYear(), targetDate.getUTCMonth(), targetDate.getUTCDate(),
-            targetDate.getUTCHours(), targetDate.getUTCMinutes(), targetDate.getUTCSeconds()
-        );
-
-        const diffInSeconds = Math.floor((nowUTC - targetDateUTC) / 1000);
-        if (diffInSeconds < 60) return `${diffInSeconds}s ago`;
-
-        const diffInMinutes = Math.floor(diffInSeconds / 60);
-        if (diffInMinutes < 60) return `${diffInMinutes}min ago`;
-
-        const diffInHours = Math.floor(diffInMinutes / 60);
-        if (diffInHours < 24) return `${diffInHours}h ago`;
-
-        const diffInDays = Math.floor(diffInHours / 24);
-        if (diffInDays < 30) return `${diffInDays}d ago`;
-
-        const diffInMonths = Math.floor(diffInDays / 30);
-        if (diffInMonths < 12) return `${diffInMonths}m ago`;
-
-        const diffInYears = Math.floor(diffInMonths / 12);
-        return `${diffInYears}y ago`;
-    }
 
     // Toggle like and update Redux
     const toggleLike = async () => {

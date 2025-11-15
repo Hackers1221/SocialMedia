@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 // React Router for navigation and location tracking
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
+import { getTimeDifference } from "../utils/time";
+
 // NotificationItem component to render different types of notifications
 function NotificationItem({
         Item,         // Notification item data
@@ -26,36 +28,6 @@ function NotificationItem({
         navigate(`/post/${post}`, { state: { backgroundLocation: location.pathname } });
         if (targetType === "pulse")
         navigate(`/pulse/${pulse}`);
-    }
-
-    // Utility function to format time difference from timestamp to "x mins/hours ago"
-    function getTimeDifference (dateString) {
-        const now = new Date();
-        const targetDate = new Date(dateString);
-
-        const nowUTC = Date.UTC(
-            now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),
-            now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()
-        );
-
-        const targetDateUTC = Date.UTC(
-            targetDate.getUTCFullYear(), targetDate.getUTCMonth(), targetDate.getUTCDate(),
-            targetDate.getUTCHours(), targetDate.getUTCMinutes(), targetDate.getUTCSeconds()
-        );
-
-        const diffInSeconds = Math.floor((nowUTC - targetDateUTC) / 1000);
-
-        if (diffInSeconds < 60) return `${diffInSeconds}s`;
-        const diffInMinutes = Math.floor(diffInSeconds / 60);
-        if (diffInMinutes < 60) return `${diffInMinutes}min`;
-        const diffInHours = Math.floor(diffInMinutes / 60);
-        if (diffInHours < 24) return `${diffInHours}h`;
-        const diffInDays = Math.floor(diffInHours / 24);
-        if (diffInDays < 30) return `${diffInDays}d`;
-        const diffInMonths = Math.floor(diffInDays / 30);
-        if (diffInMonths < 12) return `${diffInMonths}m`;
-        const diffInYears = Math.floor(diffInMonths / 12);
-        return `${diffInYears}y`;
     }
 
     // Render avatar: either profile image or first letter of username

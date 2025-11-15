@@ -34,21 +34,6 @@ export const createAnnouncement = createAsyncThunk('announcement/createAnounceme
     }
 });
 
-// export const updateVerse = createAsyncThunk('announcement/updateVerse',async(id, verseData) => {
-//     try {
-//         const response = await axiosInstance.patch(`announcement/announcement/${id}`, verseData , {
-//             headers: {
-//                 'x-access-token': localStorage.getItem('token')
-//             }
-//         });
-//         if(response){
-//             return response;
-//         }
-//     } catch (error) {
-//         toast.error(error.response?.data?.error || "Failed to update verse");
-//     }
-// })
-
 export const congratulate = createAsyncThunk('announcement/congratulate', async(data, { dispatch }) => {
     try {
         const resp = {
@@ -85,35 +70,6 @@ export const sorrify = createAsyncThunk('announcement/sorrify', async(data, { di
     }
 })
 
-// export const getVerseByUserId = createAsyncThunk('verse/getVerse' ,async(id) => {
-//     try {
-//         const response = await axiosInstance.get(`verse/verse/${id}`, { 
-//             headers: {
-//                 'x-access-token': localStorage.getItem('token')
-//             }
-//         })
-//         if(response){
-//             return response;
-//         }
-//     } catch (error) {
-//         toast.error(error.response?.data?.error || "Failed to get verse");
-//     }
-// })
-
-// export const getVerseById = createAsyncThunk('verse/getVerseById' ,async(id) => {
-//     try {
-//         const response = await axiosInstance.get(`verse/${id}`, { 
-//             headers: {
-//                 'x-access-token': localStorage.getItem('token')
-//             }
-//         })
-//         if(response){
-//             return response;
-//         }
-//     } catch (error) {
-//         toast.error(error.response?.data?.error || "Failed to get verse");
-//     }
-// })
 
 export const deleteAnnouncement = createAsyncThunk('announcement/delete' , async(id) => {
     try {        
@@ -131,23 +87,7 @@ export const deleteAnnouncement = createAsyncThunk('announcement/delete' , async
 const AnnouncementSlice = createSlice({
     name: 'announcement',
     initialState,
-    reducers: {
-        // filterVerseByUser: (state, action) => {
-        //     const id = action.payload?.id;
-        //     state.verseList = JSON.parse(JSON.stringify(state.downloadedVerse)).filter((verse) => verse.userId === id);
-        //     state.verseList = JSON.parse(JSON.stringify(state.verseList));
-        // },
-        // filterVerseByLiked: (state, action) => {
-        //     const id = action.payload?.id;
-        //     state.verseList = JSON.parse(JSON.stringify(state.downloadedVerse)).filter((verse) => verse.likes?.includes (id));
-        //     state.verseList = JSON.parse(JSON.stringify(state.verseList));
-        // },
-        // filterVerseByFollowing: (state, action) => {
-        //     const following = action.payload?.following;
-        //     state.verseList = JSON.parse(JSON.stringify(state.downloadedVerse)).filter((verse) => following.includes(verse.userId));
-        //     state.verseList = JSON.parse(JSON.stringify(state.verseList));
-        // }
-    },
+    reducers: {},
     extraReducers: (builder) => {
         builder
             .addCase(getAllAnonuncement.fulfilled, (state, action) => {
@@ -177,16 +117,9 @@ const AnnouncementSlice = createSlice({
                     announcement._id === action.payload.data?.announcement?._id ? action.payload.data?.announcement : announcement
                 );
             })
-            // .addCase(updateVerse.fulfilled, (state, action) => {
-            //     if (!action.payload?.data) return;
-            // })
-            // .addCase(getVerseByUserId.fulfilled , (state,action) => {
-            //     if(!action.payload?.data)return; 
-            //     state.verseList = action.payload?.data?.verse?.reverse();
-            // })
     }
 });
 
-export const { } = AnnouncementSlice.actions;
+export const {} = AnnouncementSlice.actions;
 
 export default AnnouncementSlice.reducer;
