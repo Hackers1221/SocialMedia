@@ -128,12 +128,14 @@ const Messenger = () => {
     };
 
     const onGroupClick = async () => {
-        const response = await dispatch(getRecentMessage(authState.data?._id));
-        if (response.payload) {
         setActiveTab('groups');
-        setGroup(groupState.groupDetails);
+        try {
+            await dispatch(getRecentMessage(authState.data?._id));
+        } catch (err) {
+            console.log(err);
         }
     };
+
 
     // Effects
     useEffect(() => setGroup(groupState.groupDetails), [groupState.groupDetails]);

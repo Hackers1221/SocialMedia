@@ -10,17 +10,24 @@ const initialState = {
     interestList: ""
 };
 
-export const getAllPosts = createAsyncThunk('posts/getAllPosts', async (_, { dispatch }) => {
+export const getAllPosts = createAsyncThunk("post/getAllPosts", async (data, { dispatch, rejectWithValue }) => {
     try {
+        const { page = 1, limit = 10 } = data || {};
+
         const response = await axiosInstance.get('post/posts', {
+            params: {
+                page: page,
+                limit: limit
+            },
             headers: {
                 'x-access-token': localStorage.getItem('token')
             }
         });
-
-        return response;
+        return response.data;
     } catch (error) {
-        dispatch (showToast ({ message: error.response.data.error || "Failed to fetch posts!", type: 'error' }));
+        const errorMessage = error.response?.data?.error || "Failed to fetch posts!";
+        dispatch(showToast({ message: errorMessage, type: 'error' }));
+        return rejectWithValue(errorMessage);
     }
 });
 
@@ -240,16 +247,19 @@ const PostSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getAllPosts.fulfilled, (state, action) => {
-                if (!action.payload?.data) return;
-                state.downloadedPosts = action.payload?.data?.postsdata?.posts.reverse();
-                state.postList = state.downloadedPosts;
+                if (!action.payload) return;
+                const posts = action.payload?.postsdata?.posts;
+
+                if (posts.length == 0) return;
+                state.downloadedPosts = [...state.downloadedPosts, ...posts];
+                state.postList = [...state.postList, ...posts];
             })
             .addCase(createPost.fulfilled, (state, action) => {
                 if (!action.payload?.data) return;
                 state.downloadedPosts = [action.payload?.data?.postsdata?.post, ...state.downloadedPosts];
             })
             .addCase(getPostByUserId.fulfilled , (state,action) => {
-                if(!action.payload?.data)return; 
+                if(!action.payload?.data) return; 
                 state.postList = action.payload?.data?.postDetails.reverse();
             })
             .addCase(getSavedPost.fulfilled,(state,action) => {

@@ -34,19 +34,24 @@ const createPost = async(req, res) => {
     })
 }
 
-const getallPosts = async(req,res) => {
-    const response = await postsService.getAllPosts();
-    if(response.error){
+const getallPosts = async (req, res) => {
+    const page = parseInt(req.query.page) || 1; 
+    const limit = parseInt(req.query.limit) || 10;
+
+    const response = await postsService.getAllPosts(page, limit);
+
+    if (response.error) {
         return res.status(StatusCodes.BAD_REQUEST).send({
-            message : "Something Went wrong",
-            error : response.error
-        })
+            message: "Something Went wrong",
+            error: response.error
+        });
     }
+
     return res.status(StatusCodes.OK).send({
-        message : "All posts fetched",
-        postsdata: response
-    })
-}
+        message: "All posts fetched",
+        postsdata: response // This contains { success: true, posts: [...] }
+    });
+};
 
 const updatePost = async(req,res) => {
     const response = await postsService.updatePost(req.params.id,req.body);

@@ -168,8 +168,9 @@ const setupSocket = (server) => {
       recipient,
       content: message.content,
       files: uploadedFiles,
-      isPost: message.isPost,
-      messageType: message.messageType
+      postId: message.postId,
+      targetType: message.targetType,
+      messageType: message.messageType,
     });
   
     // Populate sender and recipient details for the new message
@@ -227,7 +228,8 @@ const setupSocket = (server) => {
         const messageData = await Message.create({
            content : `${adminDetails.username} created the group`,
            messageType : true,
-           groupId: groupData._id
+           groupId: groupData._id,
+           targetType: "message"
         });
 
         let msg = {};
@@ -238,7 +240,8 @@ const setupSocket = (server) => {
             msg = await Message.create({
               content: `${adminDetails.username} added ${userDetails.username}`,
               messageType: true,
-              groupId: groupData._id
+              groupId: groupData._id,
+                targetType: "message"
             });
           }
         }
@@ -271,7 +274,6 @@ const setupSocket = (server) => {
       try {
       let uploadRes, image;
    
-
       const previousGroupDetails = await Group.findById(data._id);
 
       image = previousGroupDetails?.image;
@@ -483,7 +485,8 @@ const setupSocket = (server) => {
       const leaveGroupMessage = await Message.create({
         content : `${userDetails.username} left the group`,
         messageType : true,
-        groupId : data._id
+        groupId : data._id,
+        targetType: "message"
       })
 
       const uploadData = {
@@ -520,7 +523,8 @@ const setupSocket = (server) => {
         const leaveGroupMessage = await Message.create({
           content : `${userDetails.username} left the group`,
           messageType : true,
-          groupId : data._id
+          groupId : data._id,
+          targetType: "message"
         })
 
         previousGroupDetails.members.map(member => {

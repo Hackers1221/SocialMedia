@@ -60,23 +60,23 @@ const CreatePost = async (data) => {
     return response;  
 };
 
-const getAllPosts = async () => {
+const getAllPosts = async (page = 1, limit = 10) => {
     const response = {};
     try {
-        const allPosts = await Posts.find({});
+        const skip = (page - 1) * limit;
+
+        const allPosts = await Posts.find({})
+            .sort({ createdAt: -1 }) 
+            .skip(skip)
+            .limit(limit);
         
-        if (!allPosts || allPosts.length === 0) {
-            response.error = "No posts available";
-        } else {
-            response.success = true;
-            response.posts = allPosts;
-        }
+        response.success = true;
+        response.posts = allPosts;
     } catch (error) {
         response.error = error.message;
     }
     return response;  
 };
-
 
 const updatePost = async (postId, updatedData) => {
     const response = {};
