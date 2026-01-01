@@ -1,5 +1,5 @@
 const userService = require('../services/user.service');
-const {StatusCodes} = require('http-status-codes');
+const { StatusCodes } = require('http-status-codes');
 const jwt = require('jsonwebtoken')
 const authservice = require('../services/auth.service')
 
@@ -20,14 +20,15 @@ const signup = async(req,res) =>  {
 
 const signin = async(req,res) => {
     const response = await userService.ValidateUser(req.body.email,req.body.password);
-    if(response.error){
+    
+    if (response.error) {
         return res.status(StatusCodes.BAD_REQUEST).send({
             message:"Login failed",
             error : response.error
         })
     }
 
-    const token = jwt.sign({email : req.body.email} , process.env.secret_key);; 
+    const token = jwt.sign({email : req.body.email} , process.env.secret_key);
 
     return res.status(StatusCodes.ACCEPTED).json({
         message : "Successfully Login",

@@ -62,8 +62,9 @@ const ValidateUser = async (data, password) => {
         let notif = await Notification.find({ recipient: res._id })
             .populate("sender", "id username image")
 
-        const result = bcrypt.compareSync(password, res.password);
-        if (!result) {
+        const passwordsMatch = bcrypt.compareSync(password, res.password);
+
+        if (!passwordsMatch) {
             response.error = "Invalid password";
             return response;
         }
