@@ -42,11 +42,13 @@ This project demonstrates real-world features like authentication, posts, intera
 
 ## 📂 Project Structure
 
+```bash
 SocialMedia
 ├─ client        (Frontend – React)
 ├─ server        (Backend – Node + Express)
 ├─ README.md
 └─ .gitignore
+```
 
 ---
 
